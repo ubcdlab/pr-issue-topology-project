@@ -2,6 +2,7 @@ from github import Github
 import datetime
 import re
 import sys
+import json
 
 TARGET_REPO = 'jekyll/jekyll-admin'
 
@@ -10,7 +11,7 @@ def get_token():
     # from a file named token.txt
     token = None
     try:
-        with open('token.txt') as f:
+        with open('token.txt', 'r') as f:
             token = f.read()
     except IOError:
         pass
@@ -25,7 +26,7 @@ def remove_hashtag(regex_findall):
 
 
 g = Github(get_token())
-
+graph_dict = {}
 repo = g.get_repo(TARGET_REPO)
 
 for issue_number in range(1, get_highest_issue_number(repo)):
@@ -33,17 +34,19 @@ for issue_number in range(1, get_highest_issue_number(repo)):
         item = repo.get_issue(issue_number)
         total_links = []
         regex_matches = re.findall('#[0-9]+', item.body)
-        total_links = total_links + remove_hashtag(regex_matches)
+        if (item.user.type != 'Bot'):
+            total_links = total_links + remove_hashtag(regex_matches)
         for comment in item.get_comments():
             regex_matches = re.findall('#[0-9]+', comment.body)
-            total_links = total_links + remove_hashtag(regex_matches)
+            if (comment.user.type != 'Bot'):
+                total_links = total_links + remove_hashtag(regex_matches)
+        graph_dict.update({issue_number: total_links})
 
-        if len(total_links) == 0:
-            continue
-        print(f'{issue_number}:{total_links}')
     except Exception as e:
         print(e)
 
+with open('graph.txt', 'w') as f:
+    f.write(json.dumps(graph_dict, sort_keys=True, indent=4))
 
 
 
