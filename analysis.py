@@ -36,11 +36,20 @@ def find_source_nodes(data):
 				source.remove(entry)
 	return source
 
+def find_loops(data):
+	loops = []
+	for node in data.keys():
+		outgoing = data.get(node)
+		if node in outgoing:
+			loops.append(node)
+	return loops
+
 
 # statistics
 total_sinks = find_sinks(data)
 total_isolated = find_isolated_nodes(data)
 total_source = find_source_nodes(data)
+total_loop = find_loops(data)
 nodes = len(data.keys())
 
 
@@ -48,7 +57,7 @@ print(f"Total number of nodes: {nodes}")
 print(f"Source nodes: {len(total_source)} ({round(len(total_source)/nodes * 100, 2)}%)")
 print(f"Sink nodes: {len(total_sinks)} ({round(len(total_sinks)/nodes * 100, 2)}%)")
 print(f"Isolated nodes: {len(total_isolated)} ({round(len(total_isolated)/nodes * 100, 2)}%)")
-
+print(f"Loop nodes: {len(total_loop)} ({round(len(total_loop)/nodes * 100, 2)}%)")
 
 # print(sinks)
 # print(isolated)
