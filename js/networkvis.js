@@ -28,8 +28,13 @@ class Networkvis {
             node
                  .attr("cx", function (d) { return d.x; })
                  .attr("cy", function(d) { return d.y; });
-          }
+        }
+
         let vis = this;
+        let div = d3.select('body').append('div')   
+        .attr('class', 'tooltip')               
+        .style('opacity', 0);
+
         const links = vis.svg
         .selectAll('line')
         .data(data.links)
@@ -42,6 +47,20 @@ class Networkvis {
         .join('circle')
         .attr('r', 5)
         .style('fill', '#69b3a2')
+        .on('mouseover', (event, d) => {
+            div.transition()
+                .duration(200)      
+                .style('opacity', 1);      
+            div.html(d.name)  
+                .style('left', `${+event.pageX + 15}px`)     
+                .style('top', `${+event.pageY}px`);    
+            })
+        .on('mouseout', d => {       
+            div.transition()        
+                .duration(500)      
+                .style('opacity', 0);   
+        });
+
 
         const simulation = d3.forceSimulation(data.nodes)
         .force('link', d3.forceLink()

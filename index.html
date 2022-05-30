@@ -4,6 +4,20 @@
     <title>Vis</title>
     <link rel="icon" href="data:;base64,iVBORwOKGO=" />
 </head>
+<style type="text/css">
+  div.tooltip {   
+    position: absolute;         
+    text-align: left;         
+    width: fit-content;                    
+    height: fit-content;                   
+    padding: 2px;               
+    font: 12px sans-serif;      
+    background: lightgrey; 
+    border: 0px;        
+    border-radius: 8px;         
+    pointer-events: none;           
+}
+</style>
 <body>
   <h1>Test</h1>
   <div id="vis"></div>
@@ -11,61 +25,5 @@
   <script src="js/d3.v6.min.js"></script>
   <script src="js/main.js"></script>
   <script src="js/networkvis.js"></script>
-  <!-- <script type="text/javascript">
-    const margin = {top: 10, right: 30, bottom: 30, left: 40},
-          width = 1500 - margin.left - margin.right,
-          height = 800 - margin.top - margin.bottom;
-
-        // append the svg object to the body of the page
-        const svg = d3.select("#vis")
-        .append("svg")
-          .attr("width", width + margin.left + margin.right)
-          .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-          .attr("transform",
-                `translate(${margin.left}, ${margin.top})`);
-
-        d3.json("vis_graph.json").then( function( data) {
-
-          // Initialize the links
-          const link = svg
-            .selectAll("line")
-            .data(data.links)
-            .join("line")
-              .style("stroke", "#aaa")
-
-          // Initialize the nodes
-          const node = svg
-            .selectAll("circle")
-            .data(data.nodes)
-            .join("circle")
-              .attr("r", 5)
-              .style("fill", "#69b3a2")
-
-          // Let's list the force we wanna apply on the network
-          const simulation = d3.forceSimulation(data.nodes)                 // Force algorithm is applied to data.nodes
-              .force("link", d3.forceLink()                               // This force provides links between nodes
-                    .id(function(d) { return d.id; })                     // This provide  the id of a node
-                    .links(data.links)                                    // and this the list of links
-              )
-              .force("charge", d3.forceManyBody().strength(-1))
-              .force("center", d3.forceCenter(width / 2, height / 2))     // This force attracts nodes to the center of the svg area
-              .on("end", ticked);
-
-          // This function is run at each iteration of the force algorithm, updating the nodes position.
-          function ticked() {
-            link
-                .attr("x1", function(d) { return d.source.x; })
-                .attr("y1", function(d) { return d.source.y; })
-                .attr("x2", function(d) { return d.target.x; })
-                .attr("y2", function(d) { return d.target.y; });
-
-            node
-                 .attr("cx", function (d) { return d.x; })
-                 .attr("cy", function(d) { return d.y; });
-          }
-
-        });
-  </script> -->
 </body>
 </html>
