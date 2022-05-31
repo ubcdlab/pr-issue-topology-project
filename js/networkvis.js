@@ -1,8 +1,8 @@
 class Networkvis {
     constructor() {
         this.config = {
-            width: 1500,
-            height: 1000,
+            width: 800,
+            height: 800,
         }
         this.data = null;
         this.initVis();
@@ -21,36 +21,6 @@ class Networkvis {
     updateVis(data) {
         let vis = this;
         vis.renderVis(data);
-    }
-
-    drag_start(d, e) {
-        let vis = this;
-        //  if (!e.active)  {
-        //     vis.simulation.alphaTarget(0.3).restart()
-        // }
-        d.fx = d.x;
-        d.fy = d.y;
-    }
-
-    //make sure you can't drag the circle outside the box
-    drag_drag(d, e) {
-      d.fx = e.x;
-      d.fy = e.y;
-    }
-
-    drag_end(d, e) {
-        let vis = this;
-    //   if (!e.active)  {
-    //     vis.simulation.alphaTarget(0);
-    // }
-      d.fx = null;
-      d.fy = null;
-    }
-
-    //Zoom functions 
-    zoom_actions(e) {
-        let vis = this;
-        d3.select('#vis').attr("transform", e.transform)
     }
 
     renderVis(data) {
@@ -109,22 +79,10 @@ class Networkvis {
         .force('link', d3.forceLink()
             .id(function(d) { return d.id; })
             .links(data.links))
-        .force('charge', d3.forceManyBody().strength(-2))
+        .force('charge', d3.forceManyBody().strength(-1))
         .force('center', d3.forceCenter(vis.config.width / 2, vis.config.height / 2))
-        .on("tick", ticked );
+        .on("tick", ticked);
 
-        var drag_handler = d3.drag()
-        .on("start", vis.drag_start)
-        .on("drag", vis.drag_drag)
-        .on("end", vis.drag_end);   
-        
-        drag_handler(node);
-
-        //add zoom capabilities 
-        var zoom_handler = d3.zoom()
-            .on("zoom", vis.zoom_actions);
-
-        zoom_handler(vis.svg); 
     }
 
     

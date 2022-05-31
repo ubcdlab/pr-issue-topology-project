@@ -23,6 +23,10 @@
   <input checked="false" type="checkbox" id="hideIsolatedNodes">Hide Isolated Nodes</input>
   <svg id="vis"></svg>
 
+  <script type="module">
+    import {zoom} from "https://cdn.skypack.dev/d3-zoom@3";
+    const handler = zoom();
+  </script>
   <script src="js/d3.v6.min.js"></script>
   <script src="js/main.js"></script>
   <script src="js/networkvis.js"></script>
