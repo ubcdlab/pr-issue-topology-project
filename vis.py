@@ -15,5 +15,7 @@ for key, value in data.items():
 		linking = {"source": int(key), "target": int(destination)}
 		vis_data['links'].append(linking)
 
+print(f"total links: {len(vis_data['links'])}")
+
 with open('vis_graph.json', 'w') as f:
 	f.write(json.dumps(vis_data, sort_keys=True, indent=4))

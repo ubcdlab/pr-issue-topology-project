@@ -49,7 +49,9 @@ g = Github(get_token())
 graph_dict = {}
 repo = g.get_repo(TARGET_REPO)
 
-for issue_number in range(199, get_highest_issue_number(repo)):
+HIGHEST_ISSUE_NUMBER = get_highest_issue_number(repo)
+
+for issue_number in range(1, HIGHEST_ISSUE_NUMBER):
     try:
         item = repo.get_issue(issue_number)
         total_links = []
@@ -60,11 +62,14 @@ for issue_number in range(199, get_highest_issue_number(repo)):
         for comment in item.get_comments():
             if (comment.user.type != 'Bot'):
                 total_links += find_all_mentions(comment.body)
+        # filter out mentions to other projects
+        total_links = list(filter(lambda x: (int(x) <= HIGHEST_ISSUE_NUMBER), total_links))
+
         graph_dict.update({issue_number: total_links})
         print({issue_number: total_links})
 
     except Exception as e:
-        print('')
+        print(e)
 
 with open('graph.txt', 'w') as f:
     f.write(json.dumps(graph_dict, sort_keys=True, indent=4))

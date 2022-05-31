@@ -59,7 +59,7 @@ class Networkvis {
             div.transition()        
                 .duration(500)      
                 .style('opacity', 0);   
-        });
+        })
 
 
         const simulation = d3.forceSimulation(data.nodes)

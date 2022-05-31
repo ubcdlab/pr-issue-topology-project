@@ -59,6 +59,12 @@ print(f"Sink nodes: {len(total_sinks)} ({round(len(total_sinks)/nodes * 100, 2)}
 print(f"Isolated nodes: {len(total_isolated)} ({round(len(total_isolated)/nodes * 100, 2)}%)")
 print(f"Loop nodes: {len(total_loop)} ({round(len(total_loop)/nodes * 100, 2)}%)")
 
+counter = 0
+for destination in data.values():
+	for entry in destination:
+		counter += 1
+print(f"Total outgoing edges: {counter}")
+
 # print(sinks)
 # print(isolated)
 
