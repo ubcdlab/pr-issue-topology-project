@@ -22,8 +22,23 @@ def get_highest_issue_number(repo):
     return latest_issue[0].number
 
 def find_all_mentions(text):
+    ''' 
+    Github is pathological; mentions to other issues/PR
+    sometimes shows up as a string literal of form '#{NUMBER}'
+    and sometimes shows up as a string URL of form 'https://github.com/[REPO URL]/{pull/issue}/{NUMBER}'
+
+    Therefore, two seperate regex are required to properly detect mentions
+    and even then, I am not 100% confident about this method's accuracy
+    '''
+
     REGEX_STRING = '(?:\/jekyll\/jekyll-admin\/)(?:issues|pull)+\/(\d+)'
+    # the above regex uses non-capturing groups for the repo URLs, so only the number (the part we want)
+    # is captured.
+
     REGEX_NUMBER_STRING = '(?<=#)\d+'
+    # the above regex uses positive lookbehind to only capture numbers (the part we want)
+    # from the pattern #{NUMBER}
+
     regex_matches = []
     regex_matches += [x.group(1) for x in re.finditer(REGEX_STRING, text)]
     regex_matches += re.findall(REGEX_NUMBER_STRING, text)
