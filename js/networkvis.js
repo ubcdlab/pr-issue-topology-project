@@ -51,7 +51,8 @@ class Networkvis {
         .data(data.links)
         .join('line')
         .style('stroke', '#000')
-        .attr('stroke-width', 2);
+        .attr('stroke-width', 2)
+        .attr('marker-end', 'url(#triangle)');
 
         const node = vis.svg
         .selectAll('rect')
@@ -92,8 +93,9 @@ class Networkvis {
         vis.simulation = d3.forceSimulation(data.nodes)
         .force('link', d3.forceLink()
             .id(function(d) { return d.id; })
+            .distance(100)
             .links(data.links))
-        .force('charge', d3.forceManyBody().strength(-3))
+        .force('charge', d3.forceManyBody())
         .force('center', d3.forceCenter(vis.config.width / 2, vis.config.height / 2))
         .on("tick", ticked);
 
