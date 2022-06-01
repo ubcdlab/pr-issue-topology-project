@@ -26,14 +26,14 @@ class Networkvis {
     renderVis(data) {
         function ticked() {
             links
-                .attr("x1", function(d) { return d.source.x; })
-                .attr("y1", function(d) { return d.source.y; })
-                .attr("x2", function(d) { return d.target.x; })
-                .attr("y2", function(d) { return d.target.y; });
+                .attr("x1", function(d) { return d.source.x+8; })
+                .attr("y1", function(d) { return d.source.y+8; })
+                .attr("x2", function(d) { return d.target.x+8; })
+                .attr("y2", function(d) { return d.target.y+8; });
 
             node
-                 .attr("cx", function (d) { return d.x; })
-                 .attr("cy", function(d) { return d.y; });
+                 .attr("x", function (d) { return d.x; })
+                 .attr("y", function(d) { return d.y; });
         }
 
         let vis = this;
@@ -50,15 +50,20 @@ class Networkvis {
         .selectAll('line')
         .data(data.links)
         .join('line')
-        .style('stroke', '#aaa');
+        .style('stroke', '#000')
+        .attr('stroke-width', 2);
 
         const node = vis.svg
-        .selectAll('circle')
+        .selectAll('rect')
         .data(data.nodes)
-        .join('circle')
-        .attr('class', 'circle')
+        .join('rect')
+        .attr('class', 'rect')
         .classed('isolated', d => (d.isolated))
-        .attr('r', 5)
+        .attr('width', 16)
+        .attr('height', 16)
+        .attr('rx', d => d.type === 'pull_request' ? 9999 : 0)
+        .attr('ry', d => d.type === 'pull_request' ? 9999 : 0)
+        .attr('stroke', 'black')
         .style('fill', d => {
             switch (d.status) {
                 case 'closed':
@@ -88,7 +93,7 @@ class Networkvis {
         .force('link', d3.forceLink()
             .id(function(d) { return d.id; })
             .links(data.links))
-        .force('charge', d3.forceManyBody().strength(-1))
+        .force('charge', d3.forceManyBody().strength(-3))
         .force('center', d3.forceCenter(vis.config.width / 2, vis.config.height / 2))
         .on("tick", ticked);
 
