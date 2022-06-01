@@ -95,7 +95,7 @@ class Networkvis {
             .id(function(d) { return d.id; })
             .distance(100)
             .links(data.links))
-        .force('charge', d3.forceManyBody())
+        .force('charge', d3.forceManyBody().strength(-3))
         .force('center', d3.forceCenter(vis.config.width / 2, vis.config.height / 2))
         .on("tick", ticked);
 

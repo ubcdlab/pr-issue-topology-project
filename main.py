@@ -102,9 +102,9 @@ for issue_number in range(1, HIGHEST_ISSUE_NUMBER + 1):
         print(e)
         sys.exit(1)
 
-# with open('graph.txt', 'w') as f:
-#     # save result to disk
-#     f.write(json.dumps(graph_dict, sort_keys=True, indent=4))
+with open('graph.txt', 'w') as f:
+    # save result to disk
+    f.write(json.dumps(graph_dict, sort_keys=True, indent=4))
 
 
 
