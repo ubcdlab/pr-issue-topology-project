@@ -5,6 +5,9 @@
     <link rel="icon" href="data:;base64,iVBORwOKGO=" />
 </head>
 <style type="text/css">
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+  }
   div.tooltip {   
     position: absolute;         
     text-align: left;         
@@ -16,23 +19,36 @@
     border: 0px;        
     border-radius: 8px;         
     pointer-events: none;           
-}
+  }
+  #container {
+    border: 1px solid grey;
+    display: inline-block;
+  }
+
 </style>
 <body>
-  <h1>Test</h1>
+  <h3>Github Topology Visualiser</h3>
+  <p id="url_tagline">Visualising Repo URL: </p>
+  <p id="title_tagline"></p>
   <input checked="false" type="checkbox" id="hideIsolatedNodes">Hide Isolated Nodes</input>
-  <svg id="vis">
-    <defs>
-      <marker id="triangle" viewBox="-0 0 10 10"
-            refX="8" refY="2.5"
-            markerUnits="strokeWidth"
-            markerWidth="13" markerHeight="13"
-            xoferflow="visible"
-            orient="auto">
-        <path d="M 0 0 L 5 2.5 L 0 5 z" fill="#000"/>
-      </marker>
-    </defs>
-  </svg>
+  <div id="container">
+    <div id="mainView">
+      <svg id="vis">
+        <defs>
+          <marker id="triangle" viewBox="-0 0 10 10"
+                refX="8" refY="2.5"
+                markerUnits="strokeWidth"
+                markerWidth="13" markerHeight="13"
+                xoferflow="visible"
+                orient="auto">
+            <path d="M 0 0 L 5 2.5 L 0 5 z" fill="#000"/>
+          </marker>
+        </defs>
+      </svg>
+    </div>
+    <div id="auxView">
+    </div>
+  </div>
 
   <script type="module">
     import {zoom} from "https://cdn.skypack.dev/d3-zoom@3";

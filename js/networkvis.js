@@ -1,10 +1,10 @@
 class Networkvis {
-    constructor() {
+    constructor(_data) {
         this.config = {
-            width: 800,
-            height: 800,
+            width: 500,
+            height: 500,
         }
-        this.data = null;
+        this.data = _data;
         this.initVis();
     }
     initVis() {
@@ -12,6 +12,11 @@ class Networkvis {
         vis.hideIsolatedNodes = d3.select('#hideIsolatedNodes')
         .on('change', vis.update);
 
+        d3.select('#url_tagline')
+        .html(`Visualising Repo URL: <a href=${vis.data.repo_url}>${vis.data.repo_url}</a>`)
+
+        d3.select('#title_tagline')
+        .html(`Tracking ${vis.data.issue_count} issues and ${vis.data.pull_request_count} pull requests`)
     }
     update() {
         d3.selectAll('.isolated')
@@ -31,7 +36,7 @@ class Networkvis {
                 .attr("x2", function(d) { return d.target.x+8; })
                 .attr("y2", function(d) { return d.target.y+8; });
 
-            node
+            circle
                  .attr("x", function (d) { return d.x; })
                  .attr("y", function(d) { return d.y; });
         }
@@ -57,6 +62,8 @@ class Networkvis {
         const node = vis.svg
         .selectAll('rect')
         .data(data.nodes)
+
+        const circle = node
         .join('rect')
         .attr('class', 'rect')
         .classed('isolated', d => (d.isolated))
@@ -79,7 +86,9 @@ class Networkvis {
             div.transition()
                 .duration(200)      
                 .style('opacity', 1);      
-            div.html(d.name)  
+            div.html(`Node Number: ${d.id}<br>
+Type: ${d.type}<br>
+Status: ${d.status}`)  
                 .style('left', `${+event.pageX + 15}px`)     
                 .style('top', `${+event.pageY}px`);    
             })
@@ -88,6 +97,10 @@ class Networkvis {
                 .duration(500)      
                 .style('opacity', 0);   
         })
+
+        circle.append('text')
+        .text('text')
+        .attr('dy', d => d.y)
 
 
         vis.simulation = d3.forceSimulation(data.nodes)

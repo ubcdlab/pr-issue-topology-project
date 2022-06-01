@@ -1,7 +1,7 @@
 
 
 
-d3.json('data/vis_graph.json').then(data => {
+d3.json('data/vis_graph copy.json').then(data => {
   for (let node of data.nodes) {
     node['isolated'] = true;
     for (let link of data.links) {
@@ -11,9 +11,9 @@ d3.json('data/vis_graph.json').then(data => {
       }
     }
   }
-  console.log(data);
+  // console.log(data);
 
-  const networkplot = new Networkvis({});
+  const networkplot = new Networkvis(data);
   networkplot.updateVis(data);
 })
 .catch(error => {
