@@ -52,6 +52,27 @@ total_source = find_source_nodes(data)
 total_loop = find_loops(data)
 nodes = len(data.keys())
 
+closed = 0
+closed_nodes = []
+merged = 0
+not_closed = 0
+not_closed_nodes = []
+for node in data:
+	state = data[node]['status']
+	if state == 'closed':
+		closed += 1
+		closed_nodes.append(node)
+	elif state == 'open': 
+		not_closed += 1
+		not_closed_nodes.append(node)
+	elif state == 'merged':
+		merged += 1
+
+print(f"Open: {not_closed}")
+print(not_closed_nodes)
+print(f"Closed: {closed}")
+print(f"Merged: {merged}")
+
 
 print(f"Total number of nodes: {nodes}")
 print(f"Source nodes: {len(total_source)} ({round(len(total_source)/nodes * 100, 2)}%)")

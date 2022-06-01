@@ -9,9 +9,10 @@ vis_data = {
 }
 
 for key, value in data.items():
-	node = {"id": int(key), "name": str(key)}
+	print(value)
+	node = {"id": int(key), "name": str(key), "type": value['type'], "status": value['status']}
 	vis_data['nodes'].append(node)
-	for destination in value:
+	for destination in value['links']:
 		linking = {"source": int(key), "target": int(destination)}
 		vis_data['links'].append(linking)
 

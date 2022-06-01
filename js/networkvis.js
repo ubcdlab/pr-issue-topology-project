@@ -59,7 +59,16 @@ class Networkvis {
         .attr('class', 'circle')
         .classed('isolated', d => (d.isolated))
         .attr('r', 5)
-        .style('fill', '#69b3a2')
+        .style('fill', d => {
+            switch (d.status) {
+                case 'closed':
+                    return '#da3633'
+                case 'open':
+                    return '#238636'
+                case 'merged':
+                    return '#8957e5' 
+            }
+        })
         .on('mouseover', (event, d) => {
             div.transition()
                 .duration(200)      
