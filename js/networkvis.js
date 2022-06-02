@@ -45,7 +45,11 @@ class Networkvis {
 
         vis.svg = d3.select('#vis')
         .attr('width', vis.config.width)
-        .attr('height', vis.config.height);
+        .attr('height', vis.config.height)
+        .call(d3.zoom().on('zoom', function (e) {
+            vis.svg.attr('transform', e.transform)
+        }))
+        .append('g');
 
         let div = d3.select('body').append('div')   
         .attr('class', 'tooltip')               
