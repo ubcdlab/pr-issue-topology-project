@@ -1,6 +1,6 @@
 import json 
 
-f = open('graph.txt')
+f = open('graph.json')
 data = json.load(f)
 
 def find_sinks(data):

@@ -53,6 +53,13 @@ repo = g.get_repo(TARGET_REPO)
 
 HIGHEST_ISSUE_NUMBER = get_highest_issue_number(repo)
 
+graph_dict['repo_url'] = repo.html_url
+graph_dict['issue_count'] = 0
+graph_dict['pull_request_count'] = 0
+graph_dict['links'] = []
+graph_dict['nodes'] = []
+
+
 for issue_number in range(1, HIGHEST_ISSUE_NUMBER + 1):
     # go through every possible issue/PR number
     try:
@@ -72,14 +79,14 @@ for issue_number in range(1, HIGHEST_ISSUE_NUMBER + 1):
         # than the project of concern
         total_links = list(filter(lambda x: (int(x) <= HIGHEST_ISSUE_NUMBER), total_links))
 
-        node_dict['links'] = total_links
         ''' Github API treats both issue and PR as issues (PRs are issues with code),
             API docs direct us to distinguish between the two by checking the pull_request key
             which is None for issues
         '''
         node_dict['type'] = 'pull_request' if item.pull_request is not None else 'issue'
-
         node_dict['status'] = item.state # whether an issue/PR is open or closed
+        node_dict['id'] = issue_number
+        node_dict['name'] = str(issue_number)
 
         if item.pull_request is not None:
             # this ugly check is needed to find out whether a PR is merged
@@ -89,20 +96,21 @@ for issue_number in range(1, HIGHEST_ISSUE_NUMBER + 1):
                 node_dict['status'] = 'merged'
 
         # update the dictionary storing the graph toplogy 
-        graph_dict.update({issue_number: node_dict})
-        print({issue_number: node_dict})
+        graph_dict['nodes'].append(node_dict)
+
+        for link in total_links:
+            graph_dict['links'].append({'source': issue_number, 'target': int(link)})
 
     except Exception as e:
         # Exceptions usually happens, when we try to load a number 
         # that doesn't correspond to an issue or pull request
-        # idk why this happens
-        s = traceback.format_exc()
-        serr = "there were errors:\n%s\n" % (s)
-        sys.stderr.write(serr)
+        # idk why Github let this happens
+        # s = traceback.format_exc()
+        # serr = "there were errors:\n%s\n" % (s)
+        # sys.stderr.write(serr)
         print(e)
-        sys.exit(1)
 
-with open('graph.txt', 'w') as f:
+with open('graph.json', 'w') as f:
     # save result to disk
     f.write(json.dumps(graph_dict, sort_keys=True, indent=4))
 
