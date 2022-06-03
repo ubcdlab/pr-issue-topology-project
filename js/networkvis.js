@@ -96,7 +96,9 @@ class Networkvis {
                 .style('opacity', 1);      
             div.html(`Node Number: ${d.id}<br>
 Type: ${d.type}<br>
-Status: ${d.status}`)  
+Status: ${d.status}<br>
+Degree: ${d.node_degree}<br>
+Component Size: ${d.connected_component_size}`)  
                 .style('left', `${+event.pageX + 15}px`)     
                 .style('top', `${+event.pageY}px`);    
             })

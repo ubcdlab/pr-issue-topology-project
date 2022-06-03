@@ -162,11 +162,9 @@ else:
 result = compute_network_statistics(result)
 print(result)
 
-
-
-# with open('graph.json', 'w') as f:
+with open('data/graph.json', 'w') as f:
     # save result to disk
-    # f.write(json.dumps(graph_dict, sort_keys=False, indent=4))
+    f.write(json.dumps(result, sort_keys=False, indent=4))
 
 
 
