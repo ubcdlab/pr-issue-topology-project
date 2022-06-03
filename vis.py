@@ -23,7 +23,7 @@ for component in connected_components:
 	for node in component:
 		for entry in data['nodes']:
 			if (entry['id'] == node):
-				entry['connected_component_size'] = len(component)
+				entry['connected_component'] = component
 print(data['nodes'])
 
 # with open('data/vis_graph.json', 'w') as f:

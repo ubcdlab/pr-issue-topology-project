@@ -130,7 +130,7 @@ def compute_network_statistics(data):
         for node in component:
             for entry in data['nodes']:
                 if (entry['id'] == node):
-                    entry['connected_component_size'] = len(component)
+                    entry['connected_component'] = list(component)
 
     # Compute the degrees
     for node in graph.degree:

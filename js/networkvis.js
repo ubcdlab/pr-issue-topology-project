@@ -98,7 +98,8 @@ class Networkvis {
 Type: ${d.type}<br>
 Status: ${d.status}<br>
 Degree: ${d.node_degree}<br>
-Component Size: ${d.connected_component_size}`)  
+Component: ${d.connected_component}<br>
+Component Size: ${d.connected_component.length}`)  
                 .style('left', `${+event.pageX + 15}px`)     
                 .style('top', `${+event.pageY}px`);    
             })
