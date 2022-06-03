@@ -74,6 +74,7 @@ class Networkvis {
         .join('rect')
         .attr('class', 'rect')
         .classed('isolated', d => (d.isolated))
+        .attr('id', d => `point-${d.id}`)
         .attr('width', 16)
         .attr('height', 16)
         .attr('rx', d => d.type === 'pull_request' ? 9999 : 0)
