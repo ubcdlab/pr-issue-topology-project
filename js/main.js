@@ -1,7 +1,7 @@
 
 
 
-d3.json('data/vis_graph copy.json').then(data => {
+d3.json('data/vis_graph.json').then(data => {
   for (let node of data.nodes) {
     node['isolated'] = true;
     for (let link of data.links) {

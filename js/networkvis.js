@@ -1,7 +1,7 @@
 class Networkvis {
     constructor(_data) {
         this.config = {
-            width: 500,
+            width: 800,
             height: 500,
         }
         this.data = _data;
@@ -10,15 +10,13 @@ class Networkvis {
     initVis() {
         let vis = this;
         vis.hideIsolatedNodes = d3.select('#hideIsolatedNodes')
-        .on('change', vis.update);
+        .property('checked', false)
+        .on('change', vis.checkboxUpdate);
 
         d3.select('#url_tagline')
         .html(`Visualising Repo URL: <a href=${vis.data.repo_url}>${vis.data.repo_url}</a>`)
-
-        d3.select('#title_tagline')
-        .html(`Tracking ${vis.data.issue_count} issues and ${vis.data.pull_request_count} pull requests`)
     }
-    update() {
+    checkboxUpdate() {
         d3.selectAll('.isolated')
         .attr('opacity', d3.select('#hideIsolatedNodes').property('checked') ? 0.1 : 1)
     }
@@ -26,6 +24,11 @@ class Networkvis {
     updateVis(data) {
         let vis = this;
         vis.renderVis(data);
+    }
+
+    nodeDragging(e, d) {
+        d.fx = e.x;
+        d.fy = e.y;
     }
 
     renderVis(data) {
@@ -101,18 +104,35 @@ Status: ${d.status}`)
                 .duration(500)      
                 .style('opacity', 0);   
         })
+        .call(d3.drag()
+            .on('start', (d, e) => {
+                if (!e.active) {
+                    simulation.alphaTarget(0.3).restart();
+                }
+                d.fx = d.x;
+                d.fy = d.y;
+            })
+            .on('drag', vis.nodeDragging)
+            .on('end', (d, e) => {
+                if (!e.active) {
+                    simulation.alphaTarget(0);
+                }
+                d.fx = null;
+                d.fy = null;
+            }))
 
         circle.append('text')
         .text('text')
         .attr('dy', d => d.y)
 
 
-        vis.simulation = d3.forceSimulation(data.nodes)
+        var simulation = d3.forceSimulation(data.nodes)
         .force('link', d3.forceLink()
             .id(function(d) { return d.id; })
             .distance(100)
             .links(data.links))
-        .force('charge', d3.forceManyBody().strength(-3))
+        .force("collide", d3.forceCollide(20).radius(20))
+        .force('charge', d3.forceManyBody().strength(-15))
         .force('center', d3.forceCenter(vis.config.width / 2, vis.config.height / 2))
         .on("tick", ticked);
 
