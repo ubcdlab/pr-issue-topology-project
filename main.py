@@ -56,8 +56,8 @@ HIGHEST_ISSUE_NUMBER = get_highest_issue_number(repo)
 graph_dict['repo_url'] = repo.html_url
 graph_dict['issue_count'] = 0
 graph_dict['pull_request_count'] = 0
-graph_dict['links'] = []
 graph_dict['nodes'] = []
+graph_dict['links'] = []
 
 
 for issue_number in range(1, HIGHEST_ISSUE_NUMBER + 1):
@@ -83,10 +83,10 @@ for issue_number in range(1, HIGHEST_ISSUE_NUMBER + 1):
             API docs direct us to distinguish between the two by checking the pull_request key
             which is None for issues
         '''
-        node_dict['type'] = 'pull_request' if item.pull_request is not None else 'issue'
-        node_dict['status'] = item.state # whether an issue/PR is open or closed
         node_dict['id'] = issue_number
         node_dict['name'] = str(issue_number)
+        node_dict['type'] = 'pull_request' if item.pull_request is not None else 'issue'
+        node_dict['status'] = item.state # whether an issue/PR is open or closed
 
         if item.pull_request is not None:
             # this ugly check is needed to find out whether a PR is merged
@@ -112,7 +112,7 @@ for issue_number in range(1, HIGHEST_ISSUE_NUMBER + 1):
 
 with open('graph.json', 'w') as f:
     # save result to disk
-    f.write(json.dumps(graph_dict, sort_keys=True, indent=4))
+    f.write(json.dumps(graph_dict, sort_keys=False, indent=4))
 
 
 

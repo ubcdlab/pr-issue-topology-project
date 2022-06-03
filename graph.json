@@ -1,5 +1,7 @@
 {
     "issue_count": 0,
+    "pull_request_count": 0,
+    "repo_url": "https://github.com/jekyll/jekyll-admin",
     "links": [
         {
             "source": 12,
@@ -5371,7 +5373,5 @@
             "status": "open",
             "type": "issue"
         }
-    ],
-    "pull_request_count": 0,
-    "repo_url": "https://github.com/jekyll/jekyll-admin"
+    ]
 }
