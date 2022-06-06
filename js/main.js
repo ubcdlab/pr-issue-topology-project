@@ -10,7 +10,7 @@ d3.json('data/graph.json').then(data => {
       }
     }
   }
-  console.log(data);
+  // console.log(data);
 
   const networkplot = new Networkvis(data);
   networkplot.updateVis(data);

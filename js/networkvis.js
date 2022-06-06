@@ -64,7 +64,8 @@ class Networkvis {
         .join('line')
         .style('stroke', '#000')
         .attr('stroke-width', 2)
-        .attr('marker-end', 'url(#triangle)');
+        .attr('marker-end', 'url(#triangle)')
+        .attr('id', d => `link-${d.source}-${d.target}-end`)
 
         const node = vis.svg
         .selectAll('rect')
@@ -75,11 +76,11 @@ class Networkvis {
         .attr('class', 'rect')
         .classed('isolated', d => (d.isolated))
         .attr('id', d => `point-${d.id}`)
+        .attr('number', d => d.id)
         .attr('width', 16)
         .attr('height', 16)
         .attr('rx', d => d.type === 'pull_request' ? 9999 : 0)
         .attr('ry', d => d.type === 'pull_request' ? 9999 : 0)
-        .attr('stroke', 'black')
         .style('fill', d => {
             switch (d.status) {
                 case 'closed':
@@ -91,6 +92,7 @@ class Networkvis {
             }
         })
         .on('mouseover', (event, d) => {
+            // show the tooltip
             div.transition()
                 .duration(200)      
                 .style('opacity', 1);      
@@ -101,12 +103,26 @@ Degree: ${d.node_degree}<br>
 Component: ${d.connected_component}<br>
 Component Size: ${d.connected_component.length}`)  
                 .style('left', `${+event.pageX + 15}px`)     
-                .style('top', `${+event.pageY}px`);    
-            })
+                .style('top', `${+event.pageY}px`);
+            // highlight the connected component
+            for (let id of d.connected_component) {
+                d3.select(`#point-${id}`)
+                .classed('highlighted', true);
+                let selector = document.querySelector(`[id^="link-${id}"`);
+                d3.selectAll(`[id^="link-${id}-"`)
+                .classed('highlighted', true);
+            }
+        })
         .on('mouseout', d => {       
             div.transition()        
                 .duration(500)      
-                .style('opacity', 0);   
+                .style('opacity', 0);
+            d3.selectAll('.highlighted')
+            .classed('highlighted', false);   
+        })
+        .on('contextmenu', (e, d) => {
+            // e.preventDefault();
+            // window.open(`${vis.data.repo_url}/pull/${d.id}`, '_blank').focus();
         })
         .call(d3.drag()
             .on('start', (d, e) => {

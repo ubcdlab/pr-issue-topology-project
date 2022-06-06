@@ -21,8 +21,27 @@
     pointer-events: none;           
   }
   #container {
+    display: inline-block;
+    padding: 20px;
+  }
+  #mainView {
     border: 1px solid grey;
     display: inline-block;
+    float: left;
+  }
+  #auxView {
+    border: 1px solid grey;
+    display: inline-block;
+    float: right;
+    padding: 20px;
+    width: 500px;
+  }
+  .highlighted {
+    stroke: #FFBF00 !important;
+    stroke-width: 3px !important;
+  }
+  .rect {
+    stroke: black;
   }
 
 </style>
@@ -48,6 +67,7 @@
       </svg>
     </div>
     <div id="auxView">
+      Test
     </div>
   </div>
 

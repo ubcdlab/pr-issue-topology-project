@@ -85,7 +85,6 @@ def fetch_data():
                 which is None for issues
             '''
             node_dict['id'] = issue_number
-            node_dict['name'] = str(issue_number)
             node_dict['type'] = 'pull_request' if item.pull_request is not None else 'issue'
             node_dict['status'] = item.state # whether an issue/PR is open or closed
             node_dict['links'] = total_links
@@ -139,6 +138,7 @@ def compute_network_statistics(data):
         for entry in data['nodes']:
             if (entry['id'] == node_id):
                 entry['node_degree'] = node_degree
+    data['connected_components'] = list(map(lambda x: list(x), connected_components))
     return data
 
 redownload = None
