@@ -43,6 +43,9 @@
   .rect {
     stroke: black;
   }
+  th {
+    text-align: left;
+  }
 
 </style>
 <body>
@@ -50,6 +53,9 @@
   <p id="url_tagline">Visualising Repo URL: </p>
   <p id="title_tagline"></p>
   <input checked=false type="checkbox" id="hideIsolatedNodes">Hide Isolated Nodes</input>
+  <br>
+  <input id="searchBox" type="text" placeholder="Search Node ID...">
+  <button id="searchButton" type="button">Search</button>
   <br>
   <div id="container">
     <div id="mainView">
@@ -67,14 +73,9 @@
       </svg>
     </div>
     <div id="auxView">
-      Test
     </div>
   </div>
 
-  <script type="module">
-    import {zoom} from "https://cdn.skypack.dev/d3-zoom@3";
-    const handler = zoom();
-  </script>
   <script src="js/d3.v6.min.js"></script>
   <script src="js/main.js"></script>
   <script src="js/networkvis.js"></script>

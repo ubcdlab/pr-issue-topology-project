@@ -15,6 +15,16 @@ class Networkvis {
 
         d3.select('#url_tagline')
         .html(`Visualising Repo URL: <a href=${vis.data.repo_url}>${vis.data.repo_url}</a>`)
+
+        d3.select('#searchButton')
+        .on('click', (d, e) => {
+            let targetId = d3.select('#searchBox').node().value;
+            let targetX = d3.select(`#point-${targetId}`).attr('x');
+            let targetY = d3.select(`#point-${targetId}`).attr('y');
+
+            let g = d3.select('#mainViewG')
+            d3.zoom.translateTo(g, targetX, targetY);
+        })
     }
     checkboxUpdate() {
         d3.selectAll('.isolated')
@@ -29,6 +39,40 @@ class Networkvis {
     nodeDragging(e, d) {
         d.fx = e.x;
         d.fy = e.y;
+    }
+
+    searchNode(id) {
+
+    }
+
+    renderTable(data) {
+        data.connected_components = data.connected_components.filter(x => x.length > 1);
+        data.connected_components.sort((a, b) => {
+            return b.length - a.length;
+        });
+        console.log(data.connected_components);
+        let table = d3.select('#auxView').append('table')
+        let thead = table.append('thead')
+        let tbody = table.append('tbody')
+
+        // Table header
+        thead.append('tr')
+        .selectAll('th')
+        .data(['Family', 'Cardinality', 'Constituents Nodes'])
+        .join('th')
+        .text(d => d)
+
+        let rows = tbody.selectAll('tr')
+        .data(data.connected_components)
+        .join('tr');
+
+        let cells = rows.selectAll('td')
+        .data((d, i) => {
+            return [i, d.length, d];
+        })
+        .join('td')
+        .text((d, i) => {return (i === 2 ? `{${d}}` : d)})
+;
     }
 
     renderVis(data) {
@@ -52,7 +96,8 @@ class Networkvis {
         .call(d3.zoom().on('zoom', function (e) {
             vis.svg.attr('transform', e.transform)
         }))
-        .append('g');
+        .append('g')
+        .attr('id', 'mainViewG');
 
         let div = d3.select('body').append('div')   
         .attr('class', 'tooltip')               
@@ -100,7 +145,7 @@ class Networkvis {
 Type: ${d.type}<br>
 Status: ${d.status}<br>
 Degree: ${d.node_degree}<br>
-Component: ${d.connected_component}<br>
+Component: ${d.connected_component.toString().replace(/(.{50})..+/, "$1...")}<br>
 Component Size: ${d.connected_component.length}`)  
                 .style('left', `${+event.pageX + 15}px`)     
                 .style('top', `${+event.pageY}px`);
@@ -113,7 +158,8 @@ Component Size: ${d.connected_component.length}`)
                 .classed('highlighted', true);
             }
         })
-        .on('mouseout', d => {       
+        .on('mouseout', (e, d) => {
+            console.log(d)       
             div.transition()        
                 .duration(500)      
                 .style('opacity', 0);
@@ -152,11 +198,11 @@ Component Size: ${d.connected_component.length}`)
             .distance(100)
             .links(data.links))
         .force("collide", d3.forceCollide(20).radius(20))
-        .force('charge', d3.forceManyBody().strength(-15))
+        .force('charge', d3.forceManyBody().strength(-100))
         .force('center', d3.forceCenter(vis.config.width / 2, vis.config.height / 2))
         .on("tick", ticked);
 
+        vis.renderTable(data);
     }
-
     
 }
