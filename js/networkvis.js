@@ -121,6 +121,45 @@ class Networkvis {
         .selectAll('g')
         .data(data.nodes)
         .join('g')
+        .classed('issues', d => {
+            return d.type === 'issue' ? true : false;
+        })
+        .classed('pull_request', d => {
+            return d.type === 'pull_request' ? true : false;
+        })
+        .on('mouseover', (event, d) => {
+            // show the tooltip
+            div.transition()
+                .duration(200)      
+                .style('opacity', 1);      
+            div.html(`Node Number: ${d.id}<br>
+Type: ${d.type}<br>
+Status: ${d.status}<br>
+Degree: ${d.node_degree}<br>
+Component: ${d.connected_component.toString().replace(/(.{50})..+/, "$1...")}<br>
+Component Size: ${d.connected_component.length}`)  
+                .style('left', `${+event.pageX + 15}px`)     
+                .style('top', `${+event.pageY}px`);
+            // highlight the connected component
+            for (let id of d.connected_component) {
+                d3.select(`#point-${id}`)
+                .classed('highlighted', true);
+                let selector = document.querySelector(`[id^="link-${id}"`);
+                d3.selectAll(`[id^="link-${id}-"`)
+                .classed('highlighted', true);
+            }
+        })
+        .on('mouseout', (e, d) => {    
+            div.transition()        
+                .duration(500)      
+                .style('opacity', 0);
+            d3.selectAll('.highlighted')
+            .classed('highlighted', false);   
+        })
+        .on('contextmenu', (e, d) => {
+            // e.preventDefault();
+            // window.open(`${vis.data.repo_url}/pull/${d.id}`, '_blank').focus();
+        })
         .call(d3.drag()
             .on('start', (d, e) => {
                 if (!e.active) {
@@ -158,39 +197,6 @@ class Networkvis {
                     return '#8957e5' 
             }
         })
-        .on('mouseover', (event, d) => {
-            // show the tooltip
-            div.transition()
-                .duration(200)      
-                .style('opacity', 1);      
-            div.html(`Node Number: ${d.id}<br>
-Type: ${d.type}<br>
-Status: ${d.status}<br>
-Degree: ${d.node_degree}<br>
-Component: ${d.connected_component.toString().replace(/(.{50})..+/, "$1...")}<br>
-Component Size: ${d.connected_component.length}`)  
-                .style('left', `${+event.pageX + 15}px`)     
-                .style('top', `${+event.pageY}px`);
-            // highlight the connected component
-            for (let id of d.connected_component) {
-                d3.select(`#point-${id}`)
-                .classed('highlighted', true);
-                let selector = document.querySelector(`[id^="link-${id}"`);
-                d3.selectAll(`[id^="link-${id}-"`)
-                .classed('highlighted', true);
-            }
-        })
-        .on('mouseout', (e, d) => {    
-            div.transition()        
-                .duration(500)      
-                .style('opacity', 0);
-            d3.selectAll('.highlighted')
-            .classed('highlighted', false);   
-        })
-        .on('contextmenu', (e, d) => {
-            // e.preventDefault();
-            // window.open(`${vis.data.repo_url}/pull/${d.id}`, '_blank').focus();
-        })
 
         var simulation = d3.forceSimulation(data.nodes)
         .force('link', d3.forceLink()
@@ -202,11 +208,19 @@ Component Size: ${d.connected_component.length}`)
         .force('center', d3.forceCenter(vis.config.width / 2, vis.config.height / 2))
         .on("tick", ticked);
 
-        let labels = vis.svg.selectAll('g')
+        vis.svg.selectAll('.issues')
         .append('text')
-        .text('Test')
+        .text('i')
+        .style('fill', 'white')
         .attr('x', 6)
-        .attr('y', 3);
+        .attr('y', 14);
+
+        vis.svg.selectAll('.pull_request')
+        .append('text')
+        .text('p')
+        .style('fill', 'white')
+        .attr('x', 5)
+        .attr('y', 12);
 
 
         vis.renderTable(data);
