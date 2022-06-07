@@ -83,9 +83,12 @@ class Networkvis {
                 .attr("x2", function(d) { return d.target.x+8; })
                 .attr("y2", function(d) { return d.target.y+8; });
 
-            circle
-                 .attr("x", function (d) { return d.x; })
-                 .attr("y", function(d) { return d.y; });
+            // circle
+            //      .attr("x", function (d) { return d.x; })
+            //      .attr("y", function(d) { return d.y; });
+                node.attr('transform', d => {
+                    return `translate(${d.x}, ${d.y})`
+                })
         }
 
         let vis = this;
@@ -113,11 +116,30 @@ class Networkvis {
         .attr('id', d => `link-${d.source}-${d.target}-end`)
 
         const node = vis.svg
-        .selectAll('rect')
+        .append('g')
+        .attr('class', 'nodes')
+        .selectAll('g')
         .data(data.nodes)
+        .join('g')
+        .call(d3.drag()
+            .on('start', (d, e) => {
+                if (!e.active) {
+                    simulation.alphaTarget(0.3).restart();
+                }
+                d.fx = d.x;
+                d.fy = d.y;
+            })
+            .on('drag', vis.nodeDragging)
+            .on('end', (d, e) => {
+                if (!e.active) {
+                    simulation.alphaTarget(0);
+                }
+                d.fx = null;
+                d.fy = null;
+            }))
 
         const circle = node
-        .join('rect')
+        .append('rect')
         .attr('class', 'rect')
         .classed('isolated', d => (d.isolated))
         .attr('id', d => `point-${d.id}`)
@@ -158,8 +180,7 @@ Component Size: ${d.connected_component.length}`)
                 .classed('highlighted', true);
             }
         })
-        .on('mouseout', (e, d) => {
-            console.log(d)       
+        .on('mouseout', (e, d) => {    
             div.transition()        
                 .duration(500)      
                 .style('opacity', 0);
@@ -170,27 +191,6 @@ Component Size: ${d.connected_component.length}`)
             // e.preventDefault();
             // window.open(`${vis.data.repo_url}/pull/${d.id}`, '_blank').focus();
         })
-        .call(d3.drag()
-            .on('start', (d, e) => {
-                if (!e.active) {
-                    simulation.alphaTarget(0.3).restart();
-                }
-                d.fx = d.x;
-                d.fy = d.y;
-            })
-            .on('drag', vis.nodeDragging)
-            .on('end', (d, e) => {
-                if (!e.active) {
-                    simulation.alphaTarget(0);
-                }
-                d.fx = null;
-                d.fy = null;
-            }))
-
-        circle.append('text')
-        .text('text')
-        .attr('dy', d => d.y)
-
 
         var simulation = d3.forceSimulation(data.nodes)
         .force('link', d3.forceLink()
@@ -201,6 +201,13 @@ Component Size: ${d.connected_component.length}`)
         .force('charge', d3.forceManyBody().strength(-100))
         .force('center', d3.forceCenter(vis.config.width / 2, vis.config.height / 2))
         .on("tick", ticked);
+
+        let labels = vis.svg.selectAll('g')
+        .append('text')
+        .text('Test')
+        .attr('x', 6)
+        .attr('y', 3);
+
 
         vis.renderTable(data);
     }
