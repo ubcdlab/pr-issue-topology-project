@@ -165,6 +165,9 @@ result = compute_network_statistics(result)
 with open('data/graph.json', 'w') as f:
     # save result to disk
     f.write(json.dumps(result, sort_keys=False, indent=4))
+
+# with open('data/pattern.json', 'w') as f2:
+
 print('Saved result to data/graph.json')
 
 
