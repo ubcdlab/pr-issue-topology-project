@@ -13,7 +13,7 @@ def get_token():
     # from a file named token.txt
     token = None
     try:
-        with open('token.txt', 'r') as f:
+        with open('.token', 'r') as f:
             token = f.read()
     except IOError:
         pass
@@ -61,7 +61,7 @@ def fetch_data():
     graph_dict['links'] = []
 
 
-    for issue_number in range(684, HIGHEST_ISSUE_NUMBER + 1):
+    for issue_number in range(1, HIGHEST_ISSUE_NUMBER + 1):
         # go through every possible issue/PR number
         try:
             item = repo.get_issue(issue_number) # get the issue
@@ -160,11 +160,12 @@ else:
     result = json.load(f)
 
 result = compute_network_statistics(result)
-print(result)
+# print(result)
 
 with open('data/graph.json', 'w') as f:
     # save result to disk
     f.write(json.dumps(result, sort_keys=False, indent=4))
+print('Saved result to data/graph.json')
 
 
 
