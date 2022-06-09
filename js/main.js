@@ -14,6 +14,9 @@ d3.json('data/graph.json').then(data => {
 
   const networkplot = new Networkvis(data);
   networkplot.updateVis(data);
+
+  const patternplot = new Patternvis({});
+  patternplot.updateVis({});
 })
 .catch(error => {
   console.log(error);
