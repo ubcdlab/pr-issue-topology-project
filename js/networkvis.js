@@ -83,9 +83,6 @@ class Networkvis {
                 .attr("x2", function(d) { return d.target.x+8; })
                 .attr("y2", function(d) { return d.target.y+8; });
 
-            // circle
-            //      .attr("x", function (d) { return d.x; })
-            //      .attr("y", function(d) { return d.y; });
                 node.attr('transform', d => {
                     return `translate(${d.x}, ${d.y})`
                 })
@@ -157,8 +154,11 @@ Component Size: ${d.connected_component.length}`)
             .classed('highlighted', false);   
         })
         .on('contextmenu', (e, d) => {
-            // e.preventDefault();
-            // window.open(`${vis.data.repo_url}/pull/${d.id}`, '_blank').focus();
+            let checked = d3.select('#rightClickHyperlink').property('checked')
+            if (checked) {
+                e.preventDefault();
+                window.open(`${vis.data.repo_url}/pull/${d.id}`, '_blank').focus();
+            }
         })
         .call(d3.drag()
             .on('start', (d, e) => {
