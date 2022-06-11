@@ -1,10 +1,13 @@
 import json
 import sys 
+import functools
 
 f = open('data/graph.json')
 data = json.load(f)
-pattern_json = {}
 
+
+pattern_json = {}
+analysis_dict = {}
 isolated = []
 duo_issue_issue = []
 duo_issue_pr = []
@@ -20,12 +23,38 @@ def find_node(node_id):
 def compute_node_order(source_node, sink_node):
 	return [source_node['type'], sink_node['type']]
 
+def add_analysis_function(analysis_dict, level, array_of_function):
+	analysis_dict['input'][level][level] = array_of_function
+
+def find_isolated_nodes(node):
+	return len(node['connected_components']) == 0
+
+# First, compute the largest component size
+max_component_size = 0
+for component in data['connected_components']:
+	max_component_size = max(len(component), max_component_size)
+# generate the dict for analysis
+analysis_dict['input'] = [{0: []}]
+for counter in range(1, max_component_size + 1):
+	analysis_dict['input'].append({
+		counter: []
+	})
+
+# Modify the lines below to add custom analysis
+
+# add_analysis_function(analysis_dict, 1, [find_isolated_nodes])
+# add_analysis_function(analysis_dict, 2, [,])
+
+# print(analysis_dict)
+
 # First, find isolated nodes
 for component in data['connected_components']:
 	if len(component) == 1:
 		isolated.append(component)
 
-pattern_json['isolated'] = isolated
+
+for component_size in range(1, max_component_size + 1):
+	pattern_json[component_size] = {}
 
 '''
 A node has form:
@@ -61,15 +90,27 @@ for component in data['connected_components']:
 	elif ordering == ['pull_request', 'issue']:
 		duo_pr_issue.append([source_node, sink_node])
 
-pattern_json['duo_issue_issue'] = duo_issue_issue
-pattern_json['duo_issue_pr'] = duo_issue_pr
-pattern_json['duo_pr_pr'] = duo_pr_pr
-pattern_json['duo_pr_issue'] = duo_pr_issue
+pattern_json[1]['isolated'] = isolated
+pattern_json[2]['duo_issue_issue'] = duo_issue_issue
+pattern_json[2]['duo_issue_pr'] = duo_issue_pr
+pattern_json[2]['duo_pr_pr'] = duo_pr_pr
+pattern_json[2]['duo_pr_issue'] = duo_pr_issue
 
-print(len(duo_issue_issue) + len(duo_issue_pr) + len(duo_pr_pr) + len(duo_pr_issue))
-print(counter)
+for component_size in range(3, max_component_size + 1):
+	all_component_of_size = []
+	for component in data['connected_components']:
+		if len(component) != component_size:
+			continue
+		a_connected_component = []
+		for node in component:
+			temp = find_node(node)
+			a_connected_component.append(temp)
+		all_component_of_size.append(a_connected_component)
+	pattern_json[component_size]['general'] = all_component_of_size
+
+
+
 
 with open('data/structure.json', 'w') as f:
 	f.write(json.dumps(pattern_json, sort_keys=False, indent=4))
 
-# print(pattern_json)
