@@ -6,8 +6,8 @@ import sys
 import json
 import networkx as nx
 
-TARGET_REPO = 'iamkun/dayjs'
-TARGET_REPO_FILE_NAME = 'dayjs'
+TARGET_REPO = 'nvbn/thefuck'
+TARGET_REPO_FILE_NAME = 'thefuck'
 
 def get_token():
     # get personal access token
@@ -111,6 +111,11 @@ def fetch_data():
             # s = traceback.format_exc()
             # serr = "there were errors:\n%s\n" % (s)
             # sys.stderr.write(serr)
+            node_dict['id'] = issue_number
+            node_dict['type'] = 'error'
+            node_dict['status'] = 'error'
+            node_dict['links'] = []
+            graph_dict['nodes'].append(node_dict)
             print(e)
 
     print('Finished downloading entire repo.')

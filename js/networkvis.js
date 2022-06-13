@@ -1,10 +1,11 @@
 class Networkvis {
-    constructor(_data) {
+    constructor(_data, _svgTag) {
         this.config = {
             width: 800,
             height: 500,
         }
         this.data = _data;
+        this.svgTag = _svgTag;
         this.initVis();
     }
     initVis() {
@@ -90,7 +91,7 @@ class Networkvis {
 
         let vis = this;
 
-        vis.svg = d3.select('#vis')
+        vis.svg = d3.select(vis.svgTag)
         .attr('width', '100%')
         .attr('height', vis.config.height)
         .call(d3.zoom().on('zoom', function (e) {

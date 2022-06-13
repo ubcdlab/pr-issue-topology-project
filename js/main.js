@@ -10,9 +10,7 @@ d3.json('data/graph.json').then(data => {
       }
     }
   }
-  // console.log(data);
-
-  const networkplot = new Networkvis(data);
+  const networkplot = new Networkvis(data, '#vis');
   networkplot.updateVis(data);
 
   const patternplot = new Patternvis({});
@@ -22,7 +20,7 @@ d3.json('data/graph.json').then(data => {
   console.log(error);
 })
 
-d3.json('data/graph_dayjs.json').then(data => {
+d3.json('data/graph_thefuck.json').then(data => {
   for (let node of data.nodes) {
     node['isolated'] = true;
     for (let link of data.links) {
@@ -31,6 +29,7 @@ d3.json('data/graph_dayjs.json').then(data => {
       }
     }
   }
-  const networkplot = new Networkvis(data, )
+  const networkplot = new Networkvis(data, '#vis2');
+  networkplot.updateVis(data);
 })
 
