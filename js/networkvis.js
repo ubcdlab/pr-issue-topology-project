@@ -1,15 +1,16 @@
 class Networkvis {
-    constructor(_data, _svgTag) {
+    constructor(_data, _parentTag) {
         this.config = {
             width: 800,
             height: 500,
         }
         this.data = _data;
-        this.svgTag = _svgTag;
+        this.parentTag = _parentTag;
         this.initVis();
     }
     initVis() {
         let vis = this;
+
         vis.hideIsolatedNodes = d3.select('#hideIsolatedNodes')
         .property('checked', false)
         .on('change', vis.checkboxUpdate);
@@ -26,6 +27,37 @@ class Networkvis {
             let g = d3.select('#mainViewG')
             d3.zoom.translateTo(g, targetX, targetY);
         })
+        let min_size_component = 1;
+        let max_size_component = 1;
+        for (let component of vis.data['connected_components']) {
+            max_size_component = Math.max(component.length, max_size_component);
+        }
+
+        let default_slider_value = [2, Infinity]
+        let slider = d3.sliderBottom()
+        .min(min_size_component)
+        .max(max_size_component)
+        .step(1)
+        .displayValue(true)
+        .width(400)
+        .height(10)
+        .ticks(10)
+        .default(default_slider_value)
+        .fill('skyblue')
+        .on('onchange', (val) => {
+            console.log(val);
+        });
+
+        d3.select(vis.parentTag)
+        // .insert('svg', '#vis')
+        .append('svg')
+        .attr('class', 'slider')
+        .attr('width', '100%')
+        .attr('height', 80)
+        .append('g')
+        .attr('transform', 'translate(30,30)')
+        .call(slider);
+
     }
     checkboxUpdate() {
         d3.selectAll('.isolated')
@@ -91,7 +123,8 @@ class Networkvis {
 
         let vis = this;
 
-        vis.svg = d3.select(vis.svgTag)
+        vis.svg = d3.select(vis.parentTag)
+        .insert('svg', '#frequency')
         .attr('width', '100%')
         .attr('height', vis.config.height)
         .call(d3.zoom().on('zoom', function (e) {
@@ -205,7 +238,7 @@ Component Size: ${d.connected_component.length}`)
             .distance(100)
             .links(data.links))
         .force("collide", d3.forceCollide(20).radius(20))
-        .force('charge', d3.forceManyBody().strength(-100))
+        .force('charge', d3.forceManyBody().strength(-10))
         .force('center', d3.forceCenter(vis.config.width / 2, vis.config.height / 2))
         .on("tick", ticked);
 

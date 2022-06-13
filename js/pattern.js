@@ -19,6 +19,7 @@ class Patternvis {
         }
         
         vis.svg = d3.select(vis.svgTag)
+        .append('svg')
         .attr('width', '100%')
         .attr('height', vis.config.height)
         .append('g')

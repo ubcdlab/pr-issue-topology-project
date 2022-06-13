@@ -21,14 +21,6 @@
     pointer-events: none;           
   }
 
-  #container {
-    padding: 20px;
-  }
-  #mainView {
-    border: 1px solid grey;
-    display: inline-block;
-    float: left;
-  }
   #auxView {
     border: 1px solid grey;
     display: inline-block;
@@ -59,46 +51,46 @@
   .view {
     border: 1px solid grey;
   }
-
 </style>
 <body>
+  <svg height=0 width=0>
+    <defs>
+      <marker id="triangle" viewBox="-0 0 10 10"
+                      refX="8" refY="2.5"
+                      markerUnits="strokeWidth"
+                      markerWidth="13" markerHeight="13"
+                      xoferflow="visible"
+                      orient="auto">
+                  <path d="M 0 0 L 5 2.5 L 0 5 z" fill="#000"/>
+      </marker>
+    </defs>
+  </svg>
   <h3>Github Topology Visualiser</h3>
   <p id="url_tagline">Visualising Repo URL: </p>
   <p id="title_tagline"></p>
-  <input checked=false type="checkbox" id="hideIsolatedNodes">Hide Isolated Nodes</input>
   <br>
   <input checked=true type="checkbox" id="rightClickHyperlink">Right click to open node link</input>
-  <br>
-  <input id="searchBox" type="text" placeholder="Search Node ID...">
-  <button id="searchButton" type="button">Search</button>
   <br>
   <div id="container">
     <div class="row">
         <div class="column">
-          <svg class="view" id="vis">
-            <defs>
-              <marker id="triangle" viewBox="-0 0 10 10"
-                    refX="8" refY="2.5"
-                    markerUnits="strokeWidth"
-                    markerWidth="13" markerHeight="13"
-                    xoferflow="visible"
-                    orient="auto">
-                <path d="M 0 0 L 5 2.5 L 0 5 z" fill="#000"/>
-              </marker>
-            </defs>
-          </svg>
-          <svg class="view" id="frequency">
-          </svg>
+          <div id="leftVis">
         </div>
+      </div>
         <div class="column">
-          <svg class="view" id="vis2">
-          </svg>
-          <svg class="view" id="frequency2">
-          </svg>
+          <div id="right">
+            <svg class="view" id="vis2">
+            </svg>
+            <svg class="view" id="frequency2">
+            </svg>
+          </div>
         </div>
     </div>
   </div>
+  <!-- <script src="https://code.jquery.com/jquery-3.6.0.js"></script> -->
+  <!-- <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script> -->
   <script src="js/d3.v6.min.js"></script>
+  <script src="https://unpkg.com/d3-simple-slider"></script>
   <script src="js/main.js"></script>
   <script src="js/networkvis.js"></script>
   <script src="js/pattern.js"></script>
