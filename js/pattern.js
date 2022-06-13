@@ -2,7 +2,7 @@ class Patternvis {
     constructor(_data, _svgTag) {
         this.config = {
             width: 530,
-            height: 400,
+            height: 300,
             margin: 40
         }
         this.data = _data;
@@ -14,7 +14,7 @@ class Patternvis {
         let total_nodes = 0;
         for (let sub_entries of Object.values(vis.data)) {
             for (let final_entries of Object.values(sub_entries)){
-                total_nodes += final_entries.length;
+                total_nodes = Math.max(final_entries.length, total_nodes);
             }
         }
         
@@ -28,6 +28,7 @@ class Patternvis {
         vis.x = d3.scaleBand()
         .domain(Object.keys(vis.data))
         .range([0, vis.config.width])
+        .padding(0.2)
 
         vis.y = d3.scaleLinear()
         .range([vis.config.height - vis.config.margin, 0])
@@ -38,7 +39,9 @@ class Patternvis {
         .call(d3.axisLeft(vis.y));
         vis.svg.append('g')
         .attr('class', 'xAxis')
-        .call(d3.axisBottom(vis.x).tickValues(Object.keys(vis.data).filter((element, index) => { return index % 5 === 0;})))
+        .call(d3.axisBottom(vis.x).tickValues(Object.keys(vis.data).filter((element, index) => {
+            return Object.values(vis.data[element])[0].length > 0;
+        })))
         .attr('transform', `translate(0, ${vis.config.height - vis.config.margin})`)
     }
     updateVis(data) {

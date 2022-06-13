@@ -39,3 +39,11 @@ d3.json('data/graph_thefuck.json').then(data => {
   networkplot.updateVis(data);
 })
 
+d3.json('data/structure_thefuck.json').then(data => {
+  const patternplot = new Patternvis(data, '#frequency2');
+  patternplot.updateVis(data);
+})
+.catch(error => {
+  console.log(error);
+})
+
