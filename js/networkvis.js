@@ -91,7 +91,7 @@ class Networkvis {
         let vis = this;
 
         vis.svg = d3.select('#vis')
-        .attr('width', vis.config.width)
+        .attr('width', '100%')
         .attr('height', vis.config.height)
         .call(d3.zoom().on('zoom', function (e) {
             vis.svg.attr('transform', e.transform)
@@ -223,7 +223,7 @@ Component Size: ${d.connected_component.length}`)
         .attr('y', 12);
 
 
-        vis.renderTable(data);
+        // vis.renderTable(data);
     }
     
 }

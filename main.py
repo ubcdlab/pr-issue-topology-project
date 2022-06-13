@@ -6,7 +6,8 @@ import sys
 import json
 import networkx as nx
 
-TARGET_REPO = 'jekyll/jekyll-admin'
+TARGET_REPO = 'iamkun/dayjs'
+TARGET_REPO_FILE_NAME = 'dayjs'
 
 def get_token():
     # get personal access token
@@ -33,7 +34,7 @@ def find_all_mentions(text):
     and even then, I am not 100% confident about this method's accuracy
     '''
 
-    REGEX_STRING = '(?:\/jekyll\/jekyll-admin\/)(?:issues|pull)+\/(\d+)'
+    REGEX_STRING = f'(?:{TARGET_REPO})(?:issues|pull)+\/(\d+)'
     # the above regex uses non-capturing groups for the repo URLs, so only the number (the part we want)
     # is captured.
 
@@ -162,13 +163,13 @@ else:
 result = compute_network_statistics(result)
 # print(result)
 
-with open('data/graph.json', 'w') as f:
+with open(f'data/graph_{TARGET_REPO_FILE_NAME}.json', 'w') as f:
     # save result to disk
     f.write(json.dumps(result, sort_keys=False, indent=4))
 
 # with open('data/pattern.json', 'w') as f2:
 
-print('Saved result to data/graph.json')
+print(f'Saved result to data/graph_{TARGET_REPO_FILE_NAME}.json')
 
 
 
