@@ -2,9 +2,8 @@ import json
 import sys 
 import functools
 
-f = open('data/graph.json')
+f = open('data/graph_thefuck.json')
 data = json.load(f)
-
 
 pattern_json = {}
 analysis_dict = {}
@@ -111,6 +110,6 @@ for component_size in range(3, max_component_size + 1):
 
 
 
-with open('data/structure.json', 'w') as f:
+with open('data/structure_thefuck.json', 'w') as f:
 	f.write(json.dumps(pattern_json, sort_keys=False, indent=4))
 

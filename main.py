@@ -14,7 +14,7 @@ def get_token():
     # from a file named token.txt
     token = None
     try:
-        with open('.token', 'r') as f:
+        with open('token.txt', 'r') as f:
             token = f.read()
     except IOError:
         pass

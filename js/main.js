@@ -13,8 +13,8 @@ d3.json('data/graph.json').then(data => {
   const networkplot = new Networkvis(data, '#vis');
   networkplot.updateVis(data);
 
-  const patternplot = new Patternvis({});
-  patternplot.updateVis({});
+  const patternplot = new Patternvis(data, '#frequency');
+  patternplot.updateVis(data);
 })
 .catch(error => {
   console.log(error);

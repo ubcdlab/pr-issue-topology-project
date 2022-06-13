@@ -1,19 +1,19 @@
 class Patternvis {
-    constructor(_data) {
+    constructor(_data, _svgTag) {
         this.config = {
             width: 800,
             height: 500,
             margin: 40
         }
         this.data = _data;
+        this.svgTag = _svgTag;
         this.initVis();
     }
     initVis() {
         let vis = this;
         
-        vis.svg = d3.select('#patternView')
-        .append('svg')
-        .attr('width', vis.config.width)
+        vis.svg = d3.select(vis.svgTag)
+        .attr('width', '100%')
         .attr('height', vis.config.height)
         .append('g')
         .attr('class', 'patternVisArea')

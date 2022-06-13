@@ -52,9 +52,12 @@
   }
 
   .column {
-    border: 1px solid grey;
     margin-right: 20px;
     flex: 50%;
+  }
+
+  .view {
+    border: 1px solid grey;
   }
 
 </style>
@@ -72,7 +75,7 @@
   <div id="container">
     <div class="row">
         <div class="column">
-          <svg id="vis">
+          <svg class="view" id="vis">
             <defs>
               <marker id="triangle" viewBox="-0 0 10 10"
                     refX="8" refY="2.5"
@@ -84,9 +87,11 @@
               </marker>
             </defs>
           </svg>
+          <svg class="view" id="frequency">
+          </svg>
         </div>
         <div class="column">
-          <svg id="vis2">
+          <svg class="view" id="vis2">
           </svg>
         </div>
     </div>
