@@ -45,7 +45,7 @@ class Networkvis {
         .default(default_slider_value)
         .fill('skyblue')
         .on('onchange', (val) => {
-            console.log(val);
+            vis.filterByComponentSize(val[0], val[1]);
         });
 
         d3.select(vis.parentTag)
@@ -62,6 +62,20 @@ class Networkvis {
     checkboxUpdate() {
         d3.selectAll('.isolated')
         .attr('opacity', d3.select('#hideIsolatedNodes').property('checked') ? 0.1 : 1)
+    }
+
+    filterByComponentSize(min_size, max_size) {
+        let vis = this;
+        let original_data = vis.data['nodes'];
+        console.log(vis.data)
+        for (let node of original_data) {
+            if (node['connected_component'].length < min_size || node['connected_component'] > max_size) {
+                original_data.pop(node);
+            }
+            // for (let link of vis.data['links']) {
+
+            // }
+        }
     }
 
     updateVis(data) {
@@ -83,7 +97,6 @@ class Networkvis {
         data.connected_components.sort((a, b) => {
             return b.length - a.length;
         });
-        console.log(data.connected_components);
         let table = d3.select('#auxView').append('table')
         let thead = table.append('thead')
         let tbody = table.append('tbody')
