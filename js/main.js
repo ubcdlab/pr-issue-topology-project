@@ -10,9 +10,15 @@ d3.json('data/graph.json').then(data => {
       }
     }
   }
-  const networkplot = new Networkvis(data, '#vis');
+  const networkplot = new Networkvis(data, '#q');
   networkplot.updateVis(data);
+})
+.catch(error => {
+  console.log(error);
+})
 
+d3.json('data/structure.json').then(data => {
+  console.log(data);
   const patternplot = new Patternvis(data, '#frequency');
   patternplot.updateVis(data);
 })
@@ -29,7 +35,7 @@ d3.json('data/graph_thefuck.json').then(data => {
       }
     }
   }
-  const networkplot = new Networkvis(data, '#vis2');
+  const networkplot = new Networkvis(data, '#q');
   networkplot.updateVis(data);
 })
 
