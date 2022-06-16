@@ -33,49 +33,6 @@ class Networkvis {
             max_size_component = Math.max(component.length, max_size_component);
         }
 
-        let default_slider_value = [2, Infinity]
-        let slider = d3.sliderBottom()
-        .min(min_size_component)
-        .max(max_size_component)
-        .step(1)
-        .displayValue(true)
-        .width(400)
-        .height(10)
-        .ticks(10)
-        .default(default_slider_value)
-        .fill('skyblue')
-        .on('onchange', (val) => {
-            vis.filterByComponentSize(val[0], val[1]);
-        });
-
-        // d3.select(vis.parentTag)
-        // // .insert('svg', '#vis')
-        // .append('svg')
-        // .attr('class', 'slider')
-        // .attr('width', '100%')
-        // .attr('height', 80)
-        // .append('g')
-        // .attr('transform', 'translate(30,30)')
-        // .call(slider);
-
-    }
-    checkboxUpdate() {
-        d3.selectAll('.isolated')
-        .attr('opacity', d3.select('#hideIsolatedNodes').property('checked') ? 0.1 : 1)
-    }
-
-    filterByComponentSize(min_size, max_size) {
-        let vis = this;
-        let original_data = vis.data['nodes'];
-        console.log(vis.data)
-        for (let node of original_data) {
-            if (node['connected_component'].length < min_size || node['connected_component'] > max_size) {
-                original_data.pop(node);
-            }
-            // for (let link of vis.data['links']) {
-
-            // }
-        }
     }
 
     updateVis(data) {
@@ -137,7 +94,7 @@ class Networkvis {
         let vis = this;
 
         vis.svg = d3.select(vis.parentTag)
-        .insert('svg', '#frequency')
+        .insert('svg', '.slider + *')
         .attr('id', `${vis.parentTag.substring(1)}-view`)
         .attr('width', '100%')
         .attr('height', vis.config.height)
@@ -228,7 +185,6 @@ Component Size: ${d.connected_component.length}`)
         const circle = node
         .append('rect')
         .attr('class', 'rect')
-        .classed('isolated', d => (d.isolated))
         .attr('id', d => `point-${d.id}`)
         .attr('number', d => d.id)
         .attr('width', 16)
@@ -249,9 +205,9 @@ Component Size: ${d.connected_component.length}`)
         var simulation = d3.forceSimulation(data.nodes)
         .force('link', d3.forceLink()
             .id(function(d) { return d.id; })
-            .distance(100)
+            .distance(50)
             .links(data.links))
-        .force("collide", d3.forceCollide(20).radius(20))
+        .force("collide", d3.forceCollide(5).radius(23))
         .force('charge', d3.forceManyBody().strength(-10))
         .force('center', d3.forceCenter(vis.config.width / 2, vis.config.height / 2))
         .on("tick", ticked);
@@ -269,7 +225,6 @@ Component Size: ${d.connected_component.length}`)
         .style('fill', 'white')
         .attr('x', 5)
         .attr('y', 12);
-
 
         // vis.renderTable(data);
     }
