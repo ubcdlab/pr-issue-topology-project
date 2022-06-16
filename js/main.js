@@ -16,6 +16,8 @@ Promise.all([
       }
     }
   }
+
+  console.log(graph_data);
   // const networkplot = new Networkvis(graph_data, '#leftVis');
   // networkplot.updateVis(graph_data);
 
@@ -33,7 +35,7 @@ Promise.all([
   .ticks(10)
   .default(default_slider_value)
   .fill('skyblue')
-  .on('onchange', (val) => {
+  .on('end', (val) => {
       // console.log(val)
       let min_size = val[0];
       let max_size = val[1];
@@ -47,7 +49,7 @@ Promise.all([
           if (min_size <= node['connected_component'].length && node['connected_component'].length <= max_size) {
               new_nodes.push(node);
               for (let link of links) {
-                  if (link['source'].id === node.id || link['target'].id === node.id) {
+                  if (link['source'] === node.id || link['target'] === node.id) {
                       new_links.add(link);
                   }
               }
