@@ -33,6 +33,7 @@ Promise.all([
       d3.select('#leftVis-view').remove();
       const networkplot2 = new Networkvis(modify, LEFT_VIS_DIV_ID);
       networkplot2.updateVis(modify);
+      computeStatistics(graph_data, modify)
   });
 
   d3.select('.sliderDiv')
@@ -49,6 +50,8 @@ Promise.all([
   const networkplot2 = new Networkvis(modify, LEFT_VIS_DIV_ID);
   networkplot2.updateVis(modify);
 
+  computeStatistics(graph_data, modify);
+  
   const patternplot = new Patternvis(structure_data, LEFT_VIS_DIV_ID);
   patternplot.updateVis(structure_data);
 
@@ -86,4 +89,62 @@ function computeLargestConnectedComponentSize(data) {
       max_size_component = Math.max(component.length, max_size_component);
   }
   return max_size_component;
+}
+
+function computeStatistics(data, filtered) {
+  console.log(filtered.nodes);
+  let total_node_quantity = data.nodes.length;
+  let filtered_node_quantity = filtered.nodes.length;
+  let issues_quantity = 0;
+  let closed_issues = 0;
+  let open_issues = 0;
+
+  let pull_request_quantity = 0; 
+  let open_pull_request = 0;
+  let closed_pull_request = 0;
+  let merged_pull_request = 0;
+
+  for (let node of filtered.nodes) {
+    if (node.type === 'issue') {
+      issues_quantity += 1;
+      if (node.status === 'closed') {
+        closed_issues += 1;
+      } else {
+        open_issues += 1;
+      }
+    } else {
+      pull_request_quantity += 1;
+      if (node.status === 'closed') {
+        closed_pull_request += 1;
+      } else if (node.status === 'open') {
+        open_pull_request += 1;
+      } else {
+        merged_pull_request += 1;
+      }
+    }
+  }
+
+  // we can do this more elegently in an object, a note for
+  // future self
+
+  d3.select('#unfiltered_quantity').text(total_node_quantity);
+  d3.select('#filtered_quantity').text(filtered_node_quantity);
+
+  d3.select('#issues_quantity').text(issues_quantity);
+  d3.select('#pull_request_quantity').text(pull_request_quantity);
+
+  d3.select('#issues_quantity_percent').text(`${(issues_quantity/filtered_node_quantity * 100).toFixed(1)}%`);
+  d3.select('#pull_request_percent').text(`${(pull_request_quantity/filtered_node_quantity * 100).toFixed(1)}%`);
+
+  d3.select('#closed_issue').text(closed_issues);
+  d3.select('#closed_issue_percent').text(`${(closed_issues/issues_quantity * 100).toFixed(1)}%`)
+  d3.select('#open_issue').text(open_issues)
+  d3.select('#open_issue_percent').text(`${(open_issues/issues_quantity * 100).toFixed(1)}%`)
+
+  d3.select('#closed_pull_request').text(closed_pull_request)
+  d3.select('#closed_pull_request_percent').text(`${(closed_pull_request/pull_request_quantity * 100).toFixed(1)}%`)
+  d3.select('#open_pull_request').text(open_pull_request)
+  d3.select('#open_pull_request_percent').text(`${(open_pull_request/pull_request_quantity * 100).toFixed(1)}%`)
+  d3.select('#merged_pull_request').text(merged_pull_request)
+  d3.select('#merged_pull_request_percent').text(`${(merged_pull_request/pull_request_quantity * 100).toFixed(1)}%`)
 }
