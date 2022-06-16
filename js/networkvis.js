@@ -48,15 +48,15 @@ class Networkvis {
             vis.filterByComponentSize(val[0], val[1]);
         });
 
-        d3.select(vis.parentTag)
-        // .insert('svg', '#vis')
-        .append('svg')
-        .attr('class', 'slider')
-        .attr('width', '100%')
-        .attr('height', 80)
-        .append('g')
-        .attr('transform', 'translate(30,30)')
-        .call(slider);
+        // d3.select(vis.parentTag)
+        // // .insert('svg', '#vis')
+        // .append('svg')
+        // .attr('class', 'slider')
+        // .attr('width', '100%')
+        // .attr('height', 80)
+        // .append('g')
+        // .attr('transform', 'translate(30,30)')
+        // .call(slider);
 
     }
     checkboxUpdate() {
@@ -138,6 +138,7 @@ class Networkvis {
 
         vis.svg = d3.select(vis.parentTag)
         .insert('svg', '#frequency')
+        .attr('id', `${vis.parentTag.substring(1)}-view`)
         .attr('width', '100%')
         .attr('height', vis.config.height)
         .call(d3.zoom().on('zoom', function (e) {
