@@ -1,5 +1,6 @@
 
 const LEFT_VIS_DIV_ID = '#leftVis'
+const LEFT_VIS_DIV_ID_STRING = LEFT_VIS_DIV_ID.substring(1)
 
 
 Promise.all([
@@ -11,6 +12,12 @@ Promise.all([
   let structure_data = data[1];
 
   const default_slider_value = [-Infinity, Infinity]
+  let sliderDiv = d3.select(LEFT_VIS_DIV_ID)
+  .append('svg')
+  .attr('class', 'sliderDiv')
+  .style('width', '100%')
+  .style('height', '80px');
+
   let slider = d3.sliderBottom()
   .min(1)
   .max(computeLargestConnectedComponentSize(graph_data))
@@ -28,9 +35,10 @@ Promise.all([
       networkplot2.updateVis(modify);
   });
 
-  d3.select(LEFT_VIS_DIV_ID)
+  d3.select('.sliderDiv')
   .append('svg')
   .attr('class', 'slider')
+  .attr('id', `${LEFT_VIS_DIV_ID_STRING}-slider-div`)
   .attr('width', '100%')
   .attr('height', 80)
   .append('g')

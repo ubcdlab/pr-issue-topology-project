@@ -54,6 +54,7 @@
   .view {
     border: 1px solid grey;
   }
+
 </style>
 <body>
   <svg height=0 width=0>
@@ -69,15 +70,18 @@
     </defs>
   </svg>
   <h3>Github Topology Visualiser</h3>
-  <p id="url_tagline">Visualising Repo URL: </p>
-  <p id="title_tagline"></p>
-  <br>
+  <p id="url_tagline">Visualising Repo: </p>
   <input checked=true type="checkbox" id="rightClickHyperlink">Right click to open node link</input>
   <br>
   <div id="container">
     <div class="row">
         <div class="column">
           <div id="leftVis">
+            <div>
+              Visualising <span>n</span> nodes (<span>x</span> filtered) in <span>n</span> components
+              <br><span>x</span> issues (<span>x%</span>): <span>y closed</span> (<span>x%</span>); <span>z</span> open (<span>x%</span>)
+              <br><span>x</span> pull requests: (<span>x%</span>); <span>y closed</span> (<span>x%</span>); <span>z</span> open (<span>x%</span>)
+            </div>
         </div>
       </div>
         <div class="column">
@@ -86,8 +90,6 @@
         </div>
     </div>
   </div>
-  <!-- <script src="https://code.jquery.com/jquery-3.6.0.js"></script> -->
-  <!-- <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script> -->
   <script src="js/d3.v6.min.js"></script>
   <script src="https://unpkg.com/d3-simple-slider"></script>
   <script src="js/main.js"></script>

@@ -16,7 +16,7 @@ class Networkvis {
         .on('change', vis.checkboxUpdate);
 
         d3.select('#url_tagline')
-        .html(`Visualising Repo URL: <a href=${vis.data.repo_url}>${vis.data.repo_url}</a>`)
+        .html(`Visualising Repo: <a href=${vis.data.repo_url}>${vis.data.repo_url}</a>`)
 
         d3.select('#searchButton')
         .on('click', (d, e) => {
@@ -94,8 +94,9 @@ class Networkvis {
         let vis = this;
 
         vis.svg = d3.select(vis.parentTag)
-        .insert('svg', '.slider + *')
+        .insert('svg', '.sliderDiv + *')
         .attr('id', `${vis.parentTag.substring(1)}-view`)
+        .classed('view', true)
         .attr('width', '100%')
         .attr('height', vis.config.height)
         .call(d3.zoom().on('zoom', function (e) {
