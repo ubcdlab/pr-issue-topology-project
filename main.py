@@ -6,16 +6,17 @@ import sys
 import json
 import networkx as nx
 
-TARGET_REPO = 'nvbn/thefuck'
-TARGET_REPO_FILE_NAME = 'thefuck'
+TARGET_REPO = 'jekyll/jekyll-admin'
+TARGET_REPO_FILE_NAME = 'jekyll-admin'
 
 def get_token():
     # get personal access token
     # from a file named token.txt
     token = None
     try:
-        with open('token.txt', 'r') as f:
+        with open('.token', 'r') as f:
             token = f.read()
+            print('Github token read OK')
     except IOError:
         pass
     return token
@@ -34,7 +35,7 @@ def find_all_mentions(text):
     and even then, I am not 100% confident about this method's accuracy
     '''
 
-    REGEX_STRING = f'(?:{TARGET_REPO})(?:issues|pull)+\/(\d+)'
+    REGEX_STRING = f'(?:https:\/\/github\.com/{TARGET_REPO})\/(?:issues|pull)\/(\d+)'
     # the above regex uses non-capturing groups for the repo URLs, so only the number (the part we want)
     # is captured.
 
@@ -99,7 +100,7 @@ def fetch_data():
 
             # update the dictionary storing the graph toplogy 
             graph_dict['nodes'].append(node_dict)
-            print(f'Finished loading node number: {issue_number}')
+            print(f'Finished loading node number: {issue_number}; Rate Limit Remaining: {g.rate_limiting[0]}')
 
             for link in total_links:
                 graph_dict['links'].append({'source': issue_number, 'target': int(link)})
