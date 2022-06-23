@@ -4,7 +4,7 @@ const LEFT_VIS_DIV_ID_STRING = LEFT_VIS_DIV_ID.substring(1)
 
 
 Promise.all([
-  d3.json('data/graph.json'),
+  d3.json('data/graph_jekyll-admin.json'),
   d3.json('data/structure.json')
 ])
 .then(data => {
