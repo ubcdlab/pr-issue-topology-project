@@ -21,10 +21,6 @@ def get_token():
         pass
     return token
 
-def get_highest_issue_number(repo):
-    latest_issue = list(repo.get_issues(state='all', since=datetime.datetime(2022, 5, 1), direction='desc'))
-    return latest_issue[0].number
-
 def find_all_mentions(text):
     ''' 
     Github is pathological; mentions to other issues/PR
@@ -53,14 +49,15 @@ def fetch_data():
     g = Github(get_token())
     graph_dict = {}
     repo = g.get_repo(TARGET_REPO)
+    repo_url = repo.html_url
 
-    print(f'Downloading repo: {repo.html_url} with {repo.open_issues} open issues')
+    print(f'Downloading repo: {repo_url} with {repo.open_issues} open issues')
     nodes = list(repo.get_issues(state='all', sort='created', direction='asc'))
     print(f'Loaded {len(nodes)} nodes from repo.')
 
     HIGHEST_ISSUE_NUMBER = nodes[0].number
 
-    graph_dict['repo_url'] = repo.html_url
+    graph_dict['repo_url'] = repo_url
     graph_dict['issue_count'] = 0
     graph_dict['pull_request_count'] = 0
     graph_dict['nodes'] = []
@@ -74,13 +71,13 @@ def fetch_data():
             total_links += find_all_mentions(issue.body)
         for comment in issue.get_comments():
             if (comment.user.type != 'Bot'):
-                total_links += find_all_mentions(comment)
+                total_links += find_all_mentions(comment.body)
 
         total_links = list(filter(lambda x: (int(x) <= HIGHEST_ISSUE_NUMBER), total_links))
 
         node_dict['id'] = issue.number
         node_dict['type'] = 'pull_request' if issue.pull_request is not None else 'issue'
-        node_dict['status'] = item.state
+        node_dict['status'] = issue.state
         node_dict['links'] = total_links
 
         if issue.pull_request is not None:
@@ -93,66 +90,7 @@ def fetch_data():
         for links in total_links:
             graph_dict['links'].append({'source': issue.number, 'target': int(link)})
 
-        print(f'Finished loading node number: {issue_number}; Rate Limit Remaining: {g.rate_limiting[0]}')
-
-
-    # for issue_number in range(1, HIGHEST_ISSUE_NUMBER + 1):
-    #     # go through every possible issue/PR number
-    #     try:
-    #         item = repo.get_issue(issue_number) # get the issue
-    #         total_links = [] # initialise array of matches, set to empty
-    #         node_dict = {}
-
-    #         if (item.user.type != 'Bot'): # filter out links/mentions made by bot accounts 
-    #             total_links += find_all_mentions(item.body) # find all mentions in issue/PR description
-
-    #         for comment in item.get_comments(): # go through every single comment
-    #             if (comment.user.type != 'Bot'): # filter out links/mentions made by bot accounts
-    #                 total_links += find_all_mentions(comment.body) # find all mentions in a specific comment
-            
-    #         # filter out mentions to other projects, right now we catch mentions
-    #         # to other projects by removing links with an issue/PR number that is higher
-    #         # than the project of concern
-    #         total_links = list(filter(lambda x: (int(x) <= HIGHEST_ISSUE_NUMBER), total_links))
-
-    #         ''' Github API treats both issue and PR as issues (PRs are issues with code),
-    #             API docs direct us to distinguish between the two by checking the pull_request key
-    #             which is None for issues
-    #         '''
-    #         node_dict['id'] = issue_number
-    #         node_dict['type'] = 'pull_request' if item.pull_request is not None else 'issue'
-    #         node_dict['status'] = item.state # whether an issue/PR is open or closed
-    #         node_dict['links'] = total_links
-
-    #         if item.pull_request is not None:
-    #             # this ugly check is needed to find out whether a PR is merged
-    #             # since GitHub doesn't support this directly
-    #             pull_request_is_merged = repo.get_issue(issue_number).as_pull_request().merged
-    #             if pull_request_is_merged is True:
-    #                 node_dict['status'] = 'merged'
-
-    #         # update the dictionary storing the graph toplogy 
-    #         graph_dict['nodes'].append(node_dict)
-    #         print(f'Finished loading node number: {issue_number}; Rate Limit Remaining: {g.rate_limiting[0]}')
-
-    #         for link in total_links:
-    #             graph_dict['links'].append({'source': issue_number, 'target': int(link)})
-
-    #     except Exception as e:
-    #         # Exceptions usually happens, when we try to load a number 
-    #         # that doesn't correspond to an issue or pull request
-    #         # idk why Github let this happens
-    #         # s = traceback.format_exc()
-    #         # serr = "there were errors:\n%s\n" % (s)
-    #         # sys.stderr.write(serr)
-    #         node_dict['id'] = issue_number
-    #         node_dict['type'] = 'error'
-    #         node_dict['status'] = 'error'
-    #         node_dict['links'] = []
-    #         graph_dict['nodes'].append(node_dict)
-    #         print(e)
-
-    print('Finished downloading entire repo.')
+    print(f'Finished downloading entire repo. Rate limit: {g.rate_limiting[0]}')
     return graph_dict
 
 def compute_network_statistics(data):
