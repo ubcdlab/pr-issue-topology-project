@@ -52,7 +52,7 @@ def fetch_data():
     repo_url = repo.html_url
 
     print(f'Downloading repo: {repo_url} with {repo.open_issues} open issues')
-    nodes = list(repo.get_issues(state='all', sort='created', direction='asc'))
+    nodes = list(repo.get_issues(state='all', sort='created', direction='desc'))
     print(f'Loaded {len(nodes)} nodes from repo.')
 
     HIGHEST_ISSUE_NUMBER = nodes[0].number
@@ -74,6 +74,7 @@ def fetch_data():
                 total_links += find_all_mentions(comment.body)
 
         total_links = list(filter(lambda x: (int(x) <= HIGHEST_ISSUE_NUMBER), total_links))
+        # print(total_links)
 
         node_dict['id'] = issue.number
         node_dict['type'] = 'pull_request' if issue.pull_request is not None else 'issue'
@@ -87,8 +88,10 @@ def fetch_data():
                 node_dict['status'] = 'merged'
 
         graph_dict['nodes'].append(node_dict)
-        for links in total_links:
+        for link in total_links:
             graph_dict['links'].append({'source': issue.number, 'target': int(link)})
+
+        print(f'Finished processing node {issue.number}. Rate limit: {g.rate_limiting[0]}')
 
     print(f'Finished downloading entire repo. Rate limit: {g.rate_limiting[0]}')
     return graph_dict
@@ -126,7 +129,7 @@ result = None
 if redownload == True:
     result = fetch_data()
 else:
-    f = open('data/graph.json')
+    f = open(f'data/graph_{TARGET_REPO_FILE_NAME}.json')
     result = json.load(f)
 
 result = compute_network_statistics(result)

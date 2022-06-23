@@ -11,6 +11,8 @@ Promise.all([
   let graph_data = data[0];
   let structure_data = data[1];
 
+  console.log(graph_data);
+
   const default_slider_value = [-Infinity, Infinity]
   let sliderDiv = d3.select(LEFT_VIS_DIV_ID)
   .append('svg')
