@@ -94,7 +94,7 @@ class Networkvis {
         let vis = this;
 
         vis.svg = d3.select(vis.parentTag)
-        .insert('svg', '.sliderDiv + *')
+        .insert('svg', `${vis.parentTag}_sliderDiv + *`)
         .attr('id', `${vis.parentTag.substring(1)}-view`)
         .classed('view', true)
         .attr('width', '100%')
@@ -120,10 +120,10 @@ class Networkvis {
 
         const node = vis.svg
         .append('g')
-        .attr('class', 'nodes')
         .selectAll('g')
         .data(data.nodes)
         .join('g')
+        .attr('class', 'nodes')
         .classed('issues', d => {
             return d.type === 'issue' ? true : false;
         })
@@ -226,6 +226,10 @@ Component Size: ${d.connected_component.length}`)
         .style('fill', 'white')
         .attr('x', 5)
         .attr('y', 12);
+
+        vis.svg.selectAll('.nodes')
+        .append('text')
+        .text((d) => d.id);
 
         // vis.renderTable(data);
     }
