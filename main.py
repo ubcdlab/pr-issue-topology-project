@@ -7,8 +7,8 @@ import json
 import networkx as nx
 import pickle
 
-TARGET_REPO = 'facebook/react'
-TARGET_REPO_FILE_NAME = 'react'
+TARGET_REPO = '0x7c13/Notepads'
+TARGET_REPO_FILE_NAME = 'Notepads'
 
 def get_token():
     # get personal access token
@@ -55,10 +55,10 @@ def fetch_data():
     print(f'Downloading repo: {repo_url} with {repo.open_issues} open issues')
     nodes = list(repo.get_issues(state='all', sort='created', direction='desc'))
     print(f'Loaded {len(nodes)} nodes from repo.')
-    with open('nodes.pk', 'wb') as fi:
-        pickle.dump(nodes, fi)
+    # with open('nodes.pk', 'wb') as fi:
+    #     pickle.dump(nodes, fi)
 
-    sys.exit(0)
+    # sys.exit(0)
 
     HIGHEST_ISSUE_NUMBER = nodes[0].number
 
@@ -78,7 +78,7 @@ def fetch_data():
             if (comment.user.type != 'Bot'):
                 total_links += find_all_mentions(comment.body)
 
-        total_links = list(filter(lambda x: (int(x) <= HIGHEST_ISSUE_NUMBER), total_links))
+        total_links = list(filter(lambda x: (0 < int(x) <= HIGHEST_ISSUE_NUMBER), total_links))
         # print(total_links)
 
         node_dict['id'] = issue.number

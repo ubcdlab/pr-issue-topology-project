@@ -2,7 +2,7 @@ import json
 import sys 
 import functools
 
-REPO_NAME = 'jekyll-admin'
+REPO_NAME = 'Notepads'
 
 f = open(f'data/graph_{REPO_NAME}.json')
 data = json.load(f)
@@ -43,10 +43,6 @@ for counter in range(1, max_component_size + 1):
 
 # Modify the lines below to add custom analysis
 
-# add_analysis_function(analysis_dict, 1, [find_isolated_nodes])
-# add_analysis_function(analysis_dict, 2, [,])
-
-# print(analysis_dict)
 
 # First, find isolated nodes
 for component in data['connected_components']:
@@ -61,6 +57,7 @@ for component_size in range(1, max_component_size + 1):
 A node has form:
 id, type, status, links, connected_component, node_degree
 '''
+
 
 # Second, find all possible permutations of duo nodes
 for component in data['connected_components']:
