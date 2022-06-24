@@ -1,72 +1,67 @@
 
-const LEFT_VIS_DIV_ID = '#leftVis'
-const LEFT_VIS_DIV_ID_STRING = LEFT_VIS_DIV_ID.substring(1)
-
-const RIGHT_VIS_DIV_ID = '#rightVis'
-const RIGHT_VIS_DIV_ID_STRING = LEFT_VIS_DIV_ID.substring(1)
-
 
 this.createVisInstance('#leftVis', 'data/graph_jekyll-admin.json', 'data/structure_jekyll-admin.json');
+this.createVisInstance('#rightVis', 'data/graph_Notepads.json', 'data/structure_Notepads.json');
 
 function createVisInstance(DIV_ID, graph_json_file, structure_json_file) {
-  Promise.all([
-  d3.json(graph_json_file),
-  d3.json(structure_json_file)
-])
-.then(data => {
-  let graph_data = data[0];
-  let structure_data = data[1];
+    Promise.all([
+    d3.json(graph_json_file),
+    d3.json(structure_json_file)
+  ])
+  .then(data => {
+    let graph_data = data[0];
+    let structure_data = data[1];
 
-  console.log(graph_data);
+    console.log(graph_data);
 
-  const default_slider_value = [-Infinity, Infinity]
-  let sliderDiv = d3.select(DIV_ID)
-  .append('svg')
-  .attr('class', 'sliderDiv')
-  .style('width', '100%')
-  .style('height', '80px');
+    const default_slider_value = [-Infinity, Infinity]
+    let sliderDiv = d3.select(DIV_ID)
+    .append('svg')
+    .attr('id', `${DIV_ID.substring(1)}_sliderDiv`)
+    .style('width', '100%')
+    .style('height', '80px');
 
-  let slider = d3.sliderBottom()
-  .min(1)
-  .max(computeLargestConnectedComponentSize(graph_data))
-  .step(1)
-  .displayValue(true)
-  .width(400)
-  .height(10)
-  .ticks(10)
-  .default(default_slider_value)
-  .fill('skyblue')
-  .on('end', (val) => {
-      let modify = filterNetwork(val[0], val[1], graph_data)
-      d3.select('#leftVis-view').remove();
-      const networkplot2 = new Networkvis(modify, DIV_ID);
-      networkplot2.updateVis(modify);
-      computeStatistics(graph_data, modify)
-  });
+    let slider = d3.sliderBottom()
+    .min(1)
+    .max(computeLargestConnectedComponentSize(graph_data))
+    .step(1)
+    .displayValue(true)
+    .width(400)
+    .height(10)
+    .ticks(10)
+    .default(default_slider_value)
+    .fill('skyblue')
+    .on('end', (val) => {
+        let modify = filterNetwork(val[0], val[1], graph_data)
+        d3.select(`${DIV_ID}-view`).remove();
+        const networkplot2 = new Networkvis(modify, DIV_ID);
+        networkplot2.updateVis(modify);
+        computeStatistics(graph_data, modify)
+    });
 
-  d3.select('.sliderDiv')
-  .append('svg')
-  .attr('class', 'slider')
-  .attr('id', `${LEFT_VIS_DIV_ID_STRING}-slider-div`)
-  .attr('width', '100%')
-  .attr('height', 80)
-  .append('g')
-  .attr('transform', 'translate(30,30)')
-  .call(slider);
+    d3.select(`${DIV_ID}_sliderDiv`)
+    .append('svg')
+    .attr('class', 'slider')
+    .attr('id', `${DIV_ID}-slider-div`)
+    .attr('width', '100%')
+    .attr('height', 80)
+    .append('g')
+    .attr('transform', 'translate(30,30)')
+    .call(slider);
 
-  let modify = filterNetwork(-Infinity, Infinity, graph_data);
-  const networkplot2 = new Networkvis(modify, DIV_ID);
-  networkplot2.updateVis(modify);
+    let modify = filterNetwork(-Infinity, Infinity, graph_data);
+    const networkplot2 = new Networkvis(modify, DIV_ID);
+    networkplot2.updateVis(modify);
 
-  computeStatistics(graph_data, modify);
-  
-  const patternplot = new Patternvis(structure_data, DIV_ID);
-  patternplot.updateVis(structure_data);
+    computeStatistics(graph_data, modify);
+    
+    const patternplot = new Patternvis(structure_data, DIV_ID);
+    patternplot.updateVis(structure_data);
 
-})
-.catch(error => {
-  console.log(error);
-})
+  })
+  .catch(error => {
+    console.log(error);
+  })
 }
 
 
