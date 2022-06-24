@@ -14,15 +14,15 @@ function createVisInstance(DIV_ID, graph_json_file, structure_json_file) {
 
     console.log(graph_data);
 
-    const default_slider_value = [-Infinity, Infinity]
+    const default_slider_value = [10, Infinity]
 
     let statsDiv = d3.select(DIV_ID)
     .append('div')
     .attr('id', `${DIV_ID.substring(1)}_statsDiv`)
     .style('width', '100%')
-    .style('height', '50px');
+    .style('height', '85px');
 
-    this.initStatsPanel(statsDiv, graph_data);
+    this.initStatsPanel(statsDiv, graph_data, DIV_ID);
 
     let sliderDiv = d3.select(DIV_ID)
     .append('svg')
@@ -31,7 +31,7 @@ function createVisInstance(DIV_ID, graph_json_file, structure_json_file) {
     .style('height', '80px');
 
     let slider = d3.sliderBottom()
-    .min(2)
+    .min(1)
     .max(computeLargestConnectedComponentSize(graph_data))
     .step(1)
     .displayValue(true)
@@ -58,7 +58,7 @@ function createVisInstance(DIV_ID, graph_json_file, structure_json_file) {
     .attr('transform', 'translate(30,30)')
     .call(slider);
 
-    let modify = filterNetwork(-Infinity, Infinity, graph_data);
+    let modify = filterNetwork(default_slider_value[0], default_slider_value[1], graph_data);
     const networkplot2 = new Networkvis(modify, DIV_ID);
     networkplot2.updateVis(modify);
 
@@ -74,7 +74,7 @@ function createVisInstance(DIV_ID, graph_json_file, structure_json_file) {
 }
 
 
-function initStatsPanel(statsDiv, data) {
+function initStatsPanel(statsDiv, data, DIV_ID) {
   statsDiv
   .html(`
 Repo URL: <a href="${data.repo_url}">${data.repo_url}</a><br>
@@ -90,7 +90,8 @@ Visualising <span id="filtered_quantity">n</span> nodes (<span id="unfiltered_qu
 
               <span id="closed_pull_request">y</span> <span style="color: rgb(218, 54, 51);"> closed </span> (<span id="closed_pull_request_percent">x%</span>); 
               <span id="open_pull_request">z</span> <span style="color: rgb(35, 134, 54)"> open </span> (<span id="open_pull_request_percent">x%</span>);
-              <span id="merged_pull_request">z</span> <span style="color: rgb(137, 87, 229)"> merged </span> (<span id="merged_pull_request_percent">x%</span>);
+              <span id="merged_pull_request">z</span> <span style="color: rgb(137, 87, 229)"> merged </span> (<span id="merged_pull_request_percent">x%</span>);<br>
+<input checked=true type="checkbox" class="rightClickHyperlink">Right click to open node link</input>
 `)
 
 }
