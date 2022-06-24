@@ -15,6 +15,15 @@ function createVisInstance(DIV_ID, graph_json_file, structure_json_file) {
     console.log(graph_data);
 
     const default_slider_value = [-Infinity, Infinity]
+
+    let statsDiv = d3.select(DIV_ID)
+    .append('svg')
+    .attr('id', `${DIV_ID.substring(1)}_statsDiv`)
+    .style('width', '100%')
+    .style('height', '80px');
+
+    this.initStatsPanel(statsDiv);
+
     let sliderDiv = d3.select(DIV_ID)
     .append('svg')
     .attr('id', `${DIV_ID.substring(1)}_sliderDiv`)
@@ -65,6 +74,12 @@ function createVisInstance(DIV_ID, graph_json_file, structure_json_file) {
 }
 
 
+function initStatsPanel(statsDiv){
+  statsDiv
+  .append('text')
+  .text('test')
+
+}
 
 
 function filterNetwork(min_size, max_size, data) {
@@ -99,6 +114,7 @@ function computeLargestConnectedComponentSize(data) {
 
 function computeStatistics(data, filtered) {
   console.log(filtered.nodes);
+
   let total_node_quantity = data.nodes.length;
   let filtered_node_quantity = filtered.nodes.length;
   let issues_quantity = 0;
