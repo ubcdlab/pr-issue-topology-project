@@ -5,9 +5,10 @@ import re
 import sys
 import json
 import networkx as nx
+import pickle
 
-TARGET_REPO = 'jekyll/jekyll-admin'
-TARGET_REPO_FILE_NAME = 'jekyll-admin'
+TARGET_REPO = 'facebook/react'
+TARGET_REPO_FILE_NAME = 'react'
 
 def get_token():
     # get personal access token
@@ -54,6 +55,10 @@ def fetch_data():
     print(f'Downloading repo: {repo_url} with {repo.open_issues} open issues')
     nodes = list(repo.get_issues(state='all', sort='created', direction='desc'))
     print(f'Loaded {len(nodes)} nodes from repo.')
+    with open('nodes.pk', 'wb') as fi:
+        pickle.dump(nodes, fi)
+
+    sys.exit(0)
 
     HIGHEST_ISSUE_NUMBER = nodes[0].number
 
@@ -133,7 +138,6 @@ else:
     result = json.load(f)
 
 result = compute_network_statistics(result)
-# print(result)
 
 with open(f'data/graph_{TARGET_REPO_FILE_NAME}.json', 'w') as f:
     # save result to disk
