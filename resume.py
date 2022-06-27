@@ -5,6 +5,8 @@ import sys
 import json
 import pickle
 import networkx as nx
+import copy
+
 
 TARGET_REPO = 'facebook/react'
 TARGET_REPO_FILE_NAME = 'react'
@@ -55,24 +57,22 @@ def find_all_mentions(text):
 graph_dict = {}
 
 nodes = None
+comment_nodes = None
 with open('nodes.pk', 'rb') as fi:
     nodes = pickle.load(fi)
     print(f'Loaded {len(nodes)} Nodes.')
 
-# print(nodes[0])
-temp = find_node(11782, nodes)
-print(find_all_mentions(temp.body))
-sys.exit(0)
+with open('comments.pk', 'rb') as ci:
+    comment_nodes = pickle.load(ci)
+    print(f'Loaded comment nodes.')
+
+working_nodes = copy.copy(nodes)
+
 
 HIGHEST_ISSUE_NUMBER = nodes[0].number
-graph_dict['issue_count'] = 0
-graph_dict['pull_request_count'] = 0
-graph_dict['nodes'] = []
-graph_dict['links'] = []
-
 print(f'Processing {HIGHEST_ISSUE_NUMBER} nodes.')
 
-for issue in nodes:
+for issue in working_nodes:
     total_links = []
     node_dict = {}
 

@@ -7,8 +7,8 @@ import json
 import networkx as nx
 import pickle
 
-TARGET_REPO = '0x7c13/Notepads'
-TARGET_REPO_FILE_NAME = 'Notepads'
+TARGET_REPO = '10up/ElasticPress'
+TARGET_REPO_FILE_NAME = 'ElasticPress'
 
 def get_token():
     # get personal access token
@@ -55,10 +55,9 @@ def fetch_data():
     print(f'Downloading repo: {repo_url} with {repo.open_issues} open issues')
     nodes = list(repo.get_issues(state='all', sort='created', direction='desc'))
     print(f'Loaded {len(nodes)} nodes from repo.')
-    # with open('nodes.pk', 'wb') as fi:
-    #     pickle.dump(nodes, fi)
-
-    # sys.exit(0)
+    
+    with open(f'nodes_{TARGET_REPO_FILE_NAME}.pk', 'wb') as fi:
+        pickle.dump(nodes, fi)
 
     HIGHEST_ISSUE_NUMBER = nodes[0].number
 
@@ -67,6 +66,7 @@ def fetch_data():
     graph_dict['pull_request_count'] = 0
     graph_dict['nodes'] = []
     graph_dict['links'] = []
+
 
     for issue in nodes:
         total_links = []
@@ -99,6 +99,7 @@ def fetch_data():
         print(f'Finished processing node {issue.number}. Rate limit: {g.rate_limiting[0]}')
 
     print(f'Finished downloading entire repo. Rate limit: {g.rate_limiting[0]}')
+
     return graph_dict
 
 def compute_network_statistics(data):

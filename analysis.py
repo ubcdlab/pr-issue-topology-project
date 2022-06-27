@@ -2,7 +2,7 @@ import json
 import sys 
 import functools
 
-REPO_NAME = 'Notepads'
+REPO_NAME = 'ElasticPress'
 
 f = open(f'data/graph_{REPO_NAME}.json')
 data = json.load(f)
@@ -70,6 +70,9 @@ for component in data['connected_components']:
 
 	source_node = None
 	sink_node = None
+
+	if lower_number_node is None:
+		continue
 
 	if len(lower_number_node['links']) == 0:
 		sink_node = lower_number_node

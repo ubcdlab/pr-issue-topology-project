@@ -1,9 +1,22 @@
 
+d3.select('#leftFile')
+.on('change', (val) => {
+  let newSelection = d3.select('#leftFile').property('value');
+  console.log(newSelection);
+  this.createVisInstance('#leftVis', `data/graph_${newSelection}.json`, `data/structure_${newSelection}.json`);
+})
 
-this.createVisInstance('#leftVis', 'data/graph_jekyll-admin.json', 'data/structure_jekyll-admin.json');
-this.createVisInstance('#rightVis', 'data/graph_Notepads.json', 'data/structure_Notepads.json');
+d3.select('#rightFile')
+.on('change', (val) => {
+  let newSelection = d3.select('#rightFile').property('value');
+  console.log(newSelection);
+  this.createVisInstance('#rightVis', `data/graph_${newSelection}.json`, `data/structure_${newSelection}.json`);
+})
+
 
 function createVisInstance(DIV_ID, graph_json_file, structure_json_file) {
+  d3.select(DIV_ID).html(null);
+
     Promise.all([
     d3.json(graph_json_file),
     d3.json(structure_json_file)
