@@ -20,5 +20,7 @@ You can also right click on a node within the network to open a link (in a new t
 
 ## Running the crawler
 To run the crawler, make sure you have a [Github Access Token](https://github.com/settings/tokens) saved within a `.token` file inside the root directory. 
+
 **BEFORE RUNNING THE CRAWLER, MODIFY `main.py`: CHANGE THE CONST TARGET_REPO AND TARGET_FILE_NAME WITH THE REPO URL AND REPO NAME.**
+
 After changing the const as specified, run `python3 main.py` in the root directory.
