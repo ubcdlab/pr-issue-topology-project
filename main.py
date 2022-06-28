@@ -8,8 +8,8 @@ import networkx as nx
 import pickle
 from os.path import exists
 
-TARGET_REPO = '02strich/pykerberos'
-TARGET_REPO_FILE_NAME = 'pykerberos'
+TARGET_REPO = 'facebook/react/'
+TARGET_REPO_FILE_NAME = 'react'
 
 def get_token():
     # get personal access token
@@ -60,23 +60,23 @@ def fetch_data():
     # sys.exit(1)
     print(f'Loaded {len(nodes)} nodes from repo.')
     
-    with open(f'data/nodes_{TARGET_REPO_FILE_NAME}.pk', 'wb') as fi:
+    with open(f'raw_data/nodes_{TARGET_REPO_FILE_NAME}.pk', 'wb') as fi:
         pickle.dump(nodes, fi)
 
 
-    node_progress_file_exist = exists(f'data/nodes_{TARGET_REPO_FILE_NAME}_comments.pk')
+    node_progress_file_exist = exists(f'raw_data/nodes_{TARGET_REPO_FILE_NAME}_comments.pk')
     node_list = None
     comment_list = []
 
     if node_progress_file_exist is True:
         # we aren't startin from scratch
-        with open(f'data/nodes_{TARGET_REPO_FILE_NAME}_progress.pk', 'rb') as fi:
+        with open(f'raw_data/nodes_{TARGET_REPO_FILE_NAME}_progress.pk', 'rb') as fi:
             node_list = pickle.load(fi)
-        with open(f'data/nodes_{TARGET_REPO_FILE_NAME}_comments.pk', 'rb') as fi:
+        with open(f'raw_data/nodes_{TARGET_REPO_FILE_NAME}_comments.pk', 'rb') as fi:
             comment_list = pickle.load(fi)
     else:
         # we never crawled this repo before
-        with open(f'data/nodes_{TARGET_REPO_FILE_NAME}.pk', 'rb') as npf:
+        with open(f'raw_data/nodes_{TARGET_REPO_FILE_NAME}.pk', 'rb') as npf:
             node_list = pickle.load(npf)
 
     print(f'Nodes remaining to load: {len(node_list)}')
@@ -131,9 +131,9 @@ def fetch_data():
     except Exception as e:
         print(e)
     finally:
-        with open(f'data/nodes_{TARGET_REPO_FILE_NAME}_progress.pk', 'wb') as fi:
+        with open(f'raw_data/nodes_{TARGET_REPO_FILE_NAME}_progress.pk', 'wb') as fi:
             pickle.dump(node_list, fi)
-        with open(f'data/nodes_{TARGET_REPO_FILE_NAME}_comments.pk', 'wb') as fi:
+        with open(f'raw_data/nodes_{TARGET_REPO_FILE_NAME}_comments.pk', 'wb') as fi:
             pickle.dump(comment_list, fi)
     g.get_rate_limit()
     print(f'Finished downloading entire repo. Rate limit: {g.rate_limiting[0]}')
