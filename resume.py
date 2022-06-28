@@ -4,21 +4,15 @@ import re
 import sys
 import json
 import pickle
+import networkx as nx
+import copy
 
-TARGET_REPO = 'facebook/react'
-TARGET_REPO_FILE_NAME = 'react'
+TARGET_REPO_FILE_NAME = 'pykerberos'
 
-def get_token():
-    # get personal access token
-    # from a file named token.txt
-    token = None
-    try:
-        with open('.token', 'r') as f:
-            token = f.read()
-            print('Github token read OK')
-    except IOError:
-        pass
-    return token
+def find_node(number, nodes):
+    for item in nodes:
+        if item.number == number:
+            return item
 
 def find_all_mentions(text):
     ''' 
@@ -44,33 +38,96 @@ def find_all_mentions(text):
     regex_matches += re.findall(REGEX_NUMBER_STRING, text)
     return regex_matches # return all matches in an array
 
-g = Github(get_token())
-repo = g.get_repo(TARGET_REPO)
+# g = Github(get_token())
+# repo = g.get_repo(TARGET_REPO)
 graph_dict = {}
 
 nodes = None
-with open('nodes.pk', 'rb') as fi:
+comment_nodes = None
+with open(f'data/nodes_{TARGET_REPO_FILE_NAME}.pk', 'rb') as fi:
     nodes = pickle.load(fi)
-    print(f'Loaded {len(nodes)} Nodes.')
+    print(f'Loaded {len(nodes)} post nodes.')
 
-graph_dict['issue_count'] = 0
-graph_dict['pull_request_count'] = 0
-graph_dict['nodes'] = []
-graph_dict['links'] = []
+with open(f'data/nodes_{TARGET_REPO_FILE_NAME}_comments.pk', 'rb') as ci:
+    comment_nodes = pickle.load(ci)
+    print(f'Loaded {len(nodes)} comment nodes.')
 
+working_nodes = copy.copy(nodes)
+sys.exit(0)
 
-for issue in nodes[1:3]:
+HIGHEST_ISSUE_NUMBER = nodes[0].number
+print(f'Processing {HIGHEST_ISSUE_NUMBER} nodes.')
+
+for issue in working_nodes:
     total_links = []
     node_dict = {}
 
     if (issue.user.type != 'Bot'):
         total_links += find_all_mentions(issue.body)
-    for comment in issue.get_comments():
-        if (comment.user.type != 'Bot'):
-            total_links += find_all_mentions(comment.body)
 
-    total_links = list(filter(lambda x: (int(x) <= HIGHEST_ISSUE_NUMBER), total_links))
+    total_links = list(filter(lambda x: (0 < int(x) <= HIGHEST_ISSUE_NUMBER), total_links))
+    node_dict['id'] = issue.number
+    node_dict['type'] = 'pull_request' if issue.pull_request is not None else 'issue'
+    node_dict['status'] = issue.state
+    node_dict['links'] = total_links
+    node_dict['finish'] = False
 
-    print(f'Finished processing node {issue.number}. Rate limit: {g.rate_limiting[0]}')
+    if issue.pull_request is not None:
+        # this ugly check is needed to find out whether a PR is merged
+        # since PyGithub doesn't support this directly
+        if issue.pull_request.raw_data['merged_at'] is not None:
+            node_dict['status'] = 'merged'
+
+    graph_dict['nodes'].append(node_dict)
+    for link in total_links:
+        graph_dict['links'].append({'source': issue.number, 'target': int(link)})
+
+    print(f'Finished processing node {issue.number} BODY TEXT ONLY. Rate limit: {g.rate_limiting[0]}')
+
+
+# Construct the graph
+graph = nx.Graph()
+for node in graph_dict['nodes']:
+    graph.add_node(node['id'])
+    print(f'Adding node {node["id"]} to graph...')
+for link in graph_dict['links']:
+    graph.add_edge(link['source'], link['target'])
+    print(f'Adding edge {link["source"]},{link["target"]} to graph...')
+
+# Compute the connected component
+connected_components = list(nx.connected_components(graph))
+for component in connected_components:
+    for node in component:
+        for entry in graph_dict['nodes']:
+            if (entry['id'] == node):
+                entry['connected_component'] = list(component)
+                print(f'Adding connected component property to node {node}')
+
+# Compute the degrees
+for node in graph.degree:
+    node_id = node[0]
+    node_degree = node[1]
+    for entry in graph_dict['nodes']:
+        if (entry['id'] == node_id):
+            entry['node_degree'] = node_degree
+graph_dict['connected_components'] = list(map(lambda x: list(x), connected_components))
+
+with open(f'data/graph_{TARGET_REPO_FILE_NAME}.json', 'w') as f:
+    f.write(json.dumps(graph_dict, sort_keys=False, indent=4))
+
+# for issue in nodes[1:3]:
+#     total_links = []
+#     node_dict = {}
+
+#     if (issue.user.type != 'Bot'):
+#         total_links += find_all_mentions(issue.body)
+#     for comment in issue.get_comments():
+#         if (comment.user.type != 'Bot'):
+#             total_links += find_all_mentions(comment.body)
+
+#     total_links = list(filter(lambda x: (int(x) <= HIGHEST_ISSUE_NUMBER), total_links))
+
+#     print(f'Finished processing node {issue.number}. Rate limit: {g.rate_limiting[0]}')
+
 
 # print(nodes)

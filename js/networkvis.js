@@ -160,7 +160,7 @@ Component Size: ${d.connected_component.length}`)
             .classed('highlighted', false);   
         })
         .on('contextmenu', (e, d) => {
-            let checked = d3.select('#rightClickHyperlink').property('checked')
+            let checked = d3.select(vis.parentTag).select('.rightClickHyperlink').property('checked')
             if (checked) {
                 e.preventDefault();
                 window.open(`${vis.data.repo_url}/pull/${d.id}`, '_blank').focus();

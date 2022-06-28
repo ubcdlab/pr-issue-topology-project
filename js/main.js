@@ -1,9 +1,22 @@
 
+d3.select('#leftFile')
+.on('change', (val) => {
+  let newSelection = d3.select('#leftFile').property('value');
+  console.log(newSelection);
+  this.createVisInstance('#leftVis', `data/graph_${newSelection}.json`, `data/structure_${newSelection}.json`);
+})
 
-this.createVisInstance('#leftVis', 'data/graph_jekyll-admin.json', 'data/structure_jekyll-admin.json');
-this.createVisInstance('#rightVis', 'data/graph_Notepads.json', 'data/structure_Notepads.json');
+d3.select('#rightFile')
+.on('change', (val) => {
+  let newSelection = d3.select('#rightFile').property('value');
+  console.log(newSelection);
+  this.createVisInstance('#rightVis', `data/graph_${newSelection}.json`, `data/structure_${newSelection}.json`);
+})
+
 
 function createVisInstance(DIV_ID, graph_json_file, structure_json_file) {
+  d3.select(DIV_ID).html(null);
+
     Promise.all([
     d3.json(graph_json_file),
     d3.json(structure_json_file)
@@ -14,15 +27,15 @@ function createVisInstance(DIV_ID, graph_json_file, structure_json_file) {
 
     console.log(graph_data);
 
-    const default_slider_value = [-Infinity, Infinity]
+    const default_slider_value = [10, Infinity]
 
     let statsDiv = d3.select(DIV_ID)
-    .append('svg')
+    .append('div')
     .attr('id', `${DIV_ID.substring(1)}_statsDiv`)
     .style('width', '100%')
-    .style('height', '80px');
+    .style('height', '85px');
 
-    this.initStatsPanel(statsDiv);
+    this.initStatsPanel(statsDiv, graph_data, DIV_ID);
 
     let sliderDiv = d3.select(DIV_ID)
     .append('svg')
@@ -45,7 +58,7 @@ function createVisInstance(DIV_ID, graph_json_file, structure_json_file) {
         d3.select(`${DIV_ID}-view`).remove();
         const networkplot2 = new Networkvis(modify, DIV_ID);
         networkplot2.updateVis(modify);
-        computeStatistics(graph_data, modify)
+        computeStatistics(statsDiv, graph_data, modify)
     });
 
     d3.select(`${DIV_ID}_sliderDiv`)
@@ -58,11 +71,11 @@ function createVisInstance(DIV_ID, graph_json_file, structure_json_file) {
     .attr('transform', 'translate(30,30)')
     .call(slider);
 
-    let modify = filterNetwork(-Infinity, Infinity, graph_data);
+    let modify = filterNetwork(default_slider_value[0], default_slider_value[1], graph_data);
     const networkplot2 = new Networkvis(modify, DIV_ID);
     networkplot2.updateVis(modify);
 
-    computeStatistics(graph_data, modify);
+    computeStatistics(statsDiv, graph_data, modify);
     
     const patternplot = new Patternvis(structure_data, DIV_ID);
     patternplot.updateVis(structure_data);
@@ -74,10 +87,25 @@ function createVisInstance(DIV_ID, graph_json_file, structure_json_file) {
 }
 
 
-function initStatsPanel(statsDiv){
+function initStatsPanel(statsDiv, data, DIV_ID) {
   statsDiv
-  .append('text')
-  .text('test')
+  .html(`
+Repo URL: <a href="${data.repo_url}">${data.repo_url}</a><br>
+Visualising <span id="filtered_quantity">n</span> nodes (<span id="unfiltered_quantity">x</span> total) in <span>n</span> components
+              <br>
+              <span id="issues_quantity">x</span> issues (<span id="issues_quantity_percent">x%</span>): 
+
+              <span id="closed_issue">y</span><span style="color: rgb(218, 54, 51);"> closed </span> (<span id="closed_issue_percent">x%</span>); 
+              <span id="open_issue">z</span><span style="color: rgb(35, 134, 54)"> open </span>(<span id="open_issue_percent">x%</span>)
+
+              <br>
+              <span id="pull_request_quantity">x</span> pull requests (<span id="pull_request_percent">x%</span>): 
+
+              <span id="closed_pull_request">y</span> <span style="color: rgb(218, 54, 51);"> closed </span> (<span id="closed_pull_request_percent">x%</span>); 
+              <span id="open_pull_request">z</span> <span style="color: rgb(35, 134, 54)"> open </span> (<span id="open_pull_request_percent">x%</span>);
+              <span id="merged_pull_request">z</span> <span style="color: rgb(137, 87, 229)"> merged </span> (<span id="merged_pull_request_percent">x%</span>);<br>
+<input checked=true type="checkbox" class="rightClickHyperlink">Right click to open node link</input>
+`)
 
 }
 
@@ -112,7 +140,7 @@ function computeLargestConnectedComponentSize(data) {
   return max_size_component;
 }
 
-function computeStatistics(data, filtered) {
+function computeStatistics(parentDiv, data, filtered) {
   console.log(filtered.nodes);
 
   let total_node_quantity = data.nodes.length;
@@ -149,24 +177,24 @@ function computeStatistics(data, filtered) {
   // we can do this more elegently in an object, a note for
   // future self
 
-  d3.select('#unfiltered_quantity').text(total_node_quantity);
-  d3.select('#filtered_quantity').text(filtered_node_quantity);
+  parentDiv.select('#unfiltered_quantity').text(total_node_quantity);
+  parentDiv.select('#filtered_quantity').text(filtered_node_quantity);
 
-  d3.select('#issues_quantity').text(issues_quantity);
-  d3.select('#pull_request_quantity').text(pull_request_quantity);
+  parentDiv.select('#issues_quantity').text(issues_quantity);
+  parentDiv.select('#pull_request_quantity').text(pull_request_quantity);
 
-  d3.select('#issues_quantity_percent').text(`${(issues_quantity/filtered_node_quantity * 100).toFixed(1)}%`);
-  d3.select('#pull_request_percent').text(`${(pull_request_quantity/filtered_node_quantity * 100).toFixed(1)}%`);
+  parentDiv.select('#issues_quantity_percent').text(`${(issues_quantity/filtered_node_quantity * 100).toFixed(1)}%`);
+  parentDiv.select('#pull_request_percent').text(`${(pull_request_quantity/filtered_node_quantity * 100).toFixed(1)}%`);
 
-  d3.select('#closed_issue').text(closed_issues);
-  d3.select('#closed_issue_percent').text(`${(closed_issues/issues_quantity * 100).toFixed(1)}%`)
-  d3.select('#open_issue').text(open_issues)
-  d3.select('#open_issue_percent').text(`${(open_issues/issues_quantity * 100).toFixed(1)}%`)
+  parentDiv.select('#closed_issue').text(closed_issues);
+  parentDiv.select('#closed_issue_percent').text(`${(closed_issues/issues_quantity * 100).toFixed(1)}%`)
+  parentDiv.select('#open_issue').text(open_issues)
+  parentDiv.select('#open_issue_percent').text(`${(open_issues/issues_quantity * 100).toFixed(1)}%`)
 
-  d3.select('#closed_pull_request').text(closed_pull_request)
-  d3.select('#closed_pull_request_percent').text(`${(closed_pull_request/pull_request_quantity * 100).toFixed(1)}%`)
-  d3.select('#open_pull_request').text(open_pull_request)
-  d3.select('#open_pull_request_percent').text(`${(open_pull_request/pull_request_quantity * 100).toFixed(1)}%`)
-  d3.select('#merged_pull_request').text(merged_pull_request)
-  d3.select('#merged_pull_request_percent').text(`${(merged_pull_request/pull_request_quantity * 100).toFixed(1)}%`)
+  parentDiv.select('#closed_pull_request').text(closed_pull_request)
+  parentDiv.select('#closed_pull_request_percent').text(`${(closed_pull_request/pull_request_quantity * 100).toFixed(1)}%`)
+  parentDiv.select('#open_pull_request').text(open_pull_request)
+  parentDiv.select('#open_pull_request_percent').text(`${(open_pull_request/pull_request_quantity * 100).toFixed(1)}%`)
+  parentDiv.select('#merged_pull_request').text(merged_pull_request)
+  parentDiv.select('#merged_pull_request_percent').text(`${(merged_pull_request/pull_request_quantity * 100).toFixed(1)}%`)
 }
