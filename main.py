@@ -107,6 +107,8 @@ def fetch_data():
         while len(node_list) > 0:
             if g.get_rate_limit().core.remaining < 100:
                 print('Rate limit threshold reached!')
+                time_remaining = g.get_rate_limit().core.reset - datetime.datetime.utcnow()
+                print(f'Rate limit will reset after {time_remaining.seconds // 60} minutes {time_remaining.seconds % 60}')
                 raise Exception('RateLimitThreshold')
             # pit_limiter += 1
             issue = node_list.pop(0)
