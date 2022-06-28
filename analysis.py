@@ -2,7 +2,7 @@ import json
 import sys 
 import functools
 
-REPO_NAME = 'ElasticPress'
+REPO_NAME = 'manim'
 
 f = open(f'data/graph_{REPO_NAME}.json')
 data = json.load(f)

@@ -7,21 +7,7 @@ import pickle
 import networkx as nx
 import copy
 
-
-TARGET_REPO = 'facebook/react'
-TARGET_REPO_FILE_NAME = 'react'
-
-def get_token():
-    # get personal access token
-    # from a file named token.txt
-    token = None
-    try:
-        with open('.token', 'r') as f:
-            token = f.read()
-            print('Github token read OK')
-    except IOError:
-        pass
-    return token
+TARGET_REPO_FILE_NAME = 'pykerberos'
 
 def find_node(number, nodes):
     for item in nodes:
@@ -58,16 +44,16 @@ graph_dict = {}
 
 nodes = None
 comment_nodes = None
-with open('nodes.pk', 'rb') as fi:
+with open(f'data/nodes_{TARGET_REPO_FILE_NAME}.pk', 'rb') as fi:
     nodes = pickle.load(fi)
-    print(f'Loaded {len(nodes)} Nodes.')
+    print(f'Loaded {len(nodes)} post nodes.')
 
-with open('comments.pk', 'rb') as ci:
+with open(f'data/nodes_{TARGET_REPO_FILE_NAME}_comments.pk', 'rb') as ci:
     comment_nodes = pickle.load(ci)
-    print(f'Loaded comment nodes.')
+    print(f'Loaded {len(nodes)} comment nodes.')
 
 working_nodes = copy.copy(nodes)
-
+sys.exit(0)
 
 HIGHEST_ISSUE_NUMBER = nodes[0].number
 print(f'Processing {HIGHEST_ISSUE_NUMBER} nodes.')
