@@ -166,6 +166,15 @@ def compute_network_statistics(data):
     data['connected_components'] = list(map(lambda x: list(x), connected_components))
     return data
 
+try:
+    TARGET_REPO = sys.argv[1]
+    TARGET_REPO_FILE_NAME = TARGET_REPO.replace('/', '-')
+except IndexError:
+    print(f'Expected at least 1 argument, found {len(sys.argv) - 1}')
+    print('Exiting')
+    sys.exit(1)
+
+sys.exit(1)
 redownload = 'reload' in sys.argv
 write_to_file = 'write' in sys.argv
 result = None
@@ -173,8 +182,8 @@ result = None
 if redownload == True:
     result = fetch_data()
 else:
-    f = open(f'data/graph_{TARGET_REPO_FILE_NAME}.json')
-    result = json.load(f)
+    with open(f'data/graph_{TARGET_REPO_FILE_NAME}.json') as f:
+        result = json.load(f)
 
 result = compute_network_statistics(result)
 

@@ -7,7 +7,7 @@ import pickle
 import networkx as nx
 import copy
 
-TARGET_REPO_FILE_NAME = 'pykerberos'
+TARGET_REPO_FILE_NAME = ''
 
 def find_node(number, nodes):
     for item in nodes:
@@ -42,18 +42,29 @@ def find_all_mentions(text):
 # repo = g.get_repo(TARGET_REPO)
 graph_dict = {}
 
+try:
+    TARGET_REPO_FILE_NAME = sys.argv[1]
+except IndexError:
+    print(f'Expected at least 1 argument, found {len(sys.argv) - 1}')
+    print('Exiting')
+    sys.exit(1)
+
 nodes = None
 comment_nodes = None
-with open(f'data/nodes_{TARGET_REPO_FILE_NAME}.pk', 'rb') as fi:
+with open(f'raw_data/nodes_{TARGET_REPO_FILE_NAME}.pk', 'rb') as fi:
     nodes = pickle.load(fi)
     print(f'Loaded {len(nodes)} post nodes.')
 
-with open(f'data/nodes_{TARGET_REPO_FILE_NAME}_comments.pk', 'rb') as ci:
+with open(f'raw_data/nodes_{TARGET_REPO_FILE_NAME}_comments.pk', 'rb') as ci:
     comment_nodes = pickle.load(ci)
     print(f'Loaded {len(nodes)} comment nodes.')
+    
+
+print(len(nodes))
+print(len(comment_nodes))
+sys.exit(0)
 
 working_nodes = copy.copy(nodes)
-sys.exit(0)
 
 HIGHEST_ISSUE_NUMBER = nodes[0].number
 print(f'Processing {HIGHEST_ISSUE_NUMBER} nodes.')
@@ -84,50 +95,3 @@ for issue in working_nodes:
 
     print(f'Finished processing node {issue.number} BODY TEXT ONLY. Rate limit: {g.rate_limiting[0]}')
 
-
-# Construct the graph
-graph = nx.Graph()
-for node in graph_dict['nodes']:
-    graph.add_node(node['id'])
-    print(f'Adding node {node["id"]} to graph...')
-for link in graph_dict['links']:
-    graph.add_edge(link['source'], link['target'])
-    print(f'Adding edge {link["source"]},{link["target"]} to graph...')
-
-# Compute the connected component
-connected_components = list(nx.connected_components(graph))
-for component in connected_components:
-    for node in component:
-        for entry in graph_dict['nodes']:
-            if (entry['id'] == node):
-                entry['connected_component'] = list(component)
-                print(f'Adding connected component property to node {node}')
-
-# Compute the degrees
-for node in graph.degree:
-    node_id = node[0]
-    node_degree = node[1]
-    for entry in graph_dict['nodes']:
-        if (entry['id'] == node_id):
-            entry['node_degree'] = node_degree
-graph_dict['connected_components'] = list(map(lambda x: list(x), connected_components))
-
-with open(f'data/graph_{TARGET_REPO_FILE_NAME}.json', 'w') as f:
-    f.write(json.dumps(graph_dict, sort_keys=False, indent=4))
-
-# for issue in nodes[1:3]:
-#     total_links = []
-#     node_dict = {}
-
-#     if (issue.user.type != 'Bot'):
-#         total_links += find_all_mentions(issue.body)
-#     for comment in issue.get_comments():
-#         if (comment.user.type != 'Bot'):
-#             total_links += find_all_mentions(comment.body)
-
-#     total_links = list(filter(lambda x: (int(x) <= HIGHEST_ISSUE_NUMBER), total_links))
-
-#     print(f'Finished processing node {issue.number}. Rate limit: {g.rate_limiting[0]}')
-
-
-# print(nodes)
