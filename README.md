@@ -1,9 +1,9 @@
 
 # Yank Solicitation Project Crawler and Visualiser
 ## Dependencies
-- [PyGithub](https://github.com/PyGithub/PyGithub)
-- [NetworkX](https://networkx.org/)
-- [D3.js](https://d3js.org/)
+- [PyGithub](https://github.com/PyGithub/PyGithub) `pip install PyGithub`
+- [NetworkX](https://networkx.org/) `pip install networkx`
+- [D3.js](https://d3js.org/), bundled within the `./js` directory as `d3.v6.min.js`
 ## Running and using the visualisation
 From the root directory, host a local web server (`python3 -m http.server` usually does the trick), and then navigate to `localhost:8000` (assuming the server is hosted on port 8000).
 
