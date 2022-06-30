@@ -8,8 +8,7 @@ import networkx as nx
 import pickle
 from os.path import exists
 
-TARGET_REPO = '02strich/pykerberos'
-TARGET_REPO_FILE_NAME = 'pykerberos'
+RATE_LIMIT_THRESHOLD = 100
 
 def get_token():
     # get personal access token
@@ -54,30 +53,49 @@ def fetch_data():
     repo_url = repo.html_url
 
     print(f'Downloading repo: {repo_url} with {repo.open_issues} open issues')
-    nodes = list(repo.get_issues(state='all', sort='created', direction='desc'))
+
+    node_post_file_exist = exists(f'raw_data/nodes_{TARGET_REPO_FILE_NAME}.pk')
+
+    nodes = None
+    if node_post_file_exist is True:
+        print('Already crawled repo before, loading save file')
+        with open(f'raw_data/nodes_{TARGET_REPO_FILE_NAME}.pk', 'rb') as fi:
+            nodes = pickle.load(fi)
+    else:
+        print('Never crawled repo before, creating save file')
+        nodes = list(repo.get_issues(state='all', sort='created', direction='desc'))
+
     issue_and_pr_numbers = nodes.copy()
     issue_and_pr_numbers = list(map(lambda x: x.number, issue_and_pr_numbers))
-    # sys.exit(1)
+
     print(f'Loaded {len(nodes)} nodes from repo.')
     
-    with open(f'data/nodes_{TARGET_REPO_FILE_NAME}.pk', 'wb') as fi:
+    with open(f'raw_data/nodes_{TARGET_REPO_FILE_NAME}.pk', 'wb') as fi:
         pickle.dump(nodes, fi)
 
 
-    node_progress_file_exist = exists(f'data/nodes_{TARGET_REPO_FILE_NAME}_comments.pk')
+    node_progress_file_exist = exists(f'raw_data/nodes_{TARGET_REPO_FILE_NAME}_comments.pk')
+
     node_list = None
     comment_list = []
 
     if node_progress_file_exist is True:
         # we aren't startin from scratch
-        with open(f'data/nodes_{TARGET_REPO_FILE_NAME}_progress.pk', 'rb') as fi:
+        print('Already crawled comments before, loading save file')
+        with open(f'raw_data/nodes_{TARGET_REPO_FILE_NAME}_progress.pk', 'rb') as fi:
             node_list = pickle.load(fi)
-        with open(f'data/nodes_{TARGET_REPO_FILE_NAME}_comments.pk', 'rb') as fi:
+        with open(f'raw_data/nodes_{TARGET_REPO_FILE_NAME}_comments.pk', 'rb') as fi:
             comment_list = pickle.load(fi)
     else:
         # we never crawled this repo before
-        with open(f'data/nodes_{TARGET_REPO_FILE_NAME}.pk', 'rb') as npf:
+        print('Never crawled comments before, creating save file')
+        with open(f'raw_data/nodes_{TARGET_REPO_FILE_NAME}.pk', 'rb') as npf:
             node_list = pickle.load(npf)
+
+    print(f'Loaded {len(comment_list)} comment nodes.')
+    if len(nodes) == len(comment_list):
+        print('All nodes has already been downloaded and processed. Skipping the download process.')
+        return
 
     print(f'Nodes remaining to load: {len(node_list)}')
 
@@ -93,9 +111,13 @@ def fetch_data():
 
     try:
         while len(node_list) > 0:
-            if pit_limiter >= 5:
-                raise Exception('PIT LIMITER')
-            # pit_limiter += 1
+            if g.get_rate_limit().core.remaining < RATE_LIMIT_THRESHOLD:
+                print('Rate limit threshold reached!')
+                rate_limit_time = g.get_rate_limit()
+                time_remaining = rate_limit_time.core.reset - datetime.datetime.utcnow()
+                print(f'Rate limit will reset after {time_remaining.seconds // 60} minutes {time_remaining.seconds % 60} seconds')
+                print(f'Rate limit reset time: {rate_limit_time.core.reset}' ) # I am not going to bother figuring out printing local time 
+                raise Exception('RateLimitThreshold')
             issue = node_list.pop(0)
             total_links = []
             node_dict = {}
@@ -131,10 +153,12 @@ def fetch_data():
     except Exception as e:
         print(e)
     finally:
-        with open(f'data/nodes_{TARGET_REPO_FILE_NAME}_progress.pk', 'wb') as fi:
+        print('Writing raw nodes and comment data to disk... ')
+        print('DO NOT INTERRUPT OR TURN OFF YOUR COMPUTER.')
+        with open(f'raw_data/nodes_{TARGET_REPO_FILE_NAME}_progress.pk', 'wb') as fi:
             pickle.dump(node_list, fi)
-        with open(f'data/nodes_{TARGET_REPO_FILE_NAME}_comments.pk', 'wb') as fi:
-            pickle.dump(comment_list, fi)
+        with open(f'raw_data/nodes_{TARGET_REPO_FILE_NAME}_comments.pk', 'wb') as cfi:
+            pickle.dump(comment_list, cfi)
     g.get_rate_limit()
     print(f'Finished downloading entire repo. Rate limit: {g.rate_limiting[0]}')
 
@@ -166,6 +190,14 @@ def compute_network_statistics(data):
     data['connected_components'] = list(map(lambda x: list(x), connected_components))
     return data
 
+try:
+    TARGET_REPO = sys.argv[1]
+    TARGET_REPO_FILE_NAME = TARGET_REPO.replace('/', '-')
+except IndexError:
+    print(f'Expected at least 1 argument, found {len(sys.argv) - 1}')
+    print('Exiting')
+    sys.exit(1)
+
 redownload = 'reload' in sys.argv
 write_to_file = 'write' in sys.argv
 result = None
@@ -173,10 +205,11 @@ result = None
 if redownload == True:
     result = fetch_data()
 else:
-    f = open(f'data/graph_{TARGET_REPO_FILE_NAME}.json')
-    result = json.load(f)
+    with open(f'data/graph_{TARGET_REPO_FILE_NAME}.json') as f:
+        result = json.load(f)
 
-result = compute_network_statistics(result)
+# result = compute_network_statistics(result)
+sys.exit(0)
 
 with open(f'data/graph_{TARGET_REPO_FILE_NAME}.json', 'w') as f:
     # save result to disk

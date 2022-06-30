@@ -33,7 +33,7 @@ function createVisInstance(DIV_ID, graph_json_file, structure_json_file) {
     .append('div')
     .attr('id', `${DIV_ID.substring(1)}_statsDiv`)
     .style('width', '100%')
-    .style('height', '85px');
+    .style('height', 'fit-content');
 
     this.initStatsPanel(statsDiv, graph_data, DIV_ID);
 
@@ -105,7 +105,25 @@ Visualising <span id="filtered_quantity">n</span> nodes (<span id="unfiltered_qu
               <span id="open_pull_request">z</span> <span style="color: rgb(35, 134, 54)"> open </span> (<span id="open_pull_request_percent">x%</span>);
               <span id="merged_pull_request">z</span> <span style="color: rgb(137, 87, 229)"> merged </span> (<span id="merged_pull_request_percent">x%</span>);<br>
 <input checked=true type="checkbox" class="rightClickHyperlink">Right click to open node link</input>
+<input checked=true type="checkbox" class="showIssues">Show Issues</input>
+<input checked=true type="checkbox" class="showPullRequests">Show Pull Requests</input>
 `)
+  d3.select(DIV_ID)
+  .select('.showIssues')
+  .on('change', (e) => {
+    let val = d3.select(DIV_ID).select('.showIssues').property('checked');
+    d3.select(DIV_ID)
+    .selectAll('.issues')
+    .style('opacity', +val);
+  })
+  d3.select(DIV_ID)
+  .select('.showPullRequests')
+  .on('change', (e) => {
+    let val = d3.select(DIV_ID).select('.showPullRequests').property('checked');
+    d3.select(DIV_ID)
+    .selectAll('.pull_request')
+    .style('opacity', +val);
+  })
 
 }
 
