@@ -2,14 +2,12 @@
 d3.select('#leftFile')
 .on('change', (val) => {
   let newSelection = d3.select('#leftFile').property('value');
-  console.log(newSelection);
   this.createVisInstance('#leftVis', `data/graph_${newSelection}.json`, `data/structure_${newSelection}.json`);
 })
 
 d3.select('#rightFile')
 .on('change', (val) => {
   let newSelection = d3.select('#rightFile').property('value');
-  console.log(newSelection);
   this.createVisInstance('#rightVis', `data/graph_${newSelection}.json`, `data/structure_${newSelection}.json`);
 })
 
@@ -107,6 +105,7 @@ Visualising <span id="filtered_quantity">n</span> nodes (<span id="unfiltered_qu
 <input checked=true type="checkbox" class="rightClickHyperlink">Right click to open node link</input>
 <input checked=true type="checkbox" class="showIssues">Show Issues</input>
 <input checked=true type="checkbox" class="showPullRequests">Show Pull Requests</input>
+<input checked=false type="checkbox" class="showNodeLabels">Show Node Number</input>
 `)
   d3.select(DIV_ID)
   .select('.showIssues')
