@@ -1,8 +1,6 @@
 
 # Yank Solicitation Project Crawler and Visualiser
 ## Dependencies
-- [PyGithub](https://github.com/PyGithub/PyGithub) `pip install PyGithub`
-- [NetworkX](https://networkx.org/) `pip install networkx`
 - [D3.js](https://d3js.org/), bundled within the `./js` directory as `d3.v6.min.js`
 ## Running and using the visualisation
 From the root directory, host a local web server (`python3 -m http.server` usually does the trick), and then navigate to `localhost:8000` (assuming the server is hosted on port 8000).
@@ -19,8 +17,4 @@ Currently, you can filter the visualised network graph to show only the desired 
 You can also right click on a node within the network to open a link (in a new tab) directly to the issue/pull request the node represents. This behaviour can be disabled by unchecking the "right click to open node link" checkbox (usually for debugging purposes).
 
 ## Running the crawler
-To run the crawler, make sure you have a [Github Access Token](https://github.com/settings/tokens) saved within a `.token` file inside the root directory. 
-
-**BEFORE RUNNING THE CRAWLER, MODIFY `main.py`: CHANGE THE CONST TARGET_REPO AND TARGET_FILE_NAME WITH THE REPO URL AND REPO NAME.**
-
-After changing the const as specified, run `python3 main.py` in the root directory.
+Work in progress
