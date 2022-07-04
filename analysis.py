@@ -1,11 +1,24 @@
 import json
 import sys 
 import functools
+import pickle
 
-REPO_NAME = 'manim'
 
-f = open(f'data/graph_{REPO_NAME}.json')
-data = json.load(f)
+TARGET_REPO = 'facebook/react'
+TARGET_REPO_FILE_NAME = TARGET_REPO.replace('/', '-')
+
+node_list = None
+comment_list = None
+
+with open(f'raw_data/nodes_{TARGET_REPO_FILE_NAME}_comments.pk', 'rb') as fi:
+    comment_list = pickle.load(fi)
+with open(f'raw_data/nodes_{TARGET_REPO_FILE_NAME}.pk', 'rb') as fi:
+    node_list = pickle.load(fi)
+
+target = node_list[0]
+# print(node_list[0])
+sys.exit(0)
+
 
 pattern_json = {}
 analysis_dict = {}
@@ -15,6 +28,8 @@ duo_issue_pr = []
 duo_pr_pr = []
 duo_pr_issue = []
 counter = 0
+
+
 
 def find_node(node_id):
 	for node in data['nodes']:

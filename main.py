@@ -161,8 +161,7 @@ def fetch_data():
             pickle.dump(comment_list, cfi)
     g.get_rate_limit()
     print(f'Finished downloading entire repo. Rate limit: {g.rate_limiting[0]}')
-
-    return graph_dict
+    return
 
 def compute_network_statistics(data):
     # Construct the graph
@@ -208,8 +207,6 @@ else:
     with open(f'data/graph_{TARGET_REPO_FILE_NAME}.json') as f:
         result = json.load(f)
 
-# result = compute_network_statistics(result)
-sys.exit(0)
 
 with open(f'data/graph_{TARGET_REPO_FILE_NAME}.json', 'w') as f:
     # save result to disk
