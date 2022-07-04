@@ -126,8 +126,13 @@ class Networkvis {
         .attr('marker-end', 'url(#triangle)')
         .attr('id', d => `link-${d.source}-${d.target}-end`)
         .on('click', (e, d) => {
+            if (!d.colourIndex) {
+                d.colourIndex = 0;
+            }
+            // https://colorbrewer2.org
+            const colours = ['#e41a1c', '#377eb8', '#4daf4a', '#984ea3', '#ff7f00', '#a65628', '#f781bf', '#000000']
             d3.select(`#link-${d.source.id}-${d.target.id}-end`)
-            .style('stroke', 'red')
+            .style('stroke', colours[d.colourIndex++ % colours.length]);
         })
         .on('mouseover', (e, d) => {
             d3.select(`#link-${d.source.id}-${d.target.id}-end`)
