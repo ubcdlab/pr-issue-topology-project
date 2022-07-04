@@ -15,6 +15,14 @@ class Networkvis {
         .property('checked', false)
         .on('change', vis.checkboxUpdate);
 
+        d3.select(`${vis.parentTag}`)
+        .select('.showNodeLabels')
+        .on('change', (e) => {
+            let val = d3.select(vis.parentTag).select('.showNodeLabels').property('checked');
+            d3.selectAll('.number_label')
+            .style('opacity', +val)
+        })
+
         d3.select('#url_tagline')
         .html(`Visualising Repo: <a href=${vis.data.repo_url}>${vis.data.repo_url}</a>`)
 
@@ -117,6 +125,23 @@ class Networkvis {
         .attr('stroke-width', 2)
         .attr('marker-end', 'url(#triangle)')
         .attr('id', d => `link-${d.source}-${d.target}-end`)
+        .on('click', (e, d) => {
+            if (!d.colourIndex) {
+                d.colourIndex = 0;
+            }
+            // https://colorbrewer2.org
+            const colours = ['#e41a1c', '#377eb8', '#4daf4a', '#984ea3', '#ff7f00', '#a65628', '#f781bf', '#000000']
+            d3.select(`#link-${d.source.id}-${d.target.id}-end`)
+            .style('stroke', colours[d.colourIndex++ % colours.length]);
+        })
+        .on('mouseover', (e, d) => {
+            d3.select(`#link-${d.source.id}-${d.target.id}-end`)
+            .classed('highlighted', true)
+        })
+        .on('mouseout', (e, d) => {
+            d3.select(`#link-${d.source.id}-${d.target.id}-end`)
+            .classed('highlighted', false)
+        })
 
         const node = vis.svg
         .append('g')
@@ -160,10 +185,14 @@ Component Size: ${d.connected_component.length}`)
             .classed('highlighted', false);   
         })
         .on('contextmenu', (e, d) => {
-            let checked = d3.select(vis.parentTag).select('.rightClickHyperlink').property('checked')
-            if (checked) {
-                e.preventDefault();
-                window.open(`${vis.data.repo_url}/pull/${d.id}`, '_blank').focus();
+            e.preventDefault();
+            if (e.ctrlKey) {
+                console.log('whoa')
+            } else {
+                let checked = d3.select(vis.parentTag).select('.rightClickHyperlink').property('checked')
+                if (checked) {
+                    window.open(`${vis.data.repo_url}/pull/${d.id}`, '_blank').focus();
+                }
             }
         })
         .call(d3.drag()
@@ -206,10 +235,10 @@ Component Size: ${d.connected_component.length}`)
         var simulation = d3.forceSimulation(data.nodes)
         .force('link', d3.forceLink()
             .id(function(d) { return d.id; })
-            .distance(50)
+            .distance(80)
             .links(data.links))
         .force("collide", d3.forceCollide(5).radius(23))
-        .force('charge', d3.forceManyBody().strength(-10))
+        .force('charge', d3.forceManyBody().strength(-20))
         .force('center', d3.forceCenter(vis.config.width / 2, vis.config.height / 2))
         .on("tick", ticked);
 
@@ -229,6 +258,7 @@ Component Size: ${d.connected_component.length}`)
 
         vis.svg.selectAll('.nodes')
         .append('text')
+        .classed('number_label', true)
         .text((d) => d.id);
 
         // vis.renderTable(data);
