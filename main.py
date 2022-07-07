@@ -95,17 +95,57 @@ def fetch_data():
     print(f'Loaded {len(comment_list)} comment nodes.')
     if len(nodes) == len(comment_list):
         print('All nodes has already been downloaded and processed. Skipping the download process.')
-        return
+        graph_dict = {
+            'repo_url': repo.html_url,
+            'issue_count': 0,
+            'pull_request_count': 0,
+            'labels_text': list(map(lambda x: x.name, list(repo.get_labels()))),
+            'nodes': [],
+            'links': []
+        }
+        HIGHEST_ISSUE_NUMBER = nodes[0].number
+        for issue in nodes:
+            total_links = []
+            node_dict = {}
+
+            if (issue.user.type != 'Bot'):
+                total_links += find_all_mentions(issue.body)
+            node_comments = issue.get_comments()
+            for comment in node_comments:
+                if (comment.user.type != 'Bot'):
+                    total_links += find_all_mentions(comment.body)
+            total_links = list(filter(lambda x: (0 < int(x) <= HIGHEST_ISSUE_NUMBER) and int(x) in issue_and_pr_numbers, total_links))
+            # print(total_links)
+
+            node_dict['id'] = issue.number
+            node_dict['type'] = 'pull_request' if issue.pull_request is not None else 'issue'
+            node_dict['status'] = issue.state
+            node_dict['links'] = total_links
+
+            if issue.pull_request is not None:
+                # this ugly check is needed to find out whether a PR is merged
+                # since PyGithub doesn't support this directly
+                if issue.pull_request.raw_data['merged_at'] is not None:
+                    node_dict['status'] = 'merged'
+
+            graph_dict['nodes'].append(node_dict)
+            for link in total_links:
+                graph_dict['links'].append({'source': issue.number, 'target': int(link)})
+            print(f'Finished loading node number {issue.number}')
+        return graph_dict
 
     print(f'Nodes remaining to load: {len(node_list)}')
 
     HIGHEST_ISSUE_NUMBER = nodes[0].number
 
-    graph_dict['repo_url'] = repo_url
-    graph_dict['issue_count'] = 0
-    graph_dict['pull_request_count'] = 0
-    graph_dict['nodes'] = []
-    graph_dict['links'] = []
+    graph_dict = {
+        'repo_url': repo.html_url,
+        'issue_count': 0,
+        'pull_request_count': 0,
+        'labels_text': list(map(lambda x: x.name, list(repo.get_labels()))),
+        'nodes': [],
+        'links': []
+    }
 
     pit_limiter = 0
 
@@ -161,7 +201,7 @@ def fetch_data():
             pickle.dump(comment_list, cfi)
     g.get_rate_limit()
     print(f'Finished downloading entire repo. Rate limit: {g.rate_limiting[0]}')
-    return
+    return graph_dict
 
 try:
     TARGET_REPO = sys.argv[1]

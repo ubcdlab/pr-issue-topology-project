@@ -2,9 +2,10 @@ import json
 import sys 
 import functools
 import pickle
+from github import Github
 
 
-TARGET_REPO = 'facebook/react'
+TARGET_REPO = 'jekyll/jekyll-admin'
 TARGET_REPO_FILE_NAME = TARGET_REPO.replace('/', '-')
 
 node_list = None
@@ -15,33 +16,19 @@ with open(f'raw_data/nodes_{TARGET_REPO_FILE_NAME}_comments.pk', 'rb') as fi:
 with open(f'raw_data/nodes_{TARGET_REPO_FILE_NAME}.pk', 'rb') as fi:
     node_list = pickle.load(fi)
 
-target = node_list[0]
 
-
-output_json = init_output_json()
-
-
-pattern_json = {}
-analysis_dict = {}
-isolated = []
-duo_issue_issue = []
-duo_issue_pr = []
-duo_pr_pr = []
-duo_pr_issue = []
-counter = 0
-
-def init_output_json():
+def init_output_json(g, repo):
 	# return an initialised graph_{REPO_NAME}.json file
-	g = Github(get_token())
-	repo = g.get_repo(TARGET_REPO)
-
+	labels = list(repo.get_labels())
 	output = {
-		'repo_url': repo.html_url
-		'issue_count': 0
-		'pull_request_count': 0
-		'nodes': []
+		'repo_url': repo.html_url,
+		'issue_count': 0,
+		'pull_request_count': 0,
+		'labels_text': list(map(lambda x: x.name, labels)),
+		'nodes': [],
 		'links': []
 	}
+	return output
 
 def get_token():
     # get personal access token
@@ -95,6 +82,21 @@ def add_analysis_function(analysis_dict, level, array_of_function):
 
 def find_isolated_nodes(node):
 	return len(node['connected_components']) == 0
+
+
+target = node_list[0]
+g = Github(get_token())
+repo = g.get_repo(TARGET_REPO)
+output_json = init_output_json(g, repo)
+
+pattern_json = {}
+analysis_dict = {}
+isolated = []
+duo_issue_issue = []
+duo_issue_pr = []
+duo_pr_pr = []
+duo_pr_issue = []
+counter = 0
 
 # First, compute the largest component size
 max_component_size = 0
