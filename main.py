@@ -163,32 +163,6 @@ def fetch_data():
     print(f'Finished downloading entire repo. Rate limit: {g.rate_limiting[0]}')
     return
 
-def compute_network_statistics(data):
-    # Construct the graph
-    graph = nx.Graph()
-    for node in data['nodes']:
-        graph.add_node(node['id'])
-    for link in data['links']:
-        graph.add_edge(link['source'], link['target'])
-
-    # Compute the connected component
-    connected_components = list(nx.connected_components(graph))
-    for component in connected_components:
-        for node in component:
-            for entry in data['nodes']:
-                if (entry['id'] == node):
-                    entry['connected_component'] = list(component)
-
-    # Compute the degrees
-    for node in graph.degree:
-        node_id = node[0]
-        node_degree = node[1]
-        for entry in data['nodes']:
-            if (entry['id'] == node_id):
-                entry['node_degree'] = node_degree
-    data['connected_components'] = list(map(lambda x: list(x), connected_components))
-    return data
-
 try:
     TARGET_REPO = sys.argv[1]
     TARGET_REPO_FILE_NAME = TARGET_REPO.replace('/', '-')
