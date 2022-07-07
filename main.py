@@ -94,7 +94,7 @@ def fetch_data():
 
     print(f'Loaded {len(comment_list)} comment nodes.')
     if len(nodes) == len(comment_list):
-        print('All nodes has already been downloaded and processed. Skipping the download process.')
+        print('All nodes has already been downloaded and processed. Loading saved local files.')
         graph_dict = {
             'repo_url': repo.html_url,
             'issue_count': 0,
@@ -115,12 +115,13 @@ def fetch_data():
                 if (comment.user.type != 'Bot'):
                     total_links += find_all_mentions(comment.body)
             total_links = list(filter(lambda x: (0 < int(x) <= HIGHEST_ISSUE_NUMBER) and int(x) in issue_and_pr_numbers, total_links))
-            # print(total_links)
 
-            node_dict['id'] = issue.number
-            node_dict['type'] = 'pull_request' if issue.pull_request is not None else 'issue'
-            node_dict['status'] = issue.state
-            node_dict['links'] = total_links
+            node_dict = {
+                'id': issue.number,
+                'type': 'pull_request' if issue.pull_request is not None else 'issue',
+                'status': issue.state,
+                'links': total_links
+            }
 
             if issue.pull_request is not None:
                 # this ugly check is needed to find out whether a PR is merged
@@ -132,6 +133,26 @@ def fetch_data():
             for link in total_links:
                 graph_dict['links'].append({'source': issue.number, 'target': int(link)})
             print(f'Finished loading node number {issue.number}')
+        graph = nx.Graph()
+        for node in graph_dict['nodes']:
+            graph.add_node(node['id'])
+        for link in graph_dict['links']:
+            graph.add_edge(link['source'], link['target'])
+        connected_components = list(nx.connected_components(graph))
+
+        for component in connected_components:
+            for node in component:
+                for entry in graph_dict['nodes']:
+                    if (entry['id'] == node):
+                        entry['connected_component'] = list(component)
+
+        for node in graph.degree:
+            node_id = node[0]
+            node_degree = node[1]
+            for entry in graph_dict['nodes']:
+                if (entry['id'] == node_id):
+                    entry['node_degree'] = node_degree
+        graph_dict['connected_components'] = list(map(lambda x: list(x), connected_components))
         return graph_dict
 
     print(f'Nodes remaining to load: {len(node_list)}')

@@ -89,6 +89,10 @@ g = Github(get_token())
 repo = g.get_repo(TARGET_REPO)
 output_json = init_output_json(g, repo)
 
+data = None
+with open(f'data/graph_{TARGET_REPO_FILE_NAME}.json', 'r') as fi:
+    data = json.load(fi)
+
 pattern_json = {}
 analysis_dict = {}
 isolated = []
@@ -178,6 +182,6 @@ for component_size in range(3, max_component_size + 1):
 	pattern_json[component_size]['general'] = all_component_of_size
 
 
-with open(f'data/structure_{REPO_NAME}.json', 'w') as f:
+with open(f'data/structure_{TARGET_REPO_FILE_NAME}.json', 'w') as f:
 	f.write(json.dumps(pattern_json, sort_keys=False, indent=4))
 

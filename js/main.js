@@ -69,7 +69,22 @@ function createVisInstance(DIV_ID, graph_json_file, structure_json_file) {
     .attr('transform', 'translate(30,30)')
     .call(slider);
 
-    d3.select('')
+    let list_span = d3.select('#list_span');
+
+    let list_checkbox = list_span
+    .selectAll('li')
+    .data(graph_data['labels_text'])
+    .join('li')
+    .append('label')
+    .text(d => d)
+    .attr('for', d => d)
+    .append('input')
+    .attr('checked', true)
+    .attr('type', 'checkbox')
+    .attr('name', d => d)
+    .attr('id', d => d)
+    .attr('value', d => d);
+
 
     let modify = filterNetwork(default_slider_value[0], default_slider_value[1], graph_data);
     const networkplot2 = new Networkvis(modify, DIV_ID);
@@ -92,8 +107,7 @@ function initStatsPanel(statsDiv, data, DIV_ID) {
   .html(`
 <div id="list1" class="dropdown-check-list" tabindex="100">
   <span class="anchor">Github Label</span>
-  <ul class="items labels-dropdown invisible">
-    <li><input type="checkbox" />Sample Entry</li>
+  <ul id="list_span" class="items labels-dropdown invisible">
   </ul>
 </div>
 Repo URL: <a href="${data.repo_url}">${data.repo_url}</a><br>
