@@ -69,6 +69,8 @@ function createVisInstance(DIV_ID, graph_json_file, structure_json_file) {
     .attr('transform', 'translate(30,30)')
     .call(slider);
 
+    d3.select('')
+
     let modify = filterNetwork(default_slider_value[0], default_slider_value[1], graph_data);
     const networkplot2 = new Networkvis(modify, DIV_ID);
     networkplot2.updateVis(modify);
@@ -88,6 +90,12 @@ function createVisInstance(DIV_ID, graph_json_file, structure_json_file) {
 function initStatsPanel(statsDiv, data, DIV_ID) {
   statsDiv
   .html(`
+<div id="list1" class="dropdown-check-list" tabindex="100">
+  <span class="anchor">Github Label</span>
+  <ul class="items labels-dropdown invisible">
+    <li><input type="checkbox" />Sample Entry</li>
+  </ul>
+</div>
 Repo URL: <a href="${data.repo_url}">${data.repo_url}</a><br>
 Visualising <span id="filtered_quantity">n</span> nodes (<span id="unfiltered_quantity">x</span> total) in <span>n</span> components
               <br>
@@ -107,6 +115,15 @@ Visualising <span id="filtered_quantity">n</span> nodes (<span id="unfiltered_qu
 <input checked=true type="checkbox" class="showPullRequests">Show Pull Requests</input>
 <input checked=false type="checkbox" class="showNodeLabels">Show Node Number</input>
 `)
+  d3.select(DIV_ID)
+  .select('#list1')
+  .on('click', (e) => {
+    if (e.target.className === "anchor") {
+      let checklist = d3.select(DIV_ID).select('.labels-dropdown');
+      checklist.classed('visible', !checklist.classed('visible'));
+      checklist.classed('invisible', !checklist.classed('invisible'))
+    }
+  })
   d3.select(DIV_ID)
   .select('.showIssues')
   .on('change', (e) => {
