@@ -6,14 +6,12 @@ class Networkvis {
         }
         this.data = _data;
         this.parentTag = _parentTag;
+        this.filterNet = {}
         this.initVis();
     }
+
     initVis() {
         let vis = this;
-
-        vis.hideIsolatedNodes = d3.select('#hideIsolatedNodes')
-        .property('checked', false)
-        .on('change', vis.checkboxUpdate);
 
         d3.select(`${vis.parentTag}`)
         .select('.showNodeLabels')
@@ -25,22 +23,55 @@ class Networkvis {
 
         d3.select('#url_tagline')
         .html(`Visualising Repo: <a href=${vis.data.repo_url}>${vis.data.repo_url}</a>`)
+    }
 
-        d3.select('#searchButton')
-        .on('click', (d, e) => {
-            let targetId = d3.select('#searchBox').node().value;
-            let targetX = d3.select(`#point-${targetId}`).attr('x');
-            let targetY = d3.select(`#point-${targetId}`).attr('y');
-
-            let g = d3.select('#mainViewG')
-            d3.zoom.translateTo(g, targetX, targetY);
-        })
-        let min_size_component = 1;
-        let max_size_component = 1;
-        for (let component of vis.data['connected_components']) {
-            max_size_component = Math.max(component.length, max_size_component);
+    updateFilter(criteria) {
+        let vis = this;
+        if (criteria === null) {
+            vis.filterNet = {}
+        } else {
+            for (let [key, data] of Object.entries(criteria)) {
+                vis.filterNet[key] = data
+            }
         }
+        console.log(vis.filterNet);
+        let modify = vis.filterData();
+        vis.updateVis(modify);
+    }
 
+    filterData(data) {
+        let vis = this;
+        let modify = structuredClone(vis.data);
+        let original_data = modify['nodes'];
+        let links = modify['links'];
+        let new_nodes = [];
+        let new_links = new Set();
+
+        for (let node of original_data) {
+            let keep = true;
+            for (let [key, data] of Object.entries(vis.filterNet)) {
+                if (data.length > 0) {
+                    if (node[key].length === 0 && data.length > 0) {
+                        keep = false;
+                    } else if (!node[key].some(x => data.includes(x))) {
+                        keep = false;
+                        continue
+                    }
+                }
+            }
+            if (keep) {
+                new_nodes.push(node);
+                for (let link of links) {
+                    if (link['source'].id === node.id || link['target'].id === node.id) {
+                        new_links.add(link);
+                  }
+                }
+            }
+        }
+        modify['nodes'] = new_nodes
+        modify['links'] = Array.from(new_links);
+        console.log(modify);
+        return modify;
     }
 
     updateVis(data) {
@@ -53,38 +84,6 @@ class Networkvis {
         d.fy = e.y;
     }
 
-    searchNode(id) {
-
-    }
-
-    renderTable(data) {
-        data.connected_components = data.connected_components.filter(x => x.length > 1);
-        data.connected_components.sort((a, b) => {
-            return b.length - a.length;
-        });
-        let table = d3.select('#auxView').append('table')
-        let thead = table.append('thead')
-        let tbody = table.append('tbody')
-
-        // Table header
-        thead.append('tr')
-        .selectAll('th')
-        .data(['Family', 'Cardinality', 'Constituents Nodes'])
-        .join('th')
-        .text(d => d)
-
-        let rows = tbody.selectAll('tr')
-        .data(data.connected_components)
-        .join('tr');
-
-        let cells = rows.selectAll('td')
-        .data((d, i) => {
-            return [i, d.length, d];
-        })
-        .join('td')
-        .text((d, i) => {return (i === 2 ? `{${d}}` : d)})
-;
-    }
 
     renderVis(data) {
         function ticked() {
@@ -100,6 +99,8 @@ class Networkvis {
         }
 
         let vis = this;
+
+        d3.select(`${vis.parentTag}-view`).remove();
 
         vis.svg = d3.select(vis.parentTag)
         .insert('svg', `${vis.parentTag}_sliderDiv + *`)
@@ -187,7 +188,7 @@ Component Size: ${d.connected_component.length}`)
         .on('contextmenu', (e, d) => {
             e.preventDefault();
             if (e.ctrlKey) {
-                console.log('whoa')
+                // console.log('whoa')
             } else {
                 let checked = d3.select(vis.parentTag).select('.rightClickHyperlink').property('checked')
                 if (checked) {
@@ -260,8 +261,6 @@ Component Size: ${d.connected_component.length}`)
         .append('text')
         .classed('number_label', true)
         .text((d) => d.id);
-
-        // vis.renderTable(data);
     }
     
 }

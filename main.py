@@ -120,7 +120,8 @@ def fetch_data():
                 'id': issue.number,
                 'type': 'pull_request' if issue.pull_request is not None else 'issue',
                 'status': issue.state,
-                'links': total_links
+                'links': total_links,
+                'label': list(map(lambda x: x.name, issue.labels))
             }
 
             if issue.pull_request is not None:
@@ -145,6 +146,7 @@ def fetch_data():
                 for entry in graph_dict['nodes']:
                     if (entry['id'] == node):
                         entry['connected_component'] = list(component)
+                        entry['connected_component_size'] = [len(list(component))]
 
         for node in graph.degree:
             node_id = node[0]

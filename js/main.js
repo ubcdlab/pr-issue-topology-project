@@ -13,8 +13,6 @@ d3.select('#rightFile')
 
 
 function createVisInstance(DIV_ID, graph_json_file, structure_json_file) {
-  d3.select(DIV_ID).html(null);
-
     Promise.all([
     d3.json(graph_json_file),
     d3.json(structure_json_file)
@@ -25,7 +23,7 @@ function createVisInstance(DIV_ID, graph_json_file, structure_json_file) {
 
     console.log(graph_data);
 
-    const default_slider_value = [10, Infinity]
+    const default_slider_value = [12, 12]
 
     let statsDiv = d3.select(DIV_ID)
     .append('div')
@@ -41,6 +39,12 @@ function createVisInstance(DIV_ID, graph_json_file, structure_json_file) {
     .style('width', '100%')
     .style('height', '80px');
 
+    const networkplot = new Networkvis(graph_data, DIV_ID);
+    networkplot.updateFilter({
+      'connected_component_size': range(default_slider_value[0], default_slider_value[1] + 1)
+    })
+    networkplot.updateVis(graph_data);
+
     let slider = d3.sliderBottom()
     .min(1)
     .max(computeLargestConnectedComponentSize(graph_data))
@@ -53,9 +57,9 @@ function createVisInstance(DIV_ID, graph_json_file, structure_json_file) {
     .fill('skyblue')
     .on('end', (val) => {
         let modify = filterNetwork(val[0], val[1], graph_data)
-        d3.select(`${DIV_ID}-view`).remove();
-        const networkplot2 = new Networkvis(modify, DIV_ID);
-        networkplot2.updateVis(modify);
+        networkplot.updateFilter({
+          'connected_component_size': range(val[0], val[1] + 1)
+        });
         computeStatistics(statsDiv, graph_data, modify)
     });
 
@@ -79,21 +83,22 @@ function createVisInstance(DIV_ID, graph_json_file, structure_json_file) {
     .text(d => d)
     .attr('for', d => d)
     .append('input')
-    .attr('checked', true)
+    .property('checked', false)
     .attr('type', 'checkbox')
+    .attr('class', 'checkbox')
     .attr('name', d => d)
     .attr('id', d => d)
-    .attr('value', d => d);
+    .attr('value', d => d)
+    .on('click', (e) => {
+      let checkboxes = d3.select('#list_span')
+      .selectAll('.checkbox:checked').nodes();
+      let sliderValue = slider.value()
+      networkplot.updateFilter({
+        'label': checkboxes.map(x => x.value)
+      });
+    });
 
-
-    let modify = filterNetwork(default_slider_value[0], default_slider_value[1], graph_data);
-    const networkplot2 = new Networkvis(modify, DIV_ID);
-    networkplot2.updateVis(modify);
-
-    computeStatistics(statsDiv, graph_data, modify);
-    
-    const patternplot = new Patternvis(structure_data, DIV_ID);
-    patternplot.updateVis(structure_data);
+    computeStatistics(statsDiv, graph_data, graph_data);
 
   })
   .catch(error => {
@@ -101,15 +106,39 @@ function createVisInstance(DIV_ID, graph_json_file, structure_json_file) {
   })
 }
 
+function range(start, stop, step) {
+    if (typeof stop == 'undefined') {
+        // one param defined
+        stop = start;
+        start = 0;
+    }
+
+    if (typeof step == 'undefined') {
+        step = 1;
+    }
+
+    if ((step > 0 && start >= stop) || (step < 0 && start <= stop)) {
+        return [];
+    }
+
+    var result = [];
+    for (var i = start; step > 0 ? i < stop : i > stop; i += step) {
+        result.push(i);
+    }
+
+    return result;
+};
+
 
 function initStatsPanel(statsDiv, data, DIV_ID) {
   statsDiv
   .html(`
-<div id="list1" class="dropdown-check-list" tabindex="100">
+<div id="list1" class="dropdown-check-list">
   <span class="anchor">Github Label</span>
   <ul id="list_span" class="items labels-dropdown invisible">
   </ul>
 </div>
+<br><br>
 Repo URL: <a href="${data.repo_url}">${data.repo_url}</a><br>
 Visualising <span id="filtered_quantity">n</span> nodes (<span id="unfiltered_quantity">x</span> total) in <span>n</span> components
               <br>
@@ -189,8 +218,6 @@ function computeLargestConnectedComponentSize(data) {
 }
 
 function computeStatistics(parentDiv, data, filtered) {
-  console.log(filtered.nodes);
-
   let total_node_quantity = data.nodes.length;
   let filtered_node_quantity = filtered.nodes.length;
   let issues_quantity = 0;
