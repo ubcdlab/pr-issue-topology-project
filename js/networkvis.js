@@ -61,12 +61,12 @@ class Networkvis {
             }
             if (keep) {
                 new_nodes.push(node);
-                for (let link of links) {
-                    if (link['source'].id === node.id || link['target'].id === node.id) {
-                        new_links.add(link);
-                  }
-                }
             }
+        }
+        for (let link of links) {
+            if (new_nodes.includes(link['source']) && new_nodes.includes(link['target'])) {
+                new_links.add(link);
+          }
         }
         modify['nodes'] = new_nodes
         modify['links'] = Array.from(new_links);
