@@ -34,7 +34,7 @@ class Networkvis {
                 vis.filterNet[key] = data
             }
         }
-        console.log(vis.filterNet);
+        // console.log(vis.filterNet);
         let modify = vis.filterData();
         vis.updateVis(modify);
     }
@@ -49,7 +49,15 @@ class Networkvis {
             if (label.length === 0) {
                 return 1;
             }
-            return d.label.some(x => label.includes(x)) ? 1 : 0.2
+            return d.label.some(x => label.includes(x)) ? 1 : 0.05
+        })
+        d3.select(`${vis.parentTag}-view`)
+        .selectAll('.line')
+        .style('opacity', d => {
+            if (label.length === 0) {
+                return 1;
+            }
+            return d.source.label.some(x => label.includes(x)) ? 1 : 0.05
         })
     }
 
@@ -66,7 +74,7 @@ class Networkvis {
             for (let [key, entry] of Object.entries(vis.filterNet)) {
                 let cosmetic = entry['cosmetic'];
                 let val = entry['value'];
-                if (val.length > 0) {
+                if (val.length > 0 && !cosmetic) {
                     if (node[key].length === 0 && val.length > 0) {
                         keep = false;
                         continue
@@ -140,9 +148,21 @@ class Networkvis {
         .data(data.links)
         .join('line')
         .style('stroke', '#000')
+        .classed('line', true)
         .attr('stroke-width', 2)
         .attr('marker-end', 'url(#triangle)')
-        .attr('id', d => `link-${d.source}-${d.target}-end`)
+        .attr('id', d => {
+            if (typeof(d.source) === "object"){
+                return `link-${d.source.id}-${d.target.id}-end` 
+            }
+            return `link-${d.source}-${d.target}-end`
+        })
+        .attr('source', d => {
+            return typeof(d.source) === "object" ? d.source.id : d.source;
+        })
+        .attr('target', d => {
+            return typeof(d.target) === "object" ? d.target.id : d.target;
+        })
         .on('click', (e, d) => {
             if (!d.colourIndex) {
                 d.colourIndex = 0;
