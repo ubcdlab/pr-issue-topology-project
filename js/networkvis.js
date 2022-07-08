@@ -34,18 +34,20 @@ class Networkvis {
                 vis.filterNet[key] = data
             }
         }
-        // console.log(vis.filterNet);
+        let refresh = true;
         let modify = vis.filterData();
         vis.updateVis(modify);
+        vis.cosmeticFilter();
     }
 
-    cosmeticFilter(label) {
+    cosmeticFilter() {
+        let checkboxes = d3.select('#list_span')
+        .selectAll('.checkbox:checked').nodes();
+        let label = checkboxes.map(x => x.value);
         let vis = this;
-        console.log(label);
         d3.select(`${vis.parentTag}-view`)
         .selectAll('.nodes')
         .style('opacity', d => {
-            console.log(d.label);
             if (label.length === 0) {
                 return 1;
             }
@@ -92,6 +94,13 @@ class Networkvis {
             if (new_nodes.includes(link['source']) && new_nodes.includes(link['target'])) {
                 new_links.add(link);
           }
+        }
+        for (let [key, entry] of Object.entries(vis.filterNet)) {
+            let cosmetic = entry['cosmetic'];
+            let val = entry['value'];
+            if (cosmetic) {
+                vis.cosmeticFilter();
+            }
         }
         modify['nodes'] = new_nodes
         modify['links'] = Array.from(new_links);

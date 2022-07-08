@@ -96,10 +96,7 @@ function createVisInstance(DIV_ID, graph_json_file, structure_json_file) {
     .attr('id', d => d)
     .attr('value', d => d)
     .on('click', (e) => {
-      let checkboxes = d3.select('#list_span')
-      .selectAll('.checkbox:checked').nodes();
-      let sliderValue = slider.value()
-      networkplot.cosmeticFilter(checkboxes.map(x => x.value));
+      networkplot.cosmeticFilter();
     });
 
     computeStatistics(statsDiv, graph_data, graph_data);
