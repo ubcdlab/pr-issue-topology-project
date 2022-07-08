@@ -46,6 +46,9 @@ class Networkvis {
         .selectAll('.nodes')
         .style('opacity', d => {
             console.log(d.label);
+            if (label.length === 0) {
+                return 1;
+            }
             return d.label.some(x => label.includes(x)) ? 1 : 0.2
         })
     }

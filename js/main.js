@@ -23,7 +23,7 @@ function createVisInstance(DIV_ID, graph_json_file, structure_json_file) {
 
     console.log(graph_data);
 
-    const default_slider_value = [12, 12]
+    const default_slider_value = [1, 100]
 
     let statsDiv = d3.select(DIV_ID)
     .append('div')
