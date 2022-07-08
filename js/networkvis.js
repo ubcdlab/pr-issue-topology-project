@@ -39,7 +39,18 @@ class Networkvis {
         vis.updateVis(modify);
     }
 
-    filterData(data) {
+    cosmeticFilter(label) {
+        let vis = this;
+        console.log(label);
+        d3.select(`${vis.parentTag}-view`)
+        .selectAll('.nodes')
+        .style('opacity', d => {
+            console.log(d.label);
+            return d.label.some(x => label.includes(x)) ? 1 : 0.2
+        })
+    }
+
+    filterData() {
         let vis = this;
         let modify = structuredClone(vis.data);
         let original_data = modify['nodes'];
@@ -49,11 +60,14 @@ class Networkvis {
 
         for (let node of original_data) {
             let keep = true;
-            for (let [key, data] of Object.entries(vis.filterNet)) {
-                if (data.length > 0) {
-                    if (node[key].length === 0 && data.length > 0) {
+            for (let [key, entry] of Object.entries(vis.filterNet)) {
+                let cosmetic = entry['cosmetic'];
+                let val = entry['value'];
+                if (val.length > 0) {
+                    if (node[key].length === 0 && val.length > 0) {
                         keep = false;
-                    } else if (!node[key].some(x => data.includes(x))) {
+                        continue
+                    } else if (!node[key].some(x => val.includes(x))) {
                         keep = false;
                         continue
                     }
@@ -149,7 +163,10 @@ class Networkvis {
         .selectAll('g')
         .data(data.nodes)
         .join('g')
-        .attr('class', 'nodes')
+        .classed('nodes', true)
+        .attr('labels', d => {
+            return d.label;
+        })
         .classed('issues', d => {
             return d.type === 'issue' ? true : false;
         })
@@ -186,14 +203,10 @@ Component Size: ${d.connected_component.length}`)
             .classed('highlighted', false);   
         })
         .on('contextmenu', (e, d) => {
-            e.preventDefault();
-            if (e.ctrlKey) {
-                // console.log('whoa')
-            } else {
-                let checked = d3.select(vis.parentTag).select('.rightClickHyperlink').property('checked')
-                if (checked) {
-                    window.open(`${vis.data.repo_url}/pull/${d.id}`, '_blank').focus();
-                }
+            let checked = d3.select(vis.parentTag).select('.rightClickHyperlink').property('checked')
+            if (checked) {
+                e.preventDefault();
+                window.open(`${vis.data.repo_url}/pull/${d.id}`, '_blank').focus();
             }
         })
         .call(d3.drag()

@@ -41,7 +41,10 @@ function createVisInstance(DIV_ID, graph_json_file, structure_json_file) {
 
     const networkplot = new Networkvis(graph_data, DIV_ID);
     networkplot.updateFilter({
-      'connected_component_size': range(default_slider_value[0], default_slider_value[1] + 1)
+      'connected_component_size': {
+        'value': range(default_slider_value[0], default_slider_value[1] + 1),
+        'cosmetic': false
+      }
     })
     networkplot.updateVis(graph_data);
 
@@ -58,7 +61,10 @@ function createVisInstance(DIV_ID, graph_json_file, structure_json_file) {
     .on('end', (val) => {
         let modify = filterNetwork(val[0], val[1], graph_data)
         networkplot.updateFilter({
-          'connected_component_size': range(val[0], val[1] + 1)
+          'connected_component_size': { 
+            'value': range(val[0], val[1] + 1),
+            'cosmetic': false
+          }
         });
         computeStatistics(statsDiv, graph_data, modify)
     });
@@ -93,9 +99,7 @@ function createVisInstance(DIV_ID, graph_json_file, structure_json_file) {
       let checkboxes = d3.select('#list_span')
       .selectAll('.checkbox:checked').nodes();
       let sliderValue = slider.value()
-      networkplot.updateFilter({
-        'label': checkboxes.map(x => x.value)
-      });
+      networkplot.cosmeticFilter(checkboxes.map(x => x.value));
     });
 
     computeStatistics(statsDiv, graph_data, graph_data);
