@@ -199,7 +199,11 @@ Component Size: ${d.connected_component.length}`)
         .call(d3.drag()
             .on('start', (d, e) => {
                 if (!e.active) {
-                    simulation.alphaTarget(0.3).restart();
+                    simulation
+                    .alphaTarget(0.01)
+                    .alphaDecay(0.9)
+                    .velocityDecay(0.99)
+                    .restart();
                 }
                 d.fx = d.x;
                 d.fy = d.y;
@@ -207,7 +211,8 @@ Component Size: ${d.connected_component.length}`)
             .on('drag', vis.nodeDragging)
             .on('end', (d, e) => {
                 if (!e.active) {
-                    simulation.alphaTarget(0);
+                    // simulation.alphaTarget(0);
+                    simulation.stop();
                 }
                 d.fx = null;
                 d.fy = null;
@@ -239,7 +244,7 @@ Component Size: ${d.connected_component.length}`)
             .distance(80)
             .links(data.links))
         .force("collide", d3.forceCollide(5).radius(23))
-        .force('charge', d3.forceManyBody().strength(-20))
+        .force('charge', d3.forceManyBody().strength(-10))
         .force('center', d3.forceCenter(vis.config.width / 2, vis.config.height / 2))
         .on("tick", ticked);
 
