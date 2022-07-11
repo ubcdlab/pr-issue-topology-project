@@ -5,7 +5,7 @@ import pickle
 from github import Github
 
 
-TARGET_REPO = 'jekyll/jekyll-admin'
+TARGET_REPO = '10up/ElasticPress'
 TARGET_REPO_FILE_NAME = TARGET_REPO.replace('/', '-')
 
 node_list = None
