@@ -108,13 +108,13 @@ def fetch_data():
             total_links = []
             node_dict = {}
 
-            if (issue.user.type != 'Bot'):
-                total_links += find_all_mentions(issue.body)
-            node_comments = issue.get_comments()
-            for comment in node_comments:
-                if (comment.user.type != 'Bot'):
-                    total_links += find_all_mentions(comment.body)
-            # total_links = list(filter(lambda x: (0 < int(x) <= HIGHEST_ISSUE_NUMBER) and int(x) in issue_and_pr_numbers, total_links))
+            # if (issue.user.type != 'Bot'):
+            #     total_links += find_all_mentions(issue.body)
+            # node_comments = issue.get_comments()
+            # for comment in node_comments:
+            #     if (comment.user.type != 'Bot'):
+            #         total_links += find_all_mentions(comment.body)
+            # # total_links = list(filter(lambda x: (0 < int(x) <= HIGHEST_ISSUE_NUMBER) and int(x) in issue_and_pr_numbers, total_links))
 
             issue_timeline = list(issue.get_timeline())
             issue_timeline = list(filter(lambda x: x.event == 'cross-referenced' and x.source.issue.repository.full_name == repo.full_name , issue_timeline))
