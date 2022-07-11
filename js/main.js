@@ -13,19 +13,17 @@ d3.select('#rightFile')
 
 
 function createVisInstance(DIV_ID, graph_json_file, structure_json_file) {
-  d3.select(DIV_ID).html(null);
-
     Promise.all([
-    d3.json(graph_json_file),
-    d3.json(structure_json_file)
+    d3.json(graph_json_file)
   ])
   .then(data => {
     let graph_data = data[0];
-    let structure_data = data[1];
+    // let structure_data = data[1];
 
     console.log(graph_data);
+    d3.select(`${DIV_ID}`).html(null);
 
-    const default_slider_value = [10, Infinity]
+    const default_slider_value = [1, 100]
 
     let statsDiv = d3.select(DIV_ID)
     .append('div')
@@ -41,6 +39,15 @@ function createVisInstance(DIV_ID, graph_json_file, structure_json_file) {
     .style('width', '100%')
     .style('height', '80px');
 
+    const networkplot = new Networkvis(graph_data, DIV_ID);
+    networkplot.updateFilter({
+      'connected_component_size': {
+        'value': range(default_slider_value[0], default_slider_value[1] + 1),
+        'cosmetic': false
+      }
+    })
+    networkplot.updateVis(graph_data);
+
     let slider = d3.sliderBottom()
     .min(1)
     .max(computeLargestConnectedComponentSize(graph_data))
@@ -53,9 +60,12 @@ function createVisInstance(DIV_ID, graph_json_file, structure_json_file) {
     .fill('skyblue')
     .on('end', (val) => {
         let modify = filterNetwork(val[0], val[1], graph_data)
-        d3.select(`${DIV_ID}-view`).remove();
-        const networkplot2 = new Networkvis(modify, DIV_ID);
-        networkplot2.updateVis(modify);
+        networkplot.updateFilter({
+          'connected_component_size': { 
+            'value': range(val[0], val[1] + 1),
+            'cosmetic': false
+          }
+        });
         computeStatistics(statsDiv, graph_data, modify)
     });
 
@@ -69,14 +79,27 @@ function createVisInstance(DIV_ID, graph_json_file, structure_json_file) {
     .attr('transform', 'translate(30,30)')
     .call(slider);
 
-    let modify = filterNetwork(default_slider_value[0], default_slider_value[1], graph_data);
-    const networkplot2 = new Networkvis(modify, DIV_ID);
-    networkplot2.updateVis(modify);
+    let list_span = d3.select('#list_span');
 
-    computeStatistics(statsDiv, graph_data, modify);
-    
-    const patternplot = new Patternvis(structure_data, DIV_ID);
-    patternplot.updateVis(structure_data);
+    let list_checkbox = list_span
+    .selectAll('li')
+    .data(graph_data['labels_text'])
+    .join('li')
+    .append('label')
+    .text(d => d)
+    .attr('for', d => d)
+    .append('input')
+    .property('checked', false)
+    .attr('type', 'checkbox')
+    .attr('class', 'checkbox')
+    .attr('name', d => d)
+    .attr('id', d => d)
+    .attr('value', d => d)
+    .on('click', (e) => {
+      networkplot.cosmeticFilter();
+    });
+
+    computeStatistics(statsDiv, graph_data, graph_data);
 
   })
   .catch(error => {
@@ -84,10 +107,39 @@ function createVisInstance(DIV_ID, graph_json_file, structure_json_file) {
   })
 }
 
+function range(start, stop, step) {
+    if (typeof stop == 'undefined') {
+        // one param defined
+        stop = start;
+        start = 0;
+    }
+
+    if (typeof step == 'undefined') {
+        step = 1;
+    }
+
+    if ((step > 0 && start >= stop) || (step < 0 && start <= stop)) {
+        return [];
+    }
+
+    var result = [];
+    for (var i = start; step > 0 ? i < stop : i > stop; i += step) {
+        result.push(i);
+    }
+
+    return result;
+};
+
 
 function initStatsPanel(statsDiv, data, DIV_ID) {
   statsDiv
   .html(`
+<div id="list1" class="dropdown-check-list">
+  <span class="anchor">Github Label</span>
+  <ul id="list_span" class="items labels-dropdown invisible">
+  </ul>
+</div>
+<br><br>
 Repo URL: <a href="${data.repo_url}">${data.repo_url}</a><br>
 Visualising <span id="filtered_quantity">n</span> nodes (<span id="unfiltered_quantity">x</span> total) in <span>n</span> components
               <br>
@@ -107,6 +159,15 @@ Visualising <span id="filtered_quantity">n</span> nodes (<span id="unfiltered_qu
 <input checked=true type="checkbox" class="showPullRequests">Show Pull Requests</input>
 <input checked=false type="checkbox" class="showNodeLabels">Show Node Number</input>
 `)
+  d3.select(DIV_ID)
+  .select('#list1')
+  .on('click', (e) => {
+    if (e.target.className === "anchor") {
+      let checklist = d3.select(DIV_ID).select('.labels-dropdown');
+      checklist.classed('visible', !checklist.classed('visible'));
+      checklist.classed('invisible', !checklist.classed('invisible'))
+    }
+  })
   d3.select(DIV_ID)
   .select('.showIssues')
   .on('change', (e) => {
@@ -158,8 +219,6 @@ function computeLargestConnectedComponentSize(data) {
 }
 
 function computeStatistics(parentDiv, data, filtered) {
-  console.log(filtered.nodes);
-
   let total_node_quantity = data.nodes.length;
   let filtered_node_quantity = filtered.nodes.length;
   let issues_quantity = 0;

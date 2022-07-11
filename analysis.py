@@ -1,20 +1,73 @@
 import json
 import sys 
 import functools
+import pickle
+from github import Github
 
-REPO_NAME = 'manim'
 
-f = open(f'data/graph_{REPO_NAME}.json')
-data = json.load(f)
+TARGET_REPO = '10up/ElasticPress'
+TARGET_REPO_FILE_NAME = TARGET_REPO.replace('/', '-')
 
-pattern_json = {}
-analysis_dict = {}
-isolated = []
-duo_issue_issue = []
-duo_issue_pr = []
-duo_pr_pr = []
-duo_pr_issue = []
-counter = 0
+node_list = None
+comment_list = None
+
+with open(f'raw_data/nodes_{TARGET_REPO_FILE_NAME}_comments.pk', 'rb') as fi:
+    comment_list = pickle.load(fi)
+with open(f'raw_data/nodes_{TARGET_REPO_FILE_NAME}.pk', 'rb') as fi:
+    node_list = pickle.load(fi)
+
+
+def init_output_json(g, repo):
+	# return an initialised graph_{REPO_NAME}.json file
+	labels = list(repo.get_labels())
+	output = {
+		'repo_url': repo.html_url,
+		'issue_count': 0,
+		'pull_request_count': 0,
+		'labels_text': list(map(lambda x: x.name, labels)),
+		'nodes': [],
+		'links': []
+	}
+	return output
+
+def get_token():
+    # get personal access token
+    # from a file named token.txt
+    token = None
+    try:
+        with open('.token', 'r') as f:
+            token = f.read()
+            print('Github token read OK')
+    except IOError:
+        pass
+    return token
+
+
+def compute_network_statistics(data):
+    # Construct the graph
+    graph = nx.Graph()
+    for node in data['nodes']:
+        graph.add_node(node['id'])
+    for link in data['links']:
+        graph.add_edge(link['source'], link['target'])
+
+    # Compute the connected component
+    connected_components = list(nx.connected_components(graph))
+    for component in connected_components:
+        for node in component:
+            for entry in data['nodes']:
+                if (entry['id'] == node):
+                    entry['connected_component'] = list(component)
+
+    # Compute the degrees
+    for node in graph.degree:
+        node_id = node[0]
+        node_degree = node[1]
+        for entry in data['nodes']:
+            if (entry['id'] == node_id):
+                entry['node_degree'] = node_degree
+    data['connected_components'] = list(map(lambda x: list(x), connected_components))
+    return data
 
 def find_node(node_id):
 	for node in data['nodes']:
@@ -29,6 +82,25 @@ def add_analysis_function(analysis_dict, level, array_of_function):
 
 def find_isolated_nodes(node):
 	return len(node['connected_components']) == 0
+
+
+target = node_list[0]
+g = Github(get_token())
+repo = g.get_repo(TARGET_REPO)
+output_json = init_output_json(g, repo)
+
+data = None
+with open(f'data/graph_{TARGET_REPO_FILE_NAME}.json', 'r') as fi:
+    data = json.load(fi)
+
+pattern_json = {}
+analysis_dict = {}
+isolated = []
+duo_issue_issue = []
+duo_issue_pr = []
+duo_pr_pr = []
+duo_pr_issue = []
+counter = 0
 
 # First, compute the largest component size
 max_component_size = 0
@@ -110,8 +182,6 @@ for component_size in range(3, max_component_size + 1):
 	pattern_json[component_size]['general'] = all_component_of_size
 
 
-
-
-with open(f'data/structure_{REPO_NAME}.json', 'w') as f:
+with open(f'data/structure_{TARGET_REPO_FILE_NAME}.json', 'w') as f:
 	f.write(json.dumps(pattern_json, sort_keys=False, indent=4))
 

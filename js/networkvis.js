@@ -6,14 +6,12 @@ class Networkvis {
         }
         this.data = _data;
         this.parentTag = _parentTag;
+        this.filterNet = {}
         this.initVis();
     }
+
     initVis() {
         let vis = this;
-
-        vis.hideIsolatedNodes = d3.select('#hideIsolatedNodes')
-        .property('checked', false)
-        .on('change', vis.checkboxUpdate);
 
         d3.select(`${vis.parentTag}`)
         .select('.showNodeLabels')
@@ -25,22 +23,89 @@ class Networkvis {
 
         d3.select('#url_tagline')
         .html(`Visualising Repo: <a href=${vis.data.repo_url}>${vis.data.repo_url}</a>`)
+    }
 
-        d3.select('#searchButton')
-        .on('click', (d, e) => {
-            let targetId = d3.select('#searchBox').node().value;
-            let targetX = d3.select(`#point-${targetId}`).attr('x');
-            let targetY = d3.select(`#point-${targetId}`).attr('y');
-
-            let g = d3.select('#mainViewG')
-            d3.zoom.translateTo(g, targetX, targetY);
-        })
-        let min_size_component = 1;
-        let max_size_component = 1;
-        for (let component of vis.data['connected_components']) {
-            max_size_component = Math.max(component.length, max_size_component);
+    updateFilter(criteria) {
+        let vis = this;
+        if (criteria === null) {
+            vis.filterNet = {}
+        } else {
+            for (let [key, data] of Object.entries(criteria)) {
+                vis.filterNet[key] = data
+            }
         }
+        let refresh = true;
+        let modify = vis.filterData();
+        vis.updateVis(modify);
+        vis.cosmeticFilter();
+    }
 
+    cosmeticFilter() {
+        let checkboxes = d3.select('#list_span')
+        .selectAll('.checkbox:checked').nodes();
+        let label = checkboxes.map(x => x.value);
+        let vis = this;
+        d3.select(`${vis.parentTag}-view`)
+        .selectAll('.nodes')
+        .style('opacity', d => {
+            if (label.length === 0) {
+                return 1;
+            }
+            return d.label.some(x => label.includes(x)) ? 1 : 0.05
+        })
+        d3.select(`${vis.parentTag}-view`)
+        .selectAll('.line')
+        .style('opacity', d => {
+            if (label.length === 0) {
+                return 1;
+            }
+            return d.source.label.some(x => label.includes(x)) ? 1 : 0.05
+        })
+    }
+
+    filterData() {
+        let vis = this;
+        let modify = structuredClone(vis.data);
+        let original_data = modify['nodes'];
+        let links = modify['links'];
+        let new_nodes = [];
+        let new_links = new Set();
+
+        for (let node of original_data) {
+            let keep = true;
+            for (let [key, entry] of Object.entries(vis.filterNet)) {
+                let cosmetic = entry['cosmetic'];
+                let val = entry['value'];
+                if (val.length > 0 && !cosmetic) {
+                    if (node[key].length === 0 && val.length > 0) {
+                        keep = false;
+                        continue
+                    } else if (!node[key].some(x => val.includes(x))) {
+                        keep = false;
+                        continue
+                    }
+                }
+            }
+            if (keep) {
+                new_nodes.push(node);
+            }
+        }
+        for (let link of links) {
+            if (new_nodes.includes(link['source']) && new_nodes.includes(link['target'])) {
+                new_links.add(link);
+          }
+        }
+        for (let [key, entry] of Object.entries(vis.filterNet)) {
+            let cosmetic = entry['cosmetic'];
+            let val = entry['value'];
+            if (cosmetic) {
+                vis.cosmeticFilter();
+            }
+        }
+        modify['nodes'] = new_nodes
+        modify['links'] = Array.from(new_links);
+        console.log(modify);
+        return modify;
     }
 
     updateVis(data) {
@@ -53,38 +118,6 @@ class Networkvis {
         d.fy = e.y;
     }
 
-    searchNode(id) {
-
-    }
-
-    renderTable(data) {
-        data.connected_components = data.connected_components.filter(x => x.length > 1);
-        data.connected_components.sort((a, b) => {
-            return b.length - a.length;
-        });
-        let table = d3.select('#auxView').append('table')
-        let thead = table.append('thead')
-        let tbody = table.append('tbody')
-
-        // Table header
-        thead.append('tr')
-        .selectAll('th')
-        .data(['Family', 'Cardinality', 'Constituents Nodes'])
-        .join('th')
-        .text(d => d)
-
-        let rows = tbody.selectAll('tr')
-        .data(data.connected_components)
-        .join('tr');
-
-        let cells = rows.selectAll('td')
-        .data((d, i) => {
-            return [i, d.length, d];
-        })
-        .join('td')
-        .text((d, i) => {return (i === 2 ? `{${d}}` : d)})
-;
-    }
 
     renderVis(data) {
         function ticked() {
@@ -100,6 +133,8 @@ class Networkvis {
         }
 
         let vis = this;
+
+        d3.select(`${vis.parentTag}-view`).remove();
 
         vis.svg = d3.select(vis.parentTag)
         .insert('svg', `${vis.parentTag}_sliderDiv + *`)
@@ -122,9 +157,21 @@ class Networkvis {
         .data(data.links)
         .join('line')
         .style('stroke', '#000')
+        .classed('line', true)
         .attr('stroke-width', 2)
         .attr('marker-end', 'url(#triangle)')
-        .attr('id', d => `link-${d.source}-${d.target}-end`)
+        .attr('id', d => {
+            if (typeof(d.source) === "object"){
+                return `link-${d.source.id}-${d.target.id}-end` 
+            }
+            return `link-${d.source}-${d.target}-end`
+        })
+        .attr('source', d => {
+            return typeof(d.source) === "object" ? d.source.id : d.source;
+        })
+        .attr('target', d => {
+            return typeof(d.target) === "object" ? d.target.id : d.target;
+        })
         .on('click', (e, d) => {
             if (!d.colourIndex) {
                 d.colourIndex = 0;
@@ -148,7 +195,10 @@ class Networkvis {
         .selectAll('g')
         .data(data.nodes)
         .join('g')
-        .attr('class', 'nodes')
+        .classed('nodes', true)
+        .attr('labels', d => {
+            return d.label;
+        })
         .classed('issues', d => {
             return d.type === 'issue' ? true : false;
         })
@@ -185,20 +235,20 @@ Component Size: ${d.connected_component.length}`)
             .classed('highlighted', false);   
         })
         .on('contextmenu', (e, d) => {
-            e.preventDefault();
-            if (e.ctrlKey) {
-                console.log('whoa')
-            } else {
-                let checked = d3.select(vis.parentTag).select('.rightClickHyperlink').property('checked')
-                if (checked) {
-                    window.open(`${vis.data.repo_url}/pull/${d.id}`, '_blank').focus();
-                }
+            let checked = d3.select(vis.parentTag).select('.rightClickHyperlink').property('checked')
+            if (checked) {
+                e.preventDefault();
+                window.open(`${vis.data.repo_url}/pull/${d.id}`, '_blank').focus();
             }
         })
         .call(d3.drag()
             .on('start', (d, e) => {
                 if (!e.active) {
-                    simulation.alphaTarget(0.3).restart();
+                    simulation
+                    .alphaTarget(0.01)
+                    .alphaDecay(0.9)
+                    .velocityDecay(0.99)
+                    .restart();
                 }
                 d.fx = d.x;
                 d.fy = d.y;
@@ -206,7 +256,8 @@ Component Size: ${d.connected_component.length}`)
             .on('drag', vis.nodeDragging)
             .on('end', (d, e) => {
                 if (!e.active) {
-                    simulation.alphaTarget(0);
+                    // simulation.alphaTarget(0);
+                    simulation.stop();
                 }
                 d.fx = null;
                 d.fy = null;
@@ -238,7 +289,7 @@ Component Size: ${d.connected_component.length}`)
             .distance(80)
             .links(data.links))
         .force("collide", d3.forceCollide(5).radius(23))
-        .force('charge', d3.forceManyBody().strength(-20))
+        .force('charge', d3.forceManyBody().strength(-10))
         .force('center', d3.forceCenter(vis.config.width / 2, vis.config.height / 2))
         .on("tick", ticked);
 
@@ -260,8 +311,6 @@ Component Size: ${d.connected_component.length}`)
         .append('text')
         .classed('number_label', true)
         .text((d) => d.id);
-
-        // vis.renderTable(data);
     }
     
 }

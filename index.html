@@ -54,6 +54,70 @@
   .view {
     border: 1px solid grey;
   }
+  .dropdown-check-list {
+  display: inline-block;
+}
+
+.dropdown-check-list .anchor {
+  position: relative;
+  cursor: pointer;
+  display: inline-block;
+  padding: 5px 50px 5px 10px;
+  border: 1px solid #ccc;
+}
+
+.dropdown-check-list .anchor:after {
+  position: absolute;
+  content: "";
+  border-left: 2px solid black;
+  border-top: 2px solid black;
+  padding: 5px;
+  right: 10px;
+  top: 20%;
+  -moz-transform: rotate(-135deg);
+  -ms-transform: rotate(-135deg);
+  -o-transform: rotate(-135deg);
+  -webkit-transform: rotate(-135deg);
+  transform: rotate(-135deg);
+}
+
+.dropdown-check-list .anchor:active:after {
+  right: 8px;
+  top: 21%;
+}
+
+.dropdown-check-list ul.items {
+  padding: 2px;
+  margin: 0;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+
+.dropdown-check-list ul.items li {
+  list-style: none;
+}
+
+.dropdown-check-list.visible .anchor {
+  color: #0094ff;
+}
+
+.dropdown-check-list.visible .items {
+  display: block;
+}
+
+.invisible {
+  display: none !important;
+}
+
+.visible {
+  display: block !important;
+}
+
+#list1 {
+  position: absolute;
+  z-index: 1;
+  background: white;
+}
 
 </style>
 <body>
@@ -75,10 +139,10 @@
         <div class="column">
           <select id="leftFile">
             <option disabled selected value>Select an option</option>
-            <option value="ElasticPress">ElasticPress</option>
-            <option value="jekyll-admin">jekyll-admin</option>
-            <option value="Notepads">Notepads</option>
-            <option value="manim">manim</option>
+            <option value="10up-ElasticPress">10up-ElasticPress</option>
+            <option value="jekyll-jekyll-admin">jekyll-jekyll-admin</option>
+            <option value="0x7c13-Notepads">0x7c13-Notepads</option>
+            <option value="3b1b-manim">3b1b-manim</option>
           </select>
           <div id="leftVis">
         </div>
@@ -86,10 +150,10 @@
         <div class="column">
           <select id="rightFile">
             <option disabled selected value>Select an option</option>
-            <option value="ElasticPress">ElasticPress</option>
-            <option value="jekyll-admin">jekyll-admin</option>
-            <option value="Notepads">Notepads</option>
-            <option value="manim">manim</option>
+            <option value="10up-ElasticPress">10up-ElasticPress</option>
+            <option value="jekyll-jekyll-admin">jekyll-jekyll-admin</option>
+            <option value="0x7c13-Notepads">0x7c13-Notepads</option>
+            <option value="3b1b-manim">3b1b-manim</option>
           </select>
           <div id="rightVis">
           </div>
@@ -101,5 +165,7 @@
   <script src="js/main.js"></script>
   <script src="js/networkvis.js"></script>
   <script src="js/pattern.js"></script>
+  <script>
+  </script>
 </body>
 </html>
