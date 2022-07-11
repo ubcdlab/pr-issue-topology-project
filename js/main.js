@@ -15,13 +15,13 @@ d3.select('#rightFile')
 function createVisInstance(DIV_ID, graph_json_file, structure_json_file) {
     Promise.all([
     d3.json(graph_json_file)
-    // d3.json(structure_json_file)
   ])
   .then(data => {
     let graph_data = data[0];
     // let structure_data = data[1];
 
     console.log(graph_data);
+    d3.select(`${DIV_ID}`).html(null);
 
     const default_slider_value = [1, 100]
 
