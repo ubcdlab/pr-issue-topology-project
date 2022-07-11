@@ -7,6 +7,7 @@ import json
 import networkx as nx
 import pickle
 from os.path import exists
+import copy
 
 RATE_LIMIT_THRESHOLD = 100
 
@@ -45,6 +46,17 @@ def find_all_mentions(text):
     regex_matches += [x.group(1) for x in re.finditer(REGEX_STRING, text)]
     regex_matches += re.findall(REGEX_NUMBER_STRING, text)
     return regex_matches # return all matches in an array
+
+def find_link_to_comment(issue, comments, timestamp):
+    # print(issue)
+    # print(comments)
+    # print(timestamp)
+    if issue.created_at - datetime.timedelta(seconds=1) <= issue.created_at <= issue.created_at + datetime.timedelta(seconds=1):
+        return f'{issue.html_url}#issue-{issue.id}'
+    for comment in comments:
+        if comment.created_at == timestamp:
+            return comment.html_url
+    return None
 
 def fetch_data():
     g = Github(get_token())
@@ -104,7 +116,7 @@ def fetch_data():
             'links': []
         }
         HIGHEST_ISSUE_NUMBER = nodes[0].number
-        for issue in nodes:
+        for index, issue in enumerate(nodes):
             total_links = []
             node_dict = {}
 
@@ -116,17 +128,46 @@ def fetch_data():
             #         total_links += find_all_mentions(comment.body)
             # # total_links = list(filter(lambda x: (0 < int(x) <= HIGHEST_ISSUE_NUMBER) and int(x) in issue_and_pr_numbers, total_links))
 
+            node_comments = comment_list[index]
+
             issue_timeline = list(issue.get_timeline())
             issue_timeline = list(filter(lambda x: x.event == 'cross-referenced' and x.source.issue.repository.full_name == repo.full_name , issue_timeline))
+            issue_timeline_timestamp = copy.deepcopy(issue_timeline)
+            issue_timeline_timestamp = list(map(lambda x: x.created_at, issue_timeline_timestamp))
+            issue_timeline_events = copy.deepcopy(issue_timeline)
             issue_timeline = list(map(lambda x: str(x.source.issue.number), issue_timeline))
-            # print(issue_timeline)
+
             total_links = issue_timeline
 
+            links_dict = []
+            # assert len(issue_timeline) == len(issue_timeline_timestamp)
+            for mention in issue_timeline_events:
+                mentioning_issue = mention.source.issue
+                mentioning_issue_comments = mentioning_issue.get_comments()
+                mentioning_time = mention.created_at
+                comment_link = find_link_to_comment(mentioning_issue, mentioning_issue_comments, mentioning_time)
+                assert comment_link is not None
+                links_dict.append({
+                        'number': mention.source.issue.number,
+                        'comment_link': comment_link
+                    })
+
+            # print(issue_timeline)
+            # print(issue_timeline_timestamp)
+            # if len(issue_timeline) > 0:
+            #     for x in range(0, len(issue_timeline)):
+            #         mentioning_issue_comments = list(issue_timeline_events[x].source.issue.get_comments())
+            #         comment_link = find_link_to_comment(issue_timeline_timestamp[x], mentioning_issue_comments)
+            #         links_dict.append({
+            #             'number': issue_timeline[x],
+            #             'comment_link': comment_link.html_url
+            #             })
+            print(links_dict)
             node_dict = {
                 'id': issue.number,
                 'type': 'pull_request' if issue.pull_request is not None else 'issue',
                 'status': issue.state,
-                'links': total_links,
+                'links': links_dict,
                 'label': list(map(lambda x: x.name, issue.labels))
             }
 
