@@ -48,15 +48,20 @@ def find_all_mentions(text):
     return regex_matches # return all matches in an array
 
 def find_link_to_comment(issue, comments, timestamp):
-    # print(issue)
-    # print(comments)
+    # print(issue.created_at)
+    # print(list(comments))
     # print(timestamp)
-    if issue.created_at - datetime.timedelta(seconds=1) <= issue.created_at <= issue.created_at + datetime.timedelta(seconds=1):
+    if time_matches(timestamp, issue.created_at) or time_matches(timestamp, issue.updated_at):
         return f'{issue.html_url}#issue-{issue.id}'
     for comment in comments:
-        if comment.created_at == timestamp:
+        if timestamp - datetime.timedelta(seconds=1) <= comment.created_at <= timestamp + datetime.timedelta(seconds=1):
             return comment.html_url
-    return None
+    return f'{issue.html_url}#issue-{issue.id}'
+
+def time_matches(timestamp, tolerance_time):
+    print(timestamp)
+    print(tolerance_time)
+    return (tolerance_time - datetime.timedelta(seconds=1)) <= timestamp <= (tolerance_time + datetime.timedelta(seconds=1))
 
 def fetch_data():
     g = Github(get_token())
@@ -162,7 +167,7 @@ def fetch_data():
             #             'number': issue_timeline[x],
             #             'comment_link': comment_link.html_url
             #             })
-            print(links_dict)
+            # print(links_dict)
             node_dict = {
                 'id': issue.number,
                 'type': 'pull_request' if issue.pull_request is not None else 'issue',
@@ -178,8 +183,10 @@ def fetch_data():
                     node_dict['status'] = 'merged'
 
             graph_dict['nodes'].append(node_dict)
-            for link in total_links:
-                graph_dict['links'].append({'source': int(link), 'target': issue.number})
+            for link in links_dict:
+                graph_dict['links'].append({'source': link['number'], 'target': issue.number, 'comment_link': link['comment_link']})
+            # for link in total_links:
+            #     graph_dict['links'].append({'source': int(link), 'target': issue.number, })
             print(f'Finished loading node number {issue.number}')
         graph = nx.Graph()
         for node in graph_dict['nodes']:

@@ -189,6 +189,10 @@ class Networkvis {
             d3.select(`#link-${d.source.id}-${d.target.id}-end`)
             .classed('highlighted', false)
         })
+        .on('contextmenu', (e, d) => {
+            e.preventDefault();
+            window.open(`${d.comment_link}`, '_blank').focus();
+        })
 
         const node = vis.svg
         .append('g')
