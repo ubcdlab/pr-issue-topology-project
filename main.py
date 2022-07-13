@@ -169,7 +169,6 @@ def get_data(TARGET_REPO, TARGET_REPO_FILE_NAME):
         return nodes, comment_list, timeline_list # return the result
 
 def create_json_file(nodes, comment_list, timeline_list):
-
     return
 
 try:
