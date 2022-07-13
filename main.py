@@ -125,14 +125,6 @@ def fetch_data():
             total_links = []
             node_dict = {}
 
-            # if (issue.user.type != 'Bot'):
-            #     total_links += find_all_mentions(issue.body)
-            # node_comments = issue.get_comments()
-            # for comment in node_comments:
-            #     if (comment.user.type != 'Bot'):
-            #         total_links += find_all_mentions(comment.body)
-            # # total_links = list(filter(lambda x: (0 < int(x) <= HIGHEST_ISSUE_NUMBER) and int(x) in issue_and_pr_numbers, total_links))
-
             node_comments = comment_list[index]
 
             issue_timeline = list(issue.get_timeline())
@@ -157,17 +149,6 @@ def fetch_data():
                         'comment_link': comment_link
                     })
 
-            # print(issue_timeline)
-            # print(issue_timeline_timestamp)
-            # if len(issue_timeline) > 0:
-            #     for x in range(0, len(issue_timeline)):
-            #         mentioning_issue_comments = list(issue_timeline_events[x].source.issue.get_comments())
-            #         comment_link = find_link_to_comment(issue_timeline_timestamp[x], mentioning_issue_comments)
-            #         links_dict.append({
-            #             'number': issue_timeline[x],
-            #             'comment_link': comment_link.html_url
-            #             })
-            # print(links_dict)
             node_dict = {
                 'id': issue.number,
                 'type': 'pull_request' if issue.pull_request is not None else 'issue',
