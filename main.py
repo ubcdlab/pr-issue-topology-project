@@ -11,7 +11,7 @@ import os
 import copy
 import contextlib
 
-RATE_LIMIT_THRESHOLD = 4750
+RATE_LIMIT_THRESHOLD = 100
 
 def get_token():
     # get personal access token
@@ -50,9 +50,6 @@ def find_all_mentions(text):
     return regex_matches # return all matches in an array
 
 def find_link_to_comment(issue, comments, timestamp):
-    # print(issue.created_at)
-    # print(list(comments))
-    # print(timestamp)
     if time_matches(timestamp, issue.created_at) or time_matches(timestamp, issue.updated_at):
         return f'{issue.html_url}#issue-{issue.id}'
     for comment in comments:
@@ -61,8 +58,6 @@ def find_link_to_comment(issue, comments, timestamp):
     return f'{issue.html_url}'
 
 def time_matches(timestamp, tolerance_time):
-    print(timestamp)
-    print(tolerance_time)
     return (tolerance_time - datetime.timedelta(seconds=1)) <= timestamp <= (tolerance_time + datetime.timedelta(seconds=1))
 
 def delete_saved_files():
@@ -90,6 +85,11 @@ def write_variables_to_file(nodes, node_list, comment_list, timeline_list, TARGE
         pickle.dump(comment_list, fi)
     with open(f'{PATH}_event.pk', 'wb') as fi:
         pickle.dump(timeline_list, fi)
+
+def write_json_to_file(graph_dict, TARGET_REPO_FILE_NAME):
+    with open(f'data/graph_{TARGET_REPO_FILE_NAME}.json', 'w') as f:
+        f.write(json.dumps(graph_dict, sort_keys=False, indent=4))
+    print(f'Saved result to data/graph_{TARGET_REPO_FILE_NAME}.json')
 
 def check_rate_limit(rate_limit, RATE_LIMIT_THRESHOLD):
     if rate_limit < RATE_LIMIT_THRESHOLD:
@@ -172,7 +172,7 @@ def find_comment(issue_url, comment_list):
         if len(comments) > 0 and comments[0].issue_url == issue_url:
             return comments
 
-def create_json_file(g, nodes, comment_list, timeline_list):
+def create_json_file(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
     repo = g.get_repo(TARGET_REPO)
     graph_dict = {
         'repo_url': repo.html_url,
@@ -225,7 +225,8 @@ def create_json_file(g, nodes, comment_list, timeline_list):
         for link in links_dict:
             graph_dict['links'].append({'source': link['number'], 'target': issue.number, 'comment_link': link['comment_link']})
         print(f'Finished processing node number {issue.number}')
-    return
+    # write_json_to_file(graph_dict, TARGET_REPO_FILE_NAME)
+    return graph_dict
 
 try:
     TARGET_REPO = sys.argv[1]
@@ -240,7 +241,8 @@ if ('reload' in sys.argv) is True:
 
 g = Github(get_token())
 nodes, comment_list, timeline_list = get_data(g, TARGET_REPO, TARGET_REPO_FILE_NAME)
-# result = create_json_file(g, nodes, comment_list, timeline_list)
+graph_dict = create_json_file(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME)
+
 
 # with open(f'data/graph_{TARGET_REPO_FILE_NAME}.json') as f:
 #     result = json.load(f)
