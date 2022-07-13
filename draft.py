@@ -36,7 +36,79 @@ def get_data():
         with open(f'raw_data/nodes_{TARGET_REPO_FILE_NAME}.pk', 'rb') as npf:
             node_list = pickle.load(npf)
     print(f'Loaded {len(comment_list)} comment nodes.')
-    return nodes, comment_list
+    if len(nodes) == len(comment_list):
+        # Already done, just return the results loaded from file
+        print('All nodes has already been downloaded and processed. Loading saved local files.')
+        return nodes, comment_list
+    else:
+        # Download the remaining nodes
+        print(f'Nodes remaining to laod: {len(node_list)}')
+        try:
+            while len(node_list) > 0:
+                if g.get_rate_limit().core.remaining < RATE_LIMIT_THRESHOLD:
+                    print('Rate limit threshold reached!')
+                    rate_limit_time = g.get_rate_limit()
+                    time_remaining = rate_limit_time.core.reset - datetime.datetime.utcnow()
+                    print(f'Rate limit will reset after {time_remaining.seconds // 60} minutes {time_remaining.seconds % 60} seconds')
+                    print(f'Rate limit reset time: {rate_limit_time.core.reset}' ) # I am not going to bother figuring out printing local time 
+                    raise Exception('RateLimitThreshold')
+                issue = node_list.pop(0)
+                total_links = []
+                node_dict = {}
+
+                if (issue.user.type != 'Bot'):
+                    total_links += find_all_mentions(issue.body)
+                node_comments = issue.get_comments()
+                for comment in node_comments:
+                    if (comment.user.type != 'Bot'):
+                        total_links += find_all_mentions(comment.body)
+
+                total_links = list(filter(lambda x: (0 < int(x) <= HIGHEST_ISSUE_NUMBER) and int(x) in issue_and_pr_numbers, total_links))
+                # print(total_links)
+
+                node_dict['id'] = issue.number
+                node_dict['type'] = 'pull_request' if issue.pull_request is not None else 'issue'
+                node_dict['status'] = issue.state
+                node_dict['links'] = total_links
+
+                if issue.pull_request is not None:
+                    # this ugly check is needed to find out whether a PR is merged
+                    # since PyGithub doesn't support this directly
+                    if issue.pull_request.raw_data['merged_at'] is not None:
+                        node_dict['status'] = 'merged'
+
+                graph_dict['nodes'].append(node_dict)
+                for link in total_links:
+                    graph_dict['links'].append({'source': issue.number, 'target': int(link)})
+
+                print(f'Finished processing node {issue.number}. Rate limit: {g.rate_limiting[0]}')
+                # node_list.remove(issue)
+                comment_list.append(list(node_comments))
+        except Exception as e:
+            # Need to wait for rate limit cooldown
+            print(e)
+            print('Halting download due to rate limit...')
+            print('Writing raw nodes and comment data to disk... ')
+            print('DO NOT INTERRUPT OR TURN OFF YOUR COMPUTER.')
+            with open(f'raw_data/nodes_{TARGET_REPO_FILE_NAME}_progress.pk', 'wb') as fi:
+                pickle.dump(node_list, fi)
+            with open(f'raw_data/nodes_{TARGET_REPO_FILE_NAME}_comments.pk', 'wb') as cfi:
+                pickle.dump(comment_list, cfi)
+            sys.exit(0) # abort the download process
+        
+        # We made it through downloading the whole thing with no rate limit incident
+        # Save the full progress
+        print('Writing raw nodes and comment data to disk... ')
+        print('DO NOT INTERRUPT OR TURN OFF YOUR COMPUTER.')
+        with open(f'raw_data/nodes_{TARGET_REPO_FILE_NAME}_progress.pk', 'wb') as fi:
+            pickle.dump(node_list, fi)
+        with open(f'raw_data/nodes_{TARGET_REPO_FILE_NAME}_comments.pk', 'wb') as cfi:
+            pickle.dump(comment_list, cfi)
+        g.get_rate_limit()
+        print(f'Finished downloading entire repo. Rate limit: {g.rate_limiting[0]}')
+        # return the result
+        return nodes, comment_list
+
 
 def dump_to_file():
     graph_dict = {
