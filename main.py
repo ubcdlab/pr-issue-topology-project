@@ -1,5 +1,4 @@
 from github import Github
-import traceback
 import datetime
 import re
 import sys
@@ -8,7 +7,6 @@ import networkx as nx
 import pickle
 from os.path import exists
 import os
-import copy
 import contextlib
 
 RATE_LIMIT_THRESHOLD = 100
