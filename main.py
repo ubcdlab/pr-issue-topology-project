@@ -56,14 +56,14 @@ def find_link_to_comment(issue, comments, timestamp):
     for comment in comments:
         if timestamp - datetime.timedelta(seconds=1) <= comment.created_at <= timestamp + datetime.timedelta(seconds=1):
             return comment.html_url
-    return f'{issue.html_url}#issue-{issue.id}'
+    return f'{issue.html_url}'
 
 def time_matches(timestamp, tolerance_time):
     print(timestamp)
     print(tolerance_time)
     return (tolerance_time - datetime.timedelta(seconds=1)) <= timestamp <= (tolerance_time + datetime.timedelta(seconds=1))
 
-def fetch_data():
+def get_data():
     g = Github(get_token())
     graph_dict = {}
     repo = g.get_repo(TARGET_REPO)
@@ -106,12 +106,13 @@ def fetch_data():
     else:
         # we never crawled this repo before
         print('Never crawled comments before, creating save file')
-        with open(f'raw_data/nodes_{TARGET_REPO_FILE_NAME}.pk', 'rb') as npf:
-            node_list = pickle.load(npf)
+        node_list = nodes.copy()
 
     print(f'Loaded {len(comment_list)} comment nodes.')
+
     if len(nodes) == len(comment_list):
         print('All nodes has already been downloaded and processed. Loading saved local files.')
+        return nodes, comment_list
         graph_dict = {
             'repo_url': repo.html_url,
             'issue_count': 0,
@@ -269,15 +270,12 @@ except IndexError:
     print('Exiting')
     sys.exit(1)
 
-redownload = 'reload' in sys.argv
-write_to_file = 'write' in sys.argv
-result = None
 
-if redownload == True:
-    result = fetch_data()
-else:
-    with open(f'data/graph_{TARGET_REPO_FILE_NAME}.json') as f:
-        result = json.load(f)
+nodes, comment_list = get_data()
+dump_to_file(nodes, comment_list)
+
+with open(f'data/graph_{TARGET_REPO_FILE_NAME}.json') as f:
+    result = json.load(f)
 
 
 with open(f'data/graph_{TARGET_REPO_FILE_NAME}.json', 'w') as f:
