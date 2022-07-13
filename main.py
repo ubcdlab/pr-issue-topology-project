@@ -172,8 +172,9 @@ def find_comment(issue_url, comment_list):
         if len(comments) > 0 and comments[0].issue_url == issue_url:
             return comments
 
-def create_json_file(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
+def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
     repo = g.get_repo(TARGET_REPO)
+    network_graph = nx.Graph()
     graph_dict = {
         'repo_url': repo.html_url,
         'issue_count': 0,
@@ -225,7 +226,10 @@ def create_json_file(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAM
         for link in links_dict:
             graph_dict['links'].append({'source': link['number'], 'target': issue.number, 'comment_link': link['comment_link']})
         print(f'Finished processing node number {issue.number}')
-    # write_json_to_file(graph_dict, TARGET_REPO_FILE_NAME)
+    
+    network_graph = nx.Graph()
+    for node in 
+
     return graph_dict
 
 try:
@@ -241,7 +245,7 @@ if ('reload' in sys.argv) is True:
 
 g = Github(get_token())
 nodes, comment_list, timeline_list = get_data(g, TARGET_REPO, TARGET_REPO_FILE_NAME)
-graph_dict = create_json_file(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME)
+graph_dict = create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME)
 
 
 # with open(f'data/graph_{TARGET_REPO_FILE_NAME}.json') as f:
