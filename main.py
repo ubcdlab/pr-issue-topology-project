@@ -11,14 +11,14 @@ import os
 import copy
 import contextlib
 
-RATE_LIMIT_THRESHOLD = 100
+RATE_LIMIT_THRESHOLD = 4750
 
 def get_token():
     # get personal access token
     # from a file named token.txt
     token = None
     try:
-        with open('.token', 'r') as f:
+        with open('.token2', 'r') as f:
             token = f.read()
             print('Github token read OK')
     except IOError:
@@ -78,33 +78,6 @@ def delete_saved_files():
         os.remove(f'{PATH}_progress.pk')
         os.remove(f'{PATH}_event.pk')
 
-def load_saved_progress(repo, TARGET_REPO_FILE_NAME):
-    PATH = f'raw_data/nodes_{TARGET_REPO_FILE_NAME}'
-
-    nodes = []
-    node_list = []
-    comment_list = []
-    timeline_list = []
-
-    if exists(f'{PATH}.pk') is True:
-        with open(f'{PATH}.pk', 'rb') as fi:
-            nodes = pickle.load(fi)
-    else:
-        nodes = list(repo.get_issues(state='all', sort='created', direction='desc'))
-        node_list = nodes.copy()
-
-    if exists(f'{PATH}_comments.pk') is True:
-        with open(f'{PATH}_comments.pk', 'rb') as fi:
-            comment_list = pickle.load(fi)
-    if exists(f'{PATH}_progress') is True:
-        with open(f'{PATH}_progress.pk', 'rb') as fi:
-            node_list = pickle.load(fi)
-    if exists(f'{PATH}_event.pk') is True:
-        with open(f'{PATH}_event.pk', 'rb') as fi:
-            timeline_list = pickle.load(fi)
-
-    return nodes, node_list, comment_list, timeline_list
-
 def write_variables_to_file(nodes, node_list, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
     PATH = f'raw_data/nodes_{TARGET_REPO_FILE_NAME}'
     print('Writing raw nodes and comment data to disk...\nDO NOT INTERRUPT OR TURN OFF YOUR COMPUTER.')
@@ -126,6 +99,33 @@ def check_rate_limit(rate_limit, RATE_LIMIT_THRESHOLD):
         print(f'Rate limit will reset after {time_remaining.seconds // 60} minutes {time_remaining.seconds % 60} seconds')
         print(f'Rate limit reset time: {rate_limit_time.core.reset}' ) # I am not going to bother figuring out printing local time 
         raise Exception('RateLimitThreshold')
+
+def load_saved_progress(repo, TARGET_REPO_FILE_NAME):
+    PATH = f'raw_data/nodes_{TARGET_REPO_FILE_NAME}'
+
+    nodes = []
+    node_list = []
+    comment_list = []
+    timeline_list = []
+
+    if exists(f'{PATH}.pk') is True:
+        with open(f'{PATH}.pk', 'rb') as fi:
+            nodes = pickle.load(fi)
+    else:
+        nodes = list(repo.get_issues(state='all', sort='created', direction='desc'))
+        node_list = nodes.copy()
+
+    if exists(f'{PATH}_comments.pk') is True:
+        with open(f'{PATH}_comments.pk', 'rb') as fi:
+            comment_list = pickle.load(fi)
+    if exists(f'{PATH}_progress.pk') is True:
+        with open(f'{PATH}_progress.pk', 'rb') as fi:
+            node_list = pickle.load(fi)
+    if exists(f'{PATH}_event.pk') is True:
+        with open(f'{PATH}_event.pk', 'rb') as fi:
+            timeline_list = pickle.load(fi)
+
+    return nodes, node_list, comment_list, timeline_list
 
 def get_data(g, TARGET_REPO, TARGET_REPO_FILE_NAME):
     # Remember, the ONLY RESPONSIBILITY OF THIS FUNCTION
@@ -152,12 +152,12 @@ def get_data(g, TARGET_REPO, TARGET_REPO_FILE_NAME):
                 node_timeline = issue.get_timeline()
                 timeline_list.append(list(node_timeline))
                 comment_list.append(list(node_comments))
-                print(f'Downloaded node {issue.number}. Rate limit: {g.rate_limiting[0]}')
+                print(f'Downloaded node {issue.number}. {len(node_list)} remaining. Rate limit: {g.rate_limiting[0]}')
         except Exception as e:
             # Need to wait for rate limit cooldown
             print(e)
             print('Halting download due to rate limit...')
-            write_variables_to_file(nodes, node_list, comment_list, TARGET_REPO_FILE_NAME)
+            write_variables_to_file(nodes, node_list, comment_list, timeline_list, TARGET_REPO_FILE_NAME)
             sys.exit(0) # abort the download process
         
         # We made it through downloading the whole thing with no rate limit incident
@@ -166,6 +166,11 @@ def get_data(g, TARGET_REPO, TARGET_REPO_FILE_NAME):
         g.get_rate_limit()
         print(f'Finished downloading entire repo. Rate limit: {g.rate_limiting[0]}')
         return nodes, comment_list, timeline_list # return the result
+
+def find_comment(issue_url, comment_list):
+    for comments in comment_list:
+        if len(comments) > 0 and comments[0].issue_url == issue_url:
+            return comments
 
 def create_json_file(g, nodes, comment_list, timeline_list):
     repo = g.get_repo(TARGET_REPO)
@@ -195,7 +200,7 @@ def create_json_file(g, nodes, comment_list, timeline_list):
 
         for mention in issue_timeline_events:
             mentioning_issue = mention.source.issue
-            mentioning_issue_comments = mentioning_issue.get_comments()
+            mentioning_issue_comments = find_comment(mentioning_issue.url, comment_list)
             mentioning_time = mention.created_at
             comment_link = find_link_to_comment(mentioning_issue, mentioning_issue_comments, mentioning_time)
             assert comment_link is not None
@@ -219,7 +224,7 @@ def create_json_file(g, nodes, comment_list, timeline_list):
         graph_dict['nodes'].append(node_dict)
         for link in links_dict:
             graph_dict['links'].append({'source': link['number'], 'target': issue.number, 'comment_link': link['comment_link']})
-        print(f'Finished loading node number {issue.number}')
+        print(f'Finished processing node number {issue.number}')
     return
 
 try:

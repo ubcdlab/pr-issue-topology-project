@@ -2,4 +2,5 @@ token.txt
 *.txt
 .DS_Store
 .token
+.*
 *.pk
