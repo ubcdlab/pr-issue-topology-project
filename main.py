@@ -18,7 +18,7 @@ def get_token():
     # from a file named token.txt
     token = None
     try:
-        with open('.token2', 'r') as f:
+        with open('.token', 'r') as f:
             token = f.read()
             print('Github token read OK')
     except IOError:
@@ -223,13 +223,27 @@ def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
             if issue.pull_request.raw_data['merged_at'] is not None:
                 node_dict['status'] = 'merged'
         graph_dict['nodes'].append(node_dict)
+        network_graph.add_node(issue.number)
         for link in links_dict:
             graph_dict['links'].append({'source': link['number'], 'target': issue.number, 'comment_link': link['comment_link']})
+            network_graph.add_edge(link['number'], issue.number)
         print(f'Finished processing node number {issue.number}')
+    # Finished loading all nodes
+    connected_components = list(nx.connected_components(network_graph))
+    for component in connected_components:
+        for node in component:
+            for entry in graph_dict['nodes']:
+                if (entry['id'] == node):
+                    entry['connected_component'] = list(component)
+                    entry['connected_component_size'] = [len(list(component))]
     
-    network_graph = nx.Graph()
-    for node in 
-
+    for node in network_graph.degree:
+        node_id = node[0]
+        node_degree = node[1]
+        for entry in graph_dict['nodes']:
+            if (entry['id'] == node_id):
+                entry['node_degree'] = node_degree
+    graph_dict['connected_components'] = list(map(lambda x: list(x), connected_components))
     return graph_dict
 
 try:
@@ -246,19 +260,6 @@ if ('reload' in sys.argv) is True:
 g = Github(get_token())
 nodes, comment_list, timeline_list = get_data(g, TARGET_REPO, TARGET_REPO_FILE_NAME)
 graph_dict = create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME)
-
-
-# with open(f'data/graph_{TARGET_REPO_FILE_NAME}.json') as f:
-#     result = json.load(f)
-
-
-# with open(f'data/graph_{TARGET_REPO_FILE_NAME}.json', 'w') as f:
-#     # save result to disk
-#     if write_to_file == True:
-#         f.write(json.dumps(result, sort_keys=False, indent=4))
-#         print(f'Saved result to data/graph_{TARGET_REPO_FILE_NAME}.json')
-#     else:
-#         print('Did not save result to file; to save result, run script with "write" in arguments')
-
+write_json_to_file(graph_dict, TARGET_REPO_FILE_NAME)
 
 
