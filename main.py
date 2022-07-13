@@ -63,12 +63,20 @@ def time_matches(timestamp, tolerance_time):
     print(tolerance_time)
     return (tolerance_time - datetime.timedelta(seconds=1)) <= timestamp <= (tolerance_time + datetime.timedelta(seconds=1))
 
+def delete_saved_files():
+    PATH = f'raw_data/nodes_{TARGET_REPO_FILE_NAME}'
+    os.remove(f'{PATH}.pk')
+    os.remove(f'{PATH}_comments.pk')
+    os.remove(f'{PATH}_progress.pk')
+    os.remove(f'{PATH}_event.pk')
+
 def load_saved_progress(repo, TARGET_REPO_FILE_NAME):
     PATH = f'raw_data/nodes_{TARGET_REPO_FILE_NAME}'
 
     nodes = []
     node_list = []
     comment_list = []
+    timeline_list = []
 
     if exists(f'{PATH}.pk') is True:
         with open(f'{PATH}.pk', 'rb') as fi:
@@ -78,17 +86,20 @@ def load_saved_progress(repo, TARGET_REPO_FILE_NAME):
         node_list = nodes.copy()
 
     if exists(f'{PATH}_comments.pk') is True:
-        with open(f'{PATH}_comments.pk', 'rb') as fi2:
-            comment_list = pickle.load(fi2)
+        with open(f'{PATH}_comments.pk', 'rb') as fi:
+            comment_list = pickle.load(fi)
     if exists(f'{PATH}_progress') is True:
-        with open(f'{PATH}_progress.pk', 'rb') as fi3:
-            node_list = pickle.load(fi3)
-    return nodes, node_list, comment_list
+        with open(f'{PATH}_progress.pk', 'rb') as fi:
+            node_list = pickle.load(fi)
+    if exists(f'{PATH}_event.pk') is True:
+        with open(f'{PATH}_event.pk', 'rb') as fi:
+            timeline_list = pickle.load(fi)
 
-def write_variables_to_file(nodes, node_list, comment_list, TARGET_REPO_FILE_NAME):
+    return nodes, node_list, comment_list, timeline_list
+
+def write_variables_to_file(nodes, node_list, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
     PATH = f'raw_data/nodes_{TARGET_REPO_FILE_NAME}'
-    print('Writing raw nodes and comment data to disk... ')
-    print('DO NOT INTERRUPT OR TURN OFF YOUR COMPUTER.')
+    print('Writing raw nodes and comment data to disk...\nDO NOT INTERRUPT OR TURN OFF YOUR COMPUTER.')
 
     with open(f'{PATH}.pk', 'wb') as fi:
         pickle.dump(nodes, fi)
@@ -96,17 +107,27 @@ def write_variables_to_file(nodes, node_list, comment_list, TARGET_REPO_FILE_NAM
         pickle.dump(node_list, fi)
     with open(f'{PATH}_comments.pk', 'wb') as fi:
         pickle.dump(comment_list, fi)
+    with open(f'{PATH}_event.pk', 'wb') as fi:
+        pickle.dump(timeline_list, fi)
 
+def check_rate_limit(rate_limit, RATE_LIMIT_THRESHOLD):
+    if rate_limit < RATE_LIMIT_THRESHOLD:
+        print('Rate limit threshold reached!')
+        rate_limit_time = g.get_rate_limit()
+        time_remaining = rate_limit_time.core.reset - datetime.datetime.utcnow()
+        print(f'Rate limit will reset after {time_remaining.seconds // 60} minutes {time_remaining.seconds % 60} seconds')
+        print(f'Rate limit reset time: {rate_limit_time.core.reset}' ) # I am not going to bother figuring out printing local time 
+        raise Exception('RateLimitThreshold')
 
 def get_data(TARGET_REPO, TARGET_REPO_FILE_NAME):
+    # Remember, the ONLY RESPONSIBILITY OF THIS FUNCTION
+    # IS TO DOWNLOAD THE DATA, NO FILTERING, NO PROCESSING
     g = Github(get_token())
     repo = g.get_repo(TARGET_REPO)
 
-    graph_dict = {}
-
     print(f'Downloading repo: {repo.html_url} with {repo.open_issues} open issues')
 
-    nodes, node_list, comment_list = load_saved_progress(repo, TARGET_REPO_FILE_NAME)    
+    nodes, node_list, comment_list, timeline_list = load_saved_progress(repo, TARGET_REPO_FILE_NAME)    
 
     if (len(nodes) > 0 and len(comment_list) > 0) and len(nodes) == len(comment_list):
         # Already done, just return the results loaded from file
@@ -117,16 +138,12 @@ def get_data(TARGET_REPO, TARGET_REPO_FILE_NAME):
         print(f'Nodes remaining to load from repo: {len(node_list)}')
         try:
             while len(node_list) > 0:
-                if g.get_rate_limit().core.remaining < RATE_LIMIT_THRESHOLD:
-                    print('Rate limit threshold reached!')
-                    rate_limit_time = g.get_rate_limit()
-                    time_remaining = rate_limit_time.core.reset - datetime.datetime.utcnow()
-                    print(f'Rate limit will reset after {time_remaining.seconds // 60} minutes {time_remaining.seconds % 60} seconds')
-                    print(f'Rate limit reset time: {rate_limit_time.core.reset}' ) # I am not going to bother figuring out printing local time 
-                    raise Exception('RateLimitThreshold')
+                check_rate_limit(g.get_rate_limit().core.remaining, RATE_LIMIT_THRESHOLD)
 
                 issue = node_list.pop(0)
                 node_comments = issue.get_comments()
+                node_timeline = issue.get_timeline()
+                timeline_list.append(list(node_timeline))
                 comment_list.append(list(node_comments))
                 print(f'Downloaded node {issue.number}. Rate limit: {g.rate_limiting[0]}')
         except Exception as e:
@@ -138,10 +155,13 @@ def get_data(TARGET_REPO, TARGET_REPO_FILE_NAME):
         
         # We made it through downloading the whole thing with no rate limit incident
         # Save the full progress
-        write_variables_to_file(nodes, node_list, comment_list, TARGET_REPO_FILE_NAME)
+        write_variables_to_file(nodes, node_list, comment_list, timeline_list, TARGET_REPO_FILE_NAME)
         g.get_rate_limit()
         print(f'Finished downloading entire repo. Rate limit: {g.rate_limiting[0]}')
         return nodes, comment_list # return the result
+
+def create_json_file(nodes, comment_list):
+    return
 
 try:
     TARGET_REPO = sys.argv[1]
@@ -151,6 +171,8 @@ except IndexError:
     print('Exiting')
     sys.exit(1)
 
+if 'reload' in sys.argv is True:
+    delete_saved_files()
 
 nodes, comment_list = get_data(TARGET_REPO, TARGET_REPO_FILE_NAME)
 # result = dump_to_file(nodes, comment_list)
