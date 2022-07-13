@@ -7,7 +7,9 @@ import json
 import networkx as nx
 import pickle
 from os.path import exists
+import os
 import copy
+import contextlib
 
 RATE_LIMIT_THRESHOLD = 100
 
@@ -65,10 +67,16 @@ def time_matches(timestamp, tolerance_time):
 
 def delete_saved_files():
     PATH = f'raw_data/nodes_{TARGET_REPO_FILE_NAME}'
-    os.remove(f'{PATH}.pk')
-    os.remove(f'{PATH}_comments.pk')
-    os.remove(f'{PATH}_progress.pk')
-    os.remove(f'{PATH}_event.pk')
+    confirmation = input('Confirm the removal of saved progress files? ')
+    if confirmation != 'y':
+        print('Abort')
+        return
+    print('Removing saved progress files...')
+    with contextlib.suppress(FileNotFoundError):
+        os.remove(f'{PATH}.pk')
+        os.remove(f'{PATH}_comments.pk')
+        os.remove(f'{PATH}_progress.pk')
+        os.remove(f'{PATH}_event.pk')
 
 def load_saved_progress(repo, TARGET_REPO_FILE_NAME):
     PATH = f'raw_data/nodes_{TARGET_REPO_FILE_NAME}'
@@ -132,7 +140,7 @@ def get_data(TARGET_REPO, TARGET_REPO_FILE_NAME):
     if (len(nodes) > 0 and len(comment_list) > 0) and len(nodes) == len(comment_list):
         # Already done, just return the results loaded from file
         print('All nodes has already been downloaded and processed. Skipping download and loading saved local files.')
-        return nodes, comment_list
+        return nodes, comment_list, timeline_list
     else:
         # Download the remaining nodes
         print(f'Nodes remaining to load from repo: {len(node_list)}')
@@ -158,9 +166,10 @@ def get_data(TARGET_REPO, TARGET_REPO_FILE_NAME):
         write_variables_to_file(nodes, node_list, comment_list, timeline_list, TARGET_REPO_FILE_NAME)
         g.get_rate_limit()
         print(f'Finished downloading entire repo. Rate limit: {g.rate_limiting[0]}')
-        return nodes, comment_list # return the result
+        return nodes, comment_list, timeline_list # return the result
 
-def create_json_file(nodes, comment_list):
+def create_json_file(nodes, comment_list, timeline_list):
+
     return
 
 try:
@@ -171,11 +180,11 @@ except IndexError:
     print('Exiting')
     sys.exit(1)
 
-if 'reload' in sys.argv is True:
+if ('reload' in sys.argv) is True:
     delete_saved_files()
 
-nodes, comment_list = get_data(TARGET_REPO, TARGET_REPO_FILE_NAME)
-# result = dump_to_file(nodes, comment_list)
+nodes, comment_list, timeline_list = get_data(TARGET_REPO, TARGET_REPO_FILE_NAME)
+result = create_json_file(nodes, comment_list, timeline_list)
 
 # with open(f'data/graph_{TARGET_REPO_FILE_NAME}.json') as f:
 #     result = json.load(f)
