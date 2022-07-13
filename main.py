@@ -127,10 +127,9 @@ def check_rate_limit(rate_limit, RATE_LIMIT_THRESHOLD):
         print(f'Rate limit reset time: {rate_limit_time.core.reset}' ) # I am not going to bother figuring out printing local time 
         raise Exception('RateLimitThreshold')
 
-def get_data(TARGET_REPO, TARGET_REPO_FILE_NAME):
+def get_data(g, TARGET_REPO, TARGET_REPO_FILE_NAME):
     # Remember, the ONLY RESPONSIBILITY OF THIS FUNCTION
     # IS TO DOWNLOAD THE DATA, NO FILTERING, NO PROCESSING
-    g = Github(get_token())
     repo = g.get_repo(TARGET_REPO)
 
     print(f'Downloading repo: {repo.html_url} with {repo.open_issues} open issues')
@@ -168,7 +167,59 @@ def get_data(TARGET_REPO, TARGET_REPO_FILE_NAME):
         print(f'Finished downloading entire repo. Rate limit: {g.rate_limiting[0]}')
         return nodes, comment_list, timeline_list # return the result
 
-def create_json_file(nodes, comment_list, timeline_list):
+def create_json_file(g, nodes, comment_list, timeline_list):
+    repo = g.get_repo(TARGET_REPO)
+    graph_dict = {
+        'repo_url': repo.html_url,
+        'issue_count': 0,
+        'pull_request_count': 0,
+        'labels_text': list(map(lambda x: x.name, list(repo.get_labels()))),
+        'nodes': [],
+        'links': []
+    }
+    HIGHEST_ISSUE_NUMBER = nodes[0].number
+    for index, issue in enumerate(nodes):
+        total_links = []
+        node_dict = {}
+
+        node_comments = comment_list[index]
+        issue_timeline = timeline_list[index]
+
+        issue_timeline = list(filter(lambda x: x.event == 'cross-referenced' and x.source.issue.repository.full_name == repo.full_name, issue_timeline))
+        issue_timeline_events = issue_timeline.copy()
+        issue_timeline_timestamp = issue_timeline.copy()
+        issue_timeline_timestamp = list(map(lambda x: x.created_at, issue_timeline_timestamp))
+
+        total_links = issue_timeline.copy()
+        links_dict = []
+
+        for mention in issue_timeline_events:
+            mentioning_issue = mention.source.issue
+            mentioning_issue_comments = mentioning_issue.get_comments()
+            mentioning_time = mention.created_at
+            comment_link = find_link_to_comment(mentioning_issue, mentioning_issue_comments, mentioning_time)
+            assert comment_link is not None
+            links_dict.append({
+                    'number': mention.source.issue.number,
+                    'comment_link': comment_link
+                })
+        node_dict = {
+            'id': issue.number,
+            'type': 'pull_request' if issue.pull_request is not None else 'issue',
+            'status': issue.state,
+            'links': links_dict,
+            'label': list(map(lambda x: x.name, issue.labels))
+        }
+
+        if issue.pull_request is not None:
+            # this ugly check is needed to find out whether a PR is merged
+            # since PyGithub doesn't support this directly
+            if issue.pull_request.raw_data['merged_at'] is not None:
+                node_dict['status'] = 'merged'
+        graph_dict['nodes'].append(node_dict)
+        for link in links_dict:
+            graph_dict['links'].append({'source': link['number'], 'target': issue.number, 'comment_link': link['comment_link']})
+        print(f'Finished loading node number {issue.number}')
     return
 
 try:
@@ -182,8 +233,9 @@ except IndexError:
 if ('reload' in sys.argv) is True:
     delete_saved_files()
 
-nodes, comment_list, timeline_list = get_data(TARGET_REPO, TARGET_REPO_FILE_NAME)
-result = create_json_file(nodes, comment_list, timeline_list)
+g = Github(get_token())
+nodes, comment_list, timeline_list = get_data(g, TARGET_REPO, TARGET_REPO_FILE_NAME)
+# result = create_json_file(g, nodes, comment_list, timeline_list)
 
 # with open(f'data/graph_{TARGET_REPO_FILE_NAME}.json') as f:
 #     result = json.load(f)
