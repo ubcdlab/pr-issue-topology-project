@@ -7,6 +7,7 @@ import networkx as nx
 import pickle
 from os.path import exists
 import os
+import time
 import contextlib
 
 RATE_LIMIT_THRESHOLD = 100
@@ -89,14 +90,16 @@ def write_json_to_file(graph_dict, TARGET_REPO_FILE_NAME):
         f.write(json.dumps(graph_dict, sort_keys=False, indent=4))
     print(f'Saved result to data/graph_{TARGET_REPO_FILE_NAME}.json')
 
-def check_rate_limit(rate_limit, RATE_LIMIT_THRESHOLD):
-    if rate_limit < RATE_LIMIT_THRESHOLD:
+def check_rate_limit(rate_limit, RATE_LIMIT_THRESHOLD, nodes, node_list, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
+    if rate_limit.core.remaining < RATE_LIMIT_THRESHOLD:
         print('Rate limit threshold reached!')
-        rate_limit_time = g.get_rate_limit()
-        time_remaining = rate_limit_time.core.reset - datetime.datetime.utcnow()
+        time_remaining = rate_limit.core.reset - datetime.datetime.utcnow()
         print(f'Rate limit will reset after {time_remaining.seconds // 60} minutes {time_remaining.seconds % 60} seconds')
-        print(f'Rate limit reset time: {rate_limit_time.core.reset}' ) # I am not going to bother figuring out printing local time 
-        raise Exception('RateLimitThreshold')
+        print(f'Rate limit reset time: {rate_limit.core.reset}' ) # I am not going to bother figuring out printing local time 
+        print(f'Sleeping for {time_remaining.seconds + 5} seconds.')
+        write_variables_to_file(nodes, node_list, comment_list, timeline_list, TARGET_REPO_FILE_NAME)
+        time.sleep(time_remaining.seconds + 5)
+        # raise Exception('RateLimitThreshold')
 
 def load_saved_progress(repo, TARGET_REPO_FILE_NAME):
     PATH = f'raw_data/nodes_{TARGET_REPO_FILE_NAME}'
@@ -143,7 +146,7 @@ def get_data(g, TARGET_REPO, TARGET_REPO_FILE_NAME):
         print(f'Nodes remaining to load from repo: {len(node_list)}')
         try:
             while len(node_list) > 0:
-                check_rate_limit(g.get_rate_limit().core.remaining, RATE_LIMIT_THRESHOLD)
+                check_rate_limit(g.get_rate_limit(), RATE_LIMIT_THRESHOLD, nodes, node_list, comment_list, timeline_list, TARGET_REPO_FILE_NAME)
                 issue = node_list[-1]
                 # issue = node_list.pop(0)
                 node_comments = issue.get_comments()
@@ -156,7 +159,7 @@ def get_data(g, TARGET_REPO, TARGET_REPO_FILE_NAME):
         except Exception as e:
             # Need to wait for rate limit cooldown
             print(e)
-            print('Halting download due to rate limit...')
+            # print('Halting download due to rate limit...')
             write_variables_to_file(nodes, node_list, comment_list, timeline_list, TARGET_REPO_FILE_NAME)
             sys.exit(0) # abort the download process
         
@@ -263,19 +266,5 @@ nodes, comment_list, timeline_list = get_data(g, TARGET_REPO, TARGET_REPO_FILE_N
 # write_json_to_file(graph_dict, TARGET_REPO_FILE_NAME)
 
 # graph_dict = create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME)
-
-
-# with open(f'data/graph_{TARGET_REPO_FILE_NAME}.json') as f:
-#     result = json.load(f)
-
-
-# with open(f'data/graph_{TARGET_REPO_FILE_NAME}.json', 'w') as f:
-#     # save result to disk
-#     if write_to_file == True:
-#         f.write(json.dumps(result, sort_keys=False, indent=4))
-#         print(f'Saved result to data/graph_{TARGET_REPO_FILE_NAME}.json')
-#     else:
-#         print('Did not save result to file; to save result, run script with "write" in arguments')
-
 
 
