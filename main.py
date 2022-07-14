@@ -144,12 +144,14 @@ def get_data(g, TARGET_REPO, TARGET_REPO_FILE_NAME):
         try:
             while len(node_list) > 0:
                 check_rate_limit(g.get_rate_limit().core.remaining, RATE_LIMIT_THRESHOLD)
-
-                issue = node_list.pop(0)
+                issue = node_list[-1]
+                # issue = node_list.pop(0)
                 node_comments = issue.get_comments()
                 node_timeline = issue.get_timeline()
                 timeline_list.append(list(node_timeline))
                 comment_list.append(list(node_comments))
+
+                node_list.pop()
                 print(f'Downloaded node {issue.number}. {len(node_list)} remaining. Rate limit: {g.rate_limiting[0]}')
         except Exception as e:
             # Need to wait for rate limit cooldown
@@ -242,6 +244,8 @@ def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
             if (entry['id'] == node_id):
                 entry['node_degree'] = node_degree
     graph_dict['connected_components'] = list(map(lambda x: list(x), connected_components))
+    network_graph = nx.Graph()
+
     return graph_dict
 
 try:
@@ -257,7 +261,23 @@ if ('reload' in sys.argv) is True:
 
 g = Github(get_token())
 nodes, comment_list, timeline_list = get_data(g, TARGET_REPO, TARGET_REPO_FILE_NAME)
-graph_dict = create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME)
-write_json_to_file(graph_dict, TARGET_REPO_FILE_NAME)
+# graph_dict = create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME)
+# write_json_to_file(graph_dict, TARGET_REPO_FILE_NAME)
+
+# graph_dict = create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME)
+
+
+# with open(f'data/graph_{TARGET_REPO_FILE_NAME}.json') as f:
+#     result = json.load(f)
+
+
+# with open(f'data/graph_{TARGET_REPO_FILE_NAME}.json', 'w') as f:
+#     # save result to disk
+#     if write_to_file == True:
+#         f.write(json.dumps(result, sort_keys=False, indent=4))
+#         print(f'Saved result to data/graph_{TARGET_REPO_FILE_NAME}.json')
+#     else:
+#         print('Did not save result to file; to save result, run script with "write" in arguments')
+
 
 
