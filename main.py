@@ -244,8 +244,6 @@ def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
             if (entry['id'] == node_id):
                 entry['node_degree'] = node_degree
     graph_dict['connected_components'] = list(map(lambda x: list(x), connected_components))
-    network_graph = nx.Graph()
-
     return graph_dict
 
 try:
