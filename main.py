@@ -51,9 +51,10 @@ def find_all_mentions(text):
 def find_link_to_comment(issue, comments, timestamp):
     if time_matches(timestamp, issue.created_at) or time_matches(timestamp, issue.updated_at):
         return f'{issue.html_url}#issue-{issue.id}'
-    for comment in comments:
-        if timestamp - datetime.timedelta(seconds=1) <= comment.created_at <= timestamp + datetime.timedelta(seconds=1):
-            return comment.html_url
+    if comments is not None:
+        for comment in comments:
+            if timestamp - datetime.timedelta(seconds=1) <= comment.created_at <= timestamp + datetime.timedelta(seconds=1):
+                return comment.html_url
     return f'{issue.html_url}'
 
 def time_matches(timestamp, tolerance_time):
@@ -191,8 +192,13 @@ def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
         total_links = []
         node_dict = {}
 
-        node_comments = comment_list[index]
-        issue_timeline = timeline_list[index]
+        node_comments = find_comment(issue.url, comment_list)
+        # issue_timeline = timeline_list[index]
+        
+        # horrible hack to remedy a problem
+        # nodes are loaded in ascending order
+        # yet timeline_list is loaded in descending order
+        issue_timeline = timeline_list[-index-1] 
 
         issue_timeline = list(filter(lambda x: x.event == 'cross-referenced' and x.source.issue.repository.full_name == repo.full_name, issue_timeline))
         issue_timeline_events = issue_timeline.copy()
@@ -208,6 +214,7 @@ def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
             mentioning_time = mention.created_at
             comment_link = find_link_to_comment(mentioning_issue, mentioning_issue_comments, mentioning_time)
             assert comment_link is not None
+            print(f'Issue number #{issue.number} is mentioned by {mention.source.issue.number}')
             links_dict.append({
                     'number': mention.source.issue.number,
                     'comment_link': comment_link
@@ -262,9 +269,8 @@ if ('reload' in sys.argv) is True:
 
 g = Github(get_token())
 nodes, comment_list, timeline_list = get_data(g, TARGET_REPO, TARGET_REPO_FILE_NAME)
-# graph_dict = create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME)
-# write_json_to_file(graph_dict, TARGET_REPO_FILE_NAME)
+graph_dict = create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME)
+write_json_to_file(graph_dict, TARGET_REPO_FILE_NAME)
 
-# graph_dict = create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME)
 
 
