@@ -194,10 +194,11 @@ def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
 
         node_comments = find_comment(issue.url, comment_list)
         # issue_timeline = timeline_list[index]
-        
+
         # horrible hack to remedy a problem
         # nodes are loaded in ascending order
         # yet timeline_list is loaded in descending order
+        # TODO: FIX THIS
         issue_timeline = timeline_list[-index-1] 
 
         issue_timeline = list(filter(lambda x: x.event == 'cross-referenced' and x.source.issue.repository.full_name == repo.full_name, issue_timeline))
