@@ -215,7 +215,6 @@ def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
             mentioning_time = mention.created_at
             comment_link = find_link_to_comment(mentioning_issue, mentioning_issue_comments, mentioning_time)
             assert comment_link is not None
-            print(f'Issue number #{issue.number} is mentioned by {mention.source.issue.number}')
             links_dict.append({
                     'number': mention.source.issue.number,
                     'comment_link': comment_link
