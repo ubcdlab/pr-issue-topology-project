@@ -26,8 +26,23 @@ class Patternvis {
         .attr('class', 'patternVisArea')
         .attr('transform', `translate(${vis.config.margin}, ${vis.config.margin - 20})`)
 
+        let x_axis_keys = Object.entries(vis.data).filter((x, index) => {
+            let result = {};
+            let total_length = 0;
+            for (let sub_entries of Object.values(x[1])) {
+                total_length += sub_entries.length;
+            }
+            result[x[0]] = total_length;
+            return total_length > 0;
+        })
+        
+        x_axis_keys = x_axis_keys.map((x) => {
+            return x[0];
+        })
+        console.log(x_axis_keys);
+        
         vis.x = d3.scaleBand()
-        .domain(Object.keys(vis.data))
+        .domain(x_axis_keys)
         .range([0, vis.config.width])
         .padding(0.2)
 
