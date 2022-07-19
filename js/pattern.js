@@ -81,6 +81,7 @@ class Patternvis {
         vis.svg.selectAll('.bar_rect')
         .data(x_axis_entries)
         .join('g')
+        .attr('class', 'bar_rect_g')
         .append('rect')
         .attr('class', 'bar_rect')
         .attr('id', (d) => `bar_${d[0]}`)
@@ -120,71 +121,27 @@ class Patternvis {
                 .duration(500)      
                 .style('opacity', 0);
         })
-        .on('click', (e, d) => {
-            d3.select(`#bar_${d[0]}`)
-            .classed('highlighted_bar', !d3.select(`#bar_${d[0]}`).classed('highlighted_bar'))
-        })
 
-        x_axis_entries = x_axis_entries.map((x) => {
-            let result = {};
-            let total_length = 0;
-            for (let sub_entries of Object.values(x[1])) {
-                total_length += sub_entries.length;
-            }
-            result[x[0]] = total_length;
-            return result;
-        });
-        console.log(x_axis_entries)
-
-        let filtered = Object.entries(data).filter((element, index) => {
-            return Object.values(element[1])[0].length > 0;
-        });
-        vis.svg.selectAll('.bar_rect_mouseover')
-        .data(Object.entries(data))
-        .join('g')
-        .append('rect')
-        .attr('class', 'bar_rect_mouseover')
-        .attr('id', (d) => `bar_mouseover_${d[0]}`)
-        .attr('x', (d) => vis.x(d[0]))
-        .attr('y', (d) => 0)
-        .attr('height', d => {
+        vis.svg.selectAll('.bar_rect_g')
+        .append('text')
+        .text((d) => {
             let inner_object = d[1];
             let total_length = 0;
             for (let sub_entries of Object.values(inner_object)) {
                 total_length += sub_entries.length;
             }
-            return vis.y(total_length);
+            return total_length;
         })
-        .attr('width', vis.x.bandwidth())
-        .style('opacity', 0)
-        .attr('fill', 'transparent')
-        .style('stroke', '#FFBF00')
-        .style('stroke-width', 2)
-        .on('mouseover', (event, d) => {
+        .style('fill', 'black')
+        .style('text-anchor', 'middle')
+        .attr('x', (d) => vis.x(d[0]) + vis.x.bandwidth()/2)
+        .attr('y', (d) => {
             let inner_object = d[1];
             let total_length = 0;
             for (let sub_entries of Object.values(inner_object)) {
                 total_length += sub_entries.length;
             }
-            if (total_length >= 1) {
-                d3.select(`#bar_mouseover_${d[0]}`).style('opacity', 1)
-                div.transition()
-                .duration(200)      
-                .style('opacity', 1);      
-                div.html(`Component Size: ${d[0]}<br>Frequency: ${total_length}`)
-                .style('left', `${+event.pageX + 15}px`)     
-                .style('top', `${+event.pageY}px`);  
-            }
-        })
-        .on('mouseout', (e, d) => {
-            div.transition()        
-                .duration(500)      
-                .style('opacity', 0);
-            d3.select(`#bar_mouseover_${d[0]}`).style('opacity', 0)
-        })
-        .on('click', (e, d) => {
-            d3.select(`#bar_${d[0]}`)
-            .classed('highlighted_bar', !d3.select(`#bar_${d[0]}`).classed('highlighted_bar'))
+            return vis.y(total_length) - 5;
         })
     }
     
