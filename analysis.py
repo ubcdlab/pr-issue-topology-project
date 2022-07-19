@@ -4,12 +4,12 @@ import functools
 import pickle
 from github import Github
 
-
-TARGET_REPO = '10up/ElasticPress'
-TARGET_REPO_FILE_NAME = TARGET_REPO.replace('/', '-')
-
 node_list = None
 comment_list = None
+
+
+TARGET_REPO = sys.argv[1]
+TARGET_REPO_FILE_NAME = TARGET_REPO.replace('/', '-')
 
 with open(f'raw_data/nodes_{TARGET_REPO_FILE_NAME}_comments.pk', 'rb') as fi:
     comment_list = pickle.load(fi)
@@ -83,11 +83,10 @@ def add_analysis_function(analysis_dict, level, array_of_function):
 def find_isolated_nodes(node):
 	return len(node['connected_components']) == 0
 
-
 target = node_list[0]
-g = Github(get_token())
-repo = g.get_repo(TARGET_REPO)
-output_json = init_output_json(g, repo)
+# g = Github(get_token())
+# repo = g.get_repo(TARGET_REPO)
+# output_json = init_output_json(g, repo)
 
 data = None
 with open(f'data/graph_{TARGET_REPO_FILE_NAME}.json', 'r') as fi:

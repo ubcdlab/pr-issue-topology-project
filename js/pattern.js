@@ -52,13 +52,19 @@ class Patternvis {
 
     renderVis(data) {
         let vis = this;
+        let x_axis_entries = Object.entries(data).filter((element, index) => {
+            if (element[1]['general']) {
+                return element[1]['general'].length > 0;
+            }
+            return true;
+        });
 
         let div = d3.select('body').append('div')   
         .attr('class', 'tooltip')               
         .style('opacity', 0);
 
         vis.svg.selectAll('.bar_rect')
-        .data(Object.entries(data))
+        .data(x_axis_entries)
         .join('g')
         .append('rect')
         .attr('class', 'bar_rect')
@@ -103,6 +109,17 @@ class Patternvis {
             d3.select(`#bar_${d[0]}`)
             .classed('highlighted_bar', !d3.select(`#bar_${d[0]}`).classed('highlighted_bar'))
         })
+
+        x_axis_entries = x_axis_entries.map((x) => {
+            let result = {};
+            let total_length = 0;
+            for (let sub_entries of Object.values(x[1])) {
+                total_length += sub_entries.length;
+            }
+            result[x[0]] = total_length;
+            return result;
+        });
+        console.log(x_axis_entries)
 
         let filtered = Object.entries(data).filter((element, index) => {
             return Object.values(element[1])[0].length > 0;
