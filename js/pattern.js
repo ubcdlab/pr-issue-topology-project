@@ -39,7 +39,6 @@ class Patternvis {
         x_axis_keys = x_axis_keys.map((x) => {
             return x[0];
         })
-        console.log(x_axis_keys);
         
         vis.x = d3.scaleBand()
         .domain(x_axis_keys)
@@ -73,6 +72,14 @@ class Patternvis {
             }
             return true;
         });
+        console.log(data);
+        let total_nodes_count = 0;
+        for (let entry of Object.entries(data)) {
+            for (let sub_entries of Object.values(entry[1])) {
+                total_nodes_count += sub_entries.length * entry[0];
+            }
+        }
+        console.log(total_nodes_count);
 
         let div = d3.select('body').append('div')   
         .attr('class', 'tooltip')               
@@ -130,7 +137,7 @@ class Patternvis {
             for (let sub_entries of Object.values(inner_object)) {
                 total_length += sub_entries.length;
             }
-            return total_length;
+            return `${total_length} (${(total_length / total_nodes_count * 100).toFixed(1)}%)`;
         })
         .style('fill', 'black')
         .style('text-anchor', 'middle')
