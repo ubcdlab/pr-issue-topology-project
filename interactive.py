@@ -48,21 +48,6 @@ def find_all_mentions(text):
     regex_matches += re.findall(REGEX_NUMBER_STRING, text)
     return regex_matches # return all matches in an array
 
-def find_automatic_links(issue_number, issue_body, comments):
-    if issue_body is None:
-        issue_body = ''
-    if comments is None:
-        comments = []
-    REGEX_STRING = f'(close|closes|closed|fix|fixes|fixed|resolve|resolves|resolved) #{issue_number}'
-    match = re.search(REGEX_STRING, issue_body, re.IGNORECASE)
-    if match:
-        return True
-    for comment in comments:
-        if re.search(REGEX_STRING, comment.body, re.IGNORECASE):
-            return True
-    return False
-
-
 def find_link_to_comment(issue, comments, timestamp):
     if time_matches(timestamp, issue.created_at) or time_matches(timestamp, issue.updated_at):
         return f'{issue.html_url}#issue-{issue.id}'
@@ -203,7 +188,7 @@ def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
         'links': []
     }
     HIGHEST_ISSUE_NUMBER = nodes[0].number
-    # event_keywords = {''}
+    event_keywords = {}
     for index, issue in enumerate(nodes):
         total_links = []
         node_dict = {}
@@ -216,13 +201,13 @@ def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
         # yet timeline_list is loaded in descending order
         # TODO: FIX THIS
         issue_timeline = timeline_list[-index-1]
-        # for items in issue_timeline:
-        #     event_keywords.add(items.event)
+        for items in issue_timeline:
+            event_keywords.add(items.event)
 
         issue_autolinked = issue_timeline.copy()
         
-        # issue_autolinked = list(filter(lambda x: x.event == 'connected', issue_autolinked))
-        issue_autolinked = list(map(lambda x: x.event, issue_autolinked))
+        issue_autolinked = list(filter(lambda x: x.source is not None, issue_autolinked))
+        # issue_autolinked = list(map(lambda x: x.event, issue_autolinked))
         # print(f'{issue.number}:{issue_autolinked}')
 
         issue_timeline = list(filter(lambda x: x.event == 'cross-referenced' and x.source.issue.repository.full_name == repo.full_name, issue_timeline))
@@ -231,9 +216,8 @@ def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
         issue_timeline_timestamp = list(map(lambda x: x.created_at, issue_timeline_timestamp))
 
         links_dict = []
-        # print(f'{issue.number}: {list(map(lambda x: x.source.issue.number,issue_timeline_events))}')
+
         for mention in issue_timeline_events:
-            # Tracks INCOMING MENTIONS
             mentioning_issue = mention.source.issue
             mentioning_issue_comments = find_comment(mentioning_issue.url, comment_list)
             mentioning_time = mention.created_at
@@ -241,8 +225,7 @@ def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
             assert comment_link is not None
             links_dict.append({
                     'number': mention.source.issue.number,
-                    'comment_link': comment_link,
-                    'automatic_link': find_automatic_links(issue.number, mentioning_issue.body, mentioning_issue_comments)
+                    'comment_link': comment_link
                 })
         node_dict = {
             'id': issue.number,
@@ -260,15 +243,11 @@ def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
         graph_dict['nodes'].append(node_dict)
         network_graph.add_node(issue.number)
         for link in links_dict:
-            graph_dict['links'].append({
-                'source': link['number'], 
-                'target': issue.number, 
-                'comment_link': link['comment_link'],
-                'automatic': link['automatic_link'] 
-                })
+            graph_dict['links'].append({'source': link['number'], 'target': issue.number, 'comment_link': link['comment_link']})
             network_graph.add_edge(link['number'], issue.number)
         # print(f'Finished processing node number {issue.number}')
     # Finished loading all nodes
+    print(event_keywords)
     connected_components = list(nx.connected_components(network_graph))
     for component in connected_components:
         for node in component:
@@ -299,8 +278,6 @@ if ('reload' in sys.argv) is True:
 
 g = Github(get_token())
 nodes, comment_list, timeline_list = get_data(g, TARGET_REPO, TARGET_REPO_FILE_NAME)
-graph_dict = create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME)
-write_json_to_file(graph_dict, TARGET_REPO_FILE_NAME)
 
 
 

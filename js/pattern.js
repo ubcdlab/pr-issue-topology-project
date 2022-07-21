@@ -72,14 +72,12 @@ class Patternvis {
             }
             return true;
         });
-        console.log(data);
         let total_nodes_count = 0;
         for (let entry of Object.entries(data)) {
             for (let sub_entries of Object.values(entry[1])) {
                 total_nodes_count += sub_entries.length * entry[0];
             }
         }
-        console.log(total_nodes_count);
 
         let div = d3.select('body').append('div')   
         .attr('class', 'tooltip')               
