@@ -54,13 +54,20 @@ def find_automatic_links(issue_number, issue_body, comments):
     if comments is None:
         comments = []
     REGEX_STRING = f'(close|closes|closed|fix|fixes|fixed|resolve|resolves|resolved) #{issue_number}'
+    REGEX_DUPLICATE_STRING = f'Duplicate of #{issue_number}'
+
     match = re.search(REGEX_STRING, issue_body, re.IGNORECASE)
+    match_duplicate = re.search(REGEX_DUPLICATE_STRING, issue_body, re.IGNORECASE)
     if match:
-        return True
+        return 'fixes'
+    elif match_duplicate:
+        return 'duplicate'
     for comment in comments:
         if re.search(REGEX_STRING, comment.body, re.IGNORECASE):
-            return True
-    return False
+            return 'fixes'
+        elif re.search(REGEX_DUPLICATE_STRING, comment.body, re.IGNORECASE):
+            return 'duplicate'
+    return 'other'
 
 
 def find_link_to_comment(issue, comments, timestamp):
@@ -200,7 +207,11 @@ def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
         'pull_request_count': 0,
         'labels_text': list(map(lambda x: x.name, list(repo.get_labels()))),
         'nodes': [],
-        'links': []
+        'links': [],
+        'graph_density': 0,
+        'graph_node_count': 0,
+        'graph_edge_count': 0,
+        'graph_component_count': 0
     }
     HIGHEST_ISSUE_NUMBER = nodes[0].number
     # event_keywords = {''}
@@ -242,7 +253,7 @@ def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
             links_dict.append({
                     'number': mention.source.issue.number,
                     'comment_link': comment_link,
-                    'automatic_link': find_automatic_links(issue.number, mentioning_issue.body, mentioning_issue_comments)
+                    'link_type': find_automatic_links(issue.number, mentioning_issue.body, mentioning_issue_comments)
                 })
         node_dict = {
             'id': issue.number,
@@ -264,12 +275,20 @@ def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
                 'source': link['number'], 
                 'target': issue.number, 
                 'comment_link': link['comment_link'],
-                'automatic': link['automatic_link'] 
+                'link_type': link['link_type'] 
                 })
             network_graph.add_edge(link['number'], issue.number)
         # print(f'Finished processing node number {issue.number}')
     # Finished loading all nodes
     connected_components = list(nx.connected_components(network_graph))
+    node_count = len(list(network_graph.nodes))
+    edge_count = len(list(network_graph.edges))
+    graph_dict['graph_component_count'] = len(connected_components)
+    graph_dict['graph_node_count'] = node_count
+    graph_dict['graph_edge_count'] = edge_count
+    graph_dict['graph_density'] = edge_count / ((node_count * (node_count - 1)) / 2)
+
+
     for component in connected_components:
         for node in component:
             for entry in graph_dict['nodes']:
