@@ -214,27 +214,17 @@ def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
         'graph_component_count': 0
     }
     HIGHEST_ISSUE_NUMBER = nodes[0].number
-    # event_keywords = {''}
     for index, issue in enumerate(nodes):
-        total_links = []
         node_dict = {}
-
-        node_comments = find_comment(issue.url, comment_list)
-        # issue_timeline = timeline_list[index]
+        # node_comments = find_comment(issue.url, comment_list)
 
         # horrible hack to remedy a problem
         # nodes are loaded in ascending order
         # yet timeline_list is loaded in descending order
         # TODO: FIX THIS
         issue_timeline = timeline_list[-index-1]
-        # for items in issue_timeline:
-        #     event_keywords.add(items.event)
-
         issue_autolinked = issue_timeline.copy()
-        
-        # issue_autolinked = list(filter(lambda x: x.event == 'connected', issue_autolinked))
         issue_autolinked = list(map(lambda x: x.event, issue_autolinked))
-        # print(f'{issue.number}:{issue_autolinked}')
 
         issue_timeline = list(filter(lambda x: x.event == 'cross-referenced' and x.source.issue.repository.full_name == repo.full_name, issue_timeline))
         issue_timeline_events = issue_timeline.copy()
@@ -242,7 +232,6 @@ def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
         issue_timeline_timestamp = list(map(lambda x: x.created_at, issue_timeline_timestamp))
 
         links_dict = []
-        # print(f'{issue.number}: {list(map(lambda x: x.source.issue.number,issue_timeline_events))}')
         for mention in issue_timeline_events:
             # Tracks INCOMING MENTIONS
             mentioning_issue = mention.source.issue
@@ -278,7 +267,7 @@ def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
                 'link_type': link['link_type'] 
                 })
             network_graph.add_edge(link['number'], issue.number)
-        # print(f'Finished processing node number {issue.number}')
+        print(f'Finished processing node number {issue.number}')
     # Finished loading all nodes
     connected_components = list(nx.connected_components(network_graph))
     node_count = len(list(network_graph.nodes))
