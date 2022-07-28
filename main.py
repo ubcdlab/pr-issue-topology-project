@@ -201,6 +201,7 @@ def find_comment(issue_url, comment_list):
 def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
     repo = g.get_repo(TARGET_REPO)
     network_graph = nx.Graph()
+    
     graph_dict = {
         'repo_url': repo.html_url,
         'issue_count': 0,
@@ -211,17 +212,22 @@ def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
         'graph_density': 0,
         'graph_node_count': 0,
         'graph_edge_count': 0,
-        'graph_component_count': 0
+        'graph_component_count': 0,
+        'graph_fixes_relationship_count': 0,
+        'graph_duplicate_relationship_count': 0
     }
-    HIGHEST_ISSUE_NUMBER = nodes[0].number
+    fixes_relationship_counter = 0
+    duplicate_relationship_counter = 0
+
     for index, issue in enumerate(nodes):
         node_dict = {}
         # node_comments = find_comment(issue.url, comment_list)
+        # NOTE: node_comments remains currently unused, but in case we'll need it in the future
+        # I am keeping the code commented here
 
-        # horrible hack to remedy a problem
+        # HACK: horrible hack to remedy a problem
         # nodes are loaded in ascending order
         # yet timeline_list is loaded in descending order
-        # TODO: FIX THIS
         issue_timeline = timeline_list[-index-1]
         issue_autolinked = issue_timeline.copy()
         issue_autolinked = list(map(lambda x: x.event, issue_autolinked))
@@ -237,8 +243,16 @@ def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
             mentioning_issue = mention.source.issue
             mentioning_issue_comments = find_comment(mentioning_issue.url, comment_list)
             mentioning_time = mention.created_at
+            
             comment_link = find_link_to_comment(mentioning_issue, mentioning_issue_comments, mentioning_time)
             assert comment_link is not None
+
+            link_type = find_automatic_links(issue.number, mentioning_issue.body, mentioning_issue_comments)
+            if link_type == 'fixes':
+                fixes_relationship_counter += 1
+            elif link_type == 'duplicate':
+                duplicate_relationship_counter += 1
+
             links_dict.append({
                     'number': mention.source.issue.number,
                     'comment_link': comment_link,
@@ -276,6 +290,8 @@ def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
     graph_dict['graph_node_count'] = node_count
     graph_dict['graph_edge_count'] = edge_count
     graph_dict['graph_density'] = edge_count / ((node_count * (node_count - 1)) / 2)
+    graph_dict['graph_fixes_relationship_count'] = fixes_relationship_counter
+    graph_dict['graph_duplicate_relationship_count'] = duplicate_relationship_counter
 
 
     for component in connected_components:
