@@ -135,7 +135,7 @@ class Patternvis {
             for (let sub_entries of Object.values(inner_object)) {
                 total_length += sub_entries.length;
             }
-            return `${total_length} (${(total_length / total_nodes_count * 100).toFixed(1)}%)`;
+            return `${total_length}`;
         })
         .style('fill', 'black')
         .style('text-anchor', 'middle')

@@ -265,7 +265,8 @@ def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
             'links': links_dict,
             'label': list(map(lambda x: x.name, issue.labels)),
             'creation_date': issue.created_at.timestamp(),
-            'closed_at': issue.closed_at.timestamp() if issue.closed_at is not None else 0
+            'closed_at': issue.closed_at.timestamp() if issue.closed_at is not None else 0,
+            'updated_at': issue.updated_at.timestamp()
         }
 
         if issue.pull_request is not None:
