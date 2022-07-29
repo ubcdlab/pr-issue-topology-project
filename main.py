@@ -219,6 +219,8 @@ def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
     fixes_relationship_counter = 0
     duplicate_relationship_counter = 0
 
+    nonwork_events = ['subscribed', 'unsubscribed', 'automatic_base_change_failed', 'automatic_base_change_succeeded']
+
     for index, issue in enumerate(nodes):
         node_dict = {}
         # node_comments = find_comment(issue.url, comment_list)
@@ -229,8 +231,22 @@ def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
         # nodes are loaded in ascending order
         # yet timeline_list is loaded in descending order
         issue_timeline = timeline_list[-index-1]
-        issue_autolinked = issue_timeline.copy()
-        issue_autolinked = list(map(lambda x: x.event, issue_autolinked))
+
+
+        issue_commit_timeline = issue_timeline.copy()
+        issue_commit_timeline = list(filter(lambda x: x.event not in nonwork_events, issue_commit_timeline))
+        for event in issue_commit_timeline:
+            # NOTE: events of type 'commit' have no actor.url... in fact
+            # a lot of the fields aren't set... 
+            # TODO: FIX THIS... USE THE DEBUGGER
+            print(f'{event.actor.url}\n{event.created_at}')
+        # issue_commit_timeline = list(map(lambda x: {
+        #     'event': x.event,
+        #     'created_at': str(x.created_at),
+        #     'actor': x.actor.html_url
+        # }, issue_commit_timeline))
+        issue_commit_timeline = list(map(lambda x: x.url, issue_commit_timeline))
+        # print(issue_commit_timeline)
 
         issue_timeline = list(filter(lambda x: x.event == 'cross-referenced' and x.source.issue.repository.full_name == repo.full_name, issue_timeline))
         issue_timeline_events = issue_timeline.copy()
@@ -266,7 +282,8 @@ def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
             'label': list(map(lambda x: x.name, issue.labels)),
             'creation_date': issue.created_at.timestamp(),
             'closed_at': issue.closed_at.timestamp() if issue.closed_at is not None else 0,
-            'updated_at': issue.updated_at.timestamp()
+            'updated_at': issue.updated_at.timestamp(),
+            'event_list': issue_commit_timeline
         }
 
         if issue.pull_request is not None:
