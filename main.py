@@ -214,7 +214,7 @@ def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
         'graph_edge_count': 0,
         'graph_component_count': 0,
         'graph_fixes_relationship_count': 0,
-        'graph_duplicate_relationship_count': 0
+        'graph_duplicate_relationship_count': 0,
     }
     fixes_relationship_counter = 0
     duplicate_relationship_counter = 0
@@ -263,7 +263,9 @@ def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
             'type': 'pull_request' if issue.pull_request is not None else 'issue',
             'status': issue.state,
             'links': links_dict,
-            'label': list(map(lambda x: x.name, issue.labels))
+            'label': list(map(lambda x: x.name, issue.labels)),
+            'creation_date': issue.created_at.timestamp(),
+            'closed_at': issue.closed_at.timestamp() if issue.closed_at is not None else 0
         }
 
         if issue.pull_request is not None:
