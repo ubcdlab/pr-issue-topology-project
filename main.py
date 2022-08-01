@@ -222,7 +222,8 @@ def get_event_author(event):
         return author
     if 'user' in event.raw_data:
         # for event.event = 'reviewed'
-        author = event.raw_data['user']['html_url']
+        if event.raw_data['user'] is not None:
+            author = event.raw_data['user']['html_url']
     if author is not None:
         return author
     if 'comments' in event.raw_data:
