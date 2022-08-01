@@ -198,6 +198,31 @@ def find_comment(issue_url, comment_list):
         if len(comments) > 0 and comments[0].issue_url == issue_url:
             return comments
 
+def get_event_date(event):
+    # HACK: to get around Github repo's psychopathic behaviour
+    result = event.created_at
+    if result is not None:
+        return result
+    if 'author' in event.raw_data:
+        # this usually works for event.event == 'commit'
+        result = event.raw_data['author']['date']
+    if result is not None:
+        return result
+    if 'user' in event.raw_data:
+        # this usually works for event.event == 'commented'
+        if event.raw_data['submitted_at'] is not None:
+            result = event.raw_data['submitted_at']
+    if result is not None:
+        return result
+    if event.raw_data['comments'][0] is not None:
+        # this usually works for event.event == 'commit-commented"
+        result = event.raw_data['comments'][0]['created_at']
+    if result is not None:
+        return result
+    
+    assert(1 == 0)
+    return event.raw_data['author']['date']
+
 def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
     repo = g.get_repo(TARGET_REPO)
     network_graph = nx.Graph()
@@ -232,19 +257,23 @@ def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
         # yet timeline_list is loaded in descending order
         issue_timeline = timeline_list[-index-1]
 
-
+        issue_commit_timeline_2 = []
         issue_commit_timeline = issue_timeline.copy()
         issue_commit_timeline = list(filter(lambda x: x.event not in nonwork_events, issue_commit_timeline))
         for event in issue_commit_timeline:
             # NOTE: events of type 'commit' have no actor.url... in fact
             # a lot of the fields aren't set... 
             # TODO: FIX THIS... USE THE DEBUGGER
-            print(f'{event.actor.url}\n{event.created_at}')
-        # issue_commit_timeline = list(map(lambda x: {
-        #     'event': x.event,
-        #     'created_at': str(x.created_at),
-        #     'actor': x.actor.html_url
-        # }, issue_commit_timeline))
+            # some Github timeline events just dont have event ID for some cursed reason
+            # these are usually commit events
+            event_type = event.event
+            event_time = get_event_date(event)
+            # print(f'{event.actor.url}\n{event.created_at}')
+            print(f'{event_type}: {event_time}')
+            issue_commit_timeline_2.append({
+                'event': event.event,
+                'created_at': event.created_at
+            })
         issue_commit_timeline = list(map(lambda x: x.url, issue_commit_timeline))
         # print(issue_commit_timeline)
 
