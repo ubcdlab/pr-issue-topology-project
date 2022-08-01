@@ -198,27 +198,64 @@ def find_comment(issue_url, comment_list):
         if len(comments) > 0 and comments[0].issue_url == issue_url:
             return comments
 
+def get_event_author(event):
+    if event.event == 'closed':
+        # event.event == 'closed' does not have authoring information
+        return None
+    if event.event == 'renamed':
+        # event.event == 'renamed' does not have authoring information
+        return None
+    author = None
+    if event.actor is not None:
+        # usually, event actor is defined for events such as commenting
+        author = event.actor.html_url
+    if author is not None:
+        return author
+    if 'author' in event.raw_data:
+        # for event.event == 'committed'
+        author = event.raw_data['author']['email']
+    if author is not None:
+        return author
+    if 'user' in event.raw_data:
+        # for event.event = 'reviewed'
+        author = event.raw_data['user']['html_url']
+    if author is not None:
+        return author
+    if 'comments' in event.raw_data:
+        # for commit-commented
+        author = event.raw_data['comments'][0]['user']['html_url']
+    if author is not None:
+        return author
+    if 'source' in event.raw_data:
+        # for 'cross-referenced' events
+        author = event.raw_data['source']['issue']['user']['html_url']
+    if author is not None:
+        return author
+    assert(1 == 0)
+    return author
+
+
 def get_event_date(event):
     # HACK: to get around Github repo's psychopathic behaviour
-    result = event.created_at
-    if result is not None:
-        return result
+    created_at = event.created_at
+    if created_at is not None:
+        return created_at
     if 'author' in event.raw_data:
         # this usually works for event.event == 'commit'
-        result = event.raw_data['author']['date']
-    if result is not None:
-        return result
+        created_at = event.raw_data['author']['date']
+    if created_at is not None:
+        return created_at
     if 'user' in event.raw_data:
         # this usually works for event.event == 'commented'
         if event.raw_data['submitted_at'] is not None:
-            result = event.raw_data['submitted_at']
-    if result is not None:
-        return result
+            created_at = event.raw_data['submitted_at']
+    if created_at is not None:
+        return created_at
     if event.raw_data['comments'][0] is not None:
         # this usually works for event.event == 'commit-commented"
-        result = event.raw_data['comments'][0]['created_at']
-    if result is not None:
-        return result
+        created_at = event.raw_data['comments'][0]['created_at']
+    if created_at is not None:
+        return created_at
     
     assert(1 == 0)
     return event.raw_data['author']['date']
@@ -244,7 +281,8 @@ def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
     fixes_relationship_counter = 0
     duplicate_relationship_counter = 0
 
-    nonwork_events = ['subscribed', 'unsubscribed', 'automatic_base_change_failed', 'automatic_base_change_succeeded']
+    nonwork_events = ['subscribed', 'unsubscribed', 'automatic_base_change_failed', 'automatic_base_change_succeeded', 'mentioned']
+    # these are timeline events returned by the API that aren't considered work
 
     for index, issue in enumerate(nodes):
         node_dict = {}
@@ -268,13 +306,15 @@ def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
             # these are usually commit events
             event_type = event.event
             event_time = get_event_date(event)
+            event_author = get_event_author(event)
             # print(f'{event.actor.url}\n{event.created_at}')
             print(f'{event_type}: {event_time}')
             issue_commit_timeline_2.append({
-                'event': event.event,
-                'created_at': event.created_at
+                'event': event_type,
+                'created_at': str(event_time),
+                'author': str(event_author) 
             })
-        issue_commit_timeline = list(map(lambda x: x.url, issue_commit_timeline))
+        # issue_commit_timeline = list(map(lambda x: x.url, issue_commit_timeline))
         # print(issue_commit_timeline)
 
         issue_timeline = list(filter(lambda x: x.event == 'cross-referenced' and x.source.issue.repository.full_name == repo.full_name, issue_timeline))
@@ -312,7 +352,7 @@ def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
             'creation_date': issue.created_at.timestamp(),
             'closed_at': issue.closed_at.timestamp() if issue.closed_at is not None else 0,
             'updated_at': issue.updated_at.timestamp(),
-            'event_list': issue_commit_timeline
+            'event_list': issue_commit_timeline_2
         }
 
         if issue.pull_request is not None:
