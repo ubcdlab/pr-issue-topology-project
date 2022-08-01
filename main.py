@@ -199,6 +199,10 @@ def find_comment(issue_url, comment_list):
             return comments
 
 def get_event_author(event):
+    # HACK: to get around Github API's pathological behaviour
+    # the author of a timeline event API can be located in different locations
+    # depending on the type of event in question
+    # this massive hack goes through all known locations one by one
     if event.event == 'closed':
         # event.event == 'closed' does not have authoring information
         return None
@@ -236,7 +240,10 @@ def get_event_author(event):
 
 
 def get_event_date(event):
-    # HACK: to get around Github repo's psychopathic behaviour
+    # HACK: to get around Github API's pathological behaviour
+    # the creation time of a timeline event API can be located in different locations
+    # depending on the type of event in question
+    # this massive hack goes through all known locations one by one
     created_at = event.created_at
     if created_at is not None:
         return created_at
