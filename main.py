@@ -135,9 +135,9 @@ def load_saved_progress(repo, TARGET_REPO_FILE_NAME):
     if exists(f'{PATH}.pk') is True:
         with open(f'{PATH}.pk', 'rb') as fi:
             nodes = pickle.load(fi)
-    else:
-        nodes = list(repo.get_issues(state='all', sort='created', direction='desc'))
-        node_list = nodes.copy()
+    # else:
+    #     nodes = list(repo.get_issues(state='all', sort='created', direction='desc'))
+    #     node_list = nodes.copy()
 
     if exists(f'{PATH}_comments.pk') is True:
         with open(f'{PATH}_comments.pk', 'rb') as fi:
@@ -235,8 +235,8 @@ def get_event_author(event):
         author = event.raw_data['source']['issue']['user']['html_url']
     if author is not None:
         return author
-    assert(1 == 0)
-    return author
+    # assert(1 == 0)
+    return None
 
 
 def get_event_date(event):
@@ -288,8 +288,14 @@ def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
     fixes_relationship_counter = 0
     duplicate_relationship_counter = 0
 
-    nonwork_events = ['subscribed', 'unsubscribed', 'automatic_base_change_failed', 'automatic_base_change_succeeded', 'mentioned']
+    nonwork_events = ['subscribed', 
+                    'unsubscribed', 
+                    'automatic_base_change_failed', 
+                    'automatic_base_change_succeeded', 
+                    'mentioned',
+                    'review_requested']
     # these are timeline events returned by the API that aren't considered work
+    # review_requested is just a button click in github and isn't actual work
 
     for index, issue in enumerate(nodes):
         node_dict = {}
