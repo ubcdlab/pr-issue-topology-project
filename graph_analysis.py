@@ -36,7 +36,7 @@ def max_number_possible_edges_directed(graph):
 def max_number_possible_edges_directed_nodenum(n):
     return (n * (n - 1))
 
-def calculate_fixes_relationship_component_percentage(graph):
+def calculate_fixes_relationship_component_percentage(graph, TARGET_REPO_FILE_NAME):
     undirected_graph = graph.to_undirected()
     csv_column_header = ['component', 'percentage', 'fixes_count', 'edge_count', 'component_nodes']
     csv_rows = []
@@ -83,16 +83,17 @@ def calculate_connected_component_density(graph):
         csv_rows.append(csv_row_entry)
     return csv_column_header, csv_rows
 
-def calculate_summary(graph):
-    csv_column_header = ['component_size', 'component_frequency', 'edge_count', 'max_possible', 'subgraph_density']
+def calculate_summary(graph, TARGET_REPO_FILE_NAME, csv_rows):
+    csv_column_header = ['repo_name' ,'component_size', 'component_frequency', 'edge_count', 'max_possible', 'subgraph_density']
     undirected_graph = graph.to_undirected()
-    csv_rows = []
+    # csv_rows = []
     connected_components = list(nx.connected_components(undirected_graph))
     component_sizes = {len(c) for c in sorted(nx.connected_components(undirected_graph), key=len, reverse=True)}
     component_density_arr = []
     print(1)
     for component_size in component_sizes:
         component_density_dict = {
+            'repo_name': TARGET_REPO_FILE_NAME,
             'component_size': component_size,
             'component_frequency': 0,
             'total_edge': 0,
@@ -108,45 +109,29 @@ def calculate_summary(graph):
             component_density_dict['max_edge'] = component_density_dict['max_edge'] + max_number_possible_edges
             component_density_dict['component_frequency'] = component_density_dict['component_frequency'] + 1
         component_density_arr.append(component_density_dict)
-            
-    # for index, component in enumerate(connected_components):
-    #     component_subgraph = graph.subgraph(component)
-    #     if component_subgraph.number_of_nodes() <= 1:
-    #         continue
 
-    #     component_edge_count = component_subgraph.number_of_edges()
-    #     max_number_possible_edges = max_number_possible_edges_directed(component_subgraph)
-
-    #     csv_row_entry = [index,
-    #                     component_subgraph.number_of_nodes(), 
-    #                     (component_edge_count / max(max_number_possible_edges, 1)) * 100, # prevent division by 0 
-    #                     component_edge_count,  
-    #                     max_number_possible_edges,
-    #                     component]
-    #     csv_rows.append(csv_row_entry)
     for entry in component_density_arr:
-        csv_row_entry = [entry['component_size'],
+        csv_row_entry = [entry['repo_name'],
+                        entry['component_size'],
                         entry['component_frequency'],
                         entry['total_edge'],
                         entry['max_edge'],
                         entry['total_edge'] / max(entry['max_edge'], 1)]
         csv_rows.append(csv_row_entry)
-    return csv_column_header, csv_rows
+    return csv_rows
 
 def main():
-    TARGET_REPO = sys.argv[1]
-    TARGET_REPO_FILE_NAME = TARGET_REPO.replace('/', '-')
-    graph_json = read_json_from_file(TARGET_REPO_FILE_NAME)
-    graph = construct_graph(graph_json)
+    TARGET_REPO_ARRAY = sys.argv[1:]
+    csv_rows = []
+    csv_column_header = ['repo_name' ,'component_size', 'component_frequency', 'edge_count', 'max_possible', 'subgraph_density']
+    for TARGET_REPO in TARGET_REPO_ARRAY:
+        TARGET_REPO_FILE_NAME = TARGET_REPO.replace('/', '-')
+        graph_json = read_json_from_file(TARGET_REPO_FILE_NAME)
+        graph = construct_graph(graph_json)
 
-    csv_column_header, csv_rows = calculate_connected_component_density(graph)
-    write_csv_to_file(csv_column_header, csv_rows, TARGET_REPO_FILE_NAME, '')
+        csv_rows = calculate_summary(graph, TARGET_REPO_FILE_NAME, csv_rows)
 
-    csv_column_header, csv_rows = calculate_fixes_relationship_component_percentage(graph)
-    write_csv_to_file(csv_column_header, csv_rows, TARGET_REPO_FILE_NAME, 'fixes')
-
-    csv_column_header, csv_rows = calculate_summary(graph)
-    write_csv_to_file(csv_column_header, csv_rows, TARGET_REPO_FILE_NAME, 'summary')
+    write_csv_to_file(csv_column_header, csv_rows, 'csv_summary', '')
 
 if __name__ == '__main__':
     main()
