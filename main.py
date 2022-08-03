@@ -1,3 +1,4 @@
+from xmlrpc.client import DateTime
 from github import Github
 import datetime
 import re
@@ -9,6 +10,8 @@ from os.path import exists
 import os
 import time
 import contextlib
+from dateutil import parser
+
 
 RATE_LIMIT_THRESHOLD = 100
 
@@ -82,7 +85,7 @@ def find_link_to_comment(issue, comments, timestamp):
 def time_matches(timestamp, tolerance_time):
     return (tolerance_time - datetime.timedelta(seconds=1)) <= timestamp <= (tolerance_time + datetime.timedelta(seconds=1))
 
-def delete_saved_files():
+def delete_saved_files(TARGET_REPO_FILE_NAME):
     PATH = f'raw_data/nodes_{TARGET_REPO_FILE_NAME}'
     confirmation = input('Confirm the removal of saved progress files? ')
     if confirmation != 'y':
@@ -247,28 +250,31 @@ def get_event_date(event):
     # this massive hack goes through all known locations one by one
     created_at = event.created_at
     if created_at is not None:
-        return created_at
+        return created_at.timestamp()
     if 'author' in event.raw_data:
         # this usually works for event.event == 'commit'
         created_at = event.raw_data['author']['date']
+        created_at = parser.parse(created_at).timestamp()
     if created_at is not None:
         return created_at
     if 'user' in event.raw_data:
         # this usually works for event.event == 'commented'
         if event.raw_data['submitted_at'] is not None:
             created_at = event.raw_data['submitted_at']
+            created_at = parser.parse(created_at).timestamp()
     if created_at is not None:
         return created_at
     if event.raw_data['comments'][0] is not None:
         # this usually works for event.event == 'commit-commented"
         created_at = event.raw_data['comments'][0]['created_at']
+        created_at = parser.parse(created_at).timestamp()
     if created_at is not None:
         return created_at
     
     assert(1 == 0)
     return event.raw_data['author']['date']
 
-def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
+def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO):
     repo = g.get_repo(TARGET_REPO)
     network_graph = nx.Graph()
     
@@ -320,12 +326,13 @@ def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
             # these are usually commit events
             event_type = event.event
             event_time = get_event_date(event)
+
             event_author = get_event_author(event)
             # print(f'{event.actor.url}\n{event.created_at}')
             print(f'{event_type}: {event_time}')
             issue_commit_timeline_2.append({
                 'event': event_type,
-                'created_at': str(event_time),
+                'created_at': event_time,
                 'author': str(event_author) 
             })
         # issue_commit_timeline = list(map(lambda x: x.url, issue_commit_timeline))
@@ -413,21 +420,25 @@ def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
     graph_dict['connected_components'] = list(map(lambda x: list(x), connected_components))
     return graph_dict
 
-try:
-    TARGET_REPO = sys.argv[1]
-    TARGET_REPO_FILE_NAME = TARGET_REPO.replace('/', '-')
-except IndexError:
-    print(f'Expected at least 1 argument, found {len(sys.argv) - 1}')
-    print('Exiting')
-    sys.exit(1)
+def main():
+    try:
+        TARGET_REPO = sys.argv[1]
+        TARGET_REPO_FILE_NAME = TARGET_REPO.replace('/', '-')
+    except IndexError:
+        print(f'Expected at least 1 argument, found {len(sys.argv) - 1}')
+        print('Exiting')
+        sys.exit(1)
 
-if ('reload' in sys.argv) is True:
-    delete_saved_files()
+    if ('reload' in sys.argv) is True:
+        delete_saved_files(TARGET_REPO_FILE_NAME)
 
-g = Github(get_token())
-nodes, comment_list, timeline_list = get_data(g, TARGET_REPO, TARGET_REPO_FILE_NAME)
-graph_dict = create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME)
-write_json_to_file(graph_dict, TARGET_REPO_FILE_NAME)
+    g = Github(get_token())
+    nodes, comment_list, timeline_list = get_data(g, TARGET_REPO, TARGET_REPO_FILE_NAME)
+    graph_dict = create_json(g, nodes, comment_list, timeline_list, TARGET_REPO)
+    write_json_to_file(graph_dict, TARGET_REPO_FILE_NAME)
+
+if __name__ == '__main__':
+    main()
 
 
 
