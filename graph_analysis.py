@@ -24,7 +24,7 @@ def write_csv_to_file(csv_column_header, csv_rows, REPO_NAME, filename=''):
 def construct_graph(graph_json):
     graph = nx.DiGraph()
     for node in graph_json['nodes']:
-        graph.add_node(node['id'])
+        graph.add_node(node['id'], type=node['type'], status=node['status'], closed_at=node['closed_at'])
     for edge in graph_json['links']:
         graph.add_edge(edge['source'], edge['target'], type=edge['link_type'])
     return graph
@@ -119,6 +119,9 @@ def calculate_summary(graph, TARGET_REPO_FILE_NAME, csv_rows):
                         entry['total_edge'] / max(entry['max_edge'], 1)]
         csv_rows.append(csv_row_entry)
     return csv_rows
+
+def calculate_work_done_before_merge(graph):
+
 
 def main():
     TARGET_REPO_ARRAY = sys.argv[1:]

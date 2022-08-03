@@ -409,7 +409,7 @@ def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO):
             for entry in graph_dict['nodes']:
                 if (entry['id'] == node):
                     entry['connected_component'] = list(component)
-                    entry['connected_component_size'] = [len(list(component))]
+                    entry['connected_component_size'] = len(list(component))
     
     for node in network_graph.degree:
         node_id = node[0]
