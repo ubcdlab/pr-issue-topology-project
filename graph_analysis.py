@@ -24,7 +24,7 @@ def write_csv_to_file(csv_column_header, csv_rows, REPO_NAME, filename=''):
 def construct_graph(graph_json):
     graph = nx.DiGraph()
     for node in graph_json['nodes']:
-        graph.add_node(node['id'], type=node['type'], status=node['status'], closed_at=node['closed_at'])
+        graph.add_node(node['id'], type=node['type'], status=node['status'], created_at=node['creation_date'], closed_at=node['closed_at'])
     for edge in graph_json['links']:
         graph.add_edge(edge['source'], edge['target'], type=edge['link_type'])
     return graph
@@ -90,7 +90,6 @@ def calculate_summary(graph, TARGET_REPO_FILE_NAME, csv_rows):
     connected_components = list(nx.connected_components(undirected_graph))
     component_sizes = {len(c) for c in sorted(nx.connected_components(undirected_graph), key=len, reverse=True)}
     component_density_arr = []
-    print(1)
     for component_size in component_sizes:
         component_density_dict = {
             'repo_name': TARGET_REPO_FILE_NAME,
@@ -121,7 +120,26 @@ def calculate_summary(graph, TARGET_REPO_FILE_NAME, csv_rows):
     return csv_rows
 
 def calculate_work_done_before_merge(graph):
-
+    csv_column_header = ['repo_name' ,'component_size', 'component_frequency', 'edge_count', 'max_possible', 'subgraph_density']
+    undirected_graph = graph.to_undirected()
+    connected_components = list(nx.connected_components(undirected_graph))
+    for index, component in enumerate(connected_components):
+        if len(component) < 3:
+            continue
+        component_subgraph = undirected_graph.subgraph(component)
+        merged_nodes = list(filter(lambda d: d[1]['status'] == 'merged', component_subgraph.nodes(data=True)))
+        most_recent_merged_node = merged_nodes[-1]
+        for node_number, node_attribute in merged_nodes:
+            if node_attribute['closed_at'] > most_recent_merged_node[1]['closed_at']:
+                most_recent_merged_node = (node_number, node_attribute)
+        print('')
+        # for node in component_subgraph.nodes(data=True):
+        #     node_is_merged = True if graph.nodes[node]['status'] == 'merged' else False
+        #     if node_is_merged is not True:
+        #         continue
+            
+            
+    return
 
 def main():
     TARGET_REPO_ARRAY = sys.argv[1:]
@@ -133,8 +151,9 @@ def main():
         graph = construct_graph(graph_json)
 
         csv_rows = calculate_summary(graph, TARGET_REPO_FILE_NAME, csv_rows)
+        calculate_work_done_before_merge(graph)
 
-    write_csv_to_file(csv_column_header, csv_rows, 'csv_summary', '')
+    # write_csv_to_file(csv_column_header, csv_rows, 'csv_summary', '')
 
 if __name__ == '__main__':
     main()
