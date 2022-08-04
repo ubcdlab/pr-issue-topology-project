@@ -119,13 +119,12 @@ def calculate_summary(graph, TARGET_REPO_FILE_NAME, csv_rows):
         csv_rows.append(csv_row_entry)
     return csv_rows
 
-def calculate_work_done_before_merge(graph, TARGET_REPO_FILE_NAME):
-    csv_column_header = ['repo_name', 'component_number', 'component_size', 'preexisting_nodes', 'preexisting_node_count', 'percentage', 'last_merged_node']
-    csv_rows = []
+def calculate_work_done_before_merge(graph, TARGET_REPO_FILE_NAME, csv_rows):
+    csv_column_header = ['repo_name', 'component_number', 'component_size', 'component_nodes', 'preexisting_nodes', 'preexisting_node_count', 'percentage', 'last_merged_node']
     undirected_graph = graph.to_undirected()
     connected_components = list(nx.connected_components(undirected_graph))
     for index, component in enumerate(connected_components):
-        if len(component) < 3:
+        if len(component) <= 2:
             continue
         component_subgraph = undirected_graph.subgraph(component)
         merged_nodes = list(filter(lambda d: d[1]['status'] == 'merged', component_subgraph.nodes(data=True)))
@@ -148,6 +147,7 @@ def calculate_work_done_before_merge(graph, TARGET_REPO_FILE_NAME):
         csv_row_entry = [TARGET_REPO_FILE_NAME,
                         index,
                         len(component),
+                        component,
                         list(map(lambda x: x[0], preexisting_nodes)),
                         len(preexisting_nodes),
                         len(preexisting_nodes) / len(component),
@@ -158,15 +158,17 @@ def calculate_work_done_before_merge(graph, TARGET_REPO_FILE_NAME):
 def main():
     TARGET_REPO_ARRAY = sys.argv[1:]
     csv_rows = []
+    csv_merge_rows = []
     csv_column_header = ['repo_name' ,'component_size', 'component_frequency', 'edge_count', 'max_possible', 'subgraph_density']
     for TARGET_REPO in TARGET_REPO_ARRAY:
         TARGET_REPO_FILE_NAME = TARGET_REPO.replace('/', '-')
         graph_json = read_json_from_file(TARGET_REPO_FILE_NAME)
         graph = construct_graph(graph_json)
 
-        csv_rows = calculate_summary(graph, TARGET_REPO_FILE_NAME, csv_rows)
-        csv_merge_column_header, csv_merge_rows = calculate_work_done_before_merge(graph, TARGET_REPO_FILE_NAME)
-        write_csv_to_file(csv_merge_column_header, csv_merge_rows, TARGET_REPO_FILE_NAME, 'merge')
+        # csv_rows = calculate_summary(graph, TARGET_REPO_FILE_NAME, csv_rows)
+        csv_merge_column_header, csv_merge_rows = calculate_work_done_before_merge(graph, TARGET_REPO_FILE_NAME, csv_merge_rows)
+
+    write_csv_to_file(csv_merge_column_header, csv_merge_rows, TARGET_REPO_FILE_NAME, 'merge')
 
     # write_csv_to_file(csv_column_header, csv_rows, 'csv_summary', '')
 
