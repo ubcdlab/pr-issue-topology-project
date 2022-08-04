@@ -134,7 +134,6 @@ def calculate_work_done_before_merge(graph, TARGET_REPO_FILE_NAME, csv_rows):
         for node_number, node_attribute in merged_nodes:
             if node_attribute['closed_at'] > most_recent_merged_node[1]['closed_at']:
                 most_recent_merged_node = (node_number, node_attribute)
-        print('')
         # Having found the most recent merged node, find out how much of the connected
         # component existed before the node was merged
         preexisting_nodes = []
@@ -168,7 +167,7 @@ def main():
         # csv_rows = calculate_summary(graph, TARGET_REPO_FILE_NAME, csv_rows)
         csv_merge_column_header, csv_merge_rows = calculate_work_done_before_merge(graph, TARGET_REPO_FILE_NAME, csv_merge_rows)
 
-    write_csv_to_file(csv_merge_column_header, csv_merge_rows, TARGET_REPO_FILE_NAME, 'merge')
+    write_csv_to_file(csv_merge_column_header, csv_merge_rows, 'csv_summary', 'merge')
 
     # write_csv_to_file(csv_column_header, csv_rows, 'csv_summary', '')
 
