@@ -24,7 +24,12 @@ def write_csv_to_file(csv_column_header, csv_rows, REPO_NAME, filename=''):
 def construct_graph(graph_json):
     graph = nx.DiGraph()
     for node in graph_json['nodes']:
-        graph.add_node(node['id'], type=node['type'], status=node['status'], created_at=node['creation_date'], closed_at=node['closed_at'])
+        graph.add_node(node['id'], 
+                type=node['type'], 
+                status=node['status'], 
+                created_at=node['creation_date'], 
+                closed_at=node['closed_at'],
+                event_list=node['event_list'])
     for edge in graph_json['links']:
         graph.add_edge(edge['source'], edge['target'], type=edge['link_type'])
     return graph
@@ -154,7 +159,38 @@ def calculate_work_done_before_merge(graph, TARGET_REPO_FILE_NAME, csv_rows):
                         len(merged_nodes)]
         csv_rows.append(csv_row_entry)
     return csv_column_header, csv_rows
-            
+
+def calculate_mean_comments_per_component(graph, TARGET_REPO_FILE_NAME, csv_rows):
+    csv_column_header = ['repo_name', 'component_number', 'component_size', 'component_nodes', 'comments_count', 'comments_count_after_merge', 'last_merged_node']
+    undirected_graph = graph.to_undirected()
+    connected_components = list(nx.connected_components(undirected_graph))
+    for index, component in enumerate(connected_components):
+        component_subgraph = undirected_graph.subgraph(component)
+        comments = []
+        comments_after_merge = []
+        merged_nodes = list(filter(lambda d: d[1]['status'] == 'merged', component_subgraph.nodes(data=True)))
+        if len(merged_nodes) < 1:
+            continue
+        most_recent_merged_node = merged_nodes[-1]
+        for node_number, node_attribute in merged_nodes:
+            if node_attribute['closed_at'] > most_recent_merged_node[1]['closed_at']:
+                most_recent_merged_node = (node_number, node_attribute)
+        for node in component_subgraph.nodes(data=True):
+            comments_list = list(filter(lambda x: x['event'] == 'commented', node[1]['event_list']))
+            if node[1]['created_at'] > most_recent_merged_node[1]['closed_at']:
+                comments_after_merge.append(comments_list)
+            else:
+                comments.append(node)
+        csv_row_entry = [TARGET_REPO_FILE_NAME,
+                        index,
+                        len(component),
+                        component,
+                        len(comments),
+                        len(comments_after_merge),
+                        most_recent_merged_node[0]]
+        csv_rows.append(csv_row_entry)
+    return csv_column_header, csv_rows
+
 def main():
     TARGET_REPO_ARRAY = sys.argv[1:]
     csv_rows = []
@@ -166,9 +202,9 @@ def main():
         graph = construct_graph(graph_json)
 
         # csv_rows = calculate_summary(graph, TARGET_REPO_FILE_NAME, csv_rows)
-        csv_merge_column_header, csv_merge_rows = calculate_work_done_before_merge(graph, TARGET_REPO_FILE_NAME, csv_merge_rows)
-
-    write_csv_to_file(csv_merge_column_header, csv_merge_rows, 'csv_summary', 'merge')
+        # csv_merge_column_header, csv_merge_rows = calculate_work_done_before_merge(graph, TARGET_REPO_FILE_NAME, csv_merge_rows)
+        calculate_mean_authors_per_component(graph, TARGET_REPO_FILE_NAME, csv_rows)
+    # write_csv_to_file(csv_merge_column_header, csv_merge_rows, 'csv_summary', 'merge')
 
     # write_csv_to_file(csv_column_header, csv_rows, 'csv_summary', '')
 
