@@ -239,7 +239,7 @@ def main():
         csv_author_column_header, csv_author_rows = calculate_mean_authors_per_component(graph, TARGET_REPO_FILE_NAME, csv_rows)
     # write_csv_to_file(csv_merge_column_header, csv_merge_rows, 'csv_summary', 'merge')
 
-    write_csv_to_file(csv_column_header, csv_rows, 'csv_authors', '')
+    write_csv_to_file(csv_author_column_header, csv_author_rows, 'csv_authors', '')
 
 
 if __name__ == '__main__':
