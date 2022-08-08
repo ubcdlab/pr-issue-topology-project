@@ -191,6 +191,39 @@ def calculate_mean_comments_per_component(graph, TARGET_REPO_FILE_NAME, csv_rows
         csv_rows.append(csv_row_entry)
     return csv_column_header, csv_rows
 
+def calculate_mean_authors_per_component(graph, TARGET_REPO_FILE_NAME, csv_rows):
+    csv_column_header = ['repo_name', 'component_number', 'component_size', 'component_nodes', 'comments_count', 'comments_count_after_merge', 'last_merged_node']
+    undirected_graph = graph.to_undirected()
+    connected_components = list(nx.connected_components(undirected_graph))
+    for index, component in enumerate(connected_components):
+        component_subgraph = undirected_graph.subgraph(component)
+        authors = set()
+        authors_after_merge = set()
+        merged_nodes = list(filter(lambda d: d[1]['status'] == 'merged', component_subgraph.nodes(data=True)))
+        if len(merged_nodes) < 1:
+            continue
+        most_recent_merged_node = merged_nodes[-1]
+        for node_number, node_attribute in merged_nodes:
+            if node_attribute['closed_at'] > most_recent_merged_node[1]['closed_at']:
+                most_recent_merged_node = (node_number, node_attribute)
+        for node in component_subgraph.nodes(data=True):
+            # filter out events that are both less significant and do not have authoring information 
+            authors_list = list(filter(lambda x: x['event'] not in ['committed', 'closed', 'renamed'], node[1]['event_list']))
+            authors_list = set(map(lambda x: x['author'], authors_list))
+            if node[1]['created_at'] > most_recent_merged_node[1]['closed_at']:
+                authors_after_merge.update(authors_list)
+            else:
+                authors.update(authors_list)
+        csv_row_entry = [TARGET_REPO_FILE_NAME,
+                        index,
+                        len(component),
+                        component,
+                        len(authors),
+                        len(authors_after_merge),
+                        most_recent_merged_node[0]]
+        csv_rows.append(csv_row_entry)
+    return csv_column_header, csv_rows
+
 def main():
     TARGET_REPO_ARRAY = sys.argv[1:]
     csv_rows = []
@@ -203,10 +236,11 @@ def main():
 
         # csv_rows = calculate_summary(graph, TARGET_REPO_FILE_NAME, csv_rows)
         # csv_merge_column_header, csv_merge_rows = calculate_work_done_before_merge(graph, TARGET_REPO_FILE_NAME, csv_merge_rows)
-        calculate_mean_authors_per_component(graph, TARGET_REPO_FILE_NAME, csv_rows)
+        csv_author_column_header, csv_author_rows = calculate_mean_authors_per_component(graph, TARGET_REPO_FILE_NAME, csv_rows)
     # write_csv_to_file(csv_merge_column_header, csv_merge_rows, 'csv_summary', 'merge')
 
-    # write_csv_to_file(csv_column_header, csv_rows, 'csv_summary', '')
+    write_csv_to_file(csv_column_header, csv_rows, 'csv_authors', '')
+
 
 if __name__ == '__main__':
     main()
