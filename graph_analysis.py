@@ -89,40 +89,20 @@ def calculate_connected_component_density(graph):
     return csv_column_header, csv_rows
 
 def calculate_summary(graph, TARGET_REPO_FILE_NAME, csv_rows):
-    csv_column_header = ['repo_name' ,'component_size', 'component_frequency', 'edge_count', 'max_possible', 'subgraph_density']
+    csv_column_header = ['repo_name', 'component_number', 'component_size', 'edge_count', 'max_possible', 'subgraph_density']
     undirected_graph = graph.to_undirected()
-    # csv_rows = []
     connected_components = list(nx.connected_components(undirected_graph))
-    component_sizes = {len(c) for c in sorted(nx.connected_components(undirected_graph), key=len, reverse=True)}
-    component_density_arr = []
-    for component_size in component_sizes:
-        component_density_dict = {
-            'repo_name': TARGET_REPO_FILE_NAME,
-            'component_size': component_size,
-            'component_frequency': 0,
-            'total_edge': 0,
-            'max_edge': 0
-        }
-        max_number_possible_edges = max_number_possible_edges_directed_nodenum(component_size)
-        for index, component in enumerate(connected_components):
-            component_subgraph = graph.subgraph(component)
-            if component_subgraph.number_of_nodes() != component_size:
-                continue
-            component_edge_count = component_subgraph.number_of_edges()
-            component_density_dict['total_edge'] = component_density_dict['total_edge'] + component_edge_count
-            component_density_dict['max_edge'] = component_density_dict['max_edge'] + max_number_possible_edges
-            component_density_dict['component_frequency'] = component_density_dict['component_frequency'] + 1
-        component_density_arr.append(component_density_dict)
-
-    for entry in component_density_arr:
-        csv_row_entry = [entry['repo_name'],
-                        entry['component_size'],
-                        entry['component_frequency'],
-                        entry['total_edge'],
-                        entry['max_edge'],
-                        entry['total_edge'] / max(entry['max_edge'], 1)]
+    for index, component in enumerate(connected_components):
+        component_subgraph = graph.subgraph(component)
+        component_edge_count = component_subgraph.number_of_edges()
+        csv_row_entry = [TARGET_REPO_FILE_NAME,
+                        index,
+                        len(component),
+                        component_edge_count,
+                        max_number_possible_edges_directed_nodenum(len(component)),
+                        component_edge_count / max(max_number_possible_edges_directed_nodenum(len(component)), 1)]
         csv_rows.append(csv_row_entry)
-    return csv_rows
+    return csv_column_header, csv_rows
 
 def calculate_work_done_before_merge(graph, TARGET_REPO_FILE_NAME, csv_rows):
     csv_column_header = ['repo_name', 'component_number', 'component_size', 'component_nodes', 'preexisting_nodes', 'preexisting_node_count', 'percentage', 'last_merged_node', 'merged_node_count']
@@ -135,9 +115,9 @@ def calculate_work_done_before_merge(graph, TARGET_REPO_FILE_NAME, csv_rows):
         merged_nodes = list(filter(lambda d: d[1]['status'] == 'merged', component_subgraph.nodes(data=True)))
         if len(merged_nodes) < 1:
             continue
-        most_recent_merged_node = merged_nodes[-1]
+        most_recent_merged_node = merged_nodes[-1] # last element is most recent
         for node_number, node_attribute in merged_nodes:
-            if node_attribute['closed_at'] > most_recent_merged_node[1]['closed_at']:
+            if node_attribute['closed_at'] < most_recent_merged_node[1]['closed_at']:
                 most_recent_merged_node = (node_number, node_attribute)
         # Having found the most recent merged node, find out how much of the connected
         # component existed before the node was merged
@@ -160,7 +140,7 @@ def calculate_work_done_before_merge(graph, TARGET_REPO_FILE_NAME, csv_rows):
         csv_rows.append(csv_row_entry)
     return csv_column_header, csv_rows
 
-def calculate_mean_comments_per_component(graph, TARGET_REPO_FILE_NAME, csv_rows):
+def calculate_mean_comments_per_component_before_after_merge(graph, TARGET_REPO_FILE_NAME, csv_rows):
     csv_column_header = ['repo_name', 'component_number', 'component_size', 'component_nodes', 'comments_count', 'comments_count_after_merge', 'last_merged_node']
     undirected_graph = graph.to_undirected()
     connected_components = list(nx.connected_components(undirected_graph))
@@ -191,8 +171,11 @@ def calculate_mean_comments_per_component(graph, TARGET_REPO_FILE_NAME, csv_rows
         csv_rows.append(csv_row_entry)
     return csv_column_header, csv_rows
 
-def calculate_mean_authors_per_component(graph, TARGET_REPO_FILE_NAME, csv_rows):
-    csv_column_header = ['repo_name', 'component_number', 'component_size', 'component_nodes', 'comments_count', 'comments_count_after_merge', 'last_merged_node']
+def calculate_mean_comments_per_node(graph, TARGET_REPO_FILE_NAME, csv_rows):
+    return
+
+def calculate_mean_authors_per_component_before_after_merge(graph, TARGET_REPO_FILE_NAME, csv_rows):
+    csv_column_header = ['repo_name', 'component_number', 'component_size', 'component_nodes', 'authors_count', 'authors_count_after_merge', 'last_merged_node']
     undirected_graph = graph.to_undirected()
     connected_components = list(nx.connected_components(undirected_graph))
     for index, component in enumerate(connected_components):
@@ -227,19 +210,18 @@ def calculate_mean_authors_per_component(graph, TARGET_REPO_FILE_NAME, csv_rows)
 def main():
     TARGET_REPO_ARRAY = sys.argv[1:]
     csv_rows = []
-    csv_merge_rows = []
-    csv_column_header = ['repo_name' ,'component_size', 'component_frequency', 'edge_count', 'max_possible', 'subgraph_density']
     for TARGET_REPO in TARGET_REPO_ARRAY:
         TARGET_REPO_FILE_NAME = TARGET_REPO.replace('/', '-')
         graph_json = read_json_from_file(TARGET_REPO_FILE_NAME)
         graph = construct_graph(graph_json)
 
-        # csv_rows = calculate_summary(graph, TARGET_REPO_FILE_NAME, csv_rows)
+        csv_column_header, csv_rows = calculate_summary(graph, TARGET_REPO_FILE_NAME, csv_rows)
         # csv_merge_column_header, csv_merge_rows = calculate_work_done_before_merge(graph, TARGET_REPO_FILE_NAME, csv_merge_rows)
-        csv_author_column_header, csv_author_rows = calculate_mean_authors_per_component(graph, TARGET_REPO_FILE_NAME, csv_rows)
+        # csv_author_column_header, csv_author_rows = calculate_mean_authors_per_component(graph, TARGET_REPO_FILE_NAME, csv_rows)
+        # csv_comment_column_header, csv_comment_rows = calculate_mean_comments_per_component(graph, TARGET_REPO_FILE_NAME, csv_rows)
     # write_csv_to_file(csv_merge_column_header, csv_merge_rows, 'csv_summary', 'merge')
 
-    write_csv_to_file(csv_author_column_header, csv_author_rows, 'csv_authors', '')
+    write_csv_to_file(csv_column_header, csv_rows, 'csv_component_size_distribution', '')
 
 
 if __name__ == '__main__':
