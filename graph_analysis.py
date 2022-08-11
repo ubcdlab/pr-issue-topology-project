@@ -89,19 +89,22 @@ def calculate_connected_component_density(graph):
     return csv_column_header, csv_rows
 
 def calculate_summary(graph, TARGET_REPO_FILE_NAME, csv_rows):
-    csv_column_header = ['repo_name', 'component_number', 'component_size', 'edge_count', 'max_possible', 'subgraph_density']
+    csv_column_header = ['key_field', 'repo_name', 'component_number', 'component_size', 'edge_count', 'max_possible', 'subgraph_density']
     undirected_graph = graph.to_undirected()
     connected_components = list(nx.connected_components(undirected_graph))
+    counter = 0
     for index, component in enumerate(connected_components):
         component_subgraph = graph.subgraph(component)
         component_edge_count = component_subgraph.number_of_edges()
-        csv_row_entry = [TARGET_REPO_FILE_NAME,
+        csv_row_entry = [f'{TARGET_REPO_FILE_NAME}+{counter}',
+                        TARGET_REPO_FILE_NAME,
                         index,
                         len(component),
                         component_edge_count,
                         max_number_possible_edges_directed_nodenum(len(component)),
                         component_edge_count / max(max_number_possible_edges_directed_nodenum(len(component)), 1)]
         csv_rows.append(csv_row_entry)
+        counter += 1
     return csv_column_header, csv_rows
 
 def calculate_work_done_before_merge(graph, TARGET_REPO_FILE_NAME, csv_rows):
@@ -232,15 +235,16 @@ def main():
         graph_json = read_json_from_file(TARGET_REPO_FILE_NAME)
         graph = construct_graph(graph_json)
 
-        # csv_column_header, csv_rows = calculate_summary(graph, TARGET_REPO_FILE_NAME, csv_rows)
+        csv_column_header, csv_rows = calculate_summary(graph, TARGET_REPO_FILE_NAME, csv_rows)
         # csv_merge_column_header, csv_merge_rows = calculate_work_done_before_merge(graph, TARGET_REPO_FILE_NAME, csv_merge_rows)
         # csv_author_column_header, csv_author_rows = calculate_mean_authors_per_component(graph, TARGET_REPO_FILE_NAME, csv_rows)
         # csv_comment_column_header, csv_comment_rows = calculate_mean_comments_per_component(graph, TARGET_REPO_FILE_NAME, csv_rows)
-        csv_diameter_column_header, csv_diameter_rows = calculate_diameter_per_component(graph, TARGET_REPO_FILE_NAME, csv_rows)
+        # csv_diameter_column_header, csv_diameter_rows = calculate_diameter_per_component(graph, TARGET_REPO_FILE_NAME, csv_rows)
     
+    write_csv_to_file(csv_column_header, csv_rows, 'density2', '')
     # write_csv_to_file(csv_merge_column_header, csv_merge_rows, 'csv_summary', 'merge')
     # write_csv_to_file(csv_column_header, csv_rows, 'csv_component_size_distribution', '')
-    write_csv_to_file(csv_diameter_column_header, csv_diameter_rows, 'csv_component_diameter', '')
+    # write_csv_to_file(csv_diameter_column_header, csv_diameter_rows, 'csv_component_diameter', '')
 
 
 if __name__ == '__main__':
