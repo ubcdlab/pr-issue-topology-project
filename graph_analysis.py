@@ -174,6 +174,23 @@ def calculate_mean_comments_per_component_before_after_merge(graph, TARGET_REPO_
 def calculate_mean_comments_per_node(graph, TARGET_REPO_FILE_NAME, csv_rows):
     return
 
+def calculate_diameter_per_component(graph, TARGET_REPO_FILE_NAME, csv_rows):
+    csv_column_header = ['repo_name', 'component_number', 'component_size', 'component_nodes', 'component_diameter']
+    undirected_graph = graph.to_undirected()
+    connected_components = list(nx.connected_components(undirected_graph))
+    for index, component in enumerate(connected_components):
+        component_subgraph = undirected_graph.subgraph(component)
+        diameter = nx.diameter(component_subgraph)
+        csv_row_entry = [TARGET_REPO_FILE_NAME,
+                        index,
+                        len(component),
+                        component,
+                        diameter]
+        csv_rows.append(csv_row_entry)
+        print(f'Loaded component {component} in {TARGET_REPO_FILE_NAME}')
+    return csv_column_header, csv_rows
+    
+
 def calculate_mean_authors_per_component_before_after_merge(graph, TARGET_REPO_FILE_NAME, csv_rows):
     csv_column_header = ['repo_name', 'component_number', 'component_size', 'component_nodes', 'authors_count', 'authors_count_after_merge', 'last_merged_node']
     undirected_graph = graph.to_undirected()
@@ -215,13 +232,15 @@ def main():
         graph_json = read_json_from_file(TARGET_REPO_FILE_NAME)
         graph = construct_graph(graph_json)
 
-        csv_column_header, csv_rows = calculate_summary(graph, TARGET_REPO_FILE_NAME, csv_rows)
+        # csv_column_header, csv_rows = calculate_summary(graph, TARGET_REPO_FILE_NAME, csv_rows)
         # csv_merge_column_header, csv_merge_rows = calculate_work_done_before_merge(graph, TARGET_REPO_FILE_NAME, csv_merge_rows)
         # csv_author_column_header, csv_author_rows = calculate_mean_authors_per_component(graph, TARGET_REPO_FILE_NAME, csv_rows)
         # csv_comment_column_header, csv_comment_rows = calculate_mean_comments_per_component(graph, TARGET_REPO_FILE_NAME, csv_rows)
+        csv_diameter_column_header, csv_diameter_rows = calculate_diameter_per_component(graph, TARGET_REPO_FILE_NAME, csv_rows)
+    
     # write_csv_to_file(csv_merge_column_header, csv_merge_rows, 'csv_summary', 'merge')
-
-    write_csv_to_file(csv_column_header, csv_rows, 'csv_component_size_distribution', '')
+    # write_csv_to_file(csv_column_header, csv_rows, 'csv_component_size_distribution', '')
+    write_csv_to_file(csv_diameter_column_header, csv_diameter_rows, 'csv_component_diameter', '')
 
 
 if __name__ == '__main__':
