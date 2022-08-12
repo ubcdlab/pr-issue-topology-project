@@ -182,20 +182,25 @@ def calculate_mean_comments_per_component_before_after_merge(graph, TARGET_REPO_
 def calculate_mean_comments_per_node(graph, TARGET_REPO_FILE_NAME, csv_rows):
     return
 
-def calculate_diameter_per_component(graph, TARGET_REPO_FILE_NAME, csv_rows):
-    csv_column_header = ['key_field', 'repo_name', 'component_number', 'component_size', 'component_nodes', 'component_diameter']
+def calculate_diameter_density_per_component(graph, TARGET_REPO_FILE_NAME, csv_rows):
+    csv_column_header = ['key_field', 'repo_name', 'component_number', 'component_size', 'component_nodes', 'component_diameter', 'subgraph_density']
     undirected_graph = graph.to_undirected()
     connected_components = list(nx.connected_components(undirected_graph))
     counter = 0
     for index, component in enumerate(connected_components):
         component_subgraph = undirected_graph.subgraph(component)
         diameter = nx.diameter(component_subgraph)
+
+        edges_in_subgraph = graph.subgraph(component).number_of_edges()
+        max_possible_edges_directed = max_number_possible_edges_directed_nodenum(len(component))
+
         csv_row_entry = [f'{TARGET_REPO_FILE_NAME}+{counter}',
                         TARGET_REPO_FILE_NAME,
                         index,
                         len(component),
                         component,
-                        diameter]
+                        diameter,
+                        edges_in_subgraph / max(max_possible_edges_directed, 1)]
         csv_rows.append(csv_row_entry)
         print(f'Loaded component {component} in {TARGET_REPO_FILE_NAME}')
         counter += 1
@@ -249,6 +254,18 @@ def calculate_graph_connected_component_sizes_distribution(graph, TARGET_REPO_FI
         counter += 1
     return csv_column_header, csv_rows
 
+def master_function(graph, TARGET_REPO_FILE_NAME, csv_rows):
+    csv_column_header = ['key_field', 
+                         'repo_name', 
+                         'component_number', 
+                         'component_nodes',
+                         'component_size',
+                         'authors',
+                         'comments',
+                         ]
+    return
+
+
 def main():
     TARGET_REPO_ARRAY = sys.argv[1:]
     csv_rows = []
@@ -258,17 +275,18 @@ def main():
         graph = construct_graph(graph_json)
 
         # csv_column_header, csv_rows = calculate_summary(graph, TARGET_REPO_FILE_NAME, csv_rows)
-        csv_merge_column_header, csv_merge_rows = calculate_work_done_before_merge(graph, TARGET_REPO_FILE_NAME, csv_rows)
+        # csv_merge_column_header, csv_merge_rows = calculate_work_done_before_merge(graph, TARGET_REPO_FILE_NAME, csv_rows)
         # csv_author_column_header, csv_author_rows = calculate_mean_authors_per_component(graph, TARGET_REPO_FILE_NAME, csv_rows)
         # csv_comment_column_header, csv_comment_rows = calculate_mean_comments_per_component(graph, TARGET_REPO_FILE_NAME, csv_rows)
-        # csv_diameter_column_header, csv_diameter_rows = calculate_diameter_per_component(graph, TARGET_REPO_FILE_NAME, csv_rows)
+        csv_diameter_column_header, csv_diameter_rows = calculate_diameter_density_per_component(graph, TARGET_REPO_FILE_NAME, csv_rows)
         # csv_component_size_column_header, csv_rows = calculate_graph_connected_component_sizes_distribution(graph, TARGET_REPO_FILE_NAME, csv_rows)
         # csv_fixes_column_header, csv_fixes_rows = calculate_fixes_relationship_component_percentage(graph, TARGET_REPO_FILE_NAME, csv_rows)
 
+
     # write_csv_to_file(csv_column_header, csv_rows, 'density2', '')
-    write_csv_to_file(csv_merge_column_header, csv_merge_rows, 'work_done_after_merge', '')
-    # write_csv_to_file(csv_column_header, csv_rows, 'csv_component_size_distribution', '')
-    # write_csv_to_file(csv_diameter_column_header, csv_diameter_rows, 'csv_component_diameter', '')
+    # write_csv_to_file(csv_merge_column_header, csv_merge_rows, 'work_done_after_merge', '')
+    # write_csv_to_file(csv_column_header, csv_rows, 'component_size_distribution', '')
+    write_csv_to_file(csv_diameter_column_header, csv_diameter_rows, 'component_diameter', '')
     # write_csv_to_file(csv_component_size_column_header, csv_rows, 'component_size_dist', '')
     # write_csv_to_file(csv_fixes_column_header, csv_fixes_rows, 'fixes', '')
 
