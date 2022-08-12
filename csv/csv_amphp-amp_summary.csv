@@ -1,0 +1,8 @@
+repo_name,component_size,component_frequency,edge_count,max_possible,subgraph_density
+amphp-amp,1,280,0,0,0
+amphp-amp,2,30,35,60,0.583333333
+amphp-amp,3,4,10,24,0.416666667
+amphp-amp,4,3,10,36,0.277777778
+amphp-amp,5,2,14,40,0.35
+amphp-amp,6,1,6,30,0.2
+amphp-amp,8,1,7,56,0.125

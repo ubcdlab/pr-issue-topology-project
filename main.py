@@ -1,3 +1,4 @@
+from xmlrpc.client import DateTime
 from github import Github
 import datetime
 import re
@@ -9,6 +10,8 @@ from os.path import exists
 import os
 import time
 import contextlib
+from dateutil import parser
+
 
 RATE_LIMIT_THRESHOLD = 100
 
@@ -48,6 +51,28 @@ def find_all_mentions(text):
     regex_matches += re.findall(REGEX_NUMBER_STRING, text)
     return regex_matches # return all matches in an array
 
+def find_automatic_links(issue_number, issue_body, comments):
+    if issue_body is None:
+        issue_body = ''
+    if comments is None:
+        comments = []
+    REGEX_STRING = f'(close|closes|closed|fix|fixes|fixed|resolve|resolves|resolved) #{issue_number}'
+    REGEX_DUPLICATE_STRING = f'Duplicate of #{issue_number}'
+
+    match = re.search(REGEX_STRING, issue_body, re.IGNORECASE)
+    match_duplicate = re.search(REGEX_DUPLICATE_STRING, issue_body, re.IGNORECASE)
+    if match:
+        return 'fixes'
+    elif match_duplicate:
+        return 'duplicate'
+    for comment in comments:
+        if re.search(REGEX_STRING, comment.body, re.IGNORECASE):
+            return 'fixes'
+        elif re.search(REGEX_DUPLICATE_STRING, comment.body, re.IGNORECASE):
+            return 'duplicate'
+    return 'other'
+
+
 def find_link_to_comment(issue, comments, timestamp):
     if time_matches(timestamp, issue.created_at) or time_matches(timestamp, issue.updated_at):
         return f'{issue.html_url}#issue-{issue.id}'
@@ -60,7 +85,7 @@ def find_link_to_comment(issue, comments, timestamp):
 def time_matches(timestamp, tolerance_time):
     return (tolerance_time - datetime.timedelta(seconds=1)) <= timestamp <= (tolerance_time + datetime.timedelta(seconds=1))
 
-def delete_saved_files():
+def delete_saved_files(TARGET_REPO_FILE_NAME):
     PATH = f'raw_data/nodes_{TARGET_REPO_FILE_NAME}'
     confirmation = input('Confirm the removal of saved progress files? ')
     if confirmation != 'y':
@@ -113,9 +138,9 @@ def load_saved_progress(repo, TARGET_REPO_FILE_NAME):
     if exists(f'{PATH}.pk') is True:
         with open(f'{PATH}.pk', 'rb') as fi:
             nodes = pickle.load(fi)
-    else:
-        nodes = list(repo.get_issues(state='all', sort='created', direction='desc'))
-        node_list = nodes.copy()
+    # else:
+    #     nodes = list(repo.get_issues(state='all', sort='created', direction='desc'))
+    #     node_list = nodes.copy()
 
     if exists(f'{PATH}_comments.pk') is True:
         with open(f'{PATH}_comments.pk', 'rb') as fi:
@@ -176,55 +201,179 @@ def find_comment(issue_url, comment_list):
         if len(comments) > 0 and comments[0].issue_url == issue_url:
             return comments
 
-def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
+def get_event_author(event):
+    # HACK: to get around Github API's pathological behaviour
+    # the author of a timeline event API can be located in different locations
+    # depending on the type of event in question
+    # this massive hack goes through all known locations one by one
+    if event.event == 'closed':
+        # event.event == 'closed' does not have authoring information
+        return None
+    if event.event == 'renamed':
+        # event.event == 'renamed' does not have authoring information
+        return None
+    author = None
+    if event.actor is not None:
+        # usually, event actor is defined for events such as commenting
+        author = event.actor.html_url
+    if author is not None:
+        return author
+    if 'author' in event.raw_data:
+        # for event.event == 'committed'
+        author = event.raw_data['author']['email']
+    if author is not None:
+        return author
+    if 'user' in event.raw_data:
+        # for event.event = 'reviewed'
+        if event.raw_data['user'] is not None:
+            author = event.raw_data['user']['html_url']
+    if author is not None:
+        return author
+    if 'comments' in event.raw_data:
+        # for commit-commented
+        author = event.raw_data['comments'][0]['user']['html_url']
+    if author is not None:
+        return author
+    if 'source' in event.raw_data:
+        # for 'cross-referenced' events
+        author = event.raw_data['source']['issue']['user']['html_url']
+    if author is not None:
+        return author
+    # assert(1 == 0)
+    return None
+
+
+def get_event_date(event):
+    # HACK: to get around Github API's pathological behaviour
+    # the creation time of a timeline event API can be located in different locations
+    # depending on the type of event in question
+    # this massive hack goes through all known locations one by one
+    created_at = event.created_at
+    if created_at is not None:
+        return created_at.timestamp()
+    if 'author' in event.raw_data:
+        # this usually works for event.event == 'commit'
+        created_at = event.raw_data['author']['date']
+        created_at = parser.parse(created_at).timestamp()
+    if created_at is not None:
+        return created_at
+    if 'user' in event.raw_data:
+        # this usually works for event.event == 'commented'
+        if event.raw_data['submitted_at'] is not None:
+            created_at = event.raw_data['submitted_at']
+            created_at = parser.parse(created_at).timestamp()
+    if created_at is not None:
+        return created_at
+    if event.raw_data['comments'][0] is not None:
+        # this usually works for event.event == 'commit-commented"
+        created_at = event.raw_data['comments'][0]['created_at']
+        created_at = parser.parse(created_at).timestamp()
+    if created_at is not None:
+        return created_at
+    
+    assert(1 == 0)
+    return event.raw_data['author']['date']
+
+def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO):
     repo = g.get_repo(TARGET_REPO)
     network_graph = nx.Graph()
+    
     graph_dict = {
         'repo_url': repo.html_url,
         'issue_count': 0,
         'pull_request_count': 0,
         'labels_text': list(map(lambda x: x.name, list(repo.get_labels()))),
         'nodes': [],
-        'links': []
+        'links': [],
+        'graph_density': 0,
+        'graph_node_count': 0,
+        'graph_edge_count': 0,
+        'graph_component_count': 0,
+        'graph_fixes_relationship_count': 0,
+        'graph_duplicate_relationship_count': 0,
     }
-    HIGHEST_ISSUE_NUMBER = nodes[0].number
+    fixes_relationship_counter = 0
+    duplicate_relationship_counter = 0
+
+    nonwork_events = ['subscribed', 
+                    'unsubscribed', 
+                    'automatic_base_change_failed', 
+                    'automatic_base_change_succeeded', 
+                    'mentioned',
+                    'review_requested']
+    # these are timeline events returned by the API that aren't considered work
+    # review_requested is just a button click in github and isn't actual work
+
     for index, issue in enumerate(nodes):
-        total_links = []
         node_dict = {}
+        # node_comments = find_comment(issue.url, comment_list)
+        # NOTE: node_comments remains currently unused, but in case we'll need it in the future
+        # I am keeping the code commented here
 
-        node_comments = find_comment(issue.url, comment_list)
-        # issue_timeline = timeline_list[index]
-
-        # horrible hack to remedy a problem
+        # HACK: horrible hack to remedy a problem
         # nodes are loaded in ascending order
         # yet timeline_list is loaded in descending order
-        # TODO: FIX THIS
-        issue_timeline = timeline_list[-index-1] 
+        issue_timeline = timeline_list[-index-1]
+
+        issue_commit_timeline_2 = []
+        issue_commit_timeline = issue_timeline.copy()
+        issue_commit_timeline = list(filter(lambda x: x.event not in nonwork_events, issue_commit_timeline))
+        for event in issue_commit_timeline:
+            # NOTE: events of type 'commit' have no actor.url... in fact
+            # a lot of the fields aren't set... 
+            # TODO: FIX THIS... USE THE DEBUGGER
+            # some Github timeline events just dont have event ID for some cursed reason
+            # these are usually commit events
+            event_type = event.event
+            event_time = get_event_date(event)
+
+            event_author = get_event_author(event)
+            # print(f'{event.actor.url}\n{event.created_at}')
+            print(f'{event_type}: {event_time}')
+            issue_commit_timeline_2.append({
+                'event': event_type,
+                'created_at': event_time,
+                'author': str(event_author) 
+            })
+        # issue_commit_timeline = list(map(lambda x: x.url, issue_commit_timeline))
+        # print(issue_commit_timeline)
 
         issue_timeline = list(filter(lambda x: x.event == 'cross-referenced' and x.source.issue.repository.full_name == repo.full_name, issue_timeline))
         issue_timeline_events = issue_timeline.copy()
         issue_timeline_timestamp = issue_timeline.copy()
         issue_timeline_timestamp = list(map(lambda x: x.created_at, issue_timeline_timestamp))
 
-        total_links = issue_timeline.copy()
         links_dict = []
-
         for mention in issue_timeline_events:
+            # Tracks INCOMING MENTIONS
             mentioning_issue = mention.source.issue
             mentioning_issue_comments = find_comment(mentioning_issue.url, comment_list)
             mentioning_time = mention.created_at
+            
             comment_link = find_link_to_comment(mentioning_issue, mentioning_issue_comments, mentioning_time)
             assert comment_link is not None
+
+            link_type = find_automatic_links(issue.number, mentioning_issue.body, mentioning_issue_comments)
+            if link_type == 'fixes':
+                fixes_relationship_counter += 1
+            elif link_type == 'duplicate':
+                duplicate_relationship_counter += 1
+
             links_dict.append({
                     'number': mention.source.issue.number,
-                    'comment_link': comment_link
+                    'comment_link': comment_link,
+                    'link_type': find_automatic_links(issue.number, mentioning_issue.body, mentioning_issue_comments)
                 })
         node_dict = {
             'id': issue.number,
             'type': 'pull_request' if issue.pull_request is not None else 'issue',
             'status': issue.state,
             'links': links_dict,
-            'label': list(map(lambda x: x.name, issue.labels))
+            'label': list(map(lambda x: x.name, issue.labels)),
+            'creation_date': issue.created_at.timestamp(),
+            'closed_at': issue.closed_at.timestamp() if issue.closed_at is not None else 0,
+            'updated_at': issue.updated_at.timestamp(),
+            'event_list': issue_commit_timeline_2
         }
 
         if issue.pull_request is not None:
@@ -235,17 +384,32 @@ def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
         graph_dict['nodes'].append(node_dict)
         network_graph.add_node(issue.number)
         for link in links_dict:
-            graph_dict['links'].append({'source': link['number'], 'target': issue.number, 'comment_link': link['comment_link']})
+            graph_dict['links'].append({
+                'source': link['number'], 
+                'target': issue.number, 
+                'comment_link': link['comment_link'],
+                'link_type': link['link_type'] 
+                })
             network_graph.add_edge(link['number'], issue.number)
         print(f'Finished processing node number {issue.number}')
     # Finished loading all nodes
     connected_components = list(nx.connected_components(network_graph))
+    node_count = len(list(network_graph.nodes))
+    edge_count = len(list(network_graph.edges))
+    graph_dict['graph_component_count'] = len(connected_components)
+    graph_dict['graph_node_count'] = node_count
+    graph_dict['graph_edge_count'] = edge_count
+    graph_dict['graph_density'] = edge_count / ((node_count * (node_count - 1)) / 2)
+    graph_dict['graph_fixes_relationship_count'] = fixes_relationship_counter
+    graph_dict['graph_duplicate_relationship_count'] = duplicate_relationship_counter
+
+
     for component in connected_components:
         for node in component:
             for entry in graph_dict['nodes']:
                 if (entry['id'] == node):
                     entry['connected_component'] = list(component)
-                    entry['connected_component_size'] = [len(list(component))]
+                    entry['connected_component_size'] = len(list(component))
     
     for node in network_graph.degree:
         node_id = node[0]
@@ -256,21 +420,27 @@ def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
     graph_dict['connected_components'] = list(map(lambda x: list(x), connected_components))
     return graph_dict
 
-try:
-    TARGET_REPO = sys.argv[1]
-    TARGET_REPO_FILE_NAME = TARGET_REPO.replace('/', '-')
-except IndexError:
-    print(f'Expected at least 1 argument, found {len(sys.argv) - 1}')
-    print('Exiting')
-    sys.exit(1)
+def main():
+    try:
+        # TARGET_REPO = sys.argv[1]
+        TARGET_REPO_ARRAY = sys.argv[1:]
+    except IndexError:
+        print(f'Expected at least 1 argument, found {len(sys.argv) - 1}')
+        print('Exiting')
+        sys.exit(1)
 
-if ('reload' in sys.argv) is True:
-    delete_saved_files()
+    # if ('reload' in sys.argv) is True:
+    #     delete_saved_files(TARGET_REPO_FILE_NAME)
 
-g = Github(get_token())
-nodes, comment_list, timeline_list = get_data(g, TARGET_REPO, TARGET_REPO_FILE_NAME)
-graph_dict = create_json(g, nodes, comment_list, timeline_list, TARGET_REPO_FILE_NAME)
-write_json_to_file(graph_dict, TARGET_REPO_FILE_NAME)
+    g = Github(get_token())
+    for TARGET_REPO in TARGET_REPO_ARRAY:
+        TARGET_REPO_FILE_NAME = TARGET_REPO.replace('/', '-')
+        nodes, comment_list, timeline_list = get_data(g, TARGET_REPO, TARGET_REPO_FILE_NAME)
+        graph_dict = create_json(g, nodes, comment_list, timeline_list, TARGET_REPO)
+        write_json_to_file(graph_dict, TARGET_REPO_FILE_NAME)
+
+if __name__ == '__main__':
+    main()
 
 
 

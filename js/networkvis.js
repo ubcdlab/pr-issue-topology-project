@@ -104,7 +104,6 @@ class Networkvis {
         }
         modify['nodes'] = new_nodes
         modify['links'] = Array.from(new_links);
-        console.log(modify);
         return modify;
     }
 
@@ -156,7 +155,9 @@ class Networkvis {
         .selectAll('line')
         .data(data.links)
         .join('line')
-        .style('stroke', '#000')
+        .style('stroke', d => {
+            return d.automatic ? '#FF0000' : '#000'
+        })
         .classed('line', true)
         .attr('stroke-width', 2)
         .attr('marker-end', 'url(#triangle)')

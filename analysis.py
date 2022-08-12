@@ -1,8 +1,7 @@
 import json
 import sys 
-import functools
 import pickle
-from github import Github
+import networkx as nx
 
 node_list = None
 comment_list = None

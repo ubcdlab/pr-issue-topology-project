@@ -1,0 +1,10 @@
+repo_name,component_number,component_size,component_nodes,preexisting_nodes,preexisting_node_count,percentage,last_merged_node,merged_node_count
+amphp-amp,5,4,"{381, 389, 382, 383}",[],0,0.0,389,3
+amphp-amp,21,4,"{368, 364, 365, 367}",[],0,0.0,368,1
+amphp-amp,36,8,"{1, 2, 3, 4, 5, 347, 222, 223}","[347, 222, 223]",3,0.375,5,2
+amphp-amp,43,5,"{160, 322, 162, 265, 338}",[],0,0.0,338,1
+amphp-amp,47,4,"{305, 306, 301, 334}",[],0,0.0,334,2
+amphp-amp,86,3,"{283, 165, 195}",[],0,0.0,283,1
+amphp-amp,118,3,"{244, 245, 246}",[],0,0.0,245,1
+amphp-amp,156,6,"{197, 198, 168, 157, 189, 190}",[],0,0.0,197,1
+amphp-amp,227,3,"{96, 98, 110}",[],0,0.0,110,1
