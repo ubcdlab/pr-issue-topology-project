@@ -73,14 +73,23 @@ def find_automatic_links(issue_number, issue_body, comments):
     return 'other'
 
 
-def find_link_to_comment(issue, comments, timestamp):
+def find_link_to_comment(TARGET_REPO, target_issue_number, issue, comments, timestamp):
     if time_matches(timestamp, issue.created_at) or time_matches(timestamp, issue.updated_at):
         return f'{issue.html_url}#issue-{issue.id}'
     if comments is not None:
         for comment in comments:
             if timestamp - datetime.timedelta(seconds=3) <= comment.created_at <= timestamp + datetime.timedelta(seconds=3):
                 return comment.html_url
-    return f'{issue.html_url}#issue-{issue.id}'
+    # at this point, we still have not identified the link
+    # We will manually use regex at this point
+    REGEX_STRING = f'#{target_issue_number}'
+    REGEX_STRING_URL = f'https:\/\/github\.com/{TARGET_REPO}\/(?:issues|pull)\/{target_issue_number}'
+    for comment in comments:
+        if re.search(REGEX_STRING, comment.body) or re.search(REGEX_STRING_URL, comment.body) is not None:
+            return comment.html_url
+    if re.search(REGEX_STRING, issue.body) or re.search(REGEX_STRING_URL, issue.body) is not None:
+        return f'{issue.html_url}#issue-{issue.id}'
+    return None
 
 def time_matches(timestamp, tolerance_time):
     return (tolerance_time - datetime.timedelta(seconds=1)) <= timestamp <= (tolerance_time + datetime.timedelta(seconds=1))
@@ -349,8 +358,10 @@ def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO):
             mentioning_issue = mention.source.issue
             mentioning_issue_comments = find_comment(mentioning_issue.url, comment_list)
             mentioning_time = mention.created_at
+
+            target_issue_number = issue.number
             
-            comment_link = find_link_to_comment(mentioning_issue, mentioning_issue_comments, mentioning_time)
+            comment_link = find_link_to_comment(TARGET_REPO, target_issue_number, mentioning_issue, mentioning_issue_comments, mentioning_time)
             assert comment_link is not None
 
             link_type = find_automatic_links(issue.number, mentioning_issue.body, mentioning_issue_comments)
