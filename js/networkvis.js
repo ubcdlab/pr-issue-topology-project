@@ -80,7 +80,8 @@ class Networkvis {
                     if (node[key].length === 0 && val.length > 0) {
                         keep = false;
                         continue
-                    } else if (!node[key].some(x => val.includes(x))) {
+                    // } else if (!node[key].some(x => val.includes(x))) {
+                    } else if (!val.includes(node[key])) {
                         keep = false;
                         continue
                     }

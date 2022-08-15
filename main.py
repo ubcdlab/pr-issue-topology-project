@@ -80,7 +80,7 @@ def find_link_to_comment(issue, comments, timestamp):
         for comment in comments:
             if timestamp - datetime.timedelta(seconds=1) <= comment.created_at <= timestamp + datetime.timedelta(seconds=1):
                 return comment.html_url
-    return f'{issue.html_url}'
+    return f'{issue.html_url}#issue-{issue.id}'
 
 def time_matches(timestamp, tolerance_time):
     return (tolerance_time - datetime.timedelta(seconds=1)) <= timestamp <= (tolerance_time + datetime.timedelta(seconds=1))
