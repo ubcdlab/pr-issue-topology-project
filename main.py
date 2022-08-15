@@ -100,8 +100,9 @@ def find_link_and_text_of_comment(TARGET_REPO, target_issue_number, issue, comme
             if re.search(REGEX_STRING, comment.body) or re.search(REGEX_STRING_URL, comment.body) is not None:
                 return comment.html_url, comment.body
     # Search the body text of the node itself
-    if re.search(REGEX_STRING, issue.body) or re.search(REGEX_STRING_URL, issue.body) is not None:
-        return f'{issue.html_url}#issue-{issue.id}', issue.body
+    if issue.body is not None:
+        if re.search(REGEX_STRING, issue.body) or re.search(REGEX_STRING_URL, issue.body) is not None:
+            return f'{issue.html_url}#issue-{issue.id}', issue.body
     return None, ''
 
 def time_matches(timestamp, tolerance_time):
@@ -379,6 +380,10 @@ def create_json(g, nodes, comment_list, timeline_list, review_comment_list, TARG
         links_dict = []
         for mention in issue_timeline_events:
             # Tracks INCOMING MENTIONS
+            if hasattr(event.actor, 'type'):
+                if event.actor.type == 'Bot':
+                    continue
+
             mentioning_issue = mention.source.issue
             mentioning_issue_comments = find_comment(mentioning_issue.url, comment_list)
             mentioning_time = mention.created_at
