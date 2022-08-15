@@ -78,7 +78,7 @@ def find_link_to_comment(issue, comments, timestamp):
         return f'{issue.html_url}#issue-{issue.id}'
     if comments is not None:
         for comment in comments:
-            if timestamp - datetime.timedelta(seconds=1) <= comment.created_at <= timestamp + datetime.timedelta(seconds=1):
+            if timestamp - datetime.timedelta(seconds=3) <= comment.created_at <= timestamp + datetime.timedelta(seconds=3):
                 return comment.html_url
     return f'{issue.html_url}#issue-{issue.id}'
 
