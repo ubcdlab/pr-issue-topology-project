@@ -11,10 +11,14 @@ def read_json_from_file():
         data = json.load(file)
     return data
 
+def write_json_to_file(nodes):
+    with open(f'unified_json/sampled_result.json', 'w') as f:
+        f.write(json.dumps(nodes, sort_keys=False, indent=4))
+
 def component_is_similar(component_1, component_2, all_dimensions):
     components_are_similar = True
     for dimension in all_dimensions:
-        similarity = compare_component_dimension_similarity(component_1, component_2, dimension)
+        similarity = compare_component_dimension_similarity(component_1, component_2, dimension, 0.1)
         components_are_similar = components_are_similar and similarity
     return components_are_similar
 
@@ -38,13 +42,20 @@ def find_similar_components(component, component_universe, dimensions):
     for component_in_universe in component_universe:
         if component_is_similar(component, component_in_universe, dimensions):
             similar_components.append(component_in_universe)
+        else:
+            print('Not similar')
     return similar_components
 
 def score_components(sample, universe, space, config):
-    coverage = set()
+    coverage = []
+    coverage_set = set()
     for component in sample:
-        similar_components = find_similar_components(component, sample, config)
-        coverage.update(similar_components)
+        similar_components = find_similar_components(component, universe, config)
+        for item in similar_components:
+            coverage_set.add(item['key'])
+            if item in coverage:
+                continue
+            coverage.append(item)
     score = len(coverage)/len(universe)
     return score
 
@@ -66,9 +77,6 @@ def next_components(K, preselected_components, component_universe, dimensions, c
                 p_best = candidate
         if p_best is None:
             break
-        # for item in candidates:
-        #     if item == p_best:
-        #         candidates.remove(item)
         result.append(p_best)
         candidates.remove(p_best)
         c_space.append(c_best)
@@ -77,8 +85,9 @@ def next_components(K, preselected_components, component_universe, dimensions, c
 def main():
     condensed_file = read_json_from_file()
     sample = next_components(10, [], condensed_file, ['diameter', 'density'], None)
-    
-    return
+    score = score_components(sample, condensed_file, ['diameter', 'density'], ['diameter', 'density'])
+    print(score)
+    write_json_to_file(sample)
 
 if __name__ == '__main__':
     main()

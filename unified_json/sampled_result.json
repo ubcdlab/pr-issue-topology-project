@@ -1,0 +1,113 @@
+[
+    {
+        "key": 3,
+        "repo_name": "amphp/amp",
+        "nodes": [
+            368,
+            364,
+            365,
+            367
+        ],
+        "diameter": 2,
+        "density": 0.3333333333333333
+    },
+    {
+        "key": 10,
+        "repo_name": "amphp/amp",
+        "nodes": [
+            305,
+            306,
+            301,
+            334
+        ],
+        "diameter": 2,
+        "density": 0.25
+    },
+    {
+        "key": 15,
+        "repo_name": "amphp/amp",
+        "nodes": [
+            84,
+            308,
+            309,
+            311,
+            313
+        ],
+        "diameter": 2,
+        "density": 0.3
+    },
+    {
+        "key": 16,
+        "repo_name": "amphp/amp",
+        "nodes": [
+            297,
+            229,
+            253
+        ],
+        "diameter": 2,
+        "density": 0.3333333333333333
+    },
+    {
+        "key": 17,
+        "repo_name": "amphp/amp",
+        "nodes": [
+            283,
+            165,
+            195
+        ],
+        "diameter": 2,
+        "density": 0.3333333333333333
+    },
+    {
+        "key": 20,
+        "repo_name": "amphp/amp",
+        "nodes": [
+            244,
+            245,
+            246
+        ],
+        "diameter": 2,
+        "density": 0.3333333333333333
+    },
+    {
+        "key": 33,
+        "repo_name": "amphp/amp",
+        "nodes": [
+            96,
+            98,
+            110
+        ],
+        "diameter": 2,
+        "density": 0.3333333333333333
+    },
+    {
+        "key": 1,
+        "repo_name": "amphp/amp",
+        "nodes": [
+            377,
+            378
+        ],
+        "diameter": 1,
+        "density": 0.5
+    },
+    {
+        "key": 2,
+        "repo_name": "amphp/amp",
+        "nodes": [
+            372,
+            373
+        ],
+        "diameter": 1,
+        "density": 0.5
+    },
+    {
+        "key": 4,
+        "repo_name": "amphp/amp",
+        "nodes": [
+            360,
+            362
+        ],
+        "diameter": 1,
+        "density": 0.5
+    }
+]
