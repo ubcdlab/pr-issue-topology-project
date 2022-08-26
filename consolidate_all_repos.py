@@ -12,8 +12,7 @@ def read_json_from_file(TARGET_REPO_FILE_NAME):
 def construct_graph(graph_json, TARGET_REPO):
     graph = nx.Graph()
     for node in graph_json['nodes']:
-        graph.add_node(node['id'], 
-                repo=TARGET_REPO)
+        graph.add_node(node['id'])
     for edge in graph_json['links']:
         graph.add_edge(edge['source'], edge['target'], type=edge['link_type'])
     return graph
@@ -27,25 +26,29 @@ def max_number_possible_edges_directed_nodenum(n):
 
 def main():
     TARGET_REPO_ARRAY = sys.argv[1:]
-    nodes = []
+    components = []
+    magic_counter = 0
     for TARGET_REPO in TARGET_REPO_ARRAY:
         TARGET_REPO_FILE_NAME = TARGET_REPO.replace('/', '-')
         graph_json = read_json_from_file(TARGET_REPO_FILE_NAME)
         graph = construct_graph(graph_json, TARGET_REPO)
         connected_components = nx.connected_components(graph)
-        for component in connected_components:
+        for index, component in enumerate(connected_components):
+            if len(component) <= 1:
+                continue
             subgraph = graph.subgraph(component)
             edges_in_subgraph = graph.subgraph(component).number_of_edges()
             max_possible_edges_directed = max_number_possible_edges_directed_nodenum(len(component))
-            for node in subgraph.nodes(data=True):
-                nodes.append({
-                    'node_number': node[0],
-                    'repo_name': node[1]['repo'],
-                    'component': list(component),
-                    'diameter': nx.diameter(subgraph),
-                    'density': edges_in_subgraph / max(max_possible_edges_directed, 1)
-                })
-    write_json_to_file(nodes)
+            list_of_nodes = list(subgraph.nodes(data=True))
+            components.append({
+                'key': magic_counter,
+                'repo_name': TARGET_REPO,
+                'nodes': list(component),
+                'diameter': nx.diameter(subgraph),
+                'density': edges_in_subgraph / max(max_possible_edges_directed, 1)
+            })
+            magic_counter += 1
+    write_json_to_file(components)
 
 if __name__ == '__main__':
     main()

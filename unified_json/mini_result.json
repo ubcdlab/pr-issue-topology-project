@@ -1,53 +1,8 @@
 [
     {
-        "node_number": 394,
+        "key": 0,
         "repo_name": "amphp/amp",
-        "component": [
-            394
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 393,
-        "repo_name": "amphp/amp",
-        "component": [
-            393
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 392,
-        "repo_name": "amphp/amp",
-        "component": [
-            392
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 391,
-        "repo_name": "amphp/amp",
-        "component": [
-            391
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 390,
-        "repo_name": "amphp/amp",
-        "component": [
-            390
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 382,
-        "repo_name": "amphp/amp",
-        "component": [
+        "nodes": [
             381,
             389,
             382,
@@ -57,108 +12,9 @@
         "density": 0.25
     },
     {
-        "node_number": 381,
+        "key": 1,
         "repo_name": "amphp/amp",
-        "component": [
-            381,
-            389,
-            382,
-            383
-        ],
-        "diameter": 3,
-        "density": 0.25
-    },
-    {
-        "node_number": 389,
-        "repo_name": "amphp/amp",
-        "component": [
-            381,
-            389,
-            382,
-            383
-        ],
-        "diameter": 3,
-        "density": 0.25
-    },
-    {
-        "node_number": 383,
-        "repo_name": "amphp/amp",
-        "component": [
-            381,
-            389,
-            382,
-            383
-        ],
-        "diameter": 3,
-        "density": 0.25
-    },
-    {
-        "node_number": 388,
-        "repo_name": "amphp/amp",
-        "component": [
-            388
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 387,
-        "repo_name": "amphp/amp",
-        "component": [
-            387
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 386,
-        "repo_name": "amphp/amp",
-        "component": [
-            386
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 385,
-        "repo_name": "amphp/amp",
-        "component": [
-            385
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 384,
-        "repo_name": "amphp/amp",
-        "component": [
-            384
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 380,
-        "repo_name": "amphp/amp",
-        "component": [
-            380
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 379,
-        "repo_name": "amphp/amp",
-        "component": [
-            379
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 377,
-        "repo_name": "amphp/amp",
-        "component": [
+        "nodes": [
             377,
             378
         ],
@@ -166,46 +22,9 @@
         "density": 0.5
     },
     {
-        "node_number": 378,
+        "key": 2,
         "repo_name": "amphp/amp",
-        "component": [
-            377,
-            378
-        ],
-        "diameter": 1,
-        "density": 0.5
-    },
-    {
-        "node_number": 376,
-        "repo_name": "amphp/amp",
-        "component": [
-            376
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 375,
-        "repo_name": "amphp/amp",
-        "component": [
-            375
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 374,
-        "repo_name": "amphp/amp",
-        "component": [
-            374
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 372,
-        "repo_name": "amphp/amp",
-        "component": [
+        "nodes": [
             372,
             373
         ],
@@ -213,46 +32,9 @@
         "density": 0.5
     },
     {
-        "node_number": 373,
+        "key": 3,
         "repo_name": "amphp/amp",
-        "component": [
-            372,
-            373
-        ],
-        "diameter": 1,
-        "density": 0.5
-    },
-    {
-        "node_number": 371,
-        "repo_name": "amphp/amp",
-        "component": [
-            371
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 370,
-        "repo_name": "amphp/amp",
-        "component": [
-            370
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 369,
-        "repo_name": "amphp/amp",
-        "component": [
-            369
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 368,
-        "repo_name": "amphp/amp",
-        "component": [
+        "nodes": [
             368,
             364,
             365,
@@ -262,54 +44,9 @@
         "density": 0.3333333333333333
     },
     {
-        "node_number": 364,
+        "key": 4,
         "repo_name": "amphp/amp",
-        "component": [
-            368,
-            364,
-            365,
-            367
-        ],
-        "diameter": 2,
-        "density": 0.3333333333333333
-    },
-    {
-        "node_number": 365,
-        "repo_name": "amphp/amp",
-        "component": [
-            368,
-            364,
-            365,
-            367
-        ],
-        "diameter": 2,
-        "density": 0.3333333333333333
-    },
-    {
-        "node_number": 367,
-        "repo_name": "amphp/amp",
-        "component": [
-            368,
-            364,
-            365,
-            367
-        ],
-        "diameter": 2,
-        "density": 0.3333333333333333
-    },
-    {
-        "node_number": 366,
-        "repo_name": "amphp/amp",
-        "component": [
-            366
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 360,
-        "repo_name": "amphp/amp",
-        "component": [
+        "nodes": [
             360,
             362
         ],
@@ -317,82 +54,9 @@
         "density": 0.5
     },
     {
-        "node_number": 362,
+        "key": 5,
         "repo_name": "amphp/amp",
-        "component": [
-            360,
-            362
-        ],
-        "diameter": 1,
-        "density": 0.5
-    },
-    {
-        "node_number": 361,
-        "repo_name": "amphp/amp",
-        "component": [
-            361
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 359,
-        "repo_name": "amphp/amp",
-        "component": [
-            359
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 358,
-        "repo_name": "amphp/amp",
-        "component": [
-            358
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 357,
-        "repo_name": "amphp/amp",
-        "component": [
-            357
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 356,
-        "repo_name": "amphp/amp",
-        "component": [
-            356
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 355,
-        "repo_name": "amphp/amp",
-        "component": [
-            355
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 354,
-        "repo_name": "amphp/amp",
-        "component": [
-            354
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 352,
-        "repo_name": "amphp/amp",
-        "component": [
+        "nodes": [
             352,
             353
         ],
@@ -400,37 +64,9 @@
         "density": 0.5
     },
     {
-        "node_number": 353,
+        "key": 6,
         "repo_name": "amphp/amp",
-        "component": [
-            352,
-            353
-        ],
-        "diameter": 1,
-        "density": 0.5
-    },
-    {
-        "node_number": 351,
-        "repo_name": "amphp/amp",
-        "component": [
-            351
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 350,
-        "repo_name": "amphp/amp",
-        "component": [
-            350
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 349,
-        "repo_name": "amphp/amp",
-        "component": [
+        "nodes": [
             213,
             349
         ],
@@ -438,28 +74,9 @@
         "density": 0.5
     },
     {
-        "node_number": 213,
+        "key": 7,
         "repo_name": "amphp/amp",
-        "component": [
-            213,
-            349
-        ],
-        "diameter": 1,
-        "density": 0.5
-    },
-    {
-        "node_number": 348,
-        "repo_name": "amphp/amp",
-        "component": [
-            348
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 1,
-        "repo_name": "amphp/amp",
-        "component": [
+        "nodes": [
             1,
             2,
             3,
@@ -473,157 +90,9 @@
         "density": 0.125
     },
     {
-        "node_number": 2,
+        "key": 8,
         "repo_name": "amphp/amp",
-        "component": [
-            1,
-            2,
-            3,
-            4,
-            5,
-            347,
-            222,
-            223
-        ],
-        "diameter": 4,
-        "density": 0.125
-    },
-    {
-        "node_number": 3,
-        "repo_name": "amphp/amp",
-        "component": [
-            1,
-            2,
-            3,
-            4,
-            5,
-            347,
-            222,
-            223
-        ],
-        "diameter": 4,
-        "density": 0.125
-    },
-    {
-        "node_number": 4,
-        "repo_name": "amphp/amp",
-        "component": [
-            1,
-            2,
-            3,
-            4,
-            5,
-            347,
-            222,
-            223
-        ],
-        "diameter": 4,
-        "density": 0.125
-    },
-    {
-        "node_number": 5,
-        "repo_name": "amphp/amp",
-        "component": [
-            1,
-            2,
-            3,
-            4,
-            5,
-            347,
-            222,
-            223
-        ],
-        "diameter": 4,
-        "density": 0.125
-    },
-    {
-        "node_number": 347,
-        "repo_name": "amphp/amp",
-        "component": [
-            1,
-            2,
-            3,
-            4,
-            5,
-            347,
-            222,
-            223
-        ],
-        "diameter": 4,
-        "density": 0.125
-    },
-    {
-        "node_number": 222,
-        "repo_name": "amphp/amp",
-        "component": [
-            1,
-            2,
-            3,
-            4,
-            5,
-            347,
-            222,
-            223
-        ],
-        "diameter": 4,
-        "density": 0.125
-    },
-    {
-        "node_number": 223,
-        "repo_name": "amphp/amp",
-        "component": [
-            1,
-            2,
-            3,
-            4,
-            5,
-            347,
-            222,
-            223
-        ],
-        "diameter": 4,
-        "density": 0.125
-    },
-    {
-        "node_number": 346,
-        "repo_name": "amphp/amp",
-        "component": [
-            346
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 345,
-        "repo_name": "amphp/amp",
-        "component": [
-            345
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 344,
-        "repo_name": "amphp/amp",
-        "component": [
-            344
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 342,
-        "repo_name": "amphp/amp",
-        "component": [
-            342
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 340,
-        "repo_name": "amphp/amp",
-        "component": [
+        "nodes": [
             340,
             341
         ],
@@ -631,28 +100,9 @@
         "density": 0.5
     },
     {
-        "node_number": 341,
+        "key": 9,
         "repo_name": "amphp/amp",
-        "component": [
-            340,
-            341
-        ],
-        "diameter": 1,
-        "density": 0.5
-    },
-    {
-        "node_number": 339,
-        "repo_name": "amphp/amp",
-        "component": [
-            339
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 160,
-        "repo_name": "amphp/amp",
-        "component": [
+        "nodes": [
             160,
             322,
             162,
@@ -663,88 +113,9 @@
         "density": 0.25
     },
     {
-        "node_number": 162,
+        "key": 10,
         "repo_name": "amphp/amp",
-        "component": [
-            160,
-            322,
-            162,
-            265,
-            338
-        ],
-        "diameter": 3,
-        "density": 0.25
-    },
-    {
-        "node_number": 322,
-        "repo_name": "amphp/amp",
-        "component": [
-            160,
-            322,
-            162,
-            265,
-            338
-        ],
-        "diameter": 3,
-        "density": 0.25
-    },
-    {
-        "node_number": 265,
-        "repo_name": "amphp/amp",
-        "component": [
-            160,
-            322,
-            162,
-            265,
-            338
-        ],
-        "diameter": 3,
-        "density": 0.25
-    },
-    {
-        "node_number": 338,
-        "repo_name": "amphp/amp",
-        "component": [
-            160,
-            322,
-            162,
-            265,
-            338
-        ],
-        "diameter": 3,
-        "density": 0.25
-    },
-    {
-        "node_number": 337,
-        "repo_name": "amphp/amp",
-        "component": [
-            337
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 336,
-        "repo_name": "amphp/amp",
-        "component": [
-            336
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 335,
-        "repo_name": "amphp/amp",
-        "component": [
-            335
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 305,
-        "repo_name": "amphp/amp",
-        "component": [
+        "nodes": [
             305,
             306,
             301,
@@ -754,54 +125,9 @@
         "density": 0.25
     },
     {
-        "node_number": 306,
+        "key": 11,
         "repo_name": "amphp/amp",
-        "component": [
-            305,
-            306,
-            301,
-            334
-        ],
-        "diameter": 2,
-        "density": 0.25
-    },
-    {
-        "node_number": 301,
-        "repo_name": "amphp/amp",
-        "component": [
-            305,
-            306,
-            301,
-            334
-        ],
-        "diameter": 2,
-        "density": 0.25
-    },
-    {
-        "node_number": 334,
-        "repo_name": "amphp/amp",
-        "component": [
-            305,
-            306,
-            301,
-            334
-        ],
-        "diameter": 2,
-        "density": 0.25
-    },
-    {
-        "node_number": 333,
-        "repo_name": "amphp/amp",
-        "component": [
-            333
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 331,
-        "repo_name": "amphp/amp",
-        "component": [
+        "nodes": [
             331,
             332
         ],
@@ -809,19 +135,9 @@
         "density": 0.5
     },
     {
-        "node_number": 332,
+        "key": 12,
         "repo_name": "amphp/amp",
-        "component": [
-            331,
-            332
-        ],
-        "diameter": 1,
-        "density": 0.5
-    },
-    {
-        "node_number": 329,
-        "repo_name": "amphp/amp",
-        "component": [
+        "nodes": [
             329,
             330
         ],
@@ -829,46 +145,9 @@
         "density": 0.5
     },
     {
-        "node_number": 330,
+        "key": 13,
         "repo_name": "amphp/amp",
-        "component": [
-            329,
-            330
-        ],
-        "diameter": 1,
-        "density": 0.5
-    },
-    {
-        "node_number": 328,
-        "repo_name": "amphp/amp",
-        "component": [
-            328
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 327,
-        "repo_name": "amphp/amp",
-        "component": [
-            327
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 326,
-        "repo_name": "amphp/amp",
-        "component": [
-            326
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 324,
-        "repo_name": "amphp/amp",
-        "component": [
+        "nodes": [
             324,
             325
         ],
@@ -876,73 +155,9 @@
         "density": 0.5
     },
     {
-        "node_number": 325,
+        "key": 14,
         "repo_name": "amphp/amp",
-        "component": [
-            324,
-            325
-        ],
-        "diameter": 1,
-        "density": 0.5
-    },
-    {
-        "node_number": 323,
-        "repo_name": "amphp/amp",
-        "component": [
-            323
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 321,
-        "repo_name": "amphp/amp",
-        "component": [
-            321
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 320,
-        "repo_name": "amphp/amp",
-        "component": [
-            320
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 319,
-        "repo_name": "amphp/amp",
-        "component": [
-            319
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 318,
-        "repo_name": "amphp/amp",
-        "component": [
-            318
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 317,
-        "repo_name": "amphp/amp",
-        "component": [
-            317
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 250,
-        "repo_name": "amphp/amp",
-        "component": [
+        "nodes": [
             250,
             316
         ],
@@ -950,37 +165,9 @@
         "density": 0.5
     },
     {
-        "node_number": 316,
+        "key": 15,
         "repo_name": "amphp/amp",
-        "component": [
-            250,
-            316
-        ],
-        "diameter": 1,
-        "density": 0.5
-    },
-    {
-        "node_number": 315,
-        "repo_name": "amphp/amp",
-        "component": [
-            315
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 314,
-        "repo_name": "amphp/amp",
-        "component": [
-            314
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 84,
-        "repo_name": "amphp/amp",
-        "component": [
+        "nodes": [
             84,
             308,
             309,
@@ -991,124 +178,9 @@
         "density": 0.3
     },
     {
-        "node_number": 309,
+        "key": 16,
         "repo_name": "amphp/amp",
-        "component": [
-            84,
-            308,
-            309,
-            311,
-            313
-        ],
-        "diameter": 2,
-        "density": 0.3
-    },
-    {
-        "node_number": 308,
-        "repo_name": "amphp/amp",
-        "component": [
-            84,
-            308,
-            309,
-            311,
-            313
-        ],
-        "diameter": 2,
-        "density": 0.3
-    },
-    {
-        "node_number": 311,
-        "repo_name": "amphp/amp",
-        "component": [
-            84,
-            308,
-            309,
-            311,
-            313
-        ],
-        "diameter": 2,
-        "density": 0.3
-    },
-    {
-        "node_number": 313,
-        "repo_name": "amphp/amp",
-        "component": [
-            84,
-            308,
-            309,
-            311,
-            313
-        ],
-        "diameter": 2,
-        "density": 0.3
-    },
-    {
-        "node_number": 312,
-        "repo_name": "amphp/amp",
-        "component": [
-            312
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 307,
-        "repo_name": "amphp/amp",
-        "component": [
-            307
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 304,
-        "repo_name": "amphp/amp",
-        "component": [
-            304
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 303,
-        "repo_name": "amphp/amp",
-        "component": [
-            303
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 302,
-        "repo_name": "amphp/amp",
-        "component": [
-            302
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 300,
-        "repo_name": "amphp/amp",
-        "component": [
-            300
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 299,
-        "repo_name": "amphp/amp",
-        "component": [
-            299
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 297,
-        "repo_name": "amphp/amp",
-        "component": [
+        "nodes": [
             297,
             229,
             253
@@ -1117,148 +189,9 @@
         "density": 0.3333333333333333
     },
     {
-        "node_number": 229,
+        "key": 17,
         "repo_name": "amphp/amp",
-        "component": [
-            297,
-            229,
-            253
-        ],
-        "diameter": 2,
-        "density": 0.3333333333333333
-    },
-    {
-        "node_number": 253,
-        "repo_name": "amphp/amp",
-        "component": [
-            297,
-            229,
-            253
-        ],
-        "diameter": 2,
-        "density": 0.3333333333333333
-    },
-    {
-        "node_number": 296,
-        "repo_name": "amphp/amp",
-        "component": [
-            296
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 295,
-        "repo_name": "amphp/amp",
-        "component": [
-            295
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 294,
-        "repo_name": "amphp/amp",
-        "component": [
-            294
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 293,
-        "repo_name": "amphp/amp",
-        "component": [
-            293
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 292,
-        "repo_name": "amphp/amp",
-        "component": [
-            292
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 291,
-        "repo_name": "amphp/amp",
-        "component": [
-            291
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 290,
-        "repo_name": "amphp/amp",
-        "component": [
-            290
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 289,
-        "repo_name": "amphp/amp",
-        "component": [
-            289
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 288,
-        "repo_name": "amphp/amp",
-        "component": [
-            288
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 287,
-        "repo_name": "amphp/amp",
-        "component": [
-            287
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 286,
-        "repo_name": "amphp/amp",
-        "component": [
-            286
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 285,
-        "repo_name": "amphp/amp",
-        "component": [
-            285
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 284,
-        "repo_name": "amphp/amp",
-        "component": [
-            284
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 283,
-        "repo_name": "amphp/amp",
-        "component": [
+        "nodes": [
             283,
             165,
             195
@@ -1267,94 +200,9 @@
         "density": 0.3333333333333333
     },
     {
-        "node_number": 165,
+        "key": 18,
         "repo_name": "amphp/amp",
-        "component": [
-            283,
-            165,
-            195
-        ],
-        "diameter": 2,
-        "density": 0.3333333333333333
-    },
-    {
-        "node_number": 195,
-        "repo_name": "amphp/amp",
-        "component": [
-            283,
-            165,
-            195
-        ],
-        "diameter": 2,
-        "density": 0.3333333333333333
-    },
-    {
-        "node_number": 282,
-        "repo_name": "amphp/amp",
-        "component": [
-            282
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 281,
-        "repo_name": "amphp/amp",
-        "component": [
-            281
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 280,
-        "repo_name": "amphp/amp",
-        "component": [
-            280
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 279,
-        "repo_name": "amphp/amp",
-        "component": [
-            279
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 278,
-        "repo_name": "amphp/amp",
-        "component": [
-            278
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 277,
-        "repo_name": "amphp/amp",
-        "component": [
-            277
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 276,
-        "repo_name": "amphp/amp",
-        "component": [
-            276
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 264,
-        "repo_name": "amphp/amp",
-        "component": [
+        "nodes": [
             264,
             275
         ],
@@ -1362,73 +210,9 @@
         "density": 0.5
     },
     {
-        "node_number": 275,
+        "key": 19,
         "repo_name": "amphp/amp",
-        "component": [
-            264,
-            275
-        ],
-        "diameter": 1,
-        "density": 0.5
-    },
-    {
-        "node_number": 274,
-        "repo_name": "amphp/amp",
-        "component": [
-            274
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 273,
-        "repo_name": "amphp/amp",
-        "component": [
-            273
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 272,
-        "repo_name": "amphp/amp",
-        "component": [
-            272
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 271,
-        "repo_name": "amphp/amp",
-        "component": [
-            271
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 270,
-        "repo_name": "amphp/amp",
-        "component": [
-            270
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 269,
-        "repo_name": "amphp/amp",
-        "component": [
-            269
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 267,
-        "repo_name": "amphp/amp",
-        "component": [
+        "nodes": [
             267,
             268
         ],
@@ -1436,163 +220,9 @@
         "density": 0.5
     },
     {
-        "node_number": 268,
+        "key": 20,
         "repo_name": "amphp/amp",
-        "component": [
-            267,
-            268
-        ],
-        "diameter": 1,
-        "density": 0.5
-    },
-    {
-        "node_number": 266,
-        "repo_name": "amphp/amp",
-        "component": [
-            266
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 263,
-        "repo_name": "amphp/amp",
-        "component": [
-            263
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 262,
-        "repo_name": "amphp/amp",
-        "component": [
-            262
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 261,
-        "repo_name": "amphp/amp",
-        "component": [
-            261
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 260,
-        "repo_name": "amphp/amp",
-        "component": [
-            260
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 259,
-        "repo_name": "amphp/amp",
-        "component": [
-            259
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 258,
-        "repo_name": "amphp/amp",
-        "component": [
-            258
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 257,
-        "repo_name": "amphp/amp",
-        "component": [
-            257
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 256,
-        "repo_name": "amphp/amp",
-        "component": [
-            256
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 255,
-        "repo_name": "amphp/amp",
-        "component": [
-            255
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 254,
-        "repo_name": "amphp/amp",
-        "component": [
-            254
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 252,
-        "repo_name": "amphp/amp",
-        "component": [
-            252
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 251,
-        "repo_name": "amphp/amp",
-        "component": [
-            251
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 249,
-        "repo_name": "amphp/amp",
-        "component": [
-            249
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 248,
-        "repo_name": "amphp/amp",
-        "component": [
-            248
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 247,
-        "repo_name": "amphp/amp",
-        "component": [
-            247
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 244,
-        "repo_name": "amphp/amp",
-        "component": [
+        "nodes": [
             244,
             245,
             246
@@ -1601,121 +231,9 @@
         "density": 0.3333333333333333
     },
     {
-        "node_number": 245,
+        "key": 21,
         "repo_name": "amphp/amp",
-        "component": [
-            244,
-            245,
-            246
-        ],
-        "diameter": 2,
-        "density": 0.3333333333333333
-    },
-    {
-        "node_number": 246,
-        "repo_name": "amphp/amp",
-        "component": [
-            244,
-            245,
-            246
-        ],
-        "diameter": 2,
-        "density": 0.3333333333333333
-    },
-    {
-        "node_number": 243,
-        "repo_name": "amphp/amp",
-        "component": [
-            243
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 242,
-        "repo_name": "amphp/amp",
-        "component": [
-            242
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 241,
-        "repo_name": "amphp/amp",
-        "component": [
-            241
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 240,
-        "repo_name": "amphp/amp",
-        "component": [
-            240
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 239,
-        "repo_name": "amphp/amp",
-        "component": [
-            239
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 238,
-        "repo_name": "amphp/amp",
-        "component": [
-            238
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 237,
-        "repo_name": "amphp/amp",
-        "component": [
-            237
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 236,
-        "repo_name": "amphp/amp",
-        "component": [
-            236
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 235,
-        "repo_name": "amphp/amp",
-        "component": [
-            235
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 234,
-        "repo_name": "amphp/amp",
-        "component": [
-            234
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 232,
-        "repo_name": "amphp/amp",
-        "component": [
+        "nodes": [
             232,
             233
         ],
@@ -1723,55 +241,9 @@
         "density": 0.5
     },
     {
-        "node_number": 233,
+        "key": 22,
         "repo_name": "amphp/amp",
-        "component": [
-            232,
-            233
-        ],
-        "diameter": 1,
-        "density": 0.5
-    },
-    {
-        "node_number": 231,
-        "repo_name": "amphp/amp",
-        "component": [
-            231
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 230,
-        "repo_name": "amphp/amp",
-        "component": [
-            230
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 228,
-        "repo_name": "amphp/amp",
-        "component": [
-            228
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 227,
-        "repo_name": "amphp/amp",
-        "component": [
-            227
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 225,
-        "repo_name": "amphp/amp",
-        "component": [
+        "nodes": [
             225,
             226
         ],
@@ -1779,46 +251,9 @@
         "density": 0.5
     },
     {
-        "node_number": 226,
+        "key": 23,
         "repo_name": "amphp/amp",
-        "component": [
-            225,
-            226
-        ],
-        "diameter": 1,
-        "density": 0.5
-    },
-    {
-        "node_number": 224,
-        "repo_name": "amphp/amp",
-        "component": [
-            224
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 221,
-        "repo_name": "amphp/amp",
-        "component": [
-            221
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 220,
-        "repo_name": "amphp/amp",
-        "component": [
-            220
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 177,
-        "repo_name": "amphp/amp",
-        "component": [
+        "nodes": [
             177,
             219
         ],
@@ -1826,19 +261,9 @@
         "density": 0.5
     },
     {
-        "node_number": 219,
+        "key": 24,
         "repo_name": "amphp/amp",
-        "component": [
-            177,
-            219
-        ],
-        "diameter": 1,
-        "density": 0.5
-    },
-    {
-        "node_number": 217,
-        "repo_name": "amphp/amp",
-        "component": [
+        "nodes": [
             217,
             218
         ],
@@ -1846,28 +271,9 @@
         "density": 0.5
     },
     {
-        "node_number": 218,
+        "key": 25,
         "repo_name": "amphp/amp",
-        "component": [
-            217,
-            218
-        ],
-        "diameter": 1,
-        "density": 0.5
-    },
-    {
-        "node_number": 216,
-        "repo_name": "amphp/amp",
-        "component": [
-            216
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 208,
-        "repo_name": "amphp/amp",
-        "component": [
+        "nodes": [
             208,
             215
         ],
@@ -1875,145 +281,9 @@
         "density": 0.5
     },
     {
-        "node_number": 215,
+        "key": 26,
         "repo_name": "amphp/amp",
-        "component": [
-            208,
-            215
-        ],
-        "diameter": 1,
-        "density": 0.5
-    },
-    {
-        "node_number": 214,
-        "repo_name": "amphp/amp",
-        "component": [
-            214
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 212,
-        "repo_name": "amphp/amp",
-        "component": [
-            212
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 211,
-        "repo_name": "amphp/amp",
-        "component": [
-            211
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 210,
-        "repo_name": "amphp/amp",
-        "component": [
-            210
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 209,
-        "repo_name": "amphp/amp",
-        "component": [
-            209
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 207,
-        "repo_name": "amphp/amp",
-        "component": [
-            207
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 206,
-        "repo_name": "amphp/amp",
-        "component": [
-            206
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 205,
-        "repo_name": "amphp/amp",
-        "component": [
-            205
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 204,
-        "repo_name": "amphp/amp",
-        "component": [
-            204
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 203,
-        "repo_name": "amphp/amp",
-        "component": [
-            203
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 202,
-        "repo_name": "amphp/amp",
-        "component": [
-            202
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 201,
-        "repo_name": "amphp/amp",
-        "component": [
-            201
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 200,
-        "repo_name": "amphp/amp",
-        "component": [
-            200
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 199,
-        "repo_name": "amphp/amp",
-        "component": [
-            199
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 197,
-        "repo_name": "amphp/amp",
-        "component": [
+        "nodes": [
             197,
             198,
             168,
@@ -2025,97 +295,9 @@
         "density": 0.16666666666666666
     },
     {
-        "node_number": 198,
+        "key": 27,
         "repo_name": "amphp/amp",
-        "component": [
-            197,
-            198,
-            168,
-            157,
-            189,
-            190
-        ],
-        "diameter": 5,
-        "density": 0.16666666666666666
-    },
-    {
-        "node_number": 168,
-        "repo_name": "amphp/amp",
-        "component": [
-            197,
-            198,
-            168,
-            157,
-            189,
-            190
-        ],
-        "diameter": 5,
-        "density": 0.16666666666666666
-    },
-    {
-        "node_number": 157,
-        "repo_name": "amphp/amp",
-        "component": [
-            197,
-            198,
-            168,
-            157,
-            189,
-            190
-        ],
-        "diameter": 5,
-        "density": 0.16666666666666666
-    },
-    {
-        "node_number": 189,
-        "repo_name": "amphp/amp",
-        "component": [
-            197,
-            198,
-            168,
-            157,
-            189,
-            190
-        ],
-        "diameter": 5,
-        "density": 0.16666666666666666
-    },
-    {
-        "node_number": 190,
-        "repo_name": "amphp/amp",
-        "component": [
-            197,
-            198,
-            168,
-            157,
-            189,
-            190
-        ],
-        "diameter": 5,
-        "density": 0.16666666666666666
-    },
-    {
-        "node_number": 196,
-        "repo_name": "amphp/amp",
-        "component": [
-            196
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 194,
-        "repo_name": "amphp/amp",
-        "component": [
-            194
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 192,
-        "repo_name": "amphp/amp",
-        "component": [
+        "nodes": [
             192,
             193
         ],
@@ -2123,136 +305,9 @@
         "density": 0.5
     },
     {
-        "node_number": 193,
+        "key": 28,
         "repo_name": "amphp/amp",
-        "component": [
-            192,
-            193
-        ],
-        "diameter": 1,
-        "density": 0.5
-    },
-    {
-        "node_number": 191,
-        "repo_name": "amphp/amp",
-        "component": [
-            191
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 188,
-        "repo_name": "amphp/amp",
-        "component": [
-            188
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 187,
-        "repo_name": "amphp/amp",
-        "component": [
-            187
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 186,
-        "repo_name": "amphp/amp",
-        "component": [
-            186
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 185,
-        "repo_name": "amphp/amp",
-        "component": [
-            185
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 184,
-        "repo_name": "amphp/amp",
-        "component": [
-            184
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 183,
-        "repo_name": "amphp/amp",
-        "component": [
-            183
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 182,
-        "repo_name": "amphp/amp",
-        "component": [
-            182
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 181,
-        "repo_name": "amphp/amp",
-        "component": [
-            181
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 180,
-        "repo_name": "amphp/amp",
-        "component": [
-            180
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 179,
-        "repo_name": "amphp/amp",
-        "component": [
-            179
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 178,
-        "repo_name": "amphp/amp",
-        "component": [
-            178
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 176,
-        "repo_name": "amphp/amp",
-        "component": [
-            176
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 144,
-        "repo_name": "amphp/amp",
-        "component": [
+        "nodes": [
             144,
             173
         ],
@@ -2260,82 +315,9 @@
         "density": 0.5
     },
     {
-        "node_number": 173,
+        "key": 29,
         "repo_name": "amphp/amp",
-        "component": [
-            144,
-            173
-        ],
-        "diameter": 1,
-        "density": 0.5
-    },
-    {
-        "node_number": 172,
-        "repo_name": "amphp/amp",
-        "component": [
-            172
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 171,
-        "repo_name": "amphp/amp",
-        "component": [
-            171
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 170,
-        "repo_name": "amphp/amp",
-        "component": [
-            170
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 169,
-        "repo_name": "amphp/amp",
-        "component": [
-            169
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 167,
-        "repo_name": "amphp/amp",
-        "component": [
-            167
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 166,
-        "repo_name": "amphp/amp",
-        "component": [
-            166
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 164,
-        "repo_name": "amphp/amp",
-        "component": [
-            164
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 163,
-        "repo_name": "amphp/amp",
-        "component": [
+        "nodes": [
             163,
             159
         ],
@@ -2343,37 +325,9 @@
         "density": 0.5
     },
     {
-        "node_number": 159,
+        "key": 30,
         "repo_name": "amphp/amp",
-        "component": [
-            163,
-            159
-        ],
-        "diameter": 1,
-        "density": 0.5
-    },
-    {
-        "node_number": 161,
-        "repo_name": "amphp/amp",
-        "component": [
-            161
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 158,
-        "repo_name": "amphp/amp",
-        "component": [
-            158
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 155,
-        "repo_name": "amphp/amp",
-        "component": [
+        "nodes": [
             155,
             156
         ],
@@ -2381,172 +335,9 @@
         "density": 0.5
     },
     {
-        "node_number": 156,
+        "key": 31,
         "repo_name": "amphp/amp",
-        "component": [
-            155,
-            156
-        ],
-        "diameter": 1,
-        "density": 0.5
-    },
-    {
-        "node_number": 154,
-        "repo_name": "amphp/amp",
-        "component": [
-            154
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 153,
-        "repo_name": "amphp/amp",
-        "component": [
-            153
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 152,
-        "repo_name": "amphp/amp",
-        "component": [
-            152
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 151,
-        "repo_name": "amphp/amp",
-        "component": [
-            151
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 150,
-        "repo_name": "amphp/amp",
-        "component": [
-            150
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 149,
-        "repo_name": "amphp/amp",
-        "component": [
-            149
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 148,
-        "repo_name": "amphp/amp",
-        "component": [
-            148
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 147,
-        "repo_name": "amphp/amp",
-        "component": [
-            147
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 146,
-        "repo_name": "amphp/amp",
-        "component": [
-            146
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 145,
-        "repo_name": "amphp/amp",
-        "component": [
-            145
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 143,
-        "repo_name": "amphp/amp",
-        "component": [
-            143
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 142,
-        "repo_name": "amphp/amp",
-        "component": [
-            142
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 141,
-        "repo_name": "amphp/amp",
-        "component": [
-            141
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 140,
-        "repo_name": "amphp/amp",
-        "component": [
-            140
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 139,
-        "repo_name": "amphp/amp",
-        "component": [
-            139
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 138,
-        "repo_name": "amphp/amp",
-        "component": [
-            138
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 137,
-        "repo_name": "amphp/amp",
-        "component": [
-            137
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 136,
-        "repo_name": "amphp/amp",
-        "component": [
+        "nodes": [
             136,
             109
         ],
@@ -2554,172 +345,9 @@
         "density": 0.5
     },
     {
-        "node_number": 109,
+        "key": 32,
         "repo_name": "amphp/amp",
-        "component": [
-            136,
-            109
-        ],
-        "diameter": 1,
-        "density": 0.5
-    },
-    {
-        "node_number": 135,
-        "repo_name": "amphp/amp",
-        "component": [
-            135
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 134,
-        "repo_name": "amphp/amp",
-        "component": [
-            134
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 133,
-        "repo_name": "amphp/amp",
-        "component": [
-            133
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 132,
-        "repo_name": "amphp/amp",
-        "component": [
-            132
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 131,
-        "repo_name": "amphp/amp",
-        "component": [
-            131
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 130,
-        "repo_name": "amphp/amp",
-        "component": [
-            130
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 129,
-        "repo_name": "amphp/amp",
-        "component": [
-            129
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 128,
-        "repo_name": "amphp/amp",
-        "component": [
-            128
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 127,
-        "repo_name": "amphp/amp",
-        "component": [
-            127
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 126,
-        "repo_name": "amphp/amp",
-        "component": [
-            126
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 125,
-        "repo_name": "amphp/amp",
-        "component": [
-            125
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 124,
-        "repo_name": "amphp/amp",
-        "component": [
-            124
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 123,
-        "repo_name": "amphp/amp",
-        "component": [
-            123
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 122,
-        "repo_name": "amphp/amp",
-        "component": [
-            122
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 121,
-        "repo_name": "amphp/amp",
-        "component": [
-            121
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 120,
-        "repo_name": "amphp/amp",
-        "component": [
-            120
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 119,
-        "repo_name": "amphp/amp",
-        "component": [
-            119
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 117,
-        "repo_name": "amphp/amp",
-        "component": [
+        "nodes": [
             117,
             118
         ],
@@ -2727,73 +355,9 @@
         "density": 0.5
     },
     {
-        "node_number": 118,
+        "key": 33,
         "repo_name": "amphp/amp",
-        "component": [
-            117,
-            118
-        ],
-        "diameter": 1,
-        "density": 0.5
-    },
-    {
-        "node_number": 116,
-        "repo_name": "amphp/amp",
-        "component": [
-            116
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 115,
-        "repo_name": "amphp/amp",
-        "component": [
-            115
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 114,
-        "repo_name": "amphp/amp",
-        "component": [
-            114
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 113,
-        "repo_name": "amphp/amp",
-        "component": [
-            113
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 112,
-        "repo_name": "amphp/amp",
-        "component": [
-            112
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 111,
-        "repo_name": "amphp/amp",
-        "component": [
-            111
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 96,
-        "repo_name": "amphp/amp",
-        "component": [
+        "nodes": [
             96,
             98,
             110
@@ -2802,94 +366,9 @@
         "density": 0.3333333333333333
     },
     {
-        "node_number": 98,
+        "key": 34,
         "repo_name": "amphp/amp",
-        "component": [
-            96,
-            98,
-            110
-        ],
-        "diameter": 2,
-        "density": 0.3333333333333333
-    },
-    {
-        "node_number": 110,
-        "repo_name": "amphp/amp",
-        "component": [
-            96,
-            98,
-            110
-        ],
-        "diameter": 2,
-        "density": 0.3333333333333333
-    },
-    {
-        "node_number": 108,
-        "repo_name": "amphp/amp",
-        "component": [
-            108
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 107,
-        "repo_name": "amphp/amp",
-        "component": [
-            107
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 106,
-        "repo_name": "amphp/amp",
-        "component": [
-            106
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 105,
-        "repo_name": "amphp/amp",
-        "component": [
-            105
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 104,
-        "repo_name": "amphp/amp",
-        "component": [
-            104
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 103,
-        "repo_name": "amphp/amp",
-        "component": [
-            103
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 102,
-        "repo_name": "amphp/amp",
-        "component": [
-            102
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 100,
-        "repo_name": "amphp/amp",
-        "component": [
+        "nodes": [
             100,
             101
         ],
@@ -2897,118 +376,9 @@
         "density": 0.5
     },
     {
-        "node_number": 101,
+        "key": 35,
         "repo_name": "amphp/amp",
-        "component": [
-            100,
-            101
-        ],
-        "diameter": 1,
-        "density": 0.5
-    },
-    {
-        "node_number": 99,
-        "repo_name": "amphp/amp",
-        "component": [
-            99
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 97,
-        "repo_name": "amphp/amp",
-        "component": [
-            97
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 95,
-        "repo_name": "amphp/amp",
-        "component": [
-            95
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 94,
-        "repo_name": "amphp/amp",
-        "component": [
-            94
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 93,
-        "repo_name": "amphp/amp",
-        "component": [
-            93
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 92,
-        "repo_name": "amphp/amp",
-        "component": [
-            92
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 91,
-        "repo_name": "amphp/amp",
-        "component": [
-            91
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 90,
-        "repo_name": "amphp/amp",
-        "component": [
-            90
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 89,
-        "repo_name": "amphp/amp",
-        "component": [
-            89
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 88,
-        "repo_name": "amphp/amp",
-        "component": [
-            88
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 87,
-        "repo_name": "amphp/amp",
-        "component": [
-            87
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 77,
-        "repo_name": "amphp/amp",
-        "component": [
+        "nodes": [
             77,
             86
         ],
@@ -3016,82 +386,9 @@
         "density": 0.5
     },
     {
-        "node_number": 86,
+        "key": 36,
         "repo_name": "amphp/amp",
-        "component": [
-            77,
-            86
-        ],
-        "diameter": 1,
-        "density": 0.5
-    },
-    {
-        "node_number": 85,
-        "repo_name": "amphp/amp",
-        "component": [
-            85
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 83,
-        "repo_name": "amphp/amp",
-        "component": [
-            83
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 82,
-        "repo_name": "amphp/amp",
-        "component": [
-            82
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 81,
-        "repo_name": "amphp/amp",
-        "component": [
-            81
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 80,
-        "repo_name": "amphp/amp",
-        "component": [
-            80
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 79,
-        "repo_name": "amphp/amp",
-        "component": [
-            79
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 78,
-        "repo_name": "amphp/amp",
-        "component": [
-            78
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 75,
-        "repo_name": "amphp/amp",
-        "component": [
+        "nodes": [
             75,
             76
         ],
@@ -3099,37 +396,9 @@
         "density": 0.5
     },
     {
-        "node_number": 76,
+        "key": 37,
         "repo_name": "amphp/amp",
-        "component": [
-            75,
-            76
-        ],
-        "diameter": 1,
-        "density": 0.5
-    },
-    {
-        "node_number": 74,
-        "repo_name": "amphp/amp",
-        "component": [
-            74
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 73,
-        "repo_name": "amphp/amp",
-        "component": [
-            73
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 72,
-        "repo_name": "amphp/amp",
-        "component": [
+        "nodes": [
             72,
             68
         ],
@@ -3137,127 +406,9 @@
         "density": 0.5
     },
     {
-        "node_number": 68,
+        "key": 38,
         "repo_name": "amphp/amp",
-        "component": [
-            72,
-            68
-        ],
-        "diameter": 1,
-        "density": 0.5
-    },
-    {
-        "node_number": 71,
-        "repo_name": "amphp/amp",
-        "component": [
-            71
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 70,
-        "repo_name": "amphp/amp",
-        "component": [
-            70
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 69,
-        "repo_name": "amphp/amp",
-        "component": [
-            69
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 67,
-        "repo_name": "amphp/amp",
-        "component": [
-            67
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 66,
-        "repo_name": "amphp/amp",
-        "component": [
-            66
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 65,
-        "repo_name": "amphp/amp",
-        "component": [
-            65
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 64,
-        "repo_name": "amphp/amp",
-        "component": [
-            64
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 63,
-        "repo_name": "amphp/amp",
-        "component": [
-            63
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 62,
-        "repo_name": "amphp/amp",
-        "component": [
-            62
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 61,
-        "repo_name": "amphp/amp",
-        "component": [
-            61
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 60,
-        "repo_name": "amphp/amp",
-        "component": [
-            60
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 59,
-        "repo_name": "amphp/amp",
-        "component": [
-            59
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 57,
-        "repo_name": "amphp/amp",
-        "component": [
+        "nodes": [
             57,
             58
         ],
@@ -3265,127 +416,9 @@
         "density": 0.5
     },
     {
-        "node_number": 58,
+        "key": 39,
         "repo_name": "amphp/amp",
-        "component": [
-            57,
-            58
-        ],
-        "diameter": 1,
-        "density": 0.5
-    },
-    {
-        "node_number": 56,
-        "repo_name": "amphp/amp",
-        "component": [
-            56
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 55,
-        "repo_name": "amphp/amp",
-        "component": [
-            55
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 54,
-        "repo_name": "amphp/amp",
-        "component": [
-            54
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 53,
-        "repo_name": "amphp/amp",
-        "component": [
-            53
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 52,
-        "repo_name": "amphp/amp",
-        "component": [
-            52
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 51,
-        "repo_name": "amphp/amp",
-        "component": [
-            51
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 50,
-        "repo_name": "amphp/amp",
-        "component": [
-            50
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 49,
-        "repo_name": "amphp/amp",
-        "component": [
-            49
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 48,
-        "repo_name": "amphp/amp",
-        "component": [
-            48
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 47,
-        "repo_name": "amphp/amp",
-        "component": [
-            47
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 46,
-        "repo_name": "amphp/amp",
-        "component": [
-            46
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 45,
-        "repo_name": "amphp/amp",
-        "component": [
-            45
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 43,
-        "repo_name": "amphp/amp",
-        "component": [
+        "nodes": [
             43,
             44
         ],
@@ -3393,348 +426,13 @@
         "density": 0.5
     },
     {
-        "node_number": 44,
+        "key": 40,
         "repo_name": "amphp/amp",
-        "component": [
-            43,
-            44
-        ],
-        "diameter": 1,
-        "density": 0.5
-    },
-    {
-        "node_number": 42,
-        "repo_name": "amphp/amp",
-        "component": [
-            42
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 41,
-        "repo_name": "amphp/amp",
-        "component": [
-            41
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 40,
-        "repo_name": "amphp/amp",
-        "component": [
-            40
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 39,
-        "repo_name": "amphp/amp",
-        "component": [
-            39
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 38,
-        "repo_name": "amphp/amp",
-        "component": [
-            38
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 37,
-        "repo_name": "amphp/amp",
-        "component": [
-            37
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 36,
-        "repo_name": "amphp/amp",
-        "component": [
-            36
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 35,
-        "repo_name": "amphp/amp",
-        "component": [
-            35
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 34,
-        "repo_name": "amphp/amp",
-        "component": [
-            34
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 33,
-        "repo_name": "amphp/amp",
-        "component": [
-            33
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 32,
-        "repo_name": "amphp/amp",
-        "component": [
-            32
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 31,
-        "repo_name": "amphp/amp",
-        "component": [
-            31
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 30,
-        "repo_name": "amphp/amp",
-        "component": [
-            30
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 29,
-        "repo_name": "amphp/amp",
-        "component": [
-            29
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 28,
-        "repo_name": "amphp/amp",
-        "component": [
-            28
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 27,
-        "repo_name": "amphp/amp",
-        "component": [
-            27
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 26,
-        "repo_name": "amphp/amp",
-        "component": [
-            26
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 25,
-        "repo_name": "amphp/amp",
-        "component": [
-            25
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 24,
-        "repo_name": "amphp/amp",
-        "component": [
-            24
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 23,
-        "repo_name": "amphp/amp",
-        "component": [
-            23
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 22,
-        "repo_name": "amphp/amp",
-        "component": [
-            22
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 21,
-        "repo_name": "amphp/amp",
-        "component": [
-            21
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 20,
-        "repo_name": "amphp/amp",
-        "component": [
-            20
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 19,
-        "repo_name": "amphp/amp",
-        "component": [
-            19
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 18,
-        "repo_name": "amphp/amp",
-        "component": [
-            18
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 17,
-        "repo_name": "amphp/amp",
-        "component": [
-            17
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 16,
-        "repo_name": "amphp/amp",
-        "component": [
+        "nodes": [
             16,
             14
         ],
         "diameter": 1,
         "density": 0.5
-    },
-    {
-        "node_number": 14,
-        "repo_name": "amphp/amp",
-        "component": [
-            16,
-            14
-        ],
-        "diameter": 1,
-        "density": 0.5
-    },
-    {
-        "node_number": 15,
-        "repo_name": "amphp/amp",
-        "component": [
-            15
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 13,
-        "repo_name": "amphp/amp",
-        "component": [
-            13
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 12,
-        "repo_name": "amphp/amp",
-        "component": [
-            12
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 11,
-        "repo_name": "amphp/amp",
-        "component": [
-            11
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 10,
-        "repo_name": "amphp/amp",
-        "component": [
-            10
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 9,
-        "repo_name": "amphp/amp",
-        "component": [
-            9
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 8,
-        "repo_name": "amphp/amp",
-        "component": [
-            8
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 7,
-        "repo_name": "amphp/amp",
-        "component": [
-            7
-        ],
-        "diameter": 0,
-        "density": 0.0
-    },
-    {
-        "node_number": 6,
-        "repo_name": "amphp/amp",
-        "component": [
-            6
-        ],
-        "diameter": 0,
-        "density": 0.0
     }
 ]
