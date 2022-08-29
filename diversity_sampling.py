@@ -42,8 +42,6 @@ def find_similar_components(component, component_universe, dimensions):
     for component_in_universe in component_universe:
         if component_is_similar(component, component_in_universe, dimensions):
             similar_components.append(component_in_universe)
-        else:
-            print('Not similar')
     return similar_components
 
 def score_components(sample, universe, space, config):
@@ -84,7 +82,7 @@ def next_components(K, preselected_components, component_universe, dimensions, c
 
 def main():
     condensed_file = read_json_from_file()
-    sample = next_components(10, [], condensed_file, ['diameter', 'density'], None)
+    sample = next_components(100, [], condensed_file, ['diameter', 'density'], None)
     score = score_components(sample, condensed_file, ['diameter', 'density'], ['diameter', 'density'])
     print(score)
     write_json_to_file(sample)
