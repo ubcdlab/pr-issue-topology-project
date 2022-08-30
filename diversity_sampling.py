@@ -16,11 +16,11 @@ def write_json_to_file(nodes):
         f.write(json.dumps(nodes, sort_keys=False, indent=4))
 
 def component_is_similar(component_1, component_2, all_dimensions):
-    components_are_similar = True
     for dimension in all_dimensions:
         similarity = compare_component_dimension_similarity(component_1, component_2, dimension, 0.1)
-        components_are_similar = components_are_similar and similarity
-    return components_are_similar
+        if similarity is False:
+            return False
+    return True
 
 def compare_component_dimension_similarity(component_1, component_2, dimension, threshold=0.5):
     numeric = None
