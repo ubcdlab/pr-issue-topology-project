@@ -3,7 +3,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 
@@ -13,7 +12,7 @@ public class diversity_sampling {
     public static void main(String[] args) {
         try {
             HashSet<Component> universe = read_csv_from_file();
-            HashSet<Component> sample = next_components(10, universe);
+            HashSet<Component> sample = next_components(50, universe);
             float score = score_component(sample, universe);
             System.out.println(score);
             System.out.println(sample);
@@ -23,7 +22,7 @@ public class diversity_sampling {
         }
     }
     
-    private static void write_to_csv(ArrayList<Component> sample) throws IOException {
+    private static void write_to_csv(HashSet<Component> sample) throws IOException {
         File file = new File("./unified_json/java_sample.csv");
         FileWriter outputfile = new FileWriter(file);
 
@@ -31,8 +30,9 @@ public class diversity_sampling {
 
         String[] header = { "key", "repo_name", "size", "diameter", "density"};
         writer.writeNext(header);
-        for (int i = 0; i < sample.size(); i++) {
-            Component entry = sample.get(i);
+        Iterator<Component> it = sample.iterator();
+        while (it.hasNext()) {
+            Component entry = it.next();
             String[] row_entry = { Integer.toString(entry.key), 
                 entry.repo_name, 
                 Integer.toString(entry.size), 
@@ -43,11 +43,12 @@ public class diversity_sampling {
         writer.close();
     }
 
-    private static float score_component(ArrayList<Component> sample, ArrayList<Component> universe) {
+    private static float score_component(HashSet<Component> sample, HashSet<Component> universe) {
         HashSet<Component> coverage = new HashSet<Component>();
-        for (int i = 0; i < sample.size(); i++) {
-            Component component = sample.get(i);
-            ArrayList<Component> similar_components = find_similar_components(component, universe);
+        Iterator<Component> it = sample.iterator();
+        while (it.hasNext()) {
+            Component component = it.next();
+            HashSet<Component> similar_components = find_similar_components(component, universe);
             coverage.addAll(similar_components);
         }
         float score = (float) coverage.size() / universe.size();
@@ -79,17 +80,18 @@ public class diversity_sampling {
         return similar_components;
     }
 
-    private static ArrayList<Component> next_components(int K, ArrayList<Component> component_universe) {
-        ArrayList<Component> sample = new ArrayList<Component>();
-        ArrayList<Component> candidates = new ArrayList<>(component_universe);
-        ArrayList<Component> c_space = new ArrayList<>();
+    private static HashSet<Component> next_components(int K, HashSet<Component> component_universe) {
+        HashSet<Component> sample = new HashSet<Component>();
+        HashSet<Component> candidates = new HashSet<>(component_universe);
+        HashSet<Component> c_space = new HashSet<>();
         Component candidate;
         for (int i = 0; i < K; i++) {
-            ArrayList<Component> c_best = new ArrayList<Component>();
+            HashSet<Component> c_best = new HashSet<Component>();
             Component p_best = null;
-            for (int j = 0; j < candidates.size(); j++) {
-                candidate = candidates.get(j);
-                ArrayList<Component> new_coverage_by_candidate = find_similar_components(candidate, candidates);
+            Iterator<Component> it = candidates.iterator();
+            while (it.hasNext()) {
+                candidate = it.next();
+                HashSet<Component> new_coverage_by_candidate = find_similar_components(candidate, candidates);
                 new_coverage_by_candidate.removeAll(c_space);
                 if (new_coverage_by_candidate.size() > c_best.size()) {
                     c_best = new_coverage_by_candidate;
