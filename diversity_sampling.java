@@ -9,7 +9,7 @@ import com.opencsv.CSVWriter;
 
 public class diversity_sampling {
 
-    private static final int SAMPLE_SIZE = 50;
+    private static final int SAMPLE_SIZE = 80;
     private static final float DEFAULT_NUMERIC_METRIC_SIMILARITY_THRESHOLD = 0.1f;
     public static void main(String[] args) {
         try {
