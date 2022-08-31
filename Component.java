@@ -15,7 +15,7 @@ public class Component {
 
     @Override
     public String toString() {
-        return this.key + " " + this.repo_name;
+        return this.key + " " + this.repo_name + " " + this.size + " " + this.density + " " + this.diameter;
     }
 
     @Override

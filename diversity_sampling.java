@@ -1,28 +1,45 @@
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-/*
-    int key;
-    String repo_name;
-    int size;
-    int diameter;
-    float density;
- */
+import com.opencsv.CSVWriter;
 
 public class diversity_sampling {
     public static void main(String[] args) {
         try {
             ArrayList<Component> universe = read_csv_from_file();
-            ArrayList<Component> sample = next_components(100, universe);
+            ArrayList<Component> sample = next_components(10, universe);
             float score = score_component(sample, universe);
             System.out.println(score);
             System.out.println(sample);
-            
+            write_to_csv(sample);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    
+    private static void write_to_csv(ArrayList<Component> sample) throws IOException {
+        File file = new File("./unified_json/java_sample.csv");
+        FileWriter outputfile = new FileWriter(file);
+
+        CSVWriter writer = new CSVWriter(outputfile);
+
+        String[] header = { "key", "repo_name", "size", "diameter", "density"};
+        writer.writeNext(header);
+        for (int i = 0; i < sample.size(); i++) {
+            Component entry = sample.get(i);
+            String[] row_entry = { Integer.toString(entry.key), 
+                entry.repo_name, 
+                Integer.toString(entry.size), 
+                Integer.toString(entry.diameter), 
+                Float.toString(entry.density)};
+            writer.writeNext(row_entry);
+        }
+        writer.close();
     }
 
     private static float score_component(ArrayList<Component> sample, ArrayList<Component> universe) {
@@ -38,19 +55,21 @@ public class diversity_sampling {
     
     private static Boolean component_is_similar(Component a, Component b, float threshold) {
         if (threshold == 0.0f) {
+            assert(1 == 0);
             threshold = 0.5f;
         }
 
         return Math.log10(Math.abs(a.density - b.density)) <= threshold && 
         Math.log10(Math.abs(a.diameter - b.diameter)) <= threshold &&
-        a.repo_name.equals(b.repo_name);
+        // a.repo_name.equals(b.repo_name);
+        true;
     }
 
     private static ArrayList<Component> find_similar_components(Component component, ArrayList<Component> universe) {
         ArrayList<Component> similar_components = new ArrayList<>();
         for (int i = 0; i < universe.size(); i++) {
             Component comparer = universe.get(i);
-            if (component_is_similar(component, comparer, 0.5f)) {
+            if (component_is_similar(component, comparer, 0.1f)) {
                 similar_components.add(comparer);
             }
         }
@@ -84,6 +103,7 @@ public class diversity_sampling {
 
     private static ArrayList<Component> read_csv_from_file() throws Exception {
         ArrayList<Component> result = new ArrayList<Component>();
+        // BufferedReader br = new BufferedReader(new FileReader("./unified_json/result_test.csv"));
         BufferedReader br = new BufferedReader(new FileReader("./unified_json/result_simple.csv"));
         String line = "";
         br.readLine();
