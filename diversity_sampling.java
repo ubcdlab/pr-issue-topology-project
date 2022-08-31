@@ -5,14 +5,15 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 
 import com.opencsv.CSVWriter;
 
 public class diversity_sampling {
     public static void main(String[] args) {
         try {
-            ArrayList<Component> universe = read_csv_from_file();
-            ArrayList<Component> sample = next_components(10, universe);
+            HashSet<Component> universe = read_csv_from_file();
+            HashSet<Component> sample = next_components(10, universe);
             float score = score_component(sample, universe);
             System.out.println(score);
             System.out.println(sample);
@@ -58,17 +59,19 @@ public class diversity_sampling {
             assert(1 == 0);
             threshold = 0.5f;
         }
-
-        return Math.log10(Math.abs(a.density - b.density)) <= threshold && 
-        Math.log10(Math.abs(a.diameter - b.diameter)) <= threshold &&
+        Boolean is_similar = Math.abs(Math.log10(a.density) - Math.log10(b.density)) <= threshold && 
+        Math.abs(Math.log10(a.diameter) - Math.log10(b.diameter)) <= threshold &&
+        Math.abs(Math.log10(a.size) - Math.log10(b.size)) <= threshold &&
         // a.repo_name.equals(b.repo_name);
         true;
+        return is_similar;
     }
 
-    private static ArrayList<Component> find_similar_components(Component component, ArrayList<Component> universe) {
-        ArrayList<Component> similar_components = new ArrayList<>();
-        for (int i = 0; i < universe.size(); i++) {
-            Component comparer = universe.get(i);
+    private static HashSet<Component> find_similar_components(Component component, HashSet<Component> universe) {
+        HashSet<Component> similar_components = new HashSet<>();
+        Iterator<Component> it = universe.iterator();
+        while (it.hasNext()) {
+            Component comparer = it.next();
             if (component_is_similar(component, comparer, 0.1f)) {
                 similar_components.add(comparer);
             }
@@ -80,14 +83,16 @@ public class diversity_sampling {
         ArrayList<Component> sample = new ArrayList<Component>();
         ArrayList<Component> candidates = new ArrayList<>(component_universe);
         ArrayList<Component> c_space = new ArrayList<>();
+        Component candidate;
         for (int i = 0; i < K; i++) {
             ArrayList<Component> c_best = new ArrayList<Component>();
             Component p_best = null;
             for (int j = 0; j < candidates.size(); j++) {
-                Component candidate = candidates.get(j);
-                ArrayList<Component> coverage_by_candidate = find_similar_components(candidate, candidates);
-                if (coverage_by_candidate.size() > c_best.size()) {
-                    c_best = coverage_by_candidate;
+                candidate = candidates.get(j);
+                ArrayList<Component> new_coverage_by_candidate = find_similar_components(candidate, candidates);
+                new_coverage_by_candidate.removeAll(c_space);
+                if (new_coverage_by_candidate.size() > c_best.size()) {
+                    c_best = new_coverage_by_candidate;
                     p_best = candidate;
                 } 
             }
@@ -101,8 +106,8 @@ public class diversity_sampling {
         return sample;
     }
 
-    private static ArrayList<Component> read_csv_from_file() throws Exception {
-        ArrayList<Component> result = new ArrayList<Component>();
+    private static HashSet<Component> read_csv_from_file() throws Exception {
+        HashSet<Component> result = new HashSet<Component>();
         // BufferedReader br = new BufferedReader(new FileReader("./unified_json/result_test.csv"));
         BufferedReader br = new BufferedReader(new FileReader("./unified_json/result_simple.csv"));
         String line = "";
