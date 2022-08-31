@@ -5,14 +5,16 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
-
 import com.opencsv.CSVWriter;
 
 public class diversity_sampling {
+
+    private static final int SAMPLE_SIZE = 50;
+    private static final float DEFAULT_NUMERIC_METRIC_SIMILARITY_THRESHOLD = 0.1f;
     public static void main(String[] args) {
         try {
             HashSet<Component> universe = read_csv_from_file();
-            HashSet<Component> sample = next_components(50, universe);
+            HashSet<Component> sample = next_components(SAMPLE_SIZE, universe);
             float score = score_component(sample, universe);
             System.out.println(score);
             System.out.println(sample);
@@ -57,8 +59,7 @@ public class diversity_sampling {
     
     private static Boolean component_is_similar(Component a, Component b, float threshold) {
         if (threshold == 0.0f) {
-            assert(1 == 0);
-            threshold = 0.5f;
+            threshold = DEFAULT_NUMERIC_METRIC_SIMILARITY_THRESHOLD;
         }
         Boolean is_similar = Math.abs(Math.log10(a.density) - Math.log10(b.density)) <= threshold && 
         Math.abs(Math.log10(a.diameter) - Math.log10(b.diameter)) <= threshold &&
@@ -73,7 +74,7 @@ public class diversity_sampling {
         Iterator<Component> it = universe.iterator();
         while (it.hasNext()) {
             Component comparer = it.next();
-            if (component_is_similar(component, comparer, 0.1f)) {
+            if (component_is_similar(component, comparer, DEFAULT_NUMERIC_METRIC_SIMILARITY_THRESHOLD)) {
                 similar_components.add(comparer);
             }
         }
