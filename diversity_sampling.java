@@ -10,8 +10,8 @@ import com.opencsv.CSVWriter;
 
 public class diversity_sampling {
 
-    private static final int SAMPLE_SIZE = 56;
-    private static final float DEFAULT_NUMERIC_METRIC_SIMILARITY_THRESHOLD = 0.1f;
+    private static final int SAMPLE_SIZE = 58;
+    private static final float DEFAULT_NUMERIC_METRIC_SIMILARITY_THRESHOLD = 0.2f;
     private static HashMap<String, HashSet<Component>> cache = new HashMap<String, HashSet<Component>>();
     public static void main(String[] args) {
         try {
@@ -63,7 +63,7 @@ public class diversity_sampling {
         is_similar = Math.abs(Math.log10(a.density) - Math.log10(b.density)) <= threshold && 
         Math.abs(Math.log10(a.diameter) - Math.log10(b.diameter)) <= threshold &&
         Math.abs(Math.log10(a.size) - Math.log10(b.size)) <= threshold && 
-        Math.abs(Math.log10(a.list_of_authors.size() - b.list_of_authors.size())) <= threshold;
+        Math.abs(Math.log10(a.list_of_authors.size()) - Math.log10(b.list_of_authors.size())) <= threshold;
 
         return is_similar;
     }
