@@ -72,15 +72,38 @@ def find_automatic_links(issue_number, issue_body, comments):
             return 'duplicate'
     return 'other'
 
+def find_review_url(review_comment):
+    if hasattr(review_comment, 'issue_url'):
+        return review_comment.issue_url.replace('/pulls/', '/issues/')
+    elif hasattr(review_comment, 'pull_request_url'):
+        return review_comment.pull_request_url.replace('/pulls/', '/issues/')
+    return None # THIS SHOULD NEVER HAPPEN
 
-def find_link_to_comment(issue, comments, timestamp):
+def find_link_and_text_of_comment(TARGET_REPO, target_issue_number, issue, comments, review_comments, timestamp):
     if time_matches(timestamp, issue.created_at) or time_matches(timestamp, issue.updated_at):
-        return f'{issue.html_url}#issue-{issue.id}'
+        return f'{issue.html_url}#issue-{issue.id}', issue.body
     if comments is not None:
         for comment in comments:
-            if timestamp - datetime.timedelta(seconds=1) <= comment.created_at <= timestamp + datetime.timedelta(seconds=1):
-                return comment.html_url
-    return f'{issue.html_url}'
+            if timestamp - datetime.timedelta(seconds=3) <= comment.created_at <= timestamp + datetime.timedelta(seconds=3):
+                return comment.html_url, comment.body
+    # at this point, we still have not identified the link
+    # We will manually use regex at this point
+    REGEX_STRING = f'#{target_issue_number}'
+    REGEX_STRING_URL = f'https:\/\/github\.com/{TARGET_REPO}\/(?:issues|pull)\/{target_issue_number}'
+    # Search all the comments in the node with the mention
+    if comments is not None:
+        for comment in comments:
+            if re.search(REGEX_STRING, comment.body) or re.search(REGEX_STRING_URL, comment.body) is not None:
+                return comment.html_url, comment.body
+    if review_comments is not None:
+        for comment in review_comments:
+            if re.search(REGEX_STRING, comment.body) or re.search(REGEX_STRING_URL, comment.body) is not None:
+                return comment.html_url, comment.body
+    # Search the body text of the node itself
+    if issue.body is not None:
+        if re.search(REGEX_STRING, issue.body) or re.search(REGEX_STRING_URL, issue.body) is not None:
+            return f'{issue.html_url}#issue-{issue.id}', issue.body
+    return None, ''
 
 def time_matches(timestamp, tolerance_time):
     return (tolerance_time - datetime.timedelta(seconds=1)) <= timestamp <= (tolerance_time + datetime.timedelta(seconds=1))
@@ -98,7 +121,7 @@ def delete_saved_files(TARGET_REPO_FILE_NAME):
         os.remove(f'{PATH}_progress.pk')
         os.remove(f'{PATH}_event.pk')
 
-def write_variables_to_file(nodes, node_list, comment_list, timeline_list, TARGET_REPO_FILE_NAME):
+def write_variables_to_file(nodes, node_list, comment_list, timeline_list, review_comment_list, TARGET_REPO_FILE_NAME):
     PATH = f'raw_data/nodes_{TARGET_REPO_FILE_NAME}'
     print('Writing raw nodes and comment data to disk...\nDO NOT INTERRUPT OR TURN OFF YOUR COMPUTER.')
 
@@ -110,6 +133,8 @@ def write_variables_to_file(nodes, node_list, comment_list, timeline_list, TARGE
         pickle.dump(comment_list, fi)
     with open(f'{PATH}_event.pk', 'wb') as fi:
         pickle.dump(timeline_list, fi)
+    with open(f'{PATH}_review_comments.pk', 'wb') as fi:
+        pickle.dump(review_comment_list, fi)
 
 def write_json_to_file(graph_dict, TARGET_REPO_FILE_NAME):
     with open(f'data/graph_{TARGET_REPO_FILE_NAME}.json', 'w') as f:
@@ -142,6 +167,15 @@ def load_saved_progress(repo, TARGET_REPO_FILE_NAME):
     #     nodes = list(repo.get_issues(state='all', sort='created', direction='desc'))
     #     node_list = nodes.copy()
 
+    if exists(f'{PATH}_review_comments.pk') is True:
+        with open(f'{PATH}_review_comments.pk', 'rb') as fi:
+            review_comment_list = pickle.load(fi)
+    else:
+        review_comment_list = list(repo.get_pulls_review_comments(sort='created', direction='desc'))
+        with open(f'{PATH}_review_comments.pk', 'wb') as fi:
+            pickle.dump(review_comment_list, fi)
+
+
     if exists(f'{PATH}_comments.pk') is True:
         with open(f'{PATH}_comments.pk', 'rb') as fi:
             comment_list = pickle.load(fi)
@@ -152,7 +186,7 @@ def load_saved_progress(repo, TARGET_REPO_FILE_NAME):
         with open(f'{PATH}_event.pk', 'rb') as fi:
             timeline_list = pickle.load(fi)
 
-    return nodes, node_list, comment_list, timeline_list
+    return nodes, node_list, comment_list, timeline_list, review_comment_list
 
 def get_data(g, TARGET_REPO, TARGET_REPO_FILE_NAME):
     # Remember, the ONLY RESPONSIBILITY OF THIS FUNCTION
@@ -161,12 +195,12 @@ def get_data(g, TARGET_REPO, TARGET_REPO_FILE_NAME):
 
     print(f'Downloading repo: {repo.html_url} with {repo.open_issues} open issues')
 
-    nodes, node_list, comment_list, timeline_list = load_saved_progress(repo, TARGET_REPO_FILE_NAME)    
+    nodes, node_list, comment_list, timeline_list, review_comment_list = load_saved_progress(repo, TARGET_REPO_FILE_NAME)    
 
     if (len(nodes) > 0 and len(comment_list) > 0) and len(nodes) == len(comment_list):
         # Already done, just return the results loaded from file
         print('All nodes has already been downloaded and processed. Skipping download and loading saved local files.')
-        return nodes, comment_list, timeline_list
+        return nodes, comment_list, timeline_list, review_comment_list
     else:
         # Download the remaining nodes
         print(f'Nodes remaining to load from repo: {len(node_list)}')
@@ -186,12 +220,12 @@ def get_data(g, TARGET_REPO, TARGET_REPO_FILE_NAME):
             # Need to wait for rate limit cooldown
             print(e)
             # print('Halting download due to rate limit...')
-            write_variables_to_file(nodes, node_list, comment_list, timeline_list, TARGET_REPO_FILE_NAME)
+            write_variables_to_file(nodes, node_list, comment_list, timeline_list, review_comment_list, TARGET_REPO_FILE_NAME)
             sys.exit(0) # abort the download process
         
         # We made it through downloading the whole thing with no rate limit incident
         # Save the full progress
-        write_variables_to_file(nodes, node_list, comment_list, timeline_list, TARGET_REPO_FILE_NAME)
+        write_variables_to_file(nodes, node_list, comment_list, timeline_list, review_comment_list, TARGET_REPO_FILE_NAME)
         g.get_rate_limit()
         print(f'Finished downloading entire repo. Rate limit: {g.rate_limiting[0]}')
         return nodes, comment_list, timeline_list # return the result
@@ -274,7 +308,7 @@ def get_event_date(event):
     assert(1 == 0)
     return event.raw_data['author']['date']
 
-def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO):
+def create_json(g, nodes, comment_list, timeline_list, review_comment_list, TARGET_REPO):
     repo = g.get_repo(TARGET_REPO)
     network_graph = nx.Graph()
     
@@ -346,12 +380,25 @@ def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO):
         links_dict = []
         for mention in issue_timeline_events:
             # Tracks INCOMING MENTIONS
+            if hasattr(event.actor, 'type'):
+                if event.actor.type == 'Bot':
+                    continue
+
             mentioning_issue = mention.source.issue
             mentioning_issue_comments = find_comment(mentioning_issue.url, comment_list)
             mentioning_time = mention.created_at
+
+            target_issue_number = issue.number
+
+            mentioning_issue_reviews = []
+
+            for review_comment in review_comment_list:
+                # review_url = find_review_url(review_comment)
+                # issue_url = issue.url
+                if find_review_url(review_comment) == issue.url:
+                    mentioning_issue_reviews.append(review_comment)
             
-            comment_link = find_link_to_comment(mentioning_issue, mentioning_issue_comments, mentioning_time)
-            assert comment_link is not None
+            comment_link, comment_text = find_link_and_text_of_comment(TARGET_REPO, target_issue_number, mentioning_issue, mentioning_issue_comments, mentioning_issue_reviews, mentioning_time)
 
             link_type = find_automatic_links(issue.number, mentioning_issue.body, mentioning_issue_comments)
             if link_type == 'fixes':
@@ -362,7 +409,8 @@ def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO):
             links_dict.append({
                     'number': mention.source.issue.number,
                     'comment_link': comment_link,
-                    'link_type': find_automatic_links(issue.number, mentioning_issue.body, mentioning_issue_comments)
+                    'comment_text': comment_text,
+                    'link_type': find_automatic_links(issue.number, mentioning_issue.body, mentioning_issue_comments),
                 })
         node_dict = {
             'id': issue.number,
@@ -388,7 +436,8 @@ def create_json(g, nodes, comment_list, timeline_list, TARGET_REPO):
                 'source': link['number'], 
                 'target': issue.number, 
                 'comment_link': link['comment_link'],
-                'link_type': link['link_type'] 
+                'comment_text': link['comment_text'],
+                'link_type': link['link_type'],
                 })
             network_graph.add_edge(link['number'], issue.number)
         print(f'Finished processing node number {issue.number}')
@@ -435,8 +484,8 @@ def main():
     g = Github(get_token())
     for TARGET_REPO in TARGET_REPO_ARRAY:
         TARGET_REPO_FILE_NAME = TARGET_REPO.replace('/', '-')
-        nodes, comment_list, timeline_list = get_data(g, TARGET_REPO, TARGET_REPO_FILE_NAME)
-        graph_dict = create_json(g, nodes, comment_list, timeline_list, TARGET_REPO)
+        nodes, comment_list, timeline_list, review_comment_list = get_data(g, TARGET_REPO, TARGET_REPO_FILE_NAME)
+        graph_dict = create_json(g, nodes, comment_list, timeline_list, review_comment_list, TARGET_REPO)
         write_json_to_file(graph_dict, TARGET_REPO_FILE_NAME)
 
 if __name__ == '__main__':
