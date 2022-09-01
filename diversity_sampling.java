@@ -9,7 +9,7 @@ import com.opencsv.CSVWriter;
 
 public class diversity_sampling {
 
-    private static final int SAMPLE_SIZE = 50;
+    private static final int SAMPLE_SIZE = 56;
     private static final float DEFAULT_NUMERIC_METRIC_SIMILARITY_THRESHOLD = 0.1f;
     private static HashMap<String, HashSet<Component>> cache = new HashMap<String, HashSet<Component>>();
     public static void main(String[] args) {
@@ -17,9 +17,9 @@ public class diversity_sampling {
             HashSet<Component> universe = read_csv_from_file();
             HashSet<Component> sample = next_components(SAMPLE_SIZE, universe);
             float score = score_component(sample, universe);
-            System.out.println(score);
             System.out.println(sample);
-            // write_to_csv(sample);
+            System.out.println(score);
+            write_to_csv(sample);
         } catch (Exception e) {
             e.printStackTrace();
         }
