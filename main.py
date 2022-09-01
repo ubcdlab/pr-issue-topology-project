@@ -471,15 +471,11 @@ def create_json(g, nodes, comment_list, timeline_list, review_comment_list, TARG
 
 def main():
     try:
-        # TARGET_REPO = sys.argv[1]
         TARGET_REPO_ARRAY = sys.argv[1:]
     except IndexError:
         print(f'Expected at least 1 argument, found {len(sys.argv) - 1}')
         print('Exiting')
         sys.exit(1)
-
-    # if ('reload' in sys.argv) is True:
-    #     delete_saved_files(TARGET_REPO_FILE_NAME)
 
     g = Github(get_token())
     for TARGET_REPO in TARGET_REPO_ARRAY:
