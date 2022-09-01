@@ -47,7 +47,7 @@ def main():
     TARGET_REPO_ARRAY = sys.argv[1:]
     components = []
     csv_rows = []
-    csv_column_header = ['key', 'repo_name', 'size', 'diameter', 'density', 'authors']
+    csv_column_header = ['key', 'repo_name', 'size', 'diameter', 'density', 'authors', 'url']
     magic_counter = 0
     for TARGET_REPO in TARGET_REPO_ARRAY:
         TARGET_REPO_FILE_NAME = TARGET_REPO.replace('/', '-')
@@ -69,7 +69,8 @@ def main():
             len(component),
             nx.diameter(subgraph),
             edges_in_subgraph / max(max_possible_edges_directed, 1),
-            list(set_of_authors)
+            '|'.join(set_of_authors),
+            'https://github.com/' + TARGET_REPO + '/issues/' + str(list_of_nodes[0][0])
             ])
             magic_counter += 1
     # write_json_to_file(components)

@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import com.opencsv.CSVWriter;
@@ -61,7 +62,8 @@ public class diversity_sampling {
         }
         is_similar = Math.abs(Math.log10(a.density) - Math.log10(b.density)) <= threshold && 
         Math.abs(Math.log10(a.diameter) - Math.log10(b.diameter)) <= threshold &&
-        Math.abs(Math.log10(a.size) - Math.log10(b.size)) <= threshold;
+        Math.abs(Math.log10(a.size) - Math.log10(b.size)) <= threshold && 
+        Math.abs(Math.log10(a.list_of_authors.size() - b.list_of_authors.size())) <= threshold;
 
         return is_similar;
     }
@@ -114,11 +116,13 @@ public class diversity_sampling {
         br.readLine();
         while ((line = br.readLine()) != null) {
             String[] component_entry = line.split(",");
+            HashSet<String> list_of_authors = new HashSet<>(Arrays.asList(component_entry[5].split("\\|")));
             Component entry = new Component(Integer.parseInt(component_entry[0]), 
                                             component_entry[1],
                                             Integer.parseInt(component_entry[2]),
                                             Integer.parseInt(component_entry[3]),
-                                            Float.parseFloat(component_entry[4]));
+                                            Float.parseFloat(component_entry[4]), 
+                                            list_of_authors);
             result.add(entry);
         }
         br.close();
