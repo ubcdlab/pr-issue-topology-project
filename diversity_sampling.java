@@ -3,14 +3,15 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import com.opencsv.CSVWriter;
 
 public class diversity_sampling {
 
-    private static final int SAMPLE_SIZE = 80;
+    private static final int SAMPLE_SIZE = 50;
     private static final float DEFAULT_NUMERIC_METRIC_SIMILARITY_THRESHOLD = 0.1f;
+    private static HashMap<String, HashSet<Component>> cache = new HashMap<String, HashSet<Component>>();
     public static void main(String[] args) {
         try {
             HashSet<Component> universe = read_csv_from_file();
@@ -18,7 +19,7 @@ public class diversity_sampling {
             float score = score_component(sample, universe);
             System.out.println(score);
             System.out.println(sample);
-            write_to_csv(sample);
+            // write_to_csv(sample);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -32,9 +33,7 @@ public class diversity_sampling {
 
         String[] header = { "key", "repo_name", "size", "diameter", "density"};
         writer.writeNext(header);
-        Iterator<Component> it = sample.iterator();
-        while (it.hasNext()) {
-            Component entry = it.next();
+        for (Component entry: sample) {
             String[] row_entry = { Integer.toString(entry.key), 
                 entry.repo_name, 
                 Integer.toString(entry.size), 
@@ -47,9 +46,7 @@ public class diversity_sampling {
 
     private static float score_component(HashSet<Component> sample, HashSet<Component> universe) {
         HashSet<Component> coverage = new HashSet<Component>();
-        Iterator<Component> it = sample.iterator();
-        while (it.hasNext()) {
-            Component component = it.next();
+        for (Component component: sample) {
             HashSet<Component> similar_components = find_similar_components(component, universe);
             coverage.addAll(similar_components);
         }
@@ -58,25 +55,28 @@ public class diversity_sampling {
     }
     
     private static Boolean component_is_similar(Component a, Component b, float threshold) {
+        Boolean is_similar;
         if (threshold == 0.0f) {
             threshold = DEFAULT_NUMERIC_METRIC_SIMILARITY_THRESHOLD;
         }
-        Boolean is_similar = Math.abs(Math.log10(a.density) - Math.log10(b.density)) <= threshold && 
+        is_similar = Math.abs(Math.log10(a.density) - Math.log10(b.density)) <= threshold && 
         Math.abs(Math.log10(a.diameter) - Math.log10(b.diameter)) <= threshold &&
-        Math.abs(Math.log10(a.size) - Math.log10(b.size)) <= threshold &&
-        // a.repo_name.equals(b.repo_name);
-        true;
+        Math.abs(Math.log10(a.size) - Math.log10(b.size)) <= threshold;
+
         return is_similar;
     }
 
     private static HashSet<Component> find_similar_components(Component component, HashSet<Component> universe) {
-        HashSet<Component> similar_components = new HashSet<>();
-        Iterator<Component> it = universe.iterator();
-        while (it.hasNext()) {
-            Component comparer = it.next();
-            if (component_is_similar(component, comparer, DEFAULT_NUMERIC_METRIC_SIMILARITY_THRESHOLD)) {
-                similar_components.add(comparer);
+        HashSet<Component> similar_components = cache.get(Integer.toString(component.key));
+        if (similar_components == null) {
+            HashSet<Component> to_add = new HashSet<Component>();
+            for (Component comparer : universe) {
+                if (component_is_similar(component, comparer, DEFAULT_NUMERIC_METRIC_SIMILARITY_THRESHOLD)) {
+                    to_add.add(comparer);
+                }
             }
+            cache.put(Integer.toString(component.key), to_add);
+            return to_add;
         }
         return similar_components;
     }
@@ -85,13 +85,10 @@ public class diversity_sampling {
         HashSet<Component> sample = new HashSet<Component>();
         HashSet<Component> candidates = new HashSet<>(component_universe);
         HashSet<Component> c_space = new HashSet<>();
-        Component candidate;
         for (int i = 0; i < K; i++) {
             HashSet<Component> c_best = new HashSet<Component>();
             Component p_best = null;
-            Iterator<Component> it = candidates.iterator();
-            while (it.hasNext()) {
-                candidate = it.next();
+            for (Component candidate: candidates) {
                 HashSet<Component> new_coverage_by_candidate = find_similar_components(candidate, candidates);
                 new_coverage_by_candidate.removeAll(c_space);
                 if (new_coverage_by_candidate.size() > c_best.size()) {
