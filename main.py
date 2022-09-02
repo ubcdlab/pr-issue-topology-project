@@ -421,7 +421,8 @@ def create_json(g, nodes, comment_list, timeline_list, review_comment_list, TARG
             'creation_date': issue.created_at.timestamp(),
             'closed_at': issue.closed_at.timestamp() if issue.closed_at is not None else 0,
             'updated_at': issue.updated_at.timestamp(),
-            'event_list': issue_commit_timeline_2
+            'event_list': issue_commit_timeline_2,
+            'comments': issue.comments
         }
 
         if issue.pull_request is not None:

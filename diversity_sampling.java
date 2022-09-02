@@ -10,7 +10,7 @@ import com.opencsv.CSVWriter;
 
 public class diversity_sampling {
 
-    private static final int SAMPLE_SIZE = 58;
+    private static final int SAMPLE_SIZE = 65;
     private static final float DEFAULT_NUMERIC_METRIC_SIMILARITY_THRESHOLD = 0.2f;
     private static HashMap<String, HashSet<Component>> cache = new HashMap<String, HashSet<Component>>();
     public static void main(String[] args) {
@@ -19,7 +19,7 @@ public class diversity_sampling {
             HashSet<Component> sample = next_components(SAMPLE_SIZE, universe);
             float score = score_component(sample, universe);
             System.out.println(sample);
-            System.out.println(score);
+            System.out.println("Coverage score: " + score + " with sample size " + sample.size());
             write_to_csv(sample);
         } catch (Exception e) {
             e.printStackTrace();
@@ -32,14 +32,18 @@ public class diversity_sampling {
 
         CSVWriter writer = new CSVWriter(outputfile);
 
-        String[] header = { "key", "repo_name", "size", "diameter", "density"};
+        String[] header = { "key", "repo_name", "size", "diameter", "density", "author_count", "comment_count", "component_url"};
         writer.writeNext(header);
         for (Component entry: sample) {
             String[] row_entry = { Integer.toString(entry.key), 
                 entry.repo_name, 
                 Integer.toString(entry.size), 
                 Integer.toString(entry.diameter), 
-                Float.toString(entry.density)};
+                Float.toString(entry.density),
+                Integer.toString(entry.list_of_authors.size()),
+                Integer.toString(entry.comment_count),
+                entry.component_url
+                };
             writer.writeNext(row_entry);
         }
         writer.close();
@@ -63,7 +67,9 @@ public class diversity_sampling {
         is_similar = Math.abs(Math.log10(a.density) - Math.log10(b.density)) <= threshold && 
         Math.abs(Math.log10(a.diameter) - Math.log10(b.diameter)) <= threshold &&
         Math.abs(Math.log10(a.size) - Math.log10(b.size)) <= threshold && 
-        Math.abs(Math.log10(a.list_of_authors.size()) - Math.log10(b.list_of_authors.size())) <= threshold;
+        Math.abs(Math.log10(a.list_of_authors.size()) - Math.log10(b.list_of_authors.size())) <= threshold &&
+        Math.abs(Math.log10(Math.max(a.comment_count, 1)) - Math.log10(Math.max(b.comment_count, 1))) <= threshold;
+        // true;
 
         return is_similar;
     }
@@ -122,7 +128,9 @@ public class diversity_sampling {
                                             Integer.parseInt(component_entry[2]),
                                             Integer.parseInt(component_entry[3]),
                                             Float.parseFloat(component_entry[4]), 
-                                            list_of_authors);
+                                            list_of_authors,
+                                            component_entry[6],
+                                            Integer.parseInt(component_entry[7]));
             result.add(entry);
         }
         br.close();

@@ -7,14 +7,18 @@ public class Component {
     int diameter;
     float density;
     HashSet<String> list_of_authors;
+    int comment_count;
+    String component_url;
     
-    public Component(int key, String repo_name, int size, int diameter, float density, HashSet<String> list_of_authors) {
+    public Component(int key, String repo_name, int size, int diameter, float density, HashSet<String> list_of_authors, String component_url,int comment_count) {
         this.key = key;
         this.repo_name = repo_name;
         this.size = size;
         this.diameter = diameter;
         this.density = density;
         this.list_of_authors = list_of_authors;
+        this.comment_count = comment_count;
+        this.component_url = component_url;
     }
 
     @Override
