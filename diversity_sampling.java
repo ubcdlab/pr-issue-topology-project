@@ -10,7 +10,7 @@ import com.opencsv.CSVWriter;
 
 public class diversity_sampling {
 
-    private static final int SAMPLE_SIZE = 65;
+    private static final int SAMPLE_SIZE = 130;
     private static final float DEFAULT_NUMERIC_METRIC_SIMILARITY_THRESHOLD = 0.2f;
     private static HashMap<String, HashSet<Component>> cache = new HashMap<String, HashSet<Component>>();
     public static void main(String[] args) {
@@ -32,7 +32,7 @@ public class diversity_sampling {
 
         CSVWriter writer = new CSVWriter(outputfile);
 
-        String[] header = { "key", "repo_name", "size", "diameter", "density", "author_count", "comment_count", "component_url"};
+        String[] header = { "key", "repo_name", "size", "diameter", "density", "author_count", "comment_count", "repo_contributors", "component_url"};
         writer.writeNext(header);
         for (Component entry: sample) {
             String[] row_entry = { Integer.toString(entry.key), 
@@ -42,6 +42,7 @@ public class diversity_sampling {
                 Float.toString(entry.density),
                 Integer.toString(entry.list_of_authors.size()),
                 Integer.toString(entry.comment_count),
+                Integer.toString(entry.repo_contributors),
                 entry.component_url
                 };
             writer.writeNext(row_entry);
@@ -130,7 +131,8 @@ public class diversity_sampling {
                                             Float.parseFloat(component_entry[4]), 
                                             list_of_authors,
                                             component_entry[6],
-                                            Integer.parseInt(component_entry[7]));
+                                            Integer.parseInt(component_entry[7]),
+                                            Integer.parseInt(component_entry[8]));
             result.add(entry);
         }
         br.close();

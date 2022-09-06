@@ -24,7 +24,7 @@ def construct_graph(graph_json, TARGET_REPO):
             if event_author == 'None' or not event_author.startswith('https://github.com'):
                 continue
             authors.add(event_author)
-        graph.add_node(node['id'], authors=list(authors), comments=node['comments'])
+        graph.add_node(node['id'], authors=list(authors), comments=node['comments'], repo_contributors=node['repo_contributors'])
     for edge in graph_json['links']:
         graph.add_edge(edge['source'], edge['target'], type=edge['link_type'])
     return graph
@@ -47,7 +47,7 @@ def main():
     TARGET_REPO_ARRAY = sys.argv[1:]
     components = []
     csv_rows = []
-    csv_column_header = ['key', 'repo_name', 'size', 'diameter', 'density', 'authors', 'url', 'comment_count']
+    csv_column_header = ['key', 'repo_name', 'size', 'diameter', 'density', 'component_authors', 'url', 'comment_count', 'repo_contributors']
     magic_counter = 0
     for TARGET_REPO in TARGET_REPO_ARRAY:
         TARGET_REPO_FILE_NAME = TARGET_REPO.replace('/', '-')
@@ -67,14 +67,15 @@ def main():
                 set_of_authors.update(node[1]['authors'])
                 total_comments += node[1]['comments']
             csv_rows.append([magic_counter, 
-            TARGET_REPO,
-            len(component),
-            nx.diameter(subgraph),
-            edges_in_subgraph / max(max_possible_edges_directed, 1),
-            '|'.join(set_of_authors),
-            'https://github.com/' + TARGET_REPO + '/issues/' + str(list_of_nodes[0][0]),
-            total_comments
-            ])
+                TARGET_REPO,
+                len(component),
+                nx.diameter(subgraph),
+                edges_in_subgraph / max(max_possible_edges_directed, 1),
+                '|'.join(set_of_authors),
+                'https://github.com/' + TARGET_REPO + '/issues/' + str(list_of_nodes[0][0]),
+                total_comments,
+                node[1]['repo_contributors']
+                ])
             magic_counter += 1
     # write_json_to_file(components)
     write_csv_to_file(csv_column_header, csv_rows)

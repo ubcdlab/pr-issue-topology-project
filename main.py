@@ -310,6 +310,7 @@ def get_event_date(event):
 
 def create_json(g, nodes, comment_list, timeline_list, review_comment_list, TARGET_REPO):
     repo = g.get_repo(TARGET_REPO)
+    repo_contributor_count = repo.get_contributors().totalCount
     network_graph = nx.Graph()
     
     graph_dict = {
@@ -422,7 +423,8 @@ def create_json(g, nodes, comment_list, timeline_list, review_comment_list, TARG
             'closed_at': issue.closed_at.timestamp() if issue.closed_at is not None else 0,
             'updated_at': issue.updated_at.timestamp(),
             'event_list': issue_commit_timeline_2,
-            'comments': issue.comments
+            'comments': issue.comments,
+            'repo_contributors': repo_contributor_count
         }
 
         if issue.pull_request is not None:

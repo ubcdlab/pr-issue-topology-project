@@ -9,8 +9,9 @@ public class Component {
     HashSet<String> list_of_authors;
     int comment_count;
     String component_url;
+    int repo_contributors;
     
-    public Component(int key, String repo_name, int size, int diameter, float density, HashSet<String> list_of_authors, String component_url,int comment_count) {
+    public Component(int key, String repo_name, int size, int diameter, float density, HashSet<String> list_of_authors, String component_url, int comment_count, int repo_contributors) {
         this.key = key;
         this.repo_name = repo_name;
         this.size = size;
@@ -19,6 +20,7 @@ public class Component {
         this.list_of_authors = list_of_authors;
         this.comment_count = comment_count;
         this.component_url = component_url;
+        this.repo_contributors = repo_contributors;
     }
 
     @Override
