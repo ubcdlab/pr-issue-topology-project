@@ -424,7 +424,8 @@ def create_json(g, nodes, comment_list, timeline_list, review_comment_list, TARG
             'updated_at': issue.updated_at.timestamp(),
             'event_list': issue_commit_timeline_2,
             'comments': issue.comments,
-            'repo_contributors': repo_contributor_count
+            'repo_contributors': repo_contributor_count,
+            'node_creator': issue.user.html_url
         }
 
         if issue.pull_request is not None:

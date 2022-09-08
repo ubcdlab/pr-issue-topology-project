@@ -47,7 +47,16 @@ def main():
     TARGET_REPO_ARRAY = sys.argv[1:]
     components = []
     csv_rows = []
-    csv_column_header = ['key', 'repo_name', 'size', 'diameter', 'density', 'component_authors', 'url', 'comment_count', 'repo_contributors']
+    csv_column_header = ['key', 
+                   'repo_name', 
+                   'size', 
+                   'diameter', 
+                   'density', 
+                   'component_authors', 
+                   'url', 
+                   'comment_count', 
+                   'repo_contributors', 
+                   'component_nodes']
     magic_counter = 0
     for TARGET_REPO in TARGET_REPO_ARRAY:
         TARGET_REPO_FILE_NAME = TARGET_REPO.replace('/', '-')
@@ -56,11 +65,13 @@ def main():
         connected_components = nx.connected_components(graph)
         for component in connected_components:
             if len(component) <= 1:
+                magic_counter += 1
                 continue
             subgraph = graph.subgraph(component)
             edges_in_subgraph = graph.subgraph(component).number_of_edges()
             max_possible_edges_directed = max_number_possible_edges_directed_nodenum(len(component))
             list_of_nodes = list(subgraph.nodes(data=True))
+            list_of_nodes_no_data = list(subgraph.nodes())
             set_of_authors = set()
             total_comments = 0
             for node in list_of_nodes:
@@ -74,8 +85,8 @@ def main():
                 '|'.join(set_of_authors),
                 'https://github.com/' + TARGET_REPO + '/issues/' + str(list_of_nodes[0][0]),
                 total_comments,
-                node[1]['repo_contributors']
-                ])
+                node[1]['repo_contributors'],
+                '|'.join([str(x) for x in list_of_nodes_no_data])])
             magic_counter += 1
     # write_json_to_file(components)
     write_csv_to_file(csv_column_header, csv_rows)

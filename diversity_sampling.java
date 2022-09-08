@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -32,7 +33,7 @@ public class diversity_sampling {
 
         CSVWriter writer = new CSVWriter(outputfile);
 
-        String[] header = { "key", "repo_name", "size", "diameter", "density", "author_count", "comment_count", "repo_contributors", "component_url"};
+        String[] header = { "key", "repo_name", "size", "diameter", "density", "author_count", "comment_count", "repo_contributors", "component_url", "list_of_nodes"};
         writer.writeNext(header);
         for (Component entry: sample) {
             String[] row_entry = { Integer.toString(entry.key), 
@@ -43,7 +44,8 @@ public class diversity_sampling {
                 Integer.toString(entry.list_of_authors.size()),
                 Integer.toString(entry.comment_count),
                 Integer.toString(entry.repo_contributors),
-                entry.component_url
+                entry.component_url,
+                String.join("|", entry.list_of_nodes)
                 };
             writer.writeNext(row_entry);
         }
@@ -124,6 +126,7 @@ public class diversity_sampling {
         while ((line = br.readLine()) != null) {
             String[] component_entry = line.split(",");
             HashSet<String> list_of_authors = new HashSet<>(Arrays.asList(component_entry[5].split("\\|")));
+            ArrayList<String> list_of_nodes = new ArrayList<>(Arrays.asList(component_entry[9].split("\\|")));
             Component entry = new Component(Integer.parseInt(component_entry[0]), 
                                             component_entry[1],
                                             Integer.parseInt(component_entry[2]),
@@ -132,7 +135,9 @@ public class diversity_sampling {
                                             list_of_authors,
                                             component_entry[6],
                                             Integer.parseInt(component_entry[7]),
-                                            Integer.parseInt(component_entry[8]));
+                                            Integer.parseInt(component_entry[8]),
+                                            list_of_nodes
+                                            );
             result.add(entry);
         }
         br.close();

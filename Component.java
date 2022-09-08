@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashSet;
 
 public class Component {
@@ -10,8 +11,9 @@ public class Component {
     int comment_count;
     String component_url;
     int repo_contributors;
+    ArrayList<String> list_of_nodes;
     
-    public Component(int key, String repo_name, int size, int diameter, float density, HashSet<String> list_of_authors, String component_url, int comment_count, int repo_contributors) {
+    public Component(int key, String repo_name, int size, int diameter, float density, HashSet<String> list_of_authors, String component_url, int comment_count, int repo_contributors, ArrayList<String> list_of_nodes) {
         this.key = key;
         this.repo_name = repo_name;
         this.size = size;
@@ -21,6 +23,7 @@ public class Component {
         this.comment_count = comment_count;
         this.component_url = component_url;
         this.repo_contributors = repo_contributors;
+        this.list_of_nodes = list_of_nodes;
     }
 
     @Override
