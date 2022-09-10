@@ -11,7 +11,7 @@ import com.opencsv.CSVWriter;
 
 public class diversity_sampling {
 
-    private static final int SAMPLE_SIZE = 130;
+    private static final int SAMPLE_SIZE = 64;
     private static final float DEFAULT_NUMERIC_METRIC_SIMILARITY_THRESHOLD = 0.2f;
     private static HashMap<String, HashSet<Component>> cache = new HashMap<String, HashSet<Component>>();
     public static void main(String[] args) {

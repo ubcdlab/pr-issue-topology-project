@@ -24,7 +24,11 @@ def construct_graph(graph_json, TARGET_REPO):
             if event_author == 'None' or not event_author.startswith('https://github.com'):
                 continue
             authors.add(event_author)
-        graph.add_node(node['id'], authors=list(authors), comments=node['comments'], repo_contributors=node['repo_contributors'])
+        graph.add_node(node['id'], 
+                       authors=list(authors), 
+                       comments=node['comments'], 
+                       repo_contributors=node['repo_contributors'],
+                       component_id=node['component_id'])
     for edge in graph_json['links']:
         graph.add_edge(edge['source'], edge['target'], type=edge['link_type'])
     return graph
@@ -77,7 +81,7 @@ def main():
             for node in list_of_nodes:
                 set_of_authors.update(node[1]['authors'])
                 total_comments += node[1]['comments']
-            csv_rows.append([magic_counter, 
+            csv_rows.append([list_of_nodes[0][1]['component_id'], 
                 TARGET_REPO,
                 len(component),
                 nx.diameter(subgraph),

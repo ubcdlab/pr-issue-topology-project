@@ -4,12 +4,9 @@ import pickle
 from more_itertools import unique_everseen
 
 def main():
-    with open(f'unified_json/csv_sampled_links.csv', 'r') as file, open('unified_json/csv_sampled_links_nod.csv', 'w') as out_file:
-        out_file.writelines(unique_everseen(file))
-    return
-
     PATH = f'unified_json/java_sample.csv'
     csv_row = [['repo_name',
+               'component_id',
                'link_url',
                'node_1_type',
                'node_1_id', 
@@ -34,6 +31,7 @@ def main():
                 source_node = find_node(data, link['source'])
                 target_node = find_node(data, link['target'])
                 csv_row_entry = [repo_name,
+                                 source_node['component_id'],
                                  link['comment_link'],
                                  source_node['type'],
                                  source_node['id'],
@@ -48,6 +46,9 @@ def main():
     with open(f'unified_json/csv_sampled_links.csv', 'w') as csv_file:
         csvwriter = csv.writer(csv_file)
         csvwriter.writerows(csv_row)
+    with open(f'unified_json/csv_sampled_links.csv', 'r') as file, open('unified_json/csv_sampled_links_nod.csv', 'w') as out_file:
+        out_file.writelines(unique_everseen(file))
+    return
 
 def find_link(js, target_node):
     for link in js['links']:
