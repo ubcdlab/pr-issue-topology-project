@@ -1,8 +1,13 @@
 import csv
 import json
 import pickle
+from more_itertools import unique_everseen
 
 def main():
+    with open(f'unified_json/csv_sampled_links.csv', 'r') as file, open('unified_json/csv_sampled_links_nod.csv', 'w') as out_file:
+        out_file.writelines(unique_everseen(file))
+    return
+
     PATH = f'unified_json/java_sample.csv'
     csv_row = [['repo_name',
                'link_url',
