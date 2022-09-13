@@ -30,23 +30,34 @@ def main():
                 link = find_link(data, node)
                 source_node = find_node(data, link['source'])
                 target_node = find_node(data, link['target'])
+                source_node_users = set()
+                target_node_users = set()
+                for event in source_node['event_list']:
+                    if event['author'] != 'None':
+                        source_node_users.add(event['author'])
+                for event in target_node['event_list']:
+                    if event['author'] != 'None':
+                        target_node_users.add(event['author'])
                 csv_row_entry = [repo_name,
-                                 source_node['component_id'],
-                                 link['comment_link'],
                                  source_node['type'],
                                  source_node['id'],
                                  source_node['node_creator'],
                                  source_node['comments'],
+                                 list(source_node_users)
+                                 ]
+                csv_row.append(csv_row_entry)
+                csv_row_entry = [repo_name,
                                  target_node['type'],
                                  target_node['id'],
                                  target_node['node_creator'],
                                  target_node['comments'],
-                                 link['link_type']]
+                                 list(target_node_users)
+                                 ]
                 csv_row.append(csv_row_entry)
-    with open(f'unified_json/csv_sampled_links.csv', 'w') as csv_file:
+    with open(f'unified_json/csv_contributors.csv', 'w') as csv_file:
         csvwriter = csv.writer(csv_file)
         csvwriter.writerows(csv_row)
-    with open(f'unified_json/csv_sampled_links.csv', 'r') as file, open('unified_json/csv_sampled_links_nod.csv', 'w') as out_file:
+    with open(f'unified_json/csv_contributors.csv', 'r') as file, open('unified_json/csv_contributors_nod.csv', 'w') as out_file:
         out_file.writelines(unique_everseen(file))
     return
 
