@@ -24,6 +24,7 @@ def main():
             'nodes': [],
             'links': []
         }
+        list_of_node = set()
         for row in csv_reader:
             component_id = row[0]
             repo_name = row[1]
@@ -41,11 +42,13 @@ def main():
                     'id': source_node_id,
                     'type': source_node['type'],
                     'status': source_node['status'],
+                    'url': 'https://github.com/' + repo_name + '/issues/' + str(source_node['id'])
                 }
                 target_node_dict = {
                     'id': target_node_id,
                     'type': target_node['type'],
                     'status': target_node['status'],
+                    'url': 'https://github.com/' + repo_name + '/issues/' + str(target_node['id'])
                 }
                 link_dict = {
                     'source': source_node_id,
@@ -55,6 +58,8 @@ def main():
                 graph_dict['nodes'].append(source_node_dict)
                 graph_dict['nodes'].append(target_node_dict)
                 graph_dict['links'].append(link_dict)
+    
+    graph_dict['nodes']
     with open(f'unified_json/sample_visualise.json', 'w') as f:
         f.write(json.dumps(graph_dict, sort_keys=False, indent=4))
 

@@ -2,7 +2,7 @@
 d3.select('#leftFile')
 .on('change', (val) => {
   let newSelection = d3.select('#leftFile').property('value');
-  this.createVisInstance('#leftVis', `./unified_json/sample_visualise.json`, null);
+  this.createVisInstance('#leftVis', `./unified_json/sample_visualise.json`);
 })
 
 // d3.select('#rightFile')
@@ -12,14 +12,14 @@ d3.select('#leftFile')
 // })
 
 
-function createVisInstance(DIV_ID, graph_json_file, structure_json_file) {
+function createVisInstance(DIV_ID, graph_json_file) {
     Promise.all([
     d3.json(graph_json_file),
-    d3.json(structure_json_file)
+    // d3.json(structure_json_file)
   ])
   .then(data => {
     let graph_data = data[0];
-    let structure_data = data[1];
+    // let structure_data = data[1];
 
     d3.select(`${DIV_ID}`).html(null);
 
@@ -55,8 +55,8 @@ function createVisInstance(DIV_ID, graph_json_file, structure_json_file) {
     // .style('width', '100%')
     // .style('height', '600px');
 
-    const patternplot = new Patternvis(structure_data, DIV_ID);
-    patternplot.updateVis(structure_data);
+    // const patternplot = new Patternvis(structure_data, DIV_ID);
+    // patternplot.updateVis(structure_data);
 
     let slider = d3.sliderBottom()
     .min(1)
