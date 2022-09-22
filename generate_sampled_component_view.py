@@ -24,7 +24,6 @@ def main():
             'nodes': [],
             'links': []
         }
-        list_of_node = set()
         for row in csv_reader:
             component_id = row[0]
             repo_name = row[1]
@@ -58,8 +57,7 @@ def main():
                 graph_dict['nodes'].append(source_node_dict)
                 graph_dict['nodes'].append(target_node_dict)
                 graph_dict['links'].append(link_dict)
-    
-    graph_dict['nodes']
+    graph_dict['nodes'] = list(unique_everseen(graph_dict['nodes']))
     with open(f'unified_json/sample_visualise.json', 'w') as f:
         f.write(json.dumps(graph_dict, sort_keys=False, indent=4))
 
