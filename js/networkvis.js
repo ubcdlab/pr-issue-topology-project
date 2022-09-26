@@ -36,6 +36,7 @@ class Networkvis {
         }
         let refresh = true;
         let modify = vis.filterData();
+        console.log(modify);
         vis.updateVis(modify);
         vis.cosmeticFilter();
     }
@@ -66,6 +67,8 @@ class Networkvis {
     filterData() {
         let vis = this;
         let modify = structuredClone(vis.data);
+
+        return modify;
         let original_data = modify['nodes'];
         let links = modify['links'];
         let new_nodes = [];
@@ -193,6 +196,7 @@ class Networkvis {
         })
         .on('contextmenu', (e, d) => {
             e.preventDefault();
+            console.log(d);
             window.open(`${d.comment_link}`, '_blank').focus();
         })
 
@@ -213,6 +217,7 @@ class Networkvis {
         })
         .on('mouseover', (event, d) => {
             // show the tooltip
+            return;
             div.transition()
                 .duration(200)      
                 .style('opacity', 1);      
@@ -244,7 +249,7 @@ Component Size: ${d.connected_component.length}`)
             let checked = d3.select(vis.parentTag).select('.rightClickHyperlink').property('checked')
             if (checked) {
                 e.preventDefault();
-                window.open(`${vis.data.repo_url}/pull/${d.id}`, '_blank').focus();
+                window.open(`${d.url}`, '_blank').focus();
             }
         })
         .call(d3.drag()
@@ -316,7 +321,7 @@ Component Size: ${d.connected_component.length}`)
         vis.svg.selectAll('.nodes')
         .append('text')
         .classed('number_label', true)
-        .text((d) => d.id);
+        .text((d) => d.display_id);
     }
     
 }

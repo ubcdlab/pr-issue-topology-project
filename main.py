@@ -308,8 +308,9 @@ def get_event_date(event):
     assert(1 == 0)
     return event.raw_data['author']['date']
 
-def create_json(g, nodes, comment_list, timeline_list, review_comment_list, TARGET_REPO):
+def create_json(g, nodes, comment_list, timeline_list, review_comment_list, magic_counter, TARGET_REPO):
     repo = g.get_repo(TARGET_REPO)
+    repo_contributor_count = repo.get_contributors().totalCount
     network_graph = nx.Graph()
     
     graph_dict = {
@@ -421,7 +422,10 @@ def create_json(g, nodes, comment_list, timeline_list, review_comment_list, TARG
             'creation_date': issue.created_at.timestamp(),
             'closed_at': issue.closed_at.timestamp() if issue.closed_at is not None else 0,
             'updated_at': issue.updated_at.timestamp(),
-            'event_list': issue_commit_timeline_2
+            'event_list': issue_commit_timeline_2,
+            'comments': issue.comments,
+            'repo_contributors': repo_contributor_count,
+            'node_creator': issue.user.html_url
         }
 
         if issue.pull_request is not None:
@@ -459,6 +463,8 @@ def create_json(g, nodes, comment_list, timeline_list, review_comment_list, TARG
                 if (entry['id'] == node):
                     entry['connected_component'] = list(component)
                     entry['connected_component_size'] = len(list(component))
+                    entry['component_id'] = magic_counter
+        magic_counter += 1
     
     for node in network_graph.degree:
         node_id = node[0]
@@ -467,7 +473,7 @@ def create_json(g, nodes, comment_list, timeline_list, review_comment_list, TARG
             if (entry['id'] == node_id):
                 entry['node_degree'] = node_degree
     graph_dict['connected_components'] = list(map(lambda x: list(x), connected_components))
-    return graph_dict
+    return graph_dict, magic_counter
 
 def main():
     try:
@@ -478,10 +484,11 @@ def main():
         sys.exit(1)
 
     g = Github(get_token())
+    magic_counter = 0
     for TARGET_REPO in TARGET_REPO_ARRAY:
         TARGET_REPO_FILE_NAME = TARGET_REPO.replace('/', '-')
         nodes, comment_list, timeline_list, review_comment_list = get_data(g, TARGET_REPO, TARGET_REPO_FILE_NAME)
-        graph_dict = create_json(g, nodes, comment_list, timeline_list, review_comment_list, TARGET_REPO)
+        graph_dict, magic_counter = create_json(g, nodes, comment_list, timeline_list, review_comment_list, magic_counter, TARGET_REPO)
         write_json_to_file(graph_dict, TARGET_REPO_FILE_NAME)
 
 if __name__ == '__main__':

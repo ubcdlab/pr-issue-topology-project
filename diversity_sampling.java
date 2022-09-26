@@ -3,14 +3,16 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import com.opencsv.CSVWriter;
 
 public class diversity_sampling {
 
-    private static final int SAMPLE_SIZE = 56;
-    private static final float DEFAULT_NUMERIC_METRIC_SIMILARITY_THRESHOLD = 0.1f;
+    private static final int SAMPLE_SIZE = 64;
+    private static final float DEFAULT_NUMERIC_METRIC_SIMILARITY_THRESHOLD = 0.2f;
     private static HashMap<String, HashSet<Component>> cache = new HashMap<String, HashSet<Component>>();
     public static void main(String[] args) {
         try {
@@ -18,7 +20,7 @@ public class diversity_sampling {
             HashSet<Component> sample = next_components(SAMPLE_SIZE, universe);
             float score = score_component(sample, universe);
             System.out.println(sample);
-            System.out.println(score);
+            System.out.println("Coverage score: " + score + " with sample size " + sample.size());
             write_to_csv(sample);
         } catch (Exception e) {
             e.printStackTrace();
@@ -31,14 +33,20 @@ public class diversity_sampling {
 
         CSVWriter writer = new CSVWriter(outputfile);
 
-        String[] header = { "key", "repo_name", "size", "diameter", "density"};
+        String[] header = { "key", "repo_name", "size", "diameter", "density", "author_count", "comment_count", "repo_contributors", "component_url", "list_of_nodes"};
         writer.writeNext(header);
         for (Component entry: sample) {
             String[] row_entry = { Integer.toString(entry.key), 
                 entry.repo_name, 
                 Integer.toString(entry.size), 
                 Integer.toString(entry.diameter), 
-                Float.toString(entry.density)};
+                Float.toString(entry.density),
+                Integer.toString(entry.list_of_authors.size()),
+                Integer.toString(entry.comment_count),
+                Integer.toString(entry.repo_contributors),
+                entry.component_url,
+                String.join("|", entry.list_of_nodes)
+                };
             writer.writeNext(row_entry);
         }
         writer.close();
@@ -61,7 +69,10 @@ public class diversity_sampling {
         }
         is_similar = Math.abs(Math.log10(a.density) - Math.log10(b.density)) <= threshold && 
         Math.abs(Math.log10(a.diameter) - Math.log10(b.diameter)) <= threshold &&
-        Math.abs(Math.log10(a.size) - Math.log10(b.size)) <= threshold;
+        Math.abs(Math.log10(a.size) - Math.log10(b.size)) <= threshold && 
+        Math.abs(Math.log10(a.list_of_authors.size()) - Math.log10(b.list_of_authors.size())) <= threshold &&
+        Math.abs(Math.log10(Math.max(a.comment_count, 1)) - Math.log10(Math.max(b.comment_count, 1))) <= threshold;
+        // true;
 
         return is_similar;
     }
@@ -114,11 +125,19 @@ public class diversity_sampling {
         br.readLine();
         while ((line = br.readLine()) != null) {
             String[] component_entry = line.split(",");
+            HashSet<String> list_of_authors = new HashSet<>(Arrays.asList(component_entry[5].split("\\|")));
+            ArrayList<String> list_of_nodes = new ArrayList<>(Arrays.asList(component_entry[9].split("\\|")));
             Component entry = new Component(Integer.parseInt(component_entry[0]), 
                                             component_entry[1],
                                             Integer.parseInt(component_entry[2]),
                                             Integer.parseInt(component_entry[3]),
-                                            Float.parseFloat(component_entry[4]));
+                                            Float.parseFloat(component_entry[4]), 
+                                            list_of_authors,
+                                            component_entry[6],
+                                            Integer.parseInt(component_entry[7]),
+                                            Integer.parseInt(component_entry[8]),
+                                            list_of_nodes
+                                            );
             result.add(entry);
         }
         br.close();
