@@ -2,7 +2,7 @@
 d3.select('#leftFile')
 .on('change', (val) => {
   let newSelection = d3.select('#leftFile').property('value');
-  this.createVisInstance('#leftVis', `./unified_json/sample_visualise.json`);
+  this.createVisInstance('#leftVis', `./unified_json/sample_visualise.json`, newSelection);
 })
 
 // d3.select('#rightFile')
@@ -12,13 +12,30 @@ d3.select('#leftFile')
 // })
 
 
-function createVisInstance(DIV_ID, graph_json_file) {
+function createVisInstance(DIV_ID, graph_json_file, component_id) {
+  console.log(component_id);
     Promise.all([
     d3.json(graph_json_file),
     // d3.json(structure_json_file)
   ])
   .then(data => {
     let graph_data = data[0];
+    let new_graph_data = {
+      nodes: [],
+      links: []
+    }
+    // console.log(graph_data)
+    for (let node of graph_data['nodes']) {
+      if (node['component_id'] == component_id) {
+        new_graph_data['nodes'].push(node)
+      }
+    }
+    for (let link of graph_data['links']) {
+      if (link['component_id'] == component_id) {
+        new_graph_data['links'].push(link)
+      }
+    }
+    console.log(new_graph_data)
     // let structure_data = data[1];
 
     d3.select(`${DIV_ID}`).html(null);
@@ -39,7 +56,7 @@ function createVisInstance(DIV_ID, graph_json_file) {
     .style('width', '100%')
     .style('height', '80px');
 
-    const networkplot = new Networkvis(graph_data, DIV_ID);
+    const networkplot = new Networkvis(new_graph_data, DIV_ID);
     networkplot.updateFilter({
       'connected_component_size': {
         'value': range(default_slider_value[0], default_slider_value[1] + 1),
@@ -47,7 +64,7 @@ function createVisInstance(DIV_ID, graph_json_file) {
       }
     })
 
-    networkplot.updateVis(graph_data);
+    networkplot.updateVis(new_graph_data);
 
     // let patternVisDiv = d3.select(DIV_ID)
     // .append('svg')
@@ -69,7 +86,7 @@ function createVisInstance(DIV_ID, graph_json_file) {
     .default(default_slider_value)
     .fill('skyblue')
     .on('end', (val) => {
-        let modify = filterNetwork(val[0], val[1], graph_data)
+        let modify = filterNetwork(val[0], val[1], new_graph_data)
         networkplot.updateFilter({
           'connected_component_size': { 
             'value': range(val[0], val[1] + 1),
