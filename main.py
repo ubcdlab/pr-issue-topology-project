@@ -1,3 +1,4 @@
+from inspect import Attribute
 from xmlrpc.client import DateTime
 from github import Github
 import datetime
@@ -276,6 +277,50 @@ def get_event_author(event):
     # assert(1 == 0)
     return None
 
+def get_event_author_email(event):
+    # HACK: to get around Github API's pathological behaviour
+    # the author of a timeline event API can be located in different locations
+    # depending on the type of event in question
+    # this massive hack goes through all known locations one by one
+    if event.event == 'closed':
+        # event.event == 'closed' does not have authoring information
+        return ''
+    if event.event == 'renamed':
+        # event.event == 'renamed' does not have authoring information
+        return ''
+    author = None
+    if event.actor is not None:
+        # usually, event actor is defined for events such as commenting
+        author = event.actor.email
+    if author is not None:
+        return author
+    if 'author' in event.raw_data:
+        # for event.event == 'committed'
+        author = event.raw_data['author']['email']
+    if author is not None:
+        return author
+    if 'user' in event.raw_data:
+        # for event.event = 'reviewed'
+        # author is unset, and there is no email information
+        if event.raw_data['user'] is not None:
+            author = ''
+    if author is not None:
+        return author
+    if 'comments' in event.raw_data:
+        # for commit-commented
+        # author = event.raw_data['comments'][0]['user']['html_url']
+        author = ''
+    if author is not None:
+        return author
+    if 'source' in event.raw_data:
+        # for 'cross-referenced' events
+        # author = event.raw_data['source']['issue']['user']['html_url']
+        author = ''
+    if author is not None:
+        return author
+    # assert(1 == 0)
+    return ''
+
 
 def get_event_date(event):
     # HACK: to get around Github API's pathological behaviour
@@ -363,12 +408,20 @@ def create_json(g, nodes, comment_list, timeline_list, review_comment_list, magi
             event_time = get_event_date(event)
 
             event_author = get_event_author(event)
+            event_author_email = get_event_author_email(event)
+            # event_author_email = ''
+            # try:
+            #     event_author_email = event.actor.email or ''
+            # except AttributeError:
+            #     pass
+
             # print(f'{event.actor.url}\n{event.created_at}')
             print(f'{event_type}: {event_time}')
             issue_commit_timeline_2.append({
                 'event': event_type,
                 'created_at': event_time,
-                'author': str(event_author) 
+                'author': str(event_author),
+                'email': str(event_author_email)
             })
         # issue_commit_timeline = list(map(lambda x: x.url, issue_commit_timeline))
         # print(issue_commit_timeline)
