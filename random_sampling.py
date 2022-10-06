@@ -1,6 +1,5 @@
-import datetime
 import json
-import networkx as nx
+import csv
 import random
 from datetime import date
 from dateutil.relativedelta import relativedelta
@@ -31,6 +30,22 @@ def main():
             sample.append(hand)
     print(f'Sampled {len(sample)} items.')
     write_json_to_file(sample)
+    csv_rows = [['repo_name',
+                'component_id',
+                'url',
+                'node_id',
+                'comment_count']]
+    for component in sample:
+        for node in component:
+            row = [node['repo_name'],
+                            node['component_id'],
+                            node['url'],
+                            node['node_id'],
+                            node['comment_count']]
+            csv_rows.append(row)
+    with open(f'unified_json/csv_random_sample.csv', 'w') as csv_file:
+        csvwriter = csv.writer(csv_file)
+        csvwriter.writerows(csv_rows)
 
 if __name__ == '__main__':
     main()

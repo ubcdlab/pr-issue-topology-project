@@ -80,6 +80,7 @@ def main():
                 nodes_in_component.append({
                     'component_id': node_data['component_id'],
                     'repo_name': TARGET_REPO,
+                    'node_id': node[0],
                     # 'diameter': nx.diameter(subgraph),
                     # 'density': edges_in_subgraph / max(max_possible_edges_directed, 1),
                     'component_authors': ','.join(set_of_authors),
