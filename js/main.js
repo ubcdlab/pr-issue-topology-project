@@ -5,11 +5,11 @@ d3.select('#leftFile')
   this.createVisInstance('#leftVis', `./unified_json/sample_visualise.json`, newSelection);
 })
 
-// d3.select('#rightFile')
-// .on('change', (val) => {
-//   let newSelection = d3.select('#rightFile').property('value');
-//   this.createVisInstance('#rightVis', `data/graph_${newSelection}.json`, `data/structure_${newSelection}.json`);
-// })
+d3.select('#rightFile')
+.on('change', (val) => {
+  let newSelection = d3.select('#rightFile').property('value');
+  this.createVisInstance('#rightVis', `./unified_json/random_sample_vis.json`, newSelection);
+})
 
 
 function createVisInstance(DIV_ID, graph_json_file, component_id) {

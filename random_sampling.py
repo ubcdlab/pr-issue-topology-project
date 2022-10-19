@@ -28,11 +28,9 @@ def generate_data_vis_file(sampled_component):
             repo_name = repo_name.replace('/', '-')
             with open(f'data/graph_{repo_name}.json') as file:
                 data = json.load(file)
-            node_id = node['node_id']
             component_id = node['component_id']
-            random_node = find_node(data, node_id)
-            for node in random_node['connected_component']:
-                link = find_link(data, node)
+            links = find_link(data, node['node_id'])
+            for link in links:
                 source_node = find_node(data, link['source'])
                 target_node = find_node(data, link['target'])
                 source_node_id = str(component_id) + str(source_node['id'])
@@ -41,23 +39,29 @@ def generate_data_vis_file(sampled_component):
                     'id': source_node_id,
                     'type': source_node['type'],
                     'status': source_node['status'],
-                    'url': 'https://github.com/' + repo_name + '/issues/' + str(source_node['id'])
+                    'url': 'https://github.com/' + repo_name + '/issues/' + str(source_node['id']),
+                    'component_id': component_id,
+                    'display_id': source_node['id']
                 }
                 target_node_dict = {
                     'id': target_node_id,
                     'type': target_node['type'],
                     'status': target_node['status'],
-                    'url': 'https://github.com/' + repo_name + '/issues/' + str(target_node['id'])
+                    'url': 'https://github.com/' + repo_name + '/issues/' + str(target_node['id']),
+                    'component_id': component_id,
+                    'display_id': target_node['id']
                 }
                 link_dict = {
                     'source': source_node_id,
                     'target': target_node_id,
-                    'comment_link': link['comment_link']
+                    'comment_link': link['comment_link'],
+                    'component_id': component_id
                 }
                 graph_dict['nodes'].append(source_node_dict)
                 graph_dict['nodes'].append(target_node_dict)
                 graph_dict['links'].append(link_dict)
     graph_dict['nodes'] = list(unique_everseen(graph_dict['nodes']))
+    graph_dict['links'] = list(unique_everseen(graph_dict['links']))
     with open(f'unified_json/random_sample_vis.json', 'w') as f:
         f.write(json.dumps(graph_dict, sort_keys=False, indent=4))
     return
@@ -103,9 +107,11 @@ def main():
         f.close()
 
 def find_link(js, target_node):
+    links = []
     for link in js['links']:
         if link['source'] == int(target_node) or link['target'] == int(target_node):
-            return link
+            links.append(link)
+    return links
 
 def find_node(js, target_node):
     for node in js['nodes']:
