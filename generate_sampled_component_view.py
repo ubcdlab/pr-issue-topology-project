@@ -32,39 +32,48 @@ def main():
                 data = json.load(file)
             nodes_in_component = row[9].split('|')
             for node in nodes_in_component:
-                link = find_link(data, node)
-                source_node = find_node(data, link['source'])
-                target_node = find_node(data, link['target'])
-                source_node_id = str(component_id) + str(source_node['id'])
-                target_node_id = str(component_id) + str(target_node['id'])
-                source_node_dict = {
-                    'id': source_node_id,
-                    'type': source_node['type'],
-                    'status': source_node['status'],
-                    'url': 'https://github.com/' + repo_name + '/issues/' + str(source_node['id'])
-                }
-                target_node_dict = {
-                    'id': target_node_id,
-                    'type': target_node['type'],
-                    'status': target_node['status'],
-                    'url': 'https://github.com/' + repo_name + '/issues/' + str(target_node['id'])
-                }
-                link_dict = {
-                    'source': source_node_id,
-                    'target': target_node_id,
-                    'comment_link': link['comment_link']
-                }
-                graph_dict['nodes'].append(source_node_dict)
-                graph_dict['nodes'].append(target_node_dict)
-                graph_dict['links'].append(link_dict)
+                links = find_link(data, node)
+                for link in links:
+                    source_node = find_node(data, link['source'])
+                    target_node = find_node(data, link['target'])
+                    source_node_id = str(component_id) + str(source_node['id'])
+                    target_node_id = str(component_id) + str(target_node['id'])
+                    source_node_dict = {
+                        'id': source_node_id,
+                        'type': source_node['type'],
+                        'status': source_node['status'],
+                        'url': 'https://github.com/' + repo_name + '/issues/' + str(source_node['id']),
+                        'component_id': component_id,
+                        'display_id': source_node['id']
+                    }
+                    target_node_dict = {
+                        'id': target_node_id,
+                        'type': target_node['type'],
+                        'status': target_node['status'],
+                        'url': 'https://github.com/' + repo_name + '/issues/' + str(target_node['id']),
+                        'component_id': component_id,
+                        'display_id': target_node['id']
+                    }
+                    link_dict = {
+                        'source': source_node_id,
+                        'target': target_node_id,
+                        'comment_link': link['comment_link'],
+                        'component_id': component_id
+                    }
+                    graph_dict['nodes'].append(source_node_dict)
+                    graph_dict['nodes'].append(target_node_dict)
+                    graph_dict['links'].append(link_dict)
     graph_dict['nodes'] = list(unique_everseen(graph_dict['nodes']))
+    graph_dict['links'] = list(unique_everseen(graph_dict['links']))
     with open(f'unified_json/sample_visualise.json', 'w') as f:
         f.write(json.dumps(graph_dict, sort_keys=False, indent=4))
 
 def find_link(js, target_node):
+    links = []
     for link in js['links']:
         if link['source'] == int(target_node) or link['target'] == int(target_node):
-            return link
+            links.append(link)
+    return links
 
 def find_node(js, target_node):
     for node in js['nodes']:

@@ -321,7 +321,7 @@ Component Size: ${d.connected_component.length}`)
         vis.svg.selectAll('.nodes')
         .append('text')
         .classed('number_label', true)
-        .text((d) => d.id);
+        .text((d) => d.display_id);
     }
     
 }
