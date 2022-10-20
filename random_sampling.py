@@ -26,8 +26,8 @@ def generate_data_vis_file(sampled_component):
         for node in component:
             data = None
             repo_name = node['repo_name']
-            repo_name = repo_name.replace('/', '-')
-            with open(f'data/graph_{repo_name}.json') as file:
+            repo_file_name = repo_name.replace('/', '-')
+            with open(f'data/graph_{repo_file_name}.json') as file:
                 data = json.load(file)
             component_id = node['component_id']
             links = find_link(data, node['node_id'])
