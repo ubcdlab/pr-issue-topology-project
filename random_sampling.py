@@ -4,6 +4,7 @@ import random
 from datetime import date
 from dateutil.relativedelta import relativedelta
 from more_itertools import unique_everseen
+import operator
 
 def read_json_from_file():
     PATH = f'unified_json/result.json'
@@ -89,7 +90,10 @@ def main():
                 'node_id',
                 'comment_count']]
     for component in sample:
-        component_id.append(component[0]['component_id'])
+        component_id.append({
+            'component_id': component[0]['component_id'],
+            'size': len(component)
+        })
         for node in component:
             row = [node['repo_name'],
                     node['component_id'],
@@ -101,9 +105,9 @@ def main():
         csvwriter = csv.writer(csv_file)
         csvwriter.writerows(csv_rows)
     with open(f'unified_json/copy_paste_this.txt', 'w') as f:
-        component_id.sort()
+        component_id.sort(key=operator.itemgetter('size'), reverse=True)
         for id in component_id:
-            f.write(f'<option value="{id}">{id}</option>\n')
+            f.write(f'<option value="{id["component_id"]}">{id["component_id"]} (Size: {id["size"]})</option>\n')
         f.close()
 
 def find_link(js, target_node):
