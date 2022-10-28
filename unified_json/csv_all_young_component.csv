@@ -1,5 +1,4 @@
-repo_name,component_id,url,nodes,total_comment_count
-c,o,m,p,o,n,e,n,t,_,s,i,z,e
+repo_name,component_id,url,nodes,total_comment_count,component_size
 Activiti/Activiti,1,https://github.com/Activiti/Activiti/issues/4011,"[4011, 4013]",2,2
 Activiti/Activiti,29,https://github.com/Activiti/Activiti/issues/3984,"[3984, 3983]",0,2
 Activiti/Activiti,31,https://github.com/Activiti/Activiti/issues/3980,"[3980, 3981]",0,2

@@ -96,8 +96,8 @@ def main():
                 'component_id',
                 'url',
                 'nodes',
-                'total_comment_count'],
-                'component_size']
+                'total_comment_count',
+                'component_size']]
     for component in sample:
         constituent = []
         comment_count = 0
