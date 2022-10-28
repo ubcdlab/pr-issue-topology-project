@@ -1,0 +1,232 @@
+repo_name,component_id,url,nodes,total_comment_count
+c,o,m,p,o,n,e,n,t,_,s,i,z,e
+Activiti/Activiti,1,https://github.com/Activiti/Activiti/issues/4011,"[4011, 4013]",2,2
+Activiti/Activiti,29,https://github.com/Activiti/Activiti/issues/3984,"[3984, 3983]",0,2
+Activiti/Activiti,31,https://github.com/Activiti/Activiti/issues/3980,"[3980, 3981]",0,2
+Activiti/Activiti,33,https://github.com/Activiti/Activiti/issues/3968,"[3968, 3969, 3978]",0,3
+Activiti/Activiti,42,https://github.com/Activiti/Activiti/issues/3966,"[3966, 3967]",0,2
+Activiti/Activiti,43,https://github.com/Activiti/Activiti/issues/3964,"[3964, 3965]",0,2
+Activiti/Activiti,47,https://github.com/Activiti/Activiti/issues/3960,"[3960, 3911]",3,2
+Activiti/Activiti,49,https://github.com/Activiti/Activiti/issues/3957,"[3957, 3958]",0,2
+Activiti/Activiti,57,https://github.com/Activiti/Activiti/issues/3938,"[3938, 3949]",0,2
+Activiti/Activiti,63,https://github.com/Activiti/Activiti/issues/3916,"[3916, 3943]",3,2
+Activiti/Activiti,79,https://github.com/Activiti/Activiti/issues/3925,"[3925, 3926]",0,2
+Activiti/Activiti,84,https://github.com/Activiti/Activiti/issues/3920,"[3920, 3904]",0,2
+Activiti/Activiti,91,https://github.com/Activiti/Activiti/issues/3912,"[3912, 3910]",1,2
+ag-grid/ag-grid,3352,https://github.com/ag-grid/ag-grid/issues/5330,"[5330, 5333]",2,2
+ag-grid/ag-grid,3365,https://github.com/ag-grid/ag-grid/issues/5302,"[5302, 5319]",3,2
+ag-grid/ag-grid,3372,https://github.com/ag-grid/ag-grid/issues/5312,"[5312, 5284]",9,2
+ag-grid/ag-grid,3379,https://github.com/ag-grid/ag-grid/issues/5305,"[5305, 5303]",1,2
+ag-grid/ag-grid,3385,https://github.com/ag-grid/ag-grid/issues/5280,"[5280, 5297]",7,2
+ag-grid/ag-grid,3416,https://github.com/ag-grid/ag-grid/issues/5264,"[5264, 5243]",12,2
+ag-grid/ag-grid,3422,https://github.com/ag-grid/ag-grid/issues/5200,"[5200, 5258, 5211]",6,3
+ag-grid/ag-grid,3447,https://github.com/ag-grid/ag-grid/issues/5216,"[5216, 5218, 5227, 5232, 5209]",10,5
+ag-grid/ag-grid,3450,https://github.com/ag-grid/ag-grid/issues/5226,"[5226, 5229]",5,2
+ag-grid/ag-grid,3485,https://github.com/ag-grid/ag-grid/issues/5161,"[5161, 5162]",2,2
+ag-grid/ag-grid,3488,https://github.com/ag-grid/ag-grid/issues/5128,"[5128, 5158]",11,2
+ag-grid/ag-grid,3524,https://github.com/ag-grid/ag-grid/issues/5120,"[5120, 5121, 5112, 5119]",14,4
+ag-grid/ag-grid,3538,https://github.com/ag-grid/ag-grid/issues/5104,"[5104, 5085, 5088]",24,3
+apache/dubbo,8483,https://github.com/apache/dubbo/issues/10306,"[10306, 10327, 10303]",15,3
+apache/dubbo,8496,https://github.com/apache/dubbo/issues/10312,"[10312, 10313, 10274, 10267]",8,4
+apache/dubbo,8503,https://github.com/apache/dubbo/issues/10304,"[10304, 10257, 10262]",33,3
+apache/dubbo,8506,https://github.com/apache/dubbo/issues/10256,"[10256, 10196, 10197, 10170, 10043, 10300]",97,6
+apache/dubbo,8507,https://github.com/apache/dubbo/issues/10164,"[10164, 10299, 10188]",29,3
+apache/dubbo,8509,https://github.com/apache/dubbo/issues/10297,"[10297, 10283]",7,2
+apache/dubbo,8513,https://github.com/apache/dubbo/issues/10289,"[10289, 10293]",3,2
+apache/dubbo,8516,https://github.com/apache/dubbo/issues/10288,"[10288, 10290]",2,2
+apache/dubbo,8540,https://github.com/apache/dubbo/issues/10248,"[10248, 10258, 10236]",14,3
+apache/dubbo,8544,https://github.com/apache/dubbo/issues/10249,"[10249, 10252]",5,2
+apache/dubbo,8546,https://github.com/apache/dubbo/issues/10250,"[10250, 10212]",3,2
+apache/dubbo,8548,https://github.com/apache/dubbo/issues/10245,"[10245, 9973]",1,2
+apache/dubbo,8549,https://github.com/apache/dubbo/issues/10244,"[10244, 10214]",5,2
+apache/dubbo,8555,https://github.com/apache/dubbo/issues/10168,"[10168, 10235]",6,2
+apache/dubbo,8556,https://github.com/apache/dubbo/issues/10234,"[10234, 10227]",5,2
+apache/dubbo,8559,https://github.com/apache/dubbo/issues/10219,"[10219, 10231]",10,2
+apache/dubbo,8564,https://github.com/apache/dubbo/issues/10192,"[10192, 10225, 10193, 10222]",5,4
+apache/dubbo,8577,https://github.com/apache/dubbo/issues/10202,"[10202, 10203]",0,2
+apache/dubbo,8578,https://github.com/apache/dubbo/issues/10200,"[10200, 10181, 10182]",19,3
+apache/dubbo,8579,https://github.com/apache/dubbo/issues/10198,"[10198, 10199]",1,2
+apache/dubbo,8580,https://github.com/apache/dubbo/issues/10194,"[10194, 10191]",2,2
+apache/dubbo,8582,https://github.com/apache/dubbo/issues/10186,"[10186, 10189, 10166]",12,3
+apache/dubbo,8588,https://github.com/apache/dubbo/issues/10178,"[10178, 10020, 10021]",19,3
+apache/dubbo,8600,https://github.com/apache/dubbo/issues/10161,"[10161, 10031]",2,2
+apache/dubbo,8601,https://github.com/apache/dubbo/issues/10160,"[10160, 10139, 10136, 10078]",16,4
+apache/dubbo,8605,https://github.com/apache/dubbo/issues/10107,"[10107, 10156]",6,2
+apache/dubbo,8611,https://github.com/apache/dubbo/issues/10146,"[10146, 10149]",1,2
+apache/dubbo,8613,https://github.com/apache/dubbo/issues/10105,"[10105, 10147]",5,2
+apache/dubbo,8615,https://github.com/apache/dubbo/issues/10144,"[10144, 10068, 10135]",9,3
+apache/dubbo,8622,https://github.com/apache/dubbo/issues/10052,"[10052, 10134]",11,2
+apache/dubbo,8623,https://github.com/apache/dubbo/issues/10113,"[10113, 10133]",2,2
+apache/dubbo,8641,https://github.com/apache/dubbo/issues/10106,"[10106, 10059]",4,2
+apache/dubbo,8645,https://github.com/apache/dubbo/issues/9994,"[9994, 9962, 10027, 10101]",12,4
+apache/dubbo,8651,https://github.com/apache/dubbo/issues/10088,"[10088, 10089, 10090]",6,3
+apache/dubbo,8656,https://github.com/apache/dubbo/issues/10080,"[10080, 10076, 10079]",2,3
+apache/dubbo,8657,https://github.com/apache/dubbo/issues/10073,"[10073, 10077]",11,2
+apache/dubbo,8663,https://github.com/apache/dubbo/issues/10066,"[10066, 10067]",3,2
+apache/dubbo,8673,https://github.com/apache/dubbo/issues/10054,"[10054, 10055]",8,2
+apache/dubbo,8677,https://github.com/apache/dubbo/issues/10049,"[10049, 10045]",2,2
+apache/dubbo,8682,https://github.com/apache/dubbo/issues/10040,"[10040, 9953, 9978, 9958]",11,4
+apache/dubbo,8686,https://github.com/apache/dubbo/issues/10035,"[10035, 10036]",6,2
+apache/dubbo,8698,https://github.com/apache/dubbo/issues/10002,"[10002, 9990, 10015]",13,3
+apache/dubbo,8700,https://github.com/apache/dubbo/issues/10009,"[10009, 9986, 10013]",12,3
+apache/dubbo,8702,https://github.com/apache/dubbo/issues/10008,"[10008, 9972]",2,2
+apache/dubbo,8706,https://github.com/apache/dubbo/issues/10004,"[10004, 9999]",18,2
+apache/dubbo,8707,https://github.com/apache/dubbo/issues/9992,"[9992, 10003]",4,2
+apache/dubbo,8714,https://github.com/apache/dubbo/issues/9993,"[9993, 9977]",4,2
+apache/dubbo,8729,https://github.com/apache/dubbo/issues/9940,"[9940, 9974]",14,2
+apache/dubbo,8734,https://github.com/apache/dubbo/issues/9964,"[9964, 9967]",1,2
+apache/dubbo,8755,https://github.com/apache/dubbo/issues/9921,"[9921, 9941, 9942, 9910, 9912]",28,5
+App-vNext/Polly,14896,https://github.com/App-vNext/Polly/issues/936,"[936, 937]",14,2
+archriss/react-native-snap-carousel,15424,https://github.com/archriss/react-native-snap-carousel/issues/928,"[928, 929]",8,2
+archriss/react-native-snap-carousel,15427,https://github.com/archriss/react-native-snap-carousel/issues/922,"[922, 925]",4,2
+BurntSushi/toml,16083,https://github.com/BurntSushi/toml/issues/354,"[354, 358, 357, 350]",43,4
+BurntSushi/toml,16084,https://github.com/BurntSushi/toml/issues/353,"[353, 356]",11,2
+cglib/cglib,16884,https://github.com/cglib/cglib/issues/205,"[205, 206]",0,2
+deployphp/deployer,19957,https://github.com/deployphp/deployer/issues/3189,"[3189, 3159]",16,2
+deployphp/deployer,19986,https://github.com/deployphp/deployer/issues/3146,"[3146, 3147]",0,2
+deployphp/deployer,19987,https://github.com/deployphp/deployer/issues/3144,"[3144, 3145]",0,2
+deployphp/deployer,19991,https://github.com/deployphp/deployer/issues/3137,"[3137, 3138]",0,2
+deployphp/deployer,19994,https://github.com/deployphp/deployer/issues/3129,"[3129, 3133]",6,2
+deployphp/deployer,20007,https://github.com/deployphp/deployer/issues/3112,"[3112, 3111]",3,2
+deployphp/deployer,20011,https://github.com/deployphp/deployer/issues/3088,"[3088, 3089, 3091, 3092, 3093, 3095, 3096, 3097, 3098, 3100]",164,10
+duo-labs/cloudmapper,22005,https://github.com/duo-labs/cloudmapper/issues/928,"[928, 927]",2,2
+go-chi/chi,22951,https://github.com/go-chi/chi/issues/724,"[724, 726]",4,2
+grpc/grpc-web,23502,https://github.com/grpc/grpc-web/issues/1257,"[1257, 1251, 1241]",10,3
+grpc/grpc-web,23530,https://github.com/grpc/grpc-web/issues/1220,"[1220, 1222, 1223]",31,3
+jupyterhub/jupyterhub,26634,https://github.com/jupyterhub/jupyterhub/issues/3977,"[3977, 3971]",4,2
+jupyterhub/jupyterhub,26638,https://github.com/jupyterhub/jupyterhub/issues/3969,"[3969, 3965]",7,2
+jupyterhub/jupyterhub,26668,https://github.com/jupyterhub/jupyterhub/issues/3936,"[3936, 3933]",5,2
+jupyterhub/jupyterhub,26669,https://github.com/jupyterhub/jupyterhub/issues/3900,"[3900, 3935]",5,2
+jupyterhub/jupyterhub,26671,https://github.com/jupyterhub/jupyterhub/issues/3913,"[3913, 3932]",12,2
+jupyterhub/jupyterhub,26672,https://github.com/jupyterhub/jupyterhub/issues/3930,"[3930, 3931]",0,2
+jupyterhub/jupyterhub,26674,https://github.com/jupyterhub/jupyterhub/issues/3928,"[3928, 3919]",3,2
+jupyterhub/jupyterhub,26676,https://github.com/jupyterhub/jupyterhub/issues/3906,"[3906, 3925]",10,2
+jupyterhub/jupyterhub,26677,https://github.com/jupyterhub/jupyterhub/issues/3889,"[3889, 3924]",12,2
+jupyterhub/jupyterhub,26683,https://github.com/jupyterhub/jupyterhub/issues/3914,"[3914, 3915]",3,2
+jupyterhub/jupyterhub,26686,https://github.com/jupyterhub/jupyterhub/issues/3909,"[3909, 3901]",3,2
+jupyterhub/jupyterhub,26687,https://github.com/jupyterhub/jupyterhub/issues/3905,"[3905, 3907]",0,2
+jupyterhub/jupyterhub,26695,https://github.com/jupyterhub/jupyterhub/issues/3890,"[3890, 3891]",3,2
+jupyterhub/jupyterhub,26704,https://github.com/jupyterhub/jupyterhub/issues/3873,"[3873, 3874]",5,2
+kubernetes-sigs/kustomize,29306,https://github.com/kubernetes-sigs/kustomize/issues/4705,"[4705, 4698, 4699, 4692]",62,4
+kubernetes-sigs/kustomize,29312,https://github.com/kubernetes-sigs/kustomize/issues/4688,"[4688, 4689]",11,2
+kubernetes-sigs/kustomize,29359,https://github.com/kubernetes-sigs/kustomize/issues/4570,"[4570, 4610]",8,2
+MagicStack/uvloop,31993,https://github.com/MagicStack/uvloop/issues/468,"[468, 469, 470]",2,3
+marko-js/marko,32332,https://github.com/marko-js/marko/issues/1808,"[1808, 1810]",10,2
+marko-js/marko,32343,https://github.com/marko-js/marko/issues/1796,"[1796, 1797]",9,2
+MithrilJS/mithril.js,35844,https://github.com/MithrilJS/mithril.js/issues/2773,"[2773, 2774]",1,2
+MithrilJS/mithril.js,35845,https://github.com/MithrilJS/mithril.js/issues/2771,"[2771, 2772]",15,2
+mlflow/mlflow,37387,https://github.com/mlflow/mlflow/issues/6250,"[6250, 6154, 6096, 6227, 6171, 6172]",6,6
+mlflow/mlflow,37406,https://github.com/mlflow/mlflow/issues/6209,"[6209, 6228]",6,2
+mlflow/mlflow,37409,https://github.com/mlflow/mlflow/issues/6224,"[6224, 6221]",5,2
+mlflow/mlflow,37414,https://github.com/mlflow/mlflow/issues/6218,"[6218, 6194]",36,2
+mlflow/mlflow,37416,https://github.com/mlflow/mlflow/issues/6216,"[6216, 6201]",9,2
+mlflow/mlflow,37419,https://github.com/mlflow/mlflow/issues/6200,"[6200, 6212, 6213]",33,3
+mlflow/mlflow,37422,https://github.com/mlflow/mlflow/issues/6208,"[6208, 6190, 6202, 6205, 6206, 6207]",7,6
+mlflow/mlflow,37436,https://github.com/mlflow/mlflow/issues/6184,"[6184, 6169]",12,2
+mlflow/mlflow,37439,https://github.com/mlflow/mlflow/issues/5659,"[5659, 6181]",55,2
+mlflow/mlflow,37441,https://github.com/mlflow/mlflow/issues/6177,"[6177, 6179]",5,2
+mlflow/mlflow,37443,https://github.com/mlflow/mlflow/issues/6176,"[6176, 6081]",6,2
+mlflow/mlflow,37447,https://github.com/mlflow/mlflow/issues/6170,"[6170, 6155]",1,2
+mlflow/mlflow,37468,https://github.com/mlflow/mlflow/issues/6134,"[6134, 6143]",0,2
+mlflow/mlflow,37484,https://github.com/mlflow/mlflow/issues/5996,"[5996, 5997, 6126]",19,3
+mlflow/mlflow,37485,https://github.com/mlflow/mlflow/issues/6121,"[6121, 6125]",2,2
+mlflow/mlflow,37489,https://github.com/mlflow/mlflow/issues/6120,"[6120, 6119]",10,2
+mlflow/mlflow,37490,https://github.com/mlflow/mlflow/issues/6093,"[6093, 6118]",1,2
+mlflow/mlflow,37495,https://github.com/mlflow/mlflow/issues/6113,"[6113, 6107]",4,2
+mlflow/mlflow,37496,https://github.com/mlflow/mlflow/issues/6112,"[6112, 5994, 5995]",13,3
+mlflow/mlflow,37501,https://github.com/mlflow/mlflow/issues/6105,"[6105, 6106]",4,2
+mlflow/mlflow,37503,https://github.com/mlflow/mlflow/issues/6083,"[6083, 6103]",2,2
+mlflow/mlflow,37515,https://github.com/mlflow/mlflow/issues/6080,"[6080, 6089, 6085]",21,3
+mlflow/mlflow,37521,https://github.com/mlflow/mlflow/issues/6076,"[6076, 5716]",12,2
+mlflow/mlflow,37525,https://github.com/mlflow/mlflow/issues/6071,"[6071, 6063]",0,2
+mlflow/mlflow,37529,https://github.com/mlflow/mlflow/issues/6066,"[6066, 6027, 6031]",5,3
+mlflow/mlflow,37531,https://github.com/mlflow/mlflow/issues/6064,"[6064, 5939, 5819]",21,3
+mlflow/mlflow,37534,https://github.com/mlflow/mlflow/issues/6060,"[6060, 6045, 6046]",8,3
+mlflow/mlflow,37542,https://github.com/mlflow/mlflow/issues/6049,"[6049, 6052]",8,2
+mlflow/mlflow,37550,https://github.com/mlflow/mlflow/issues/6041,"[6041, 6039]",12,2
+mlflow/mlflow,37553,https://github.com/mlflow/mlflow/issues/5857,"[5857, 6036, 5862]",15,3
+mlflow/mlflow,37557,https://github.com/mlflow/mlflow/issues/6017,"[6017, 5986, 6026, 6007, 6002, 6005, 5973, 5975, 5976, 5977, 5978, 5980, 5981, 5982, 5983]",308,15
+mlflow/mlflow,37559,https://github.com/mlflow/mlflow/issues/6003,"[6003, 6023]",10,2
+mlflow/mlflow,37564,https://github.com/mlflow/mlflow/issues/6018,"[6018, 5961, 5964, 5965, 5945, 5946, 5949]",26,7
+mlflow/mlflow,37566,https://github.com/mlflow/mlflow/issues/5653,"[5653, 6011, 5725, 6014, 6015]",53,5
+mlflow/mlflow,37574,https://github.com/mlflow/mlflow/issues/5993,"[5993, 5999]",5,2
+mlflow/mlflow,37576,https://github.com/mlflow/mlflow/issues/5987,"[5987, 5988]",7,2
+mlflow/mlflow,37582,https://github.com/mlflow/mlflow/issues/5968,"[5968, 5970]",30,2
+mlflow/mlflow,37583,https://github.com/mlflow/mlflow/issues/5960,"[5960, 5969]",10,2
+mlflow/mlflow,37598,https://github.com/mlflow/mlflow/issues/5934,"[5934, 5943]",5,2
+mlflow/mlflow,37599,https://github.com/mlflow/mlflow/issues/5938,"[5938, 5942]",0,2
+mlflow/mlflow,37605,https://github.com/mlflow/mlflow/issues/5932,"[5932, 5886, 5919]",0,3
+mlflow/mlflow,37606,https://github.com/mlflow/mlflow/issues/5913,"[5913, 5930]",4,2
+mlflow/mlflow,37607,https://github.com/mlflow/mlflow/issues/5929,"[5929, 5915]",14,2
+mlflow/mlflow,37610,https://github.com/mlflow/mlflow/issues/5923,"[5923, 5926]",13,2
+mlflow/mlflow,37614,https://github.com/mlflow/mlflow/issues/5921,"[5921, 5850]",6,2
+mlflow/mlflow,37619,https://github.com/mlflow/mlflow/issues/5670,"[5670, 5708, 5680, 5875, 5914]",64,5
+mlflow/mlflow,37620,https://github.com/mlflow/mlflow/issues/5912,"[5912, 5904]",3,2
+mlflow/mlflow,37622,https://github.com/mlflow/mlflow/issues/5897,"[5897, 5839, 5905, 5910]",51,4
+mlflow/mlflow,37623,https://github.com/mlflow/mlflow/issues/5882,"[5882, 5884, 5909]",14,3
+mlflow/mlflow,37624,https://github.com/mlflow/mlflow/issues/5907,"[5907, 5899]",16,2
+mlflow/mlflow,37625,https://github.com/mlflow/mlflow/issues/5888,"[5888, 5906]",2,2
+mlflow/mlflow,37632,https://github.com/mlflow/mlflow/issues/5892,"[5892, 5893]",19,2
+mlflow/mlflow,37635,https://github.com/mlflow/mlflow/issues/5872,"[5872, 5889, 5718, 5871]",29,4
+mlflow/mlflow,37640,https://github.com/mlflow/mlflow/issues/5878,"[5878, 5879]",10,2
+mlflow/mlflow,37643,https://github.com/mlflow/mlflow/issues/5840,"[5840, 5873, 5841, 5845, 5656]",73,5
+mlflow/mlflow,37644,https://github.com/mlflow/mlflow/issues/5865,"[5865, 5869, 5870, 5863]",2,4
+mlflow/mlflow,37648,https://github.com/mlflow/mlflow/issues/5861,"[5861, 5711]",3,2
+mlflow/mlflow,37650,https://github.com/mlflow/mlflow/issues/5849,"[5849, 5859]",14,2
+mlflow/mlflow,37654,https://github.com/mlflow/mlflow/issues/5851,"[5851, 5853]",13,2
+mlflow/mlflow,37660,https://github.com/mlflow/mlflow/issues/5791,"[5791, 5842, 5676, 5703]",50,4
+mlflow/mlflow,37662,https://github.com/mlflow/mlflow/issues/5816,"[5816, 5817, 5837, 5798]",46,4
+mlflow/mlflow,37669,https://github.com/mlflow/mlflow/issues/5828,"[5828, 5829, 5822]",20,3
+mlflow/mlflow,37672,https://github.com/mlflow/mlflow/issues/5824,"[5824, 5820]",19,2
+mlflow/mlflow,37682,https://github.com/mlflow/mlflow/issues/5808,"[5808, 5804]",6,2
+mlflow/mlflow,37683,https://github.com/mlflow/mlflow/issues/5786,"[5786, 5806]",6,2
+mlflow/mlflow,37685,https://github.com/mlflow/mlflow/issues/5803,"[5803, 5709, 5797]",47,3
+mlflow/mlflow,37687,https://github.com/mlflow/mlflow/issues/5801,"[5801, 5628]",7,2
+mlflow/mlflow,37706,https://github.com/mlflow/mlflow/issues/5777,"[5777, 5644]",0,2
+mlflow/mlflow,37715,https://github.com/mlflow/mlflow/issues/5736,"[5736, 5694, 5767]",14,3
+mlflow/mlflow,37720,https://github.com/mlflow/mlflow/issues/5761,"[5761, 5740]",0,2
+mlflow/mlflow,37721,https://github.com/mlflow/mlflow/issues/5760,"[5760, 5748, 5717, 5759]",10,4
+mlflow/mlflow,37723,https://github.com/mlflow/mlflow/issues/5739,"[5739, 5756]",22,2
+mlflow/mlflow,37724,https://github.com/mlflow/mlflow/issues/5753,"[5753, 5732, 5733]",5,3
+mlflow/mlflow,37727,https://github.com/mlflow/mlflow/issues/5738,"[5738, 5750]",8,2
+mlflow/mlflow,37729,https://github.com/mlflow/mlflow/issues/5730,"[5730, 5734, 5735, 5743, 5712, 5746, 5747]",60,7
+mlflow/mlflow,37730,https://github.com/mlflow/mlflow/issues/5744,"[5744, 5745]",7,2
+mlflow/mlflow,37741,https://github.com/mlflow/mlflow/issues/5721,"[5721, 5705]",4,2
+mlflow/mlflow,37742,https://github.com/mlflow/mlflow/issues/5720,"[5720, 5713]",3,2
+mlflow/mlflow,37744,https://github.com/mlflow/mlflow/issues/5704,"[5704, 5715]",3,2
+mlflow/mlflow,37747,https://github.com/mlflow/mlflow/issues/5697,"[5697, 5707]",12,2
+mlflow/mlflow,37767,https://github.com/mlflow/mlflow/issues/5674,"[5674, 5675]",3,2
+mlflow/mlflow,37783,https://github.com/mlflow/mlflow/issues/5635,"[5635, 5646]",5,2
+mlflow/mlflow,37788,https://github.com/mlflow/mlflow/issues/5640,"[5640, 5617]",5,2
+mlflow/mlflow,37791,https://github.com/mlflow/mlflow/issues/5633,"[5633, 5631]",2,2
+Project-OSRM/osrm-backend,6,https://github.com/Project-OSRM/osrm-backend/issues/6273,"[6273, 6275, 6261, 6270]",26,4
+Project-OSRM/osrm-backend,17,https://github.com/Project-OSRM/osrm-backend/issues/6258,"[6258, 6259]",10,2
+Project-OSRM/osrm-backend,36,https://github.com/Project-OSRM/osrm-backend/issues/6236,"[6236, 6237]",17,2
+Rapptz/discord.py,46911,https://github.com/Rapptz/discord.py/issues/8198,"[8198, 7918]",1,2
+Rapptz/discord.py,46912,https://github.com/Rapptz/discord.py/issues/8196,"[8196, 8103]",6,2
+Rapptz/discord.py,46920,https://github.com/Rapptz/discord.py/issues/8187,"[8187, 8159]",9,2
+Rapptz/discord.py,46928,https://github.com/Rapptz/discord.py/issues/8064,"[8064, 8179]",1,2
+Rapptz/discord.py,46983,https://github.com/Rapptz/discord.py/issues/8082,"[8082, 8109]",9,2
+Rapptz/discord.py,46995,https://github.com/Rapptz/discord.py/issues/8091,"[8091, 7999]",1,2
+Rapptz/discord.py,47012,https://github.com/Rapptz/discord.py/issues/8048,"[8048, 8062]",0,2
+Rapptz/discord.py,47021,https://github.com/Rapptz/discord.py/issues/8052,"[8052, 8046]",4,2
+Rapptz/discord.py,47031,https://github.com/Rapptz/discord.py/issues/8002,"[8002, 8037]",14,2
+Rapptz/discord.py,47035,https://github.com/Rapptz/discord.py/issues/8032,"[8032, 8026]",3,2
+Rapptz/discord.py,47066,https://github.com/Rapptz/discord.py/issues/7969,"[7969, 7978]",8,2
+Rapptz/discord.py,47076,https://github.com/Rapptz/discord.py/issues/7964,"[7964, 7966]",3,2
+Rapptz/discord.py,47087,https://github.com/Rapptz/discord.py/issues/7954,"[7954, 7941]",0,2
+Rapptz/discord.py,47091,https://github.com/Rapptz/discord.py/issues/7949,"[7949, 7950]",2,2
+Rapptz/discord.py,47145,https://github.com/Rapptz/discord.py/issues/7889,"[7889, 7890]",0,2
+Rapptz/discord.py,47154,https://github.com/Rapptz/discord.py/issues/7872,"[7872, 7877]",0,2
+redis/redis-rb,51128,https://github.com/redis/redis-rb/issues/1106,"[1106, 1107]",15,2
+redis/redis-rb,51137,https://github.com/redis/redis-rb/issues/1096,"[1096, 1097]",3,2
+summernote/summernote,55501,https://github.com/summernote/summernote/issues/4312,"[4312, 4270]",2,2
+TypeStrong/ts-node,62390,https://github.com/TypeStrong/ts-node/issues/1714,"[1714, 1715, 1838, 1839]",19,4
+TypeStrong/ts-node,62396,https://github.com/TypeStrong/ts-node/issues/1829,"[1829, 1830]",1,2
+TypeStrong/ts-node,62399,https://github.com/TypeStrong/ts-node/issues/1824,"[1824, 1778, 1764]",18,3
+TypeStrong/ts-node,62401,https://github.com/TypeStrong/ts-node/issues/1797,"[1797, 1821, 1790, 1822]",51,4
+TypeStrong/ts-node,62403,https://github.com/TypeStrong/ts-node/issues/1793,"[1793, 1796, 1800, 1801, 1802, 1817]",100,6
+TypeStrong/ts-node,62411,https://github.com/TypeStrong/ts-node/issues/1777,"[1777, 1779, 1791]",19,3
+TypeStrong/ts-node,62417,https://github.com/TypeStrong/ts-node/issues/1774,"[1774, 1775]",1,2
+TypeStrong/ts-node,62420,https://github.com/TypeStrong/ts-node/issues/1769,"[1769, 1770, 1771]",20,3
+varvet/pundit,63367,https://github.com/varvet/pundit/issues/736,"[736, 739]",0,2

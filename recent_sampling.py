@@ -95,23 +95,33 @@ def main():
     csv_rows = [['repo_name',
                 'component_id',
                 'url',
-                'node_id',
-                'comment_count'],
+                'nodes',
+                'total_comment_count'],
                 'component_size']
     for component in sample:
+        constituent = []
+        comment_count = 0
         component_id.append({
             'component_id': component[0]['component_id'],
             'size': len(component)
         })
         for node in component:
-            row = [node['repo_name'],
-                    node['component_id'],
-                    node['url'],
-                    node['node_id'],
-                    node['comment_count'],
-                    len(component)]
-            csv_rows.append(row)
-    with open(f'unified_json/csv_all_young_sample_nodes.csv', 'w') as csv_file:
+            constituent.append(node['node_id'])
+            # row = [node['repo_name'],
+            #         node['component_id'],
+            #         node['url'],
+            #         node['node_id'],
+            #         node['comment_count'],
+            #         len(component)]
+            comment_count += node['comment_count']
+        row = [component[0]['repo_name'],
+               component[0]['component_id'],
+               component[0]['url'],
+               constituent,
+               comment_count,
+               len(component)]
+        csv_rows.append(row)
+    with open(f'unified_json/csv_all_young_component.csv', 'w') as csv_file:
         csvwriter = csv.writer(csv_file)
         csvwriter.writerows(csv_rows)
     # with open(f'unified_json/copy_paste_this.txt', 'w') as f:
