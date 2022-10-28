@@ -96,7 +96,8 @@ def main():
                 'component_id',
                 'url',
                 'node_id',
-                'comment_count']]
+                'comment_count'],
+                'component_size']
     for component in sample:
         component_id.append({
             'component_id': component[0]['component_id'],
@@ -107,9 +108,10 @@ def main():
                     node['component_id'],
                     node['url'],
                     node['node_id'],
-                    node['comment_count']]
+                    node['comment_count'],
+                    len(component)]
             csv_rows.append(row)
-    with open(f'unified_json/csv_all_young_sample.csv', 'w') as csv_file:
+    with open(f'unified_json/csv_all_young_sample_nodes.csv', 'w') as csv_file:
         csvwriter = csv.writer(csv_file)
         csvwriter.writerows(csv_rows)
     # with open(f'unified_json/copy_paste_this.txt', 'w') as f:
