@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+
 import com.opencsv.CSVWriter;
 
 public class diversity_sampling {
@@ -28,7 +30,7 @@ public class diversity_sampling {
     }
     
     private static void write_to_csv(HashSet<Component> sample) throws IOException {
-        File file = new File("./unified_json/java_sample.csv");
+        File file = new File("./unified_json/java_sample_new.csv");
         FileWriter outputfile = new FileWriter(file);
 
         CSVWriter writer = new CSVWriter(outputfile);
@@ -96,16 +98,85 @@ public class diversity_sampling {
         HashSet<Component> sample = new HashSet<Component>();
         HashSet<Component> candidates = new HashSet<>(component_universe);
         HashSet<Component> c_space = new HashSet<>();
+        Integer[] blocklist = new Integer[]{
+            54915,
+            18052,
+            4869,
+            36106,
+            52493,
+            40078,
+            45584,
+            63252,
+            17046,
+            58774,
+            11032,
+            58392,
+            1433,
+            49179,
+            44062,
+            39967,
+            36000,
+            52640,
+            39974,
+            16426,
+            34730,
+            20267,
+            16428,
+            430,
+            34735,
+            13361,
+            58936,
+            36152,
+            185,
+            23869,
+            38589,
+            16446,
+            46143,
+            17472,
+            1985,
+            17731,
+            11717,
+            37705,
+            37322,
+            44240,
+            55505,
+            4821,
+            49494,
+            25818,
+            36060,
+            30049,
+            36194,
+            62946,
+            40802,
+            25443,
+            8679,
+            16491,
+            34155,
+            24942,
+            22130,
+            34418,
+            36212,
+            16885,
+            4854,
+            22393,
+            26745,
+            123,
+            383,
+            56191
+        };
+        List<Integer> blocklistList = new ArrayList<>(Arrays.asList(blocklist));
         for (int i = 0; i < K; i++) {
             HashSet<Component> c_best = new HashSet<Component>();
             Component p_best = null;
             for (Component candidate: candidates) {
-                HashSet<Component> new_coverage_by_candidate = find_similar_components(candidate, candidates);
-                new_coverage_by_candidate.removeAll(c_space);
-                if (new_coverage_by_candidate.size() > c_best.size()) {
-                    c_best = new_coverage_by_candidate;
-                    p_best = candidate;
-                } 
+                if (!blocklistList.contains(candidate.key)) {
+                    HashSet<Component> new_coverage_by_candidate = find_similar_components(candidate, candidates);
+                    new_coverage_by_candidate.removeAll(c_space);
+                    if (new_coverage_by_candidate.size() > c_best.size()) {
+                        c_best = new_coverage_by_candidate;
+                        p_best = candidate;
+                    }
+                }
             }
             if (p_best == null) {
                 break;
