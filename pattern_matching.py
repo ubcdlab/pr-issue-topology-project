@@ -28,6 +28,7 @@ def construct_graph(graph_json):
 def main():
     graph_json = read_json_from_file('tiny-dnn-tiny-dnn')
     graph = construct_graph(graph_json)
+    # list(nx.connected_components(graph))
     undirected_graph = graph.to_undirected()
     connected_components = list(nx.connected_components(undirected_graph))
 
