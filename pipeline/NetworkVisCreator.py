@@ -4,7 +4,7 @@ from github import Github
 import picklereader
 import networkx as nx
 import json
-import os
+from pathlib import Path
 
 class NetworkVisCreator(picklereader.PickleReader):
     def __init__(self, github_token, target_repo_list):
@@ -19,8 +19,7 @@ class NetworkVisCreator(picklereader.PickleReader):
     
     def write_json_to_file(self, graph_dict, target_repo):
         target_repo_no_slash = target_repo.replace('/', '-')
-        PATH_FROM_PARENT_DIR = f'raw_data/nodes_{target_repo_no_slash}'
-        PATH = os.path.abspath('..')
+        PATH = Path(__file__).resolve().parents[1]
         with open(f'{PATH}/data/graph_{target_repo_no_slash}.json', 'w') as f:
             f.write(json.dumps(graph_dict, sort_keys=False, indent=4))
         print(f'Saved result to data/graph_{target_repo_no_slash}.json')
@@ -80,8 +79,8 @@ class NetworkVisCreator(picklereader.PickleReader):
             links_dict = []
             for mention in issue_timeline_events:
                 # Tracks INCOMING MENTIONS
-                if hasattr(mention.event.actor, 'type'):
-                    if mention.event.actor.type == 'Bot':
+                if hasattr(mention.actor, 'type'):
+                    if mention.actor.type == 'Bot':
                         continue
 
                 mentioning_issue = mention.source.issue
@@ -96,20 +95,20 @@ class NetworkVisCreator(picklereader.PickleReader):
                     if self.find_review_url(review_comment) == issue.url:
                         mentioning_issue_reviews.append(review_comment)
                     
-                    comment_link, comment_text = self.find_link_and_text_of_comment(target_repo, target_issue_number, mentioning_issue, mentioning_issue_comments, mentioning_issue_reviews, mentioning_time)
+                comment_link, comment_text = self.find_link_and_text_of_comment(target_repo, target_issue_number, mentioning_issue, mentioning_issue_comments, mentioning_issue_reviews, mentioning_time)
 
-                    link_type = self.find_automatic_links(issue.number, mentioning_issue.body, mentioning_issue_comments)
-                    if link_type == 'fixes':
-                        fixes_relationship_counter += 1
-                    elif link_type == 'duplicate':
-                        duplicate_relationship_counter += 1
+                link_type = self.find_automatic_links(issue.number, mentioning_issue.body, mentioning_issue_comments)
+                if link_type == 'fixes':
+                    fixes_relationship_counter += 1
+                elif link_type == 'duplicate':
+                    duplicate_relationship_counter += 1
 
-                    links_dict.append({
-                            'number': mention.source.issue.number,
-                            'comment_link': comment_link,
-                            'comment_text': comment_text,
-                            'link_type': self.find_automatic_links(issue.number, mentioning_issue.body, mentioning_issue_comments),
-                        })
+                links_dict.append({
+                        'number': mention.source.issue.number,
+                        'comment_link': comment_link,
+                        'comment_text': comment_text,
+                        'link_type': self.find_automatic_links(issue.number, mentioning_issue.body, mentioning_issue_comments),
+                    })
             for link in links_dict:
                 # add link to D3 links dict
                 graph_dict['links'].append({
@@ -135,7 +134,7 @@ class NetworkVisCreator(picklereader.PickleReader):
                 for entry in graph_dict['nodes']:
                     if (entry['id'] == node):
                         entry['connected_component'] = list(component)
-                        entry['connected_component_size'] = len(list(component))
+                        entry['connected_component_size'] = [len(list(component))]
                         entry['component_id'] = self.component_id
             self.component_id += 1
         
@@ -149,7 +148,7 @@ class NetworkVisCreator(picklereader.PickleReader):
 
         return graph_dict
 
-    def find_automatic_links(issue_number, issue_body, comments):
+    def find_automatic_links(self, issue_number, issue_body, comments):
         if issue_body is None:
             issue_body = ''
         if comments is None:
@@ -170,19 +169,19 @@ class NetworkVisCreator(picklereader.PickleReader):
                 return 'duplicate'
         return 'other'
 
-    def find_review_url(review_comment):
+    def find_review_url(self, review_comment):
         if hasattr(review_comment, 'issue_url'):
             return review_comment.issue_url.replace('/pulls/', '/issues/')
         elif hasattr(review_comment, 'pull_request_url'):
             return review_comment.pull_request_url.replace('/pulls/', '/issues/')
         return None # Github do be like that sometimes, where we just cant find the URL
 
-    def find_comment(issue_url, comment_list):
+    def find_comment(self, issue_url, comment_list):
         for comments in comment_list:
             if len(comments) > 0 and comments[0].issue_url == issue_url:
                 return comments
 
-    def time_matches(timestamp, tolerance_time):
+    def time_matches(self, timestamp, tolerance_time):
         return (tolerance_time - datetime.timedelta(seconds=1)) <= timestamp <= (tolerance_time + datetime.timedelta(seconds=1))
 
     def find_link_and_text_of_comment(self, TARGET_REPO, target_issue_number, issue, comments, review_comments, timestamp):
