@@ -1,6 +1,7 @@
 import sys
 import pickle
 import os
+from pathlib import Path
 
 class PickleReader(object):
     def __init__(self, target_repo_list):
@@ -8,8 +9,9 @@ class PickleReader(object):
     
     def read_repo_local_file(self, repo, target_repo):
         target_repo_no_slash = target_repo.replace('/', '-') # slashes breaks file path
-        PATH_FROM_PARENT_DIR = f'raw_data/nodes_{target_repo_no_slash}'
-        PATH = os.path.abspath(os.path.join(os.path.abspath('..'), PATH_FROM_PARENT_DIR))
+        # PATH_FROM_PARENT_DIR = f'raw_data/nodes_{target_repo_no_slash}'
+        # PATH = os.path.abspath(os.path.join(os.path.abspath('..'), PATH_FROM_PARENT_DIR))
+        PATH = Path(__file__).resolve().parents[1].joinpath(f'raw_data/nodes_{target_repo_no_slash}')
         nodes, node_list, comment_list, timeline_list, review_comment_list = ([] for i in range(5))
         try:
             nodes = pickle.load(open(f'{PATH}.pk', 'rb'))
@@ -31,8 +33,7 @@ class PickleReader(object):
     
     def write_variables_to_file(self, nodes, node_list, comment_list, timeline_list, review_comment_list, target_repo):
         target_repo_no_slash = target_repo.replace('/', '-') # slashes breaks file path
-        PATH_FROM_PARENT_DIR = f'raw_data/nodes_{target_repo_no_slash}'
-        PATH = os.path.abspath(os.path.join(os.path.abspath('..'), PATH_FROM_PARENT_DIR))
+        PATH = Path(__file__).resolve().parents[1].joinpath(f'raw_data/nodes_{target_repo_no_slash}')
         print('Writing raw nodes and comment data to disk...\nDO NOT INTERRUPT OR TURN OFF YOUR COMPUTER.')
         pickle.dump(nodes, open(f'{PATH}.pk', 'wb'))
         pickle.dump(node_list, open(f'{PATH}_progress.pk', 'wb'))

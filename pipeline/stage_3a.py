@@ -1,5 +1,6 @@
 import sys
 import NetworkVisCreator as NetworkVisCreator
+import BarChartCreator as BarChartCreator
 from pathlib import Path
 
 def get_token():
@@ -26,8 +27,10 @@ def main():
         print(f'You need to specify the names of Github repo to download as arguments.')
         print('Exiting.')
         sys.exit(1)
-    dm = NetworkVisCreator.NetworkVisCreator(get_token(), TARGET_REPO_ARRAY)
-    dm.create_vis_for_all_repo()
+    # network_vis_creator = NetworkVisCreator.NetworkVisCreator(get_token(), TARGET_REPO_ARRAY)
+    # network_vis_creator.create_vis_for_all_repo()
+    bar_chart_creator = BarChartCreator.BarChartCreator(None, TARGET_REPO_ARRAY)
+    bar_chart_creator.create_vis_for_all_repo()
 
 if __name__ == '__main__':
     main()
