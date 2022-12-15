@@ -1,13 +1,13 @@
 import sys
 import dataminer
-import os
+from pathlib import Path
 
 def get_token():
     # get personal access token from a file named token.txt
     token = None
-    PATH = os.path.abspath('..')
+    PATH = Path(__file__).resolve().parents[1].joinpath('.token')
     try:
-        with open(f'{PATH}/.token', 'r') as f:
+        with open(PATH, 'r') as f:
             token = f.read()
             print('Github token read OK')
     except IOError:

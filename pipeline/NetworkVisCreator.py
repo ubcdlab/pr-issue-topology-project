@@ -30,7 +30,6 @@ class NetworkVisCreator(picklereader.PickleReader):
         repo_contributor_count = repo.get_contributors().totalCount
         nodes, node_list, comment_list, timeline_list, review_comment_list = self.read_repo_local_file(repo, target_repo)
         network_graph = nx.Graph()
-        issue_timeline = []
 
         graph_dict = {
             'repo_url': repo.html_url,
@@ -72,6 +71,7 @@ class NetworkVisCreator(picklereader.PickleReader):
             graph_dict['nodes'].append(node_dict)
             network_graph.add_node(issue.number)
 
+            issue_timeline = timeline_list[-index-1]
             issue_timeline = list(filter(lambda x: x.event == 'cross-referenced' and x.source.issue.repository.full_name == repo.full_name, issue_timeline))
             issue_timeline_events = issue_timeline.copy()
             issue_timeline_timestamp = issue_timeline.copy()
@@ -192,8 +192,7 @@ class NetworkVisCreator(picklereader.PickleReader):
             for comment in comments:
                 if timestamp - datetime.timedelta(seconds=3) <= comment.created_at <= timestamp + datetime.timedelta(seconds=3):
                     return comment.html_url, comment.body
-        # at this point, we still have not identified the link
-        # We will manually use regex at this point
+        # at this point, we still have not identified the link, We will manually use regex at this point
         REGEX_STRING = f'#{target_issue_number}'
         REGEX_STRING_URL = f'https:\/\/github\.com/{TARGET_REPO}\/(?:issues|pull)\/{target_issue_number}'
         # Search all the comments in the node with the mention

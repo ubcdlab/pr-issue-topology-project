@@ -364,7 +364,7 @@ def create_json(g, nodes, comment_list, timeline_list, review_comment_list, magi
         for event in issue_commit_timeline:
             # NOTE: events of type 'commit' have no actor.url... in fact
             # a lot of the fields aren't set... 
-            # TODO: FIX THIS... USE THE DEBUGGER
+            # T0D0: FIX THIS... USE THE DEBUGGER
             # some Github timeline events just dont have event ID for some cursed reason
             # these are usually commit events
             event_type = event.event
