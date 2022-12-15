@@ -1,6 +1,6 @@
 import os
 import sys
-import viscreator
+import pipeline.NetworkVisCreator as NetworkVisCreator
 
 def get_token():
     # get personal access token from a file named token.txt
@@ -26,7 +26,7 @@ def main():
         print(f'You need to specify the names of Github repo to download as arguments.')
         print('Exiting.')
         sys.exit(1)
-    dm = viscreator.VisCreator(get_token(), TARGET_REPO_ARRAY)
+    dm = NetworkVisCreator.NetworkVisCreator(get_token(), TARGET_REPO_ARRAY)
     dm.create_vis_for_all_repo()
 
 if __name__ == '__main__':

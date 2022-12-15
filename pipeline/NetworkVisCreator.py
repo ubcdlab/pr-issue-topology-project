@@ -6,7 +6,7 @@ import networkx as nx
 import json
 import os
 
-class VisCreator(picklereader.PickleReader):
+class NetworkVisCreator(picklereader.PickleReader):
     def __init__(self, github_token, target_repo_list):
         self.g = Github(github_token)
         self.target_repo_list = target_repo_list
