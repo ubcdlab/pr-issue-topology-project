@@ -1,11 +1,10 @@
 from github import Github
+import picklereader
 import datetime
 import sys
-import pickle
 import time
-import os
 
-class Dataminer(object):
+class Dataminer(picklereader.PickleReader):
     RATE_LIMIT_THRESHOLD = 100
     EXTRA_RATE_LIMIT_WAIT_DURATION = 5
 
@@ -13,44 +12,10 @@ class Dataminer(object):
         self.g = Github(github_token)
         self.target_repo_list = target_repo_list
 
-    def load_saved_progress(self, repo, target_repo):
-        target_repo_no_slash = target_repo.replace('/', '-') # slashes breaks file path
-        PATH_FROM_PARENT_DIR = f'raw_data/nodes_{target_repo_no_slash}'
-        PATH = os.path.abspath(os.path.join(os.path.abspath('..'), PATH_FROM_PARENT_DIR))
-        nodes, node_list, comment_list, timeline_list, review_comment_list = ([] for i in range(5))
-        try:
-            nodes = pickle.load(open(f'{PATH}.pk', 'rb'))
-            node_list = pickle.load(open(f'{PATH}_progress.pk', 'rb'))
-            comment_list = pickle.load(open(f'{PATH}_comments.pk', 'rb'))
-            timeline_list = pickle.load(open(f'{PATH}_event.pk', 'rb'))
-            review_comment_list = pickle.load(open(f'{PATH}_review_comments.pk', 'rb'))
-        except FileNotFoundError:
-            print('One or more binary files missing. Redownloading repo files.')
-            nodes = list(repo.get_issues(state='all', sort='created', direction='desc'))
-            node_list = nodes.copy()
-            review_comment_list = list(repo.get_pulls_review_comments(sort='created', direction='desc'))
-            pickle.dump(review_comment_list, open(f'{PATH}_review_comments.pk', 'wb'))
-        except Exception as e:
-            print(e)
-            print('To the new RA, an exception (that is not FileNotFoundError) has happened, and it\'s not supposed to ever happen.')
-            sys.exit(1)
-        return nodes, node_list, comment_list, timeline_list, review_comment_list
-    
     def download_all_repo_data(self):
         for target_repo in self.target_repo_list:
             self.download_repo_data(target_repo)
     
-    def write_variables_to_file(self, nodes, node_list, comment_list, timeline_list, review_comment_list, target_repo):
-        target_repo_no_slash = target_repo.replace('/', '-') # slashes breaks file path
-        PATH_FROM_PARENT_DIR = f'raw_data/nodes_{target_repo_no_slash}'
-        PATH = os.path.abspath(os.path.join(os.path.abspath('..'), PATH_FROM_PARENT_DIR))
-        print('Writing raw nodes and comment data to disk...\nDO NOT INTERRUPT OR TURN OFF YOUR COMPUTER.')
-        pickle.dump(nodes, open(f'{PATH}.pk', 'wb'))
-        pickle.dump(node_list, open(f'{PATH}_progress.pk', 'wb'))
-        pickle.dump(comment_list, open(f'{PATH}_comments.pk', 'wb'))
-        pickle.dump(timeline_list, open(f'{PATH}_event.pk', 'wb'))
-        pickle.dump(review_comment_list, open(f'{PATH}_review_comments.pk', 'wb'))
-
     def check_rate_limit(self, rate_limit, nodes, node_list, comment_list, timeline_list, review_comment_list, target_repo):
         if rate_limit.core.remaining < self.RATE_LIMIT_THRESHOLD:
             print('Rate limit threshold reached!')
@@ -64,7 +29,7 @@ class Dataminer(object):
     def download_repo_data(self, target_repo):
         repo = self.g.get_repo(target_repo)
         print(f'Downloading repo: {repo.html_url} with {repo.open_issues} open issues')
-        nodes, node_list, comment_list, timeline_list, review_comment_list = self.load_saved_progress(repo, target_repo)
+        nodes, node_list, comment_list, timeline_list, review_comment_list = self.read_repo_local_file(repo, target_repo)
         
         if (len(nodes) > 0 and len(comment_list) > 0) and len(nodes) == len(comment_list):
             # Already done, just return the results loaded from file
