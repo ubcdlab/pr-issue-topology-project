@@ -21,7 +21,6 @@ class Dataminer(picklereader.PickleReader):
             print('Rate limit threshold reached!')
             time_remaining = rate_limit.core.reset - datetime.datetime.utcnow()
             print(f'Rate limit will reset after {time_remaining.seconds // 60} minutes {time_remaining.seconds % 60} seconds')
-            print(f'Rate limit reset time: {rate_limit.core.reset}' ) # I am not going to bother figuring out printing local time 
             print(f'Sleeping for {time_remaining.seconds + self.EXTRA_RATE_LIMIT_WAIT_DURATION} seconds.')
             self.write_variables_to_file(nodes, node_list, comment_list, timeline_list, review_comment_list, target_repo)
             time.sleep(time_remaining.seconds + self.EXTRA_RATE_LIMIT_WAIT_DURATION)
