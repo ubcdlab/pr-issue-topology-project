@@ -1,5 +1,5 @@
 import sys
-import ComponentSampler
+import DiversitySamplerStage1
 
 def main():
     try:
@@ -11,7 +11,7 @@ def main():
         print(f'You need to specify the names of Github repo to download as arguments.')
         print('Exiting.')
         sys.exit(1)
-    cs = ComponentSampler.ComponentSampler(None, TARGET_REPO_ARRAY)
+    cs = DiversitySamplerStage1.DiversitySamplerStage1(None, TARGET_REPO_ARRAY)
     cs.load_all_repo_component()
 
 if __name__ == '__main__':
