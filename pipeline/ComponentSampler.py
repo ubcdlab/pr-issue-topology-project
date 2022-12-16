@@ -10,7 +10,7 @@ class ComponentSampler(picklereader.PickleReader):
     def __init__(self, github_token, target_repo_list):
         self.target_repo_list = target_repo_list
         self.all_repo_component = []
-        self.component_id_keyfield_counter = 0
+        self.component_id_keyfield_counter = 1
     
     def load_all_repo_component(self):
         for target_repo in self.target_repo_list:
@@ -24,6 +24,7 @@ class ComponentSampler(picklereader.PickleReader):
             del entry['component_nodes']
         with open(f'{PATH}/unified_json/recent_sampling.json', 'w') as f:
             f.write(json.dumps(graph_dict, sort_keys=False, indent=4, default=lambda o: ''))
+        print('Saved result to /unified_json/recent_sampling.json')
     
     def find_issue(self, nodes, id):
         for issue in nodes:
@@ -53,19 +54,25 @@ class ComponentSampler(picklereader.PickleReader):
             subgraph = graph.subgraph(component)
             edge_count = graph.subgraph(component).number_of_edges() # edgy
             issue_list = []
+            component_node_dict = []
             for node in component:
                 issue = self.find_issue(nodes, node)
                 component_authors.add(issue.user.html_url)
                 total_comment_count += issue.comments
                 issue_list.append(issue)
-
+                component_node_dict.append({
+                    'id': issue.number,
+                    'type': 'pull_request' if issue.pull_request is not None else 'issue',
+                    'status': issue.state
+                })
             self.all_repo_component.append({
                 'repo_name': target_repo,
                 'component_id': self.component_id_keyfield_counter,
                 'component_nodes': list(issue_list),
-                'component_nodes_id': list(component),
+                'component_nodes_data': component_node_dict,
                 # 'component_authors': list(component_authors),
                 # 'comment_count': total_comment_count,
+                'links': [list(e) for e in subgraph.edges],
                 'diameter': nx.diameter(subgraph),
                 'density': edge_count / max((edge_count * (edge_count - 1)), 1),
                 'url': f'https://github.com/{target_repo}/issues/{list(component)[0]}'
