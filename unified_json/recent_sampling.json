@@ -1,12 +1,47 @@
 [
     {
+        "repo_name": "amphp/amp",
+        "component_id": 9,
+        "component_nodes_id": [
+            390
+        ],
+        "diameter": 0,
+        "density": 0.0,
+        "url": "https://github.com/amphp/amp/issues/390"
+    },
+    {
+        "repo_name": "amphp/amp",
+        "component_id": 11,
+        "component_nodes_id": [
+            388
+        ],
+        "diameter": 0,
+        "density": 0.0,
+        "url": "https://github.com/amphp/amp/issues/388"
+    },
+    {
+        "repo_name": "Frozemint/pr_dev",
+        "component_id": 2,
+        "component_nodes_id": [
+            7
+        ],
+        "diameter": 0,
+        "density": 0.0,
+        "url": "https://github.com/Frozemint/pr_dev/issues/7"
+    },
+    {
+        "repo_name": "amphp/amp",
+        "component_id": 7,
+        "component_nodes_id": [
+            392
+        ],
+        "diameter": 0,
+        "density": 0.0,
+        "url": "https://github.com/amphp/amp/issues/392"
+    },
+    {
         "repo_name": "Frozemint/pr_dev",
         "component_id": 4,
-        "component_nodes": [
-            "",
-            "",
-            ""
-        ],
         "component_nodes_id": [
             3,
             4,
@@ -18,92 +53,7 @@
     },
     {
         "repo_name": "amphp/amp",
-        "component_id": 8,
-        "component_nodes": [
-            ""
-        ],
-        "component_nodes_id": [
-            391
-        ],
-        "diameter": 0,
-        "density": 0.0,
-        "url": "https://github.com/amphp/amp/issues/391"
-    },
-    {
-        "repo_name": "Frozemint/pr_dev",
-        "component_id": 3,
-        "component_nodes": [
-            ""
-        ],
-        "component_nodes_id": [
-            6
-        ],
-        "diameter": 0,
-        "density": 0.0,
-        "url": "https://github.com/Frozemint/pr_dev/issues/6"
-    },
-    {
-        "repo_name": "Frozemint/pr_dev",
-        "component_id": 2,
-        "component_nodes": [
-            ""
-        ],
-        "component_nodes_id": [
-            7
-        ],
-        "diameter": 0,
-        "density": 0.0,
-        "url": "https://github.com/Frozemint/pr_dev/issues/7"
-    },
-    {
-        "repo_name": "Frozemint/pr_dev",
-        "component_id": 1,
-        "component_nodes": [
-            "",
-            ""
-        ],
-        "component_nodes_id": [
-            8,
-            2
-        ],
-        "diameter": 1,
-        "density": 1.0,
-        "url": "https://github.com/Frozemint/pr_dev/issues/8"
-    },
-    {
-        "repo_name": "amphp/amp",
-        "component_id": 7,
-        "component_nodes": [
-            ""
-        ],
-        "component_nodes_id": [
-            392
-        ],
-        "diameter": 0,
-        "density": 0.0,
-        "url": "https://github.com/amphp/amp/issues/392"
-    },
-    {
-        "repo_name": "Frozemint/pr_dev",
-        "component_id": 0,
-        "component_nodes": [
-            "",
-            ""
-        ],
-        "component_nodes_id": [
-            9,
-            1
-        ],
-        "diameter": 1,
-        "density": 1.0,
-        "url": "https://github.com/Frozemint/pr_dev/issues/9"
-    },
-    {
-        "repo_name": "amphp/amp",
         "component_id": 5,
-        "component_nodes": [
-            ""
-        ],
         "component_nodes_id": [
             394
         ],
@@ -114,9 +64,6 @@
     {
         "repo_name": "amphp/amp",
         "component_id": 6,
-        "component_nodes": [
-            ""
-        ],
         "component_nodes_id": [
             393
         ],
@@ -125,29 +72,45 @@
         "url": "https://github.com/amphp/amp/issues/393"
     },
     {
-        "repo_name": "amphp/amp",
-        "component_id": 9,
-        "component_nodes": [
-            ""
-        ],
+        "repo_name": "Frozemint/pr_dev",
+        "component_id": 1,
         "component_nodes_id": [
-            390
+            8,
+            2
+        ],
+        "diameter": 1,
+        "density": 1.0,
+        "url": "https://github.com/Frozemint/pr_dev/issues/8"
+    },
+    {
+        "repo_name": "Frozemint/pr_dev",
+        "component_id": 3,
+        "component_nodes_id": [
+            6
         ],
         "diameter": 0,
         "density": 0.0,
-        "url": "https://github.com/amphp/amp/issues/390"
+        "url": "https://github.com/Frozemint/pr_dev/issues/6"
+    },
+    {
+        "repo_name": "Frozemint/pr_dev",
+        "component_id": 0,
+        "component_nodes_id": [
+            9,
+            1
+        ],
+        "diameter": 1,
+        "density": 1.0,
+        "url": "https://github.com/Frozemint/pr_dev/issues/9"
     },
     {
         "repo_name": "amphp/amp",
-        "component_id": 11,
-        "component_nodes": [
-            ""
-        ],
+        "component_id": 8,
         "component_nodes_id": [
-            388
+            391
         ],
         "diameter": 0,
         "density": 0.0,
-        "url": "https://github.com/amphp/amp/issues/388"
+        "url": "https://github.com/amphp/amp/issues/391"
     }
 ]

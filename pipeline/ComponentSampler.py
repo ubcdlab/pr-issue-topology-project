@@ -20,6 +20,8 @@ class ComponentSampler(picklereader.PickleReader):
 
     def write_json_to_file(self, graph_dict):
         PATH = Path(__file__).resolve().parents[1]
+        for entry in graph_dict:
+            del entry['component_nodes']
         with open(f'{PATH}/unified_json/recent_sampling.json', 'w') as f:
             f.write(json.dumps(graph_dict, sort_keys=False, indent=4, default=lambda o: ''))
     
