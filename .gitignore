@@ -3,6 +3,5 @@ token.txt
 .DS_Store
 .token
 .*
-*.pk
 data/graph_Project-OSRM-osrm-backend.json
 unified_json/result.json

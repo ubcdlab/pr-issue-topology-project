@@ -29,19 +29,6 @@ def init_output_json(g, repo):
 	}
 	return output
 
-def get_token():
-    # get personal access token
-    # from a file named token.txt
-    token = None
-    try:
-        with open('.token', 'r') as f:
-            token = f.read()
-            print('Github token read OK')
-    except IOError:
-        pass
-    return token
-
-
 def compute_network_statistics(data):
     # Construct the graph
     graph = nx.Graph()
@@ -83,9 +70,6 @@ def find_isolated_nodes(node):
 	return len(node['connected_components']) == 0
 
 target = node_list[0]
-# g = Github(get_token())
-# repo = g.get_repo(TARGET_REPO)
-# output_json = init_output_json(g, repo)
 
 data = None
 with open(f'data/graph_{TARGET_REPO_FILE_NAME}.json', 'r') as fi:

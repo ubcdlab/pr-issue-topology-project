@@ -28,30 +28,6 @@ def get_token():
         pass
     return token
 
-def find_all_mentions(text):
-    ''' 
-    Github is pathological; mentions to other issues/PR
-    sometimes shows up as a string literal of form '#{NUMBER}'
-    and sometimes shows up as a string URL of form 'https://github.com/[REPO URL]/{pull/issue}/{NUMBER}'
-
-    Therefore, two seperate regex are required to properly detect mentions
-    and even then, I am not 100% confident about this method's accuracy
-    '''
-
-    REGEX_STRING = f'(?:https:\/\/github\.com/{TARGET_REPO})\/(?:issues|pull)\/(\d+)'
-    # the above regex uses non-capturing groups for the repo URLs, so only the number (the part we want)
-    # is captured.
-
-    REGEX_NUMBER_STRING = '(?<=#)\d+'
-    # the above regex uses positive lookbehind to only capture numbers (the part we want)
-    # from the pattern #{NUMBER}
-    if text is None:
-        return []
-    regex_matches = []
-    regex_matches += [x.group(1) for x in re.finditer(REGEX_STRING, text)]
-    regex_matches += re.findall(REGEX_NUMBER_STRING, text)
-    return regex_matches # return all matches in an array
-
 def find_automatic_links(issue_number, issue_body, comments):
     if issue_body is None:
         issue_body = ''
@@ -108,19 +84,6 @@ def find_link_and_text_of_comment(TARGET_REPO, target_issue_number, issue, comme
 
 def time_matches(timestamp, tolerance_time):
     return (tolerance_time - datetime.timedelta(seconds=1)) <= timestamp <= (tolerance_time + datetime.timedelta(seconds=1))
-
-def delete_saved_files(TARGET_REPO_FILE_NAME):
-    PATH = f'raw_data/nodes_{TARGET_REPO_FILE_NAME}'
-    confirmation = input('Confirm the removal of saved progress files? ')
-    if confirmation != 'y':
-        print('Abort')
-        return
-    print('Removing saved progress files...')
-    with contextlib.suppress(FileNotFoundError):
-        os.remove(f'{PATH}.pk')
-        os.remove(f'{PATH}_comments.pk')
-        os.remove(f'{PATH}_progress.pk')
-        os.remove(f'{PATH}_event.pk')
 
 def write_variables_to_file(nodes, node_list, comment_list, timeline_list, review_comment_list, TARGET_REPO_FILE_NAME):
     PATH = f'raw_data/nodes_{TARGET_REPO_FILE_NAME}'
@@ -401,7 +364,7 @@ def create_json(g, nodes, comment_list, timeline_list, review_comment_list, magi
         for event in issue_commit_timeline:
             # NOTE: events of type 'commit' have no actor.url... in fact
             # a lot of the fields aren't set... 
-            # TODO: FIX THIS... USE THE DEBUGGER
+            # T0D0: FIX THIS... USE THE DEBUGGER
             # some Github timeline events just dont have event ID for some cursed reason
             # these are usually commit events
             event_type = event.event
