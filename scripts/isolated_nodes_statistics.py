@@ -3,6 +3,7 @@ from pathlib import Path
 from json import loads
 from re import match
 from prettytable import PrettyTable
+from .helpers import all_structures, to_json, fetch_path
 
 
 @dataclass
@@ -33,38 +34,30 @@ pr_statistics = PRStatistics(0, 0, 0, 0)
 issue_statistics = IssueStatistics(0, 0, 0, 0)
 
 # pull isolated nodes from data/structure_*, then grab node data from data/graph_*
-pathlist = Path("data/").glob("**/structure_*.json")
+pathlist = all_structures()
 for path in pathlist:
     isolated_nodes = []
     path_str = str(path)
 
-    with open(path_str, "r") as structure:
-        structure_json = loads(structure.read())
-        isolated_nodes = structure_json["1"]["isolated"]
+    structure_json = to_json(path_str)
+    isolated_nodes = structure_json["1"]["isolated"]
     isolated_nodes = [nested[0] for nested in isolated_nodes]
 
-    match_obj = match(r".*structure_([\w\-.]+).json", path_str)
-    if not match_obj:
-        print("Could not find repository name from file path.", path_str)
-        exit(1)
-    repo_name = match_obj.groups()[0]
-
-    with open(f"data/graph_{repo_name}.json") as graph:
-        graph_json = loads(graph.read())
-        for isolated_node in isolated_nodes:
-            graph_node = next(filter(lambda g_node: g_node["id"] == isolated_node, graph_json["nodes"]))
-            to_modify = None
-            if graph_node["type"] == "pull_request":
-                to_modify = pr_statistics
-            else:
-                to_modify = issue_statistics
-            to_modify.total += 1
-            if graph_node["status"] == "open":
-                to_modify.open += 1
-            elif graph_node["status"] == "merged":
-                to_modify.merged += 1
-            else:
-                to_modify.closed += 1
+    graph_json = to_json(fetch_path(path_str))
+    for isolated_node in isolated_nodes:
+        graph_node = next(filter(lambda g_node: g_node["id"] == isolated_node, graph_json["nodes"]))
+        to_modify = None
+        if graph_node["type"] == "pull_request":
+            to_modify = pr_statistics
+        else:
+            to_modify = issue_statistics
+        to_modify.total += 1
+        if graph_node["status"] == "open":
+            to_modify.open += 1
+        elif graph_node["status"] == "merged":
+            to_modify.merged += 1
+        else:
+            to_modify.closed += 1
 
 table = PrettyTable()
 table.field_names = ["Node Type", "Open", "Merged", "Closed", "Total"]
