@@ -1,10 +1,8 @@
 from dataclasses import dataclass
 from pathlib import Path
 from json import loads
-from re import compile, match
+from re import match
 from prettytable import PrettyTable
-
-REPO_REGEX = compile(r"structure_(\w+).json")
 
 
 @dataclass
