@@ -36,11 +36,7 @@ issue_statistics = IssueStatistics(0, 0, 0, 0)
 
 # pull isolated nodes from data/structure_*, then grab node data from data/graph_*
 pathlist = Path("data/").glob("**/structure_*.json")
-i = 0
 for path in pathlist:
-    if i == 1:
-        break  # TODO
-    i += 1
     isolated_nodes = []
     path_str = str(path)
 
@@ -49,9 +45,9 @@ for path in pathlist:
         isolated_nodes = structure_json["1"]["isolated"]
     isolated_nodes = [nested[0] for nested in isolated_nodes]
 
-    match_obj = match(r".*structure_([\w-]+).json", path_str)
+    match_obj = match(r".*structure_([\w\-.]+).json", path_str)
     if not match_obj:
-        print("Could not find repository name from file path.")
+        print("Could not find repository name from file path.", path_str)
         exit(1)
     repo_name = match_obj.groups()[0]
 
@@ -77,28 +73,28 @@ table.field_names = ["Node Type", "Open", "Merged", "Closed", "Total"]
 table.add_row(
     [
         "PR",
-        f"{pr_statistics.open/pr_statistics.total:.0%}",
-        f"{pr_statistics.merged/pr_statistics.total:.0%}",
-        f"{pr_statistics.closed/pr_statistics.total:.0%}",
-        f"{pr_statistics.total/(pr_statistics.total + issue_statistics.total):.0%}",
+        f"{pr_statistics.open/pr_statistics.total:.2%}",
+        f"{pr_statistics.merged/pr_statistics.total:.2%}",
+        f"{pr_statistics.closed/pr_statistics.total:.2%}",
+        f"{pr_statistics.total/(pr_statistics.total + issue_statistics.total):.2%}",
     ]
 )
 table.add_row(
     [
         "Issue",
-        f"{issue_statistics.open/issue_statistics.total:.0%}",
+        f"{issue_statistics.open/issue_statistics.total:.2%}",
         "—",
-        f"{issue_statistics.closed/issue_statistics.total:.0%}",
-        f"{issue_statistics.total/(pr_statistics.total + issue_statistics.total):.0%}",
+        f"{issue_statistics.closed/issue_statistics.total:.2%}",
+        f"{issue_statistics.total/(pr_statistics.total + issue_statistics.total):.2%}",
     ]
 )
 table.add_row(
     [
         "Total",
-        f"{(pr_statistics.open + issue_statistics.open)/(pr_statistics.total + issue_statistics.total):.0%}",
-        f"{(pr_statistics.merged)/(pr_statistics.total + issue_statistics.total):.0%}",
-        f"{(pr_statistics.closed + issue_statistics.closed)/(pr_statistics.total + issue_statistics.total):.0%}",
-        f"{(pr_statistics.total + issue_statistics.total)/(pr_statistics.total + issue_statistics.total):.0%}",
+        f"{(pr_statistics.open + issue_statistics.open)/(pr_statistics.total + issue_statistics.total):.2%}",
+        f"{(pr_statistics.merged)/(pr_statistics.total + issue_statistics.total):.2%}",
+        f"{(pr_statistics.closed + issue_statistics.closed)/(pr_statistics.total + issue_statistics.total):.2%}",
+        f"{(pr_statistics.total + issue_statistics.total)/(pr_statistics.total + issue_statistics.total):.2%}",
     ],
 )
 print(table)
