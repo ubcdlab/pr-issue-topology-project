@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from re import match
 from prettytable import PrettyTable
 from .helpers import all_structures, to_json, fetch_path
+from sys import argv
 
 
 @dataclass
@@ -12,10 +13,17 @@ class OverallStatistics:
     issue_pr: int
     pr_issue: int
     pr_pr: int
+    closed_issue_merged_pr: int
+    merged_pr_closed_issue: int
     total_diad: int
 
 
-overall_statistics = OverallStatistics(0, 0, 0, 0, 0)
+closed_links = False
+if len(argv) == 2 and argv[1] == "include_closed":
+    closed_links = True
+    print("Including closed Issues → merged PRs and Merged PRs → closed Issues...")
+
+overall_statistics = OverallStatistics(0, 0, 0, 0, 0, 0, 0)
 total_component_count = 0
 
 # pull diads from data/structure_* and total node lengths from data/graph_*
@@ -43,6 +51,15 @@ for path in pathlist:
     graph_json = to_json(fetch_path(path_str))
     total_component_count += len(graph_json["nodes"])
 
+    if closed_links:
+        for issue in structure_json["2"]["duo_issue_pr"]:
+            if issue[0]["status"] == "closed" and issue[1]["status"] == "merged":
+                overall_statistics.closed_issue_merged_pr += 1
+        for pr in structure_json["2"]["duo_pr_issue"]:
+            if pr[0]["status"] == "merged" and pr[1]["status"] == "closed":
+                overall_statistics.merged_pr_closed_issue += 1
+
+
 table = PrettyTable()
 table.field_names = ["Issue → Issue", "Issue → PR", "PR → Issue", "PR → PR"]
 table.add_row(
@@ -55,3 +72,16 @@ table.add_row(
 )
 print(table)
 print(f"(Percentage of components that are diads: {overall_statistics.total_diad/total_component_count:.2%})")
+
+if closed_links:
+    table = PrettyTable()
+    table.field_names = ["Type", "Closed Issue → Merged PR", "Merged PR → Closed Issue"]
+    table.add_row(["Raw Counts", overall_statistics.closed_issue_merged_pr, overall_statistics.merged_pr_closed_issue])
+    table.add_row(
+        [
+            "Percentages of Size 2 Components",
+            f"{overall_statistics.closed_issue_merged_pr/overall_statistics.total_diad:.2%}",
+            f"{overall_statistics.merged_pr_closed_issue/overall_statistics.total_diad:.2%}",
+        ]
+    )
+    print(table)
