@@ -19,6 +19,16 @@ class ConnectedComponentsStatistics:
     repo: str
 
 
+output_csv = None
+for arg in argv:
+    if "output_csv" in arg:
+        output_csv = open(arg.split("=")[-1], "w")
+        output_csv.writelines(
+            [
+                "Repo,Component ID,Component Size,Nodes,First Node Creation,Last Node Update,Delta,Average Conversation Span Duration\n"
+            ]
+        )
+
 is_small = False
 if "small" in argv:
     is_small = True
@@ -71,16 +81,38 @@ for path in pathlist:
             "Δ",
             "Average comment span",
         ]
-        node_cc_stats_table = [
-            node_cc_stats.repo,
-            node_cc_stats.component_id,
-            # node_cc_stats.nodes,
-            node_cc_stats.size,
-            hr_date(date.fromtimestamp(int(node_cc_stats.min_time))),
-            hr_date(date.fromtimestamp(int(node_cc_stats.max_time))),
-            time_delta(timedelta(seconds=int(node_cc_stats.max_time) - int(node_cc_stats.min_time))),
-            time_delta(timedelta(seconds=int(node_cc_stats.average_comment_span_duration))),
-        ]
-        table.add_row(node_cc_stats_table)
+        table.add_row(
+            [
+                node_cc_stats.repo,
+                node_cc_stats.component_id,
+                # node_cc_stats.nodes,
+                node_cc_stats.size,
+                hr_date(date.fromtimestamp(int(node_cc_stats.min_time))),
+                hr_date(date.fromtimestamp(int(node_cc_stats.max_time))),
+                time_delta(timedelta(seconds=int(node_cc_stats.max_time) - int(node_cc_stats.min_time))),
+                time_delta(timedelta(seconds=int(node_cc_stats.average_comment_span_duration))),
+            ]
+        )
         print(table)
+        if output_csv:
+            output_csv.writelines(
+                [
+                    ",".join(
+                        [
+                            str(e)
+                            for e in [
+                                node_cc_stats.repo,
+                                node_cc_stats.component_id,
+                                node_cc_stats.size,
+                                node_cc_stats.nodes,
+                                int(node_cc_stats.min_time),
+                                int(node_cc_stats.max_time),
+                                int(node_cc_stats.max_time) - int(node_cc_stats.min_time),
+                                int(node_cc_stats.average_comment_span_duration),
+                            ]
+                        ]
+                    )
+                    + "\n"
+                ]
+            )
         exit(0)  # TODO, remove
