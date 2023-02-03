@@ -7,6 +7,10 @@ def all_structures():
     return Path("data/").glob("**/structure_*.json")
 
 
+def num_structures():
+    return len(list(Path("data/").glob("**/structure_*.json")))
+
+
 def to_json(path_str: str):
     with open(path_str) as json_file:
         return loads(json_file.read())
@@ -22,3 +26,7 @@ def fetch_path(path_str: str, from_graph: bool = False):
 
 def all_graphs():
     return Path("data/").glob("**/graph_*.json")
+
+
+def num_graphs():
+    return len(list(Path("data/").glob("**/graph_*.json")))
