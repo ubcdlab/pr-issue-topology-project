@@ -60,3 +60,27 @@ for path in pathlist:
                 ) / (node_cc_stats.size + 1)
             node_cc_stats.size += 1
             node_cc_stats.nodes += [cc_node_id]
+        table = PrettyTable()
+        table.field_names = [
+            "Repository",
+            "Component ID",
+            # "Nodes",
+            "Size",
+            "Creation",
+            "Last Update",
+            "Δ",
+            "Average comment span",
+        ]
+        node_cc_stats_table = [
+            node_cc_stats.repo,
+            node_cc_stats.component_id,
+            # node_cc_stats.nodes,
+            node_cc_stats.size,
+            hr_date(date.fromtimestamp(int(node_cc_stats.min_time))),
+            hr_date(date.fromtimestamp(int(node_cc_stats.max_time))),
+            time_delta(timedelta(seconds=int(node_cc_stats.max_time) - int(node_cc_stats.min_time))),
+            time_delta(timedelta(seconds=int(node_cc_stats.average_comment_span_duration))),
+        ]
+        table.add_row(node_cc_stats_table)
+        print(table)
+        exit(0)  # TODO, remove
