@@ -3,6 +3,7 @@ token.txt
 .DS_Store
 .token
 .*
-data/graph_Project-OSRM-osrm-backend.json
 unified_json/result.json
 __pycache__/
+scripts_dump/*
+data/graph_Project-OSRM-osrm-backend.json

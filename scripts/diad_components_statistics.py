@@ -53,10 +53,14 @@ for path in pathlist:
 
     if closed_links:
         for issue in structure_json["2"]["duo_issue_pr"]:
-            if issue[0]["status"] == "closed" and issue[1]["status"] == "merged":
+            issue_node = next(filter(lambda n: n["id"] == issue[0], graph_json["nodes"]))
+            pr_node = next(filter(lambda n: n["id"] == issue[1], graph_json["nodes"]))
+            if issue_node["status"] == "closed" and pr_node["status"] == "merged":
                 overall_statistics.closed_issue_merged_pr += 1
         for pr in structure_json["2"]["duo_pr_issue"]:
-            if pr[0]["status"] == "merged" and pr[1]["status"] == "closed":
+            pr_node = next(filter(lambda n: n["id"] == pr[0], graph_json["nodes"]))
+            issue_node = next(filter(lambda n: n["id"] == pr[1], graph_json["nodes"]))
+            if pr_node["status"] == "merged" and issue_node["status"] == "closed":
                 overall_statistics.merged_pr_closed_issue += 1
 
 

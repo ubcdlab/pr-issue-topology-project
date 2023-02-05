@@ -38,6 +38,14 @@ to_print = False
 if "print" in argv:
     to_print = True
 
+redirecting = False
+if "redirecting" in argv:
+    redirecting = True
+
+save_all = False
+if "save_all" in argv:
+    save_all = True
+
 repo_str = None
 for arg in argv:
     if "repo" in arg:
@@ -51,7 +59,8 @@ for arg in argv:
         print(f"Searching for size {specific_size}...")
 
 pathlist = all_graphs()
-for path in tqdm(pathlist, total=num_graphs()):
+iterator = tqdm(pathlist, total=num_graphs()) if to_print and not redirecting else pathlist
+for path in iterator:
     path_str = str(path)
     graph_json = to_json(path_str)
     seen = set()
@@ -60,28 +69,32 @@ for path in tqdm(pathlist, total=num_graphs()):
         if node["id"] in seen:
             continue
         seen.add(node["id"])
-        if not specific_size and (
-            (
-                not is_small
-                and (
-                    (type(node["connected_component_size"]) is list and node["connected_component_size"][0] < 20)
-                    or (type(node["connected_component_size"]) is int and node["connected_component_size"] < 20)
+        if not save_all:
+            if not specific_size and (
+                (
+                    not is_small
+                    and (
+                        (type(node["connected_component_size"]) is list and node["connected_component_size"][0] < 100)
+                        or (type(node["connected_component_size"]) is int and node["connected_component_size"] < 100)
+                    )
                 )
-            )
-            or (
-                is_small
-                and (
-                    (type(node["connected_component_size"]) is list and node["connected_component_size"][0] >= 10)
-                    or (type(node["connected_component_size"]) is int and node["connected_component_size"] >= 10)
+                or (
+                    is_small
+                    and (
+                        (type(node["connected_component_size"]) is list and node["connected_component_size"][0] >= 20)
+                        or (type(node["connected_component_size"]) is int and node["connected_component_size"] >= 20)
+                    )
                 )
-            )
-        ):
-            continue
-        if specific_size and (
-            (type(node["connected_component_size"]) is list and node["connected_component_size"][0] != specific_size)
-            or (type(node["connected_component_size"]) is int and node["connected_component_size"] != specific_size)
-        ):
-            continue
+            ):
+                continue
+            if specific_size and (
+                (
+                    type(node["connected_component_size"]) is list
+                    and node["connected_component_size"][0] != specific_size
+                )
+                or (type(node["connected_component_size"]) is int and node["connected_component_size"] != specific_size)
+            ):
+                continue
         node_cc_stats = ConnectedComponentsStatistics(
             [node["id"]],
             1,
@@ -125,7 +138,6 @@ for path in tqdm(pathlist, total=num_graphs()):
                 [
                     node_cc_stats.repo,
                     node_cc_stats.component_id,
-                    # node_cc_stats.nodes,
                     node_cc_stats.size,
                     hr_date(date.fromtimestamp(int(node_cc_stats.min_time))),
                     hr_date(date.fromtimestamp(int(node_cc_stats.max_time))),
