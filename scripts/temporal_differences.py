@@ -59,10 +59,11 @@ for arg in argv:
         print(f"Searching for size {specific_size}...")
 
 pathlist = all_graphs()
-iterator = tqdm(pathlist, total=num_graphs()) if to_print and not redirecting else pathlist
+iterator = tqdm(pathlist, total=num_graphs()) if not redirecting else pathlist
 for path in iterator:
     path_str = str(path)
     graph_json = to_json(path_str)
+    structure_json = to_json(fetch_path(path_str, from_graph=True))
     seen = set()
 
     for node in graph_json["nodes"]:
@@ -95,12 +96,17 @@ for path in iterator:
                 or (type(node["connected_component_size"]) is int and node["connected_component_size"] != specific_size)
             ):
                 continue
+        last_date = node["creation_date"]
+        if node["event_list"] and node["event_list"][-1]["created_at"] > node["creation_date"]:
+            last_date = node["event_list"][-1]["created_at"]
+        elif node["updated_at"] > node["creation_date"]:
+            last_date = node["updated_at"]
         node_cc_stats = ConnectedComponentsStatistics(
             [node["id"]],
             1,
             node["creation_date"],
-            node["closed_at"] if node["closed_at"] else node["creation_date"],
-            node["event_list"][-1]["created_at"] - node["creation_date"] if len(node["event_list"]) else 0,
+            last_date,
+            last_date - node["creation_date"],
             node["component_id"],
             graph_json["repo_url"].replace("https://github.com/", ""),
         )
@@ -110,9 +116,11 @@ for path in iterator:
             seen.add(cc_node_id)
             cc_node = next(filter(lambda n: n["id"] == cc_node_id, graph_json["nodes"]))
             node_cc_stats.min_time = min(node_cc_stats.min_time, cc_node["creation_date"])
+            # if not cc_node.get("event_list"):
+            #     print(path_str, cc_node["id"])
             node_cc_stats.max_time = max(
-                node_cc_stats.min_time,
-                cc_node["event_list"][-1]["created_at"] if len(cc_node["event_list"]) else 0,
+                node_cc_stats.max_time,
+                cc_node["event_list"][-1]["created_at"] if len(cc_node["event_list"]) else cc_node["updated_at"],
             )
             if len(cc_node["event_list"]):
                 node_cc_stats.average_comment_span_duration = (
@@ -156,7 +164,7 @@ for path in iterator:
                                 node_cc_stats.repo,
                                 node_cc_stats.component_id,
                                 node_cc_stats.size,
-                                node_cc_stats.nodes,
+                                '"' + ", ".join([str(n) for n in node_cc_stats.nodes]) + '"',
                                 int(node_cc_stats.min_time),
                                 int(node_cc_stats.max_time),
                                 int(node_cc_stats.max_time) - int(node_cc_stats.min_time),

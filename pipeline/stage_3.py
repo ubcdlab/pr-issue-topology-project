@@ -31,8 +31,8 @@ def main():
         sys.exit(1)
     network_vis_creator = NetworkVisCreator.NetworkVisCreator(get_token(), TARGET_REPO_ARRAY)
     network_vis_creator.create_vis_for_all_repo()
-    bar_chart_creator = BarChartCreator.BarChartCreator(None, TARGET_REPO_ARRAY)
-    bar_chart_creator.create_vis_for_all_repo()
+    # bar_chart_creator = BarChartCreator.BarChartCreator(None, TARGET_REPO_ARRAY)
+    # bar_chart_creator.create_vis_for_all_repo()
 
 
 if __name__ == "__main__":

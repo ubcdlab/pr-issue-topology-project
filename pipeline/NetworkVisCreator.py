@@ -5,6 +5,126 @@ import picklereader
 import networkx as nx
 import json
 from pathlib import Path
+from dateutil import parser
+
+
+def get_event_author(event):
+    # HACK: to get around Github API's pathological behaviour
+    # the author of a timeline event API can be located in different locations
+    # depending on the type of event in question
+    # this massive hack goes through all known locations one by one
+    if event.event == "closed":
+        # event.event == 'closed' does not have authoring information
+        return None
+    if event.event == "renamed":
+        # event.event == 'renamed' does not have authoring information
+        return None
+    author = None
+    if event.actor is not None:
+        # usually, event actor is defined for events such as commenting
+        author = event.actor.html_url
+    if author is not None:
+        return author
+    if "author" in event.raw_data:
+        # for event.event == 'committed'
+        author = event.raw_data["author"]["email"]
+    if author is not None:
+        return author
+    if "user" in event.raw_data:
+        # for event.event = 'reviewed'
+        if event.raw_data["user"] is not None:
+            author = event.raw_data["user"]["html_url"]
+    if author is not None:
+        return author
+    if "comments" in event.raw_data:
+        # for commit-commented
+        author = event.raw_data["comments"][0]["user"]["html_url"]
+    if author is not None:
+        return author
+    if "source" in event.raw_data:
+        # for 'cross-referenced' events
+        author = event.raw_data["source"]["issue"]["user"]["html_url"]
+    if author is not None:
+        return author
+    # assert(1 == 0)
+    return None
+
+
+def get_event_author_email(event):
+    # HACK: to get around Github API's pathological behaviour
+    # the author of a timeline event API can be located in different locations
+    # depending on the type of event in question
+    # this massive hack goes through all known locations one by one
+    if event.event == "closed":
+        # event.event == 'closed' does not have authoring information
+        return ""
+    if event.event == "renamed":
+        # event.event == 'renamed' does not have authoring information
+        return ""
+    author = None
+    if event.actor is not None:
+        # usually, event actor is defined for events such as commenting
+        author = event.actor.email
+    if author is not None:
+        return author
+    if "author" in event.raw_data:
+        # for event.event == 'committed'
+        author = event.raw_data["author"]["email"]
+    if author is not None:
+        return author
+    if "user" in event.raw_data:
+        # for event.event = 'reviewed'
+        # author is unset, and there is no email information
+        if event.raw_data["user"] is not None:
+            author = ""
+    if author is not None:
+        return author
+    if "comments" in event.raw_data:
+        # for commit-commented
+        # author = event.raw_data['comments'][0]['user']['html_url']
+        author = ""
+    if author is not None:
+        return author
+    if "source" in event.raw_data:
+        # for 'cross-referenced' events
+        # author = event.raw_data['source']['issue']['user']['html_url']
+        author = ""
+    if author is not None:
+        return author
+    # assert(1 == 0)
+    return ""
+
+
+def get_event_date(event):
+    # HACK: to get around Github API's pathological behaviour
+    # the creation time of a timeline event API can be located in different locations
+    # depending on the type of event in question
+    # this massive hack goes through all known locations one by one
+    created_at = event.created_at
+    if created_at is not None:
+        return created_at.timestamp()
+    if "author" in event.raw_data:
+        # this usually works for event.event == 'commit'
+        created_at = event.raw_data["author"]["date"]
+        created_at = parser.parse(created_at).timestamp()
+    if created_at is not None:
+        return created_at
+    if "user" in event.raw_data:
+        # this usually works for event.event == 'commented'
+        if event.raw_data["submitted_at"] is not None:
+            created_at = event.raw_data["submitted_at"]
+            created_at = parser.parse(created_at).timestamp()
+    if created_at is not None:
+        return created_at
+    if event.raw_data["comments"][0] is not None:
+        # this usually works for event.event == 'commit-commented"
+        created_at = event.raw_data["comments"][0]["created_at"]
+        created_at = parser.parse(created_at).timestamp()
+    if created_at is not None:
+        return created_at
+
+    assert 1 == 0
+    return event.raw_data["author"]["date"]
 
 
 class NetworkVisCreator(picklereader.PickleReader):
@@ -48,6 +168,14 @@ class NetworkVisCreator(picklereader.PickleReader):
         fixes_relationship_counter = 0
         duplicate_relationship_counter = 0
 
+        nonwork_events = [
+            "subscribed",
+            "unsubscribed",
+            "automatic_base_change_failed",
+            "automatic_base_change_succeeded",
+            "mentioned",
+            "review_requested",
+        ]
         # First, we populate the nodes array as required by D3
         for index, issue in enumerate(nodes):
             # node_dict is the dictionary that specifies a node in D3 network graph
@@ -73,6 +201,7 @@ class NetworkVisCreator(picklereader.PickleReader):
             network_graph.add_node(issue.number)
 
             issue_timeline = timeline_list[-index - 1]
+            issue_commit_timeline_2 = issue_timeline.copy()
             issue_timeline = list(
                 filter(
                     lambda x: x.event == "cross-referenced" and x.source.issue.repository.full_name == repo.full_name,
@@ -139,6 +268,21 @@ class NetworkVisCreator(picklereader.PickleReader):
                     }
                 )
                 network_graph.add_edge(link["number"], issue.number)
+            event_timeline = []
+            for event in issue_commit_timeline_2:
+                event_type = event.event
+                event_time = get_event_date(event)
+                event_author = get_event_author(event)
+                event_author_email = get_event_author_email(event)
+                event_timeline.append(
+                    {
+                        "event": event_type,
+                        "created_at": event_time,
+                        "author": str(event_author),
+                        "email": str(event_author_email),
+                    }
+                )
+            node_dict["event_list"] = event_timeline
         connected_components = list(nx.connected_components(network_graph))
         node_count = len(list(network_graph.nodes))
         edge_count = len(list(network_graph.edges))
