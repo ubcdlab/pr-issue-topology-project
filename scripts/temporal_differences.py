@@ -82,8 +82,8 @@ for path in iterator:
                 or (
                     is_small
                     and (
-                        (type(node["connected_component_size"]) is list and node["connected_component_size"][0] >= 20)
-                        or (type(node["connected_component_size"]) is int and node["connected_component_size"] >= 20)
+                        (type(node["connected_component_size"]) is list and node["connected_component_size"][0] >= 10)
+                        or (type(node["connected_component_size"]) is int and node["connected_component_size"] >= 10)
                     )
                 )
             ):
