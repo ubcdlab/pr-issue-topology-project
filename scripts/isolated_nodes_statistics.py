@@ -4,6 +4,7 @@ from json import loads
 from re import match
 from prettytable import PrettyTable
 from .helpers import all_structures, to_json, fetch_path
+from sys import argv
 
 
 @dataclass
@@ -32,6 +33,10 @@ class IssueStatistics(OverallStatistics):
 
 pr_statistics = PRStatistics(0, 0, 0, 0)
 issue_statistics = IssueStatistics(0, 0, 0, 0)
+
+print_total = False
+if "total" in argv:
+    print_total = True
 
 # pull isolated nodes from data/structure_*, then grab node data from data/graph_*
 pathlist = all_structures()
@@ -89,3 +94,5 @@ table.add_row(
     ],
 )
 print(table)
+if print_total:
+    print(pr_statistics.total + issue_statistics.total)

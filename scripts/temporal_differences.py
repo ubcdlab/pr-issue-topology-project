@@ -116,8 +116,6 @@ for path in iterator:
             seen.add(cc_node_id)
             cc_node = next(filter(lambda n: n["id"] == cc_node_id, graph_json["nodes"]))
             node_cc_stats.min_time = min(node_cc_stats.min_time, cc_node["creation_date"])
-            # if not cc_node.get("event_list"):
-            #     print(path_str, cc_node["id"])
             node_cc_stats.max_time = max(
                 node_cc_stats.max_time,
                 cc_node["event_list"][-1]["created_at"] if len(cc_node["event_list"]) else cc_node["updated_at"],
@@ -130,7 +128,7 @@ for path in iterator:
                 ) / (node_cc_stats.size + 1)
             node_cc_stats.size += 1
             node_cc_stats.nodes += [cc_node_id]
-        if to_print or not output_csv:
+        if to_print or (not output_csv and not redirecting):
             table = PrettyTable()
             table.field_names = [
                 "Repository",

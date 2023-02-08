@@ -1,7 +1,7 @@
 import datetime
 import re
 from github import Github
-import picklereader
+from . import picklereader
 import networkx as nx
 import json
 from pathlib import Path
@@ -214,6 +214,8 @@ class NetworkVisCreator(picklereader.PickleReader):
 
             links_dict = []
             for mention in issue_timeline_events:
+                network_graph.add_edge(mention.source.issue.number, issue.number)
+
                 # Tracks INCOMING MENTIONS
                 if hasattr(mention.actor, "type"):
                     if mention.actor.type == "Bot":
@@ -256,6 +258,7 @@ class NetworkVisCreator(picklereader.PickleReader):
                         ),
                     }
                 )
+
             for link in links_dict:
                 # add link to D3 links dict
                 graph_dict["links"].append(
@@ -267,7 +270,7 @@ class NetworkVisCreator(picklereader.PickleReader):
                         "link_type": link["link_type"],
                     }
                 )
-                network_graph.add_edge(link["number"], issue.number)
+                # network_graph.add_edge(link["number"], issue.number)
             event_timeline = []
             for event in issue_commit_timeline_2:
                 event_type = event.event
