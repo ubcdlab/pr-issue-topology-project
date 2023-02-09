@@ -24,6 +24,14 @@ def fetch_path(path_str: str, from_graph: bool = False):
     return f"data/{'graph' if not from_graph else 'structure'}_{match_obj.groups()[0]}.json"
 
 
+def fetch_repo(path_str: str, from_graph: bool = False):
+    match_obj = match(rf".*{'graph' if from_graph else 'structure'}_([\w\-.]+).json", path_str)
+    if not match_obj:
+        print("Could not find repository name from file path.", path_str)
+        exit(1)
+    return match_obj.groups()[0]
+
+
 def all_graphs():
     return Path("data/").glob("**/graph_*.json")
 
