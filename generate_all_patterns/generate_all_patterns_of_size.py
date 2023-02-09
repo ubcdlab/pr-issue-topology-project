@@ -40,8 +40,14 @@ for path in all_graphs():
 
     local_graph = nx.Graph()
     for index, node in enumerate(nodes):
+        node_status = node.state
+        if node.pull_request is not None:
+            if node.pull_request.raw_data["merged_at"] is not None:
+                node_status = "merged"
         local_graph.add_node(
-            f"{target_repo}#{node.number}", type="pull_request" if node.pull_request is not None else "issue"
+            f"{target_repo}#{node.number}",
+            type="pull_request" if node.pull_request is not None else "issue",
+            status=node_status,
         )
         node_timeline = timeline_list[-index - 1]
         node_timeline = list(
@@ -82,9 +88,10 @@ for path in all_graphs():
             pos = nx.spring_layout(graph)
             labels = dict()
             types = nx.get_node_attributes(component, "type")
+            statuses = nx.get_node_attributes(component, "status")
             colors = []
             for cn in component.nodes:
-                labels[cn] = f"{cn}\n{types[cn]}"
+                labels[cn] = f"{cn}\n{types[cn]}\n{statuses[cn]}"
                 colors += ["#fce1e4" if types[cn] == "issue" else "#e8dff5"]
             link_types = nx.get_edge_attributes(component, "link_type")
             edge_colors = []
