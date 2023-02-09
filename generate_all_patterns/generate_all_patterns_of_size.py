@@ -79,6 +79,7 @@ for path in all_graphs():
 
     graph = nx.compose(graph, local_graph)
 
+    # TODO: move this after whole graph generated
     if to_render:
         try:
             makedirs(f"image_dump/{target_repo.replace('/','-')}/{size}")
@@ -92,7 +93,10 @@ for path in all_graphs():
             colors = []
             for cn in component.nodes:
                 labels[cn] = f"{cn}\n{types[cn]}\n{statuses[cn]}"
-                colors += ["#fce1e4" if types[cn] == "issue" else "#e8dff5"]
+                color = "#f46d75" if statuses[cn] == "closed" else "#64389f" if statuses[cn] == "merged" else "#77dd77"
+                nx.draw(
+                    component, pos, nodelist=[cn], node_color=color, node_shape="s" if types[cn] == "issue" else "o"
+                )
             link_types = nx.get_edge_attributes(component, "link_type")
             edge_colors = []
             for ce in component.edges:
@@ -103,8 +107,8 @@ for path in all_graphs():
                     if link_types[ce] == "duplicate"
                     else "#5a5a5a"
                 ]
-            nx.draw(component, pos=pos, node_color=colors, edge_color=edge_colors)
             nx.draw_networkx_labels(component, pos=pos, labels=labels)
+            nx.draw_networkx_edges(component, pos, edge_color=edge_colors)
             nx.draw_networkx_edge_labels(component, pos=pos)
             plt.savefig(f"image_dump/{target_repo.replace('/','-')}/{size}/{i}.png")
             plt.clf()
