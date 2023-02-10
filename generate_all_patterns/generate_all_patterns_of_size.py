@@ -3,6 +3,9 @@ from sys import argv, path
 from os import makedirs
 import networkx as nx
 import matplotlib.pyplot as plt
+from matplotlib import use
+from pickle import dump
+from tqdm import tqdm
 
 path.append("..")
 
@@ -29,10 +32,11 @@ nwvc = NetworkVisCreator(None, [])
 
 
 def node_match(node_1, node_2):
-    return node_1 == node_2
+    return node_1["type"] == node_2["type"] and node_1["status"] == node_2["status"]
 
 
-for path in all_graphs():
+path_list_len = len(list(all_graphs()))
+for path in tqdm(all_graphs(), total=path_list_len):
     path_str = str(path)
     target_repo = to_json(path_str)["repo_url"].replace("https://github.com/", "")
 
@@ -48,6 +52,10 @@ for path in all_graphs():
             f"{target_repo}#{node.number}",
             type="pull_request" if node.pull_request is not None else "issue",
             status=node_status,
+            repository=target_repo,
+            creation_date=node.created_at.timestamp(),
+            closed_at=node.closed_at.timestamp() if node.closed_at is not None else 0,
+            updated_at=node.updated_at.timestamp(),
         )
         node_timeline = timeline_list[-index - 1]
         node_timeline = list(
@@ -71,7 +79,7 @@ for path in all_graphs():
         else:
             total_patterns += 1
             for pattern in all_patterns:
-                if nx.is_isomorphic(cc, pattern, node_match=node_match):
+                if nx.is_isomorphic(cc, pattern, node_match=node_match, edge_match=lambda x, y: x == y):
                     all_patterns[pattern] += 1
                     break
             else:
@@ -79,40 +87,39 @@ for path in all_graphs():
 
     graph = nx.compose(graph, local_graph)
 
-    # TODO: move this after whole graph generated
-    if to_render:
+try:
+    makedirs(f"pattern_dump/")
+except:
+    pass
+with open(f"pattern_dump/{size}.pk", "wb") as x:
+    dump(all_patterns, x)
+
+if to_render:
+    use("agg")
+    components = [graph.subgraph(c) for c in nx.connected_components(graph)]
+    for i, component in enumerate(tqdm(components, total=len(components))):
+        pos = nx.spring_layout(graph)
+        labels = dict()
+        types = nx.get_node_attributes(component, "type")
+        statuses = nx.get_node_attributes(component, "status")
+        repository = list(nx.get_node_attributes(component, "repository").values())[0]
+        colors = []
+        for cn in component.nodes:
+            labels[cn] = f"{cn}\n{types[cn]}\n{statuses[cn]}"
+            color = "#f46d75" if statuses[cn] == "closed" else "#64389f" if statuses[cn] == "merged" else "#77dd77"
+            nx.draw(component, pos, nodelist=[cn], node_color=color, node_shape="s" if types[cn] == "issue" else "o")
+        link_types = nx.get_edge_attributes(component, "link_type")
+        edge_colors = []
+        for ce in component.edges:
+            edge_colors += [
+                "#9cadce" if link_types[ce] == "fixes" else "#7ec4cf" if link_types[ce] == "duplicate" else "#5a5a5a"
+            ]
+        nx.draw_networkx_labels(component, pos=pos, labels=labels)
+        nx.draw_networkx_edges(component, pos, edge_color=edge_colors)
+        nx.draw_networkx_edge_labels(component, pos=pos)
         try:
-            makedirs(f"image_dump/{target_repo.replace('/','-')}/{size}")
+            makedirs(f"image_dump/{repository.replace('/','-')}/{size}")
         except:
             pass
-        for i, component in enumerate([local_graph.subgraph(c) for c in nx.connected_components(local_graph)]):
-            pos = nx.spring_layout(graph)
-            labels = dict()
-            types = nx.get_node_attributes(component, "type")
-            statuses = nx.get_node_attributes(component, "status")
-            colors = []
-            for cn in component.nodes:
-                labels[cn] = f"{cn}\n{types[cn]}\n{statuses[cn]}"
-                color = "#f46d75" if statuses[cn] == "closed" else "#64389f" if statuses[cn] == "merged" else "#77dd77"
-                nx.draw(
-                    component, pos, nodelist=[cn], node_color=color, node_shape="s" if types[cn] == "issue" else "o"
-                )
-            link_types = nx.get_edge_attributes(component, "link_type")
-            edge_colors = []
-            for ce in component.edges:
-                edge_colors += [
-                    "#9cadce"
-                    if link_types[ce] == "fixes"
-                    else "#7ec4cf"
-                    if link_types[ce] == "duplicate"
-                    else "#5a5a5a"
-                ]
-            nx.draw_networkx_labels(component, pos=pos, labels=labels)
-            nx.draw_networkx_edges(component, pos, edge_color=edge_colors)
-            nx.draw_networkx_edge_labels(component, pos=pos)
-            plt.savefig(f"image_dump/{target_repo.replace('/','-')}/{size}/{i}.png")
-            plt.clf()
-
-    break  # TODO: remove
-
-print(all_patterns)
+        plt.savefig(f"image_dump/{repository.replace('/','-')}/{size}/{i}.png")
+        plt.clf()
