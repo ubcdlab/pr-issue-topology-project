@@ -1,10 +1,12 @@
 from collections import defaultdict
 from sys import argv, path
 from os import makedirs
+from os.path import isfile
 import networkx as nx
 import matplotlib.pyplot as plt
 from matplotlib import use
-from pickle import dump
+from pickle import dump, load
+from math import sqrt
 from tqdm import tqdm
 
 path.append("..")
@@ -23,7 +25,12 @@ if "to_render" in argv:
     print("Rendering to images...")
     to_render = True
 
-graph = nx.Graph()
+with_status = False
+if "with_status" in argv:
+    print("Including status...")
+    with_status = True
+
+graph = nx.DiGraph()
 total_patterns = 0
 all_patterns = defaultdict(int)
 
@@ -31,74 +38,105 @@ pr = PickleReader([])
 nwvc = NetworkVisCreator(None, [])
 
 
-def node_match(node_1, node_2):
+def node_match_with_status(node_1, node_2):
     return node_1["type"] == node_2["type"] and node_1["status"] == node_2["status"]
 
 
-path_list_len = len(list(all_graphs()))
-for path in tqdm(all_graphs(), total=path_list_len):
-    path_str = str(path)
-    target_repo = to_json(path_str)["repo_url"].replace("https://github.com/", "")
+def node_match_type(node_1, node_2):
+    return node_1["type"] == node_2["type"]
 
-    nodes, _, comment_list, timeline_list, _ = pr.read_repo_local_file(None, target_repo)
 
-    local_graph = nx.Graph()
-    for index, node in enumerate(nodes):
-        node_status = node.state
-        if node.pull_request is not None:
-            if node.pull_request.raw_data["merged_at"] is not None:
-                node_status = "merged"
-        local_graph.add_node(
-            f"{target_repo}#{node.number}",
-            type="pull_request" if node.pull_request is not None else "issue",
-            status=node_status,
-            repository=target_repo,
-            creation_date=node.created_at.timestamp(),
-            closed_at=node.closed_at.timestamp() if node.closed_at is not None else 0,
-            updated_at=node.updated_at.timestamp(),
-        )
-        node_timeline = timeline_list[-index - 1]
-        node_timeline = list(
-            filter(
-                lambda x: x.event == "cross-referenced" and x.source.issue.repository.full_name == target_repo,
-                node_timeline,
-            )
-        )
-        for mention in node_timeline:
-            mentioning_issue_comments = nwvc.find_comment(mention.source.issue.url, comment_list)
-            local_graph.add_edge(
-                f"{target_repo}#{mention.source.issue.number}",
+if not isfile(f"pattern_dump/graph_{size}.pk"):
+    path_list_len = len(list(all_graphs()))
+    for path in tqdm(all_graphs(), total=path_list_len):
+        path_str = str(path)
+        target_repo = to_json(path_str)["repo_url"].replace("https://github.com/", "")
+
+        nodes, _, comment_list, timeline_list, _ = pr.read_repo_local_file(None, target_repo)
+
+        local_graph = nx.DiGraph()
+        for index, node in enumerate(nodes):
+            node_status = node.state
+            if node.pull_request is not None:
+                if node.pull_request.raw_data["merged_at"] is not None:
+                    node_status = "merged"
+            local_graph.add_node(
                 f"{target_repo}#{node.number}",
-                link_type=nwvc.find_automatic_links(node.number, mention.source.issue.body, mentioning_issue_comments),
+                type="pull_request" if node.pull_request is not None else "issue",
+                status=node_status,
+                repository=target_repo,
+                number=node.number,
+                creation_date=node.created_at.timestamp(),
+                closed_at=node.closed_at.timestamp() if node.closed_at is not None else 0,
+                updated_at=node.updated_at.timestamp(),
             )
+            node_timeline = timeline_list[-index - 1]
+            node_timeline = list(
+                filter(
+                    lambda x: x.event == "cross-referenced" and x.source.issue.repository.full_name == target_repo,
+                    node_timeline,
+                )
+            )
+            for mention in node_timeline:
+                mentioning_issue_comments = nwvc.find_comment(mention.source.issue.url, comment_list)
+                local_graph.add_edge(
+                    f"{target_repo}#{mention.source.issue.number}",
+                    f"{target_repo}#{node.number}",
+                    link_type=nwvc.find_automatic_links(
+                        node.number, mention.source.issue.body, mentioning_issue_comments
+                    ),
+                )
 
-    connected_components = [local_graph.subgraph(c).copy() for c in nx.connected_components(local_graph)]
-    for cc in connected_components:
-        if len(cc.nodes) != size:
-            local_graph.remove_nodes_from(cc)
-        else:
-            total_patterns += 1
-            for pattern in all_patterns:
-                if nx.is_isomorphic(cc, pattern, node_match=node_match, edge_match=lambda x, y: x == y):
-                    all_patterns[pattern] += 1
-                    break
+        connected_components = [local_graph.subgraph(c).copy() for c in nx.connected_components(local_graph)]
+        for cc in connected_components:
+            if len(cc.nodes) != size:
+                local_graph.remove_nodes_from(cc)
             else:
-                all_patterns[cc] = 1
+                total_patterns += 1
+                for pattern in all_patterns:
+                    dgm = nx.isomorphism.DiGraphMatcher(
+                        nx.path_graph(cc, create_using=nx.DiGraph),
+                        nx.path_graph(pattern, create_using=nx.DiGraph),
+                        node_match=node_match_with_status if with_status else node_match_type,
+                        edge_match=(lambda x, y: x == y) if with_status else None,
+                    )
+                    if not dgm.is_isomorphic():
+                        continue
+                    non_matching_edge = False
+                    for edge in pattern.edges():
+                        edge_og_1, edge_og_2 = edge
+                        if not cc.has_edge(dgm.mapping[edge_og_1], dgm.mapping[edge_og_2]):
+                            non_matching_edge = True
+                            break
+                    if not non_matching_edge:
+                        all_patterns[pattern] += 1
+                        break
+                else:
+                    all_patterns[cc] = 1
 
-    graph = nx.compose(graph, local_graph)
+        graph = nx.compose(graph, local_graph)
 
-try:
-    makedirs(f"pattern_dump/")
-except:
-    pass
-with open(f"pattern_dump/{size}.pk", "wb") as x:
-    dump(all_patterns, x)
+    try:
+        makedirs(f"pattern_dump/")
+    except:
+        pass
+    with open(f"pattern_dump/{size}.pk", "wb") as x:
+        dump(all_patterns, x)
+    with open(f"pattern_dump/graph_{size}.pk", "wb") as x:
+        dump(graph, x)
+else:
+    with open(f"pattern_dump/{size}.pk", "rb") as x:
+        all_patterns = load(x)
+    with open(f"pattern_dump/graph_{size}.pk", "rb") as x:
+        graph = load(x)
+
+# TODO: sort all_patterns and prune graph
 
 if to_render:
     use("agg")
     components = [graph.subgraph(c) for c in nx.connected_components(graph)]
     for i, component in enumerate(tqdm(components, total=len(components))):
-        pos = nx.spring_layout(graph)
+        pos = nx.spring_layout(graph, k=15 / sqrt(graph.order()))
         labels = dict()
         types = nx.get_node_attributes(component, "type")
         statuses = nx.get_node_attributes(component, "status")
