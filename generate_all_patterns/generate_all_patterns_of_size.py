@@ -1,4 +1,5 @@
 from collections import defaultdict
+import operator
 from sys import argv, path
 from os import makedirs
 from os.path import isfile
@@ -11,9 +12,24 @@ from tqdm import tqdm
 
 path.append("..")
 
-from scripts.helpers import all_graphs, to_json
+from scripts.helpers import all_graphs, num_graphs, to_json
 from pipeline.picklereader import PickleReader
 from pipeline.NetworkVisCreator import NetworkVisCreator
+
+
+class ExtendedDiGraphMatcher(nx.isomorphism.DiGraphMatcher):
+    def is_isomorphic(self):
+        default_isomorphic = super().is_isomorphic()
+        if not default_isomorphic:
+            return default_isomorphic
+        non_matching_edge = False
+        for edge in self.G1.edges():
+            edge_og_1, edge_og_2 = edge
+            if not self.G2.has_edge(self.mapping[edge_og_1], self.mapping[edge_og_2]):
+                non_matching_edge = True
+                break
+        return not non_matching_edge
+
 
 size = 5
 for arg in argv:
@@ -29,6 +45,11 @@ with_status = False
 if "with_status" in argv:
     print("Including status...")
     with_status = True
+
+edge_direction_match = False
+if "edge_direction_match" in argv:
+    print("Matching edge directions...")
+    edge_direction_match = True
 
 graph = nx.DiGraph()
 total_patterns = 0
@@ -47,8 +68,7 @@ def node_match_type(node_1, node_2):
 
 
 if not isfile(f"pattern_dump/graph_{size}.pk"):
-    path_list_len = len(list(all_graphs()))
-    for path in tqdm(all_graphs(), total=path_list_len):
+    for path in tqdm(all_graphs(), total=num_graphs()):
         path_str = str(path)
         target_repo = to_json(path_str)["repo_url"].replace("https://github.com/", "")
 
@@ -87,28 +107,29 @@ if not isfile(f"pattern_dump/graph_{size}.pk"):
                     ),
                 )
 
-        connected_components = [local_graph.subgraph(c).copy() for c in nx.connected_components(local_graph)]
+        connected_components = [
+            local_graph.subgraph(c).copy() for c in nx.connected_components(local_graph.to_undirected())
+        ]
         for cc in connected_components:
             if len(cc.nodes) != size:
                 local_graph.remove_nodes_from(cc)
             else:
                 total_patterns += 1
                 for pattern in all_patterns:
-                    dgm = nx.isomorphism.DiGraphMatcher(
-                        nx.path_graph(cc, create_using=nx.DiGraph),
-                        nx.path_graph(pattern, create_using=nx.DiGraph),
+                    if not nx.is_isomorphic(
+                        cc,
+                        pattern,
                         node_match=node_match_with_status if with_status else node_match_type,
                         edge_match=(lambda x, y: x == y) if with_status else None,
-                    )
-                    if not dgm.is_isomorphic():
+                    ):
                         continue
-                    non_matching_edge = False
-                    for edge in pattern.edges():
-                        edge_og_1, edge_og_2 = edge
-                        if not cc.has_edge(dgm.mapping[edge_og_1], dgm.mapping[edge_og_2]):
-                            non_matching_edge = True
-                            break
-                    if not non_matching_edge:
+                    matcher_type = nx.isomorphism.DiGraphMatcher if not edge_direction_match else ExtendedDiGraphMatcher
+                    dgm = matcher_type(
+                        nx.path_graph(cc, create_using=nx.DiGraph),
+                        nx.path_graph(pattern, create_using=nx.DiGraph),
+                    )
+                    dgm.match()
+                    if dgm.is_isomorphic():
                         all_patterns[pattern] += 1
                         break
                 else:
@@ -130,13 +151,11 @@ else:
     with open(f"pattern_dump/graph_{size}.pk", "rb") as x:
         graph = load(x)
 
-# TODO: sort all_patterns and prune graph
-
 if to_render:
     use("agg")
-    components = [graph.subgraph(c) for c in nx.connected_components(graph)]
-    for i, component in enumerate(tqdm(components, total=len(components))):
-        pos = nx.spring_layout(graph, k=15 / sqrt(graph.order()))
+    top_20_patterns = list(map(lambda x: x[0], sorted(all_patterns.items(), key=lambda x: x[1], reverse=True)[:20]))
+    for i, component in enumerate(tqdm(top_20_patterns, total=len(top_20_patterns))):
+        pos = nx.nx_agraph.graphviz_layout(graph)
         labels = dict()
         types = nx.get_node_attributes(component, "type")
         statuses = nx.get_node_attributes(component, "status")
@@ -156,8 +175,8 @@ if to_render:
         nx.draw_networkx_edges(component, pos, edge_color=edge_colors)
         nx.draw_networkx_edge_labels(component, pos=pos)
         try:
-            makedirs(f"image_dump/{repository.replace('/','-')}/{size}")
+            makedirs(f"image_dump/{size}")
         except:
             pass
-        plt.savefig(f"image_dump/{repository.replace('/','-')}/{size}/{i}.png")
+        plt.savefig(f"image_dump/{size}/{i}.png")
         plt.clf()
