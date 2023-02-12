@@ -21,7 +21,7 @@ for path in tqdm(all_graphs(), total=path_list_len):
 
     nodes, _, comment_list, timeline_list, _ = pr.read_repo_local_file(None, target_repo)
 
-    local_graph = nx.Graph()
+    local_graph = nx.DiGraph()
     for index, node in enumerate(nodes):
         node_status = node.state
         if node.pull_request is not None:
