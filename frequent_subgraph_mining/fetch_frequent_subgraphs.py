@@ -11,17 +11,25 @@ if not target_data_path:
     print("Must provide target data path (run convert_network_to_gspan_format.py first!)")
     exit(1)
 
-min_support = 2
+min_support = 1000
 for arg in argv:
     if "support" in arg:
         min_support = int(arg.split("=")[-1])
 
-max_nodes = 100
+size = 5
 for arg in argv:
-    if "max_nodes" in arg:
-        max_nodes = int(arg.split("=")[-1])
+    if "size" in arg:
+        size = int(arg.split("=")[-1])
 
-gspan = gSpan(target_data_path, min_support=min_support, max_num_vertices=max_nodes)
+gspan = gSpan(
+    target_data_path,
+    min_support=min_support,
+    max_num_vertices=size,
+    min_num_vertices=size,
+    is_undirected=False,
+    where=True,
+    visualize=True,
+)
 gspan.run()
 del gspan.graphs[0]
 

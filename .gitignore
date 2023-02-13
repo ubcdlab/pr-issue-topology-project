@@ -10,3 +10,4 @@ data/graph_Project-OSRM-osrm-backend.json
 image_dump/**/*.png
 pattern_dump/**/*.pk
 graphml_dump/**/*.graphml
+tmp.data
