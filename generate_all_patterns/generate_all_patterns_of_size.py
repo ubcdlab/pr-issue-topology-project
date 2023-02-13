@@ -3,6 +3,7 @@ import operator
 from sys import argv, path
 from os import makedirs
 from os.path import isfile
+from pathlib import Path
 import networkx as nx
 import matplotlib.pyplot as plt
 from matplotlib import use
@@ -15,21 +16,6 @@ path.append("..")
 from scripts.helpers import all_graphs, num_graphs, to_json
 from pipeline.picklereader import PickleReader
 from pipeline.NetworkVisCreator import NetworkVisCreator
-
-
-class ExtendedDiGraphMatcher(nx.isomorphism.DiGraphMatcher):
-    def is_isomorphic(self):
-        default_isomorphic = super().is_isomorphic()
-        if not default_isomorphic:
-            return default_isomorphic
-        non_matching_edge = False
-        for edge in self.G1.edges():
-            edge_og_1, edge_og_2 = edge
-            if not self.G2.has_edge(self.mapping[edge_og_1], self.mapping[edge_og_2]):
-                non_matching_edge = True
-                break
-        return not non_matching_edge
-
 
 size = 5
 for arg in argv:
@@ -45,11 +31,6 @@ with_status = False
 if "with_status" in argv:
     print("Including status...")
     with_status = True
-
-edge_direction_match = False
-if "edge_direction_match" in argv:
-    print("Matching edge directions...")
-    edge_direction_match = True
 
 graph = nx.DiGraph()
 total_patterns = 0
@@ -116,27 +97,18 @@ if not isfile(f"pattern_dump/graph_{size}.pk"):
             else:
                 total_patterns += 1
                 for pattern in all_patterns:
-                    if not nx.is_isomorphic(
+                    if nx.is_isomorphic(
                         cc,
                         pattern,
                         node_match=node_match_with_status if with_status else node_match_type,
                         edge_match=(lambda x, y: x == y) if with_status else None,
                     ):
-                        continue
-                    matcher_type = nx.isomorphism.DiGraphMatcher if not edge_direction_match else ExtendedDiGraphMatcher
-                    dgm = matcher_type(
-                        nx.path_graph(cc, create_using=nx.DiGraph),
-                        nx.path_graph(pattern, create_using=nx.DiGraph),
-                    )
-                    dgm.match()
-                    if dgm.is_isomorphic():
                         all_patterns[pattern] += 1
                         break
                 else:
                     all_patterns[cc] = 1
 
         graph = nx.compose(graph, local_graph)
-
     try:
         makedirs(f"pattern_dump/")
     except:
@@ -157,26 +129,55 @@ if to_render:
     for i, component in enumerate(tqdm(top_20_patterns, total=len(top_20_patterns))):
         pos = nx.nx_agraph.graphviz_layout(graph)
         labels = dict()
+        edge_labels = dict()
         types = nx.get_node_attributes(component, "type")
+        numbers = nx.get_node_attributes(component, "number")
         statuses = nx.get_node_attributes(component, "status")
         repository = list(nx.get_node_attributes(component, "repository").values())[0]
         colors = []
+        plt.figure(1, figsize=(10, 10))
+        plt.title(f"Example occurrence in {repository}")
+        issues = list(filter(lambda cn: types[cn] == "issue", component.nodes))
+        prs = list(filter(lambda cn: types[cn] == "pull_request", component.nodes))
+        issue_colors = [
+            "#f46d75" if statuses[cn] == "closed" else "#64389f" if statuses[cn] == "merged" else "#77dd77"
+            for cn in issues
+        ]
+        pr_colors = [
+            "#f46d75" if statuses[cn] == "closed" else "#64389f" if statuses[cn] == "merged" else "#77dd77"
+            for cn in prs
+        ]
+        nx.draw(
+            component,
+            pos,
+            nodelist=issues,
+            node_color=issue_colors,
+            node_shape="s",
+            font_size=10,
+            node_size=200,
+        )
+        nx.draw(
+            component,
+            pos,
+            nodelist=prs,
+            node_color=pr_colors,
+            node_shape="o",
+            font_size=10,
+            node_size=200,
+        )
         for cn in component.nodes:
-            labels[cn] = f"{cn}\n{types[cn]}\n{statuses[cn]}"
-            color = "#f46d75" if statuses[cn] == "closed" else "#64389f" if statuses[cn] == "merged" else "#77dd77"
-            nx.draw(component, pos, nodelist=[cn], node_color=color, node_shape="s" if types[cn] == "issue" else "o")
+            labels[cn] = f"{types[cn]} #{numbers[cn]}"
         link_types = nx.get_edge_attributes(component, "link_type")
-        edge_colors = []
         for ce in component.edges:
-            edge_colors += [
-                "#9cadce" if link_types[ce] == "fixes" else "#7ec4cf" if link_types[ce] == "duplicate" else "#5a5a5a"
-            ]
-        nx.draw_networkx_labels(component, pos=pos, labels=labels)
-        nx.draw_networkx_edges(component, pos, edge_color=edge_colors)
-        nx.draw_networkx_edge_labels(component, pos=pos)
+            if link_types[ce] != "other":
+                edge_labels[ce] = link_types[ce]
+        nx.draw_networkx_labels(component, pos=pos, labels=labels, font_size=10)
+        nx.draw_networkx_edges(component, pos)
+        nx.draw_networkx_edge_labels(component, pos=pos, edge_labels=edge_labels, font_size=10)
         try:
             makedirs(f"image_dump/{size}")
         except:
             pass
+        plt.tight_layout()
         plt.savefig(f"image_dump/{size}/{i}.png")
         plt.clf()
