@@ -1,0 +1,576 @@
+repo_name,component_id,link_url,node_1_type,node_1_id,node_1_author,node_1_num_comment,node_2_type,node_2_id,node_2_author,node_2_num_comments,Link Type,Quotes
+sosedoff/pgweb,54915,https://github.com/sosedoff/pgweb/issues/480#issuecomment-668324478,issue,480,https://github.com/gabrieljones,14,issue,222,https://github.com/zoujd-github,5,similar,#222 is related
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+cruffenach/CRToast,18052,https://github.com/cruffenach/CRToast/pull/16#issuecomment-35463585,pull_request,16,https://github.com/Ashton-W,2,pull_request,21,https://github.com/cruffenach,0,improves,Rebased and merged via #21.
+cruffenach/CRToast,18052,https://github.com/cruffenach/CRToast/issues/10#issuecomment-35165970,issue,10,https://github.com/Ashton-W,2,issue,8,https://github.com/phillipthelen,3,context,"I dig it. I'm gonna tackle #8 first, I could give this a shot after."
+cruffenach/CRToast,18052,https://github.com/cruffenach/CRToast/pull/16#issue-27775625,pull_request,16,https://github.com/Ashton-W,2,issue,10,https://github.com/Ashton-W,2,fixes,Satisfies #10
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+ag-grid/ag-grid,4869,https://github.com/ag-grid/ag-grid/pull/3468#issue-512443375,pull_request,3468,https://github.com/deser,2,issue,3467,https://github.com/deser,4,fixes,Fixes #3467
+ag-grid/ag-grid,4869,https://github.com/ag-grid/ag-grid/pull/3685#issue-569971525,pull_request,3685,https://github.com/HipsterZipster,1,pull_request,3468,https://github.com/deser,2,irrelevant,This was fixed on master in #3468
+,,,pull_request,3685,,,issue,3467,,,irrelevant,Reported in: #3467
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+MithrilJS/mithril.js,36106,https://github.com/MithrilJS/mithril.js/pull/2134#issue-316528590,pull_request,2134,https://github.com/maranomynet,1,pull_request,2133,https://github.com/maranomynet,15,impact,Discovered while testing #2133
+,,,pull_request,2137,,,pull_request,2133,,,improves,In response to suggestions made in #2133
+MithrilJS/mithril.js,36106,https://github.com/MithrilJS/mithril.js/pull/2137#issuecomment-386926318,pull_request,2137,https://github.com/maranomynet,23,pull_request,2141,https://github.com/maranomynet,12,improves,Superseeded by #2141
+MithrilJS/mithril.js,36106,https://github.com/MithrilJS/mithril.js/issues/2138#issuecomment-386708665,issue,2138,https://github.com/maranomynet,6,pull_request,2139,https://github.com/maranomynet,3,irrelevant,"Adding this in such an obviously half-baked state to 2137 just messes things up, so I reverted those commits and put them in a standalone pull-request #2139"
+,,,issue,2138,,,pull_request,2137,,,context,"Great! you can add it as ospec/change-log.md, in #2137 .... It would have been good in #2137 as well, I don't think anyone cares about the details of pre v1.4 history :-)"
+MithrilJS/mithril.js,36106,https://github.com/MithrilJS/mithril.js/pull/2142#issue-320639751,pull_request,2142,https://github.com/maranomynet,0,pull_request,2141,https://github.com/maranomynet,12,improves,My bad. #2141 was broken when merged
+,,,pull_request,2141,,,pull_request,2137,,,improves,Feel free to ignore this pull request. Its sole purpose is to illustrate what an alternative approach to #2137 and #2133 could look like – if only ospec was treated like a first-class package allowing a single dependency for the node.js binary.
+,,,pull_request,2141,,,pull_request,2133,,,improves,Feel free to ignore this pull request. Its sole purpose is to illustrate what an alternative approach to #2137 and #2133 could look like – if only ospec was treated like a first-class package allowing a single dependency for the node.js binary.
+,,,,,,,,,,,,
+rematch/rematch,52493,https://github.com/rematch/rematch/issues/51#issue-266713150,issue,51,https://github.com/ShMcK,1,pull_request,56,https://github.com/ShMcK,4,fixes,closed once #56 is ready to merge.
+rematch/rematch,52493,https://github.com/rematch/rematch/issues/48#issue-266695777,issue,48,https://github.com/ShMcK,4,pull_request,56,https://github.com/ShMcK,4,fixes,closed when #56 merges.
+rematch/rematch,52493,https://github.com/rematch/rematch/pull/56#issue-267434858,pull_request,56,https://github.com/ShMcK,4,issue,52,https://github.com/ShMcK,0,fixes,"Closes #52. Once resolved, should handle multiple subscriptions with the same name in different models."
+,,,,,,,,,,,,
+mlflow/mlflow,40078,https://github.com/mlflow/mlflow/issues/1487#issuecomment-573033558,issue,1487,https://github.com/hershaw,25,pull_request,2289,https://github.com/hershaw,0,fixes,See #1487 for full discussion
+,,,,,,,,,,,,
+Project-OSRM/osrm-backend,45584,https://github.com/Project-OSRM/osrm-backend/issues/556#issuecomment-11846073,issue,556,https://github.com/vanomel,4,issue,529,https://github.com/jose1711,4,duplicate,see #529 and #532 for other reports on turn instructions
+Project-OSRM/osrm-backend,45584,https://github.com/Project-OSRM/osrm-backend/issues/556#issuecomment-11846073,issue,556,https://github.com/vanomel,4,issue,532,https://github.com/emiltin,6,duplicate,see #529 and #532 for other reports on turn instructions
+Project-OSRM/osrm-backend,45584,https://github.com/Project-OSRM/osrm-backend/issues/532#issuecomment-13989749,issue,532,https://github.com/emiltin,6,pull_request,596,https://github.com/emiltin,8,fixes,simpler solution at #596
+,,,,,,,,,,,,
+TypeStrong/ts-node,63252,https://github.com/TypeStrong/ts-node/issues/184#issue-172536561,issue,184,https://github.com/xogeny,10,issue,163,https://github.com/pleerock,14,context,I should add that this is on Windows (related to #163 or #137 ?).
+,,,issue,184,,,issue,137,,,context,
+TypeStrong/ts-node,63252,https://github.com/TypeStrong/ts-node/issues/163#issuecomment-236356467,issue,163,https://github.com/pleerock,14,issue,137,https://github.com/wclr,21,context,
+,,,,,,,,,,,,
+chaijs/chai,17046,https://github.com/chaijs/chai/pull/1458#issue-1154090179,pull_request,1458,https://github.com/snewcomer,2,issue,1358,https://github.com/derMart,1,fixes,close #1358
+,,,,,,,,,,,,
+SwipeCellKit/SwipeCellKit,58774,https://github.com/SwipeCellKit/SwipeCellKit/issues/4#issue-208885555,issue,4,https://github.com/fabb,23,pull_request,188,https://github.com/kurabi,1,fixes,This feature is now complete and has been merged onto master. #188.
+,,,pull_request,45,,,issue,4,,,fixes,"#4
+Initial support for UICollectionView."
+SwipeCellKit/SwipeCellKit,58774,https://github.com/SwipeCellKit/SwipeCellKit/pull/45#issuecomment-359907402,pull_request,45,https://github.com/gcox,15,pull_request,142,https://github.com/kreeger,6,improves,The updated pull request has been posted (#142)! This one can be closed in favor of the other one.
+,,,pull_request,142,,,pull_request,45,,,improves,This pull request supersedes #45.
+SwipeCellKit/SwipeCellKit,58774,https://github.com/SwipeCellKit/SwipeCellKit/pull/142#issuecomment-383320036,pull_request,142,https://github.com/kreeger,6,pull_request,188,https://github.com/kurabi,1,improves,Follow PR #188
+,,,issue,4,,,pull_request,142,,,context,"@fabb That is fine, but when there is an open PR (#142) that @kurabi said he would review over the next few days back on January 25th, with no updates since that is not open source."
+,,,,,,,,,,,,
+apache/dubbo,11032,https://github.com/apache/dubbo/pull/300#issuecomment-332460871,pull_request,300,https://github.com/x1957,3,issue,664,https://github.com/li362692680,5,ignore,Fixed. see #664
+apache/dubbo,11032,https://github.com/apache/dubbo/issues/6533#issue-667655978,issue,6533,https://github.com/dcy421,1,issue,664,https://github.com/li362692680,5,ignore,
+apache/dubbo,11032,https://github.com/apache/dubbo/pull/694#issue-260848428,pull_request,694,https://github.com/zonghaishang,0,pull_request,300,https://github.com/x1957,3,ignore,
+,,,,300,,,,694,,,ignore,This is a duplication of the previous one.
+,,,,,,,,,,,,
+summernote/summernote,58392,https://github.com/summernote/summernote/issues/240#issue-27749231,issue,240,https://github.com/loicbenoit,7,pull_request,260,https://github.com/loicbenoit,2,fixes,Done for fr-FR (#260)
+,,,issue,240,,,pull_request,250,,,fixes,Done for RU and UA (#250)
+summernote/summernote,58392,https://github.com/summernote/summernote/pull/248#issue-28092235,pull_request,248,https://github.com/takyam-git,1,issue,240,https://github.com/loicbenoit,7,fixes,for #240 (title: Add 'remove image' to ja-JP)
+summernote/summernote,58392,https://github.com/summernote/summernote/pull/249#issue-28095026,pull_request,249,https://github.com/taalendigitaal,3,issue,240,https://github.com/loicbenoit,7,fixes,for #240 (title: updated dutch (nl-NL) translations)
+,58392,,,249,,,issue,122,,,fixes,and also for #122 (title: updated dutch (nl-NL) translations)
+summernote/summernote,58392,https://github.com/summernote/summernote/pull/203#issuecomment-33893405,pull_request,203,https://github.com/xguox,2,issue,122,https://github.com/gcpds,4,fixes,"#122 (title: open in new window , zh-CN)"
+summernote/summernote,58392,https://github.com/summernote/summernote/pull/204#issue-26755812,pull_request,204,https://github.com/takyam-git,0,issue,122,https://github.com/gcpds,4,fixes,"for summernote #122 (title: add 'open in new window' tlanslate to ja-JP, for issue #122)"
+,,,,,,,,,,,,
+Activiti/Activiti,1433,https://github.com/Activiti/Activiti/issues/2214#issuecomment-442294073,issue,2214,https://github.com/igdianov,4,pull_request,2216,https://github.com/igdianov,1,fixes,@salaboy I created all PRs for dependency convergence tests in Cloud and updated Core repos to include transitive BoM dependencies when we release them into Cloud. (...) Automated tests for dependencies convergence in CI pipelines for Activiti Cloud #2216
+Activiti/Activiti,1433,https://github.com/Activiti/Activiti/pull/2216#issue-385039979,pull_request,2216,https://github.com/igdianov,1,issue,2215,https://github.com/igdianov,0,fixes,Part of #2214 and #2172 and #2215
+,,,pull_request,2216,,,issue,2214,,,fixes,Part of #2214 and #2172 and #2215
+,,,pull_request,2216,,,issue,2172,,,fixes,Part of #2214 and #2172 and #2215
+Activiti/Activiti,1433,https://github.com/Activiti/Activiti/issues/2198#issuecomment-441157000,issue,2198,https://github.com/igdianov,2,pull_request,2199,https://github.com/igdianov,1,fixes,@salaboy I have prepared the PRs to be merged: #2199
+Activiti/Activiti,1433,https://github.com/Activiti/Activiti/pull/2199#issue-383700907,pull_request,2199,https://github.com/igdianov,1,issue,2200,https://github.com/igdianov,2,fixes,"Also, added same parent version convergence test as part of #2200"
+Activiti/Activiti,1433,https://github.com/Activiti/Activiti/pull/2199#issue-383700907,pull_request,2199,https://github.com/igdianov,1,issue,2172,https://github.com/igdianov,2,fixes,It also fixes Maven-deploy-plugin configuration to follow best practice for deploying multi-module project at the end. (See #2172)
+,,,pull_request,2199,,,issue,2198,,,,This PR proposes to add dependency convergence tests for external activiti-api and activiti-core-common dependencies as part of #2198.
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+Project-OSRM/osrm-backend,44062,https://github.com/Project-OSRM/osrm-backend/issues/791#issue-22523924,issue,791,https://github.com/clintharris,4,issue,802,https://github.com/clintharris,27,improves,closing here in favor of #802
+Project-OSRM/osrm-backend,44062,https://github.com/Project-OSRM/osrm-backend/issues/802#issuecomment-28694591,issue,802,https://github.com/clintharris,27,issue,798,https://github.com/clintharris,9,context,"In light of #798, what's your ..."
+Project-OSRM/osrm-backend,44062,https://github.com/Project-OSRM/osrm-backend/issues/3839#issue-215347211,issue,3839,https://github.com/Pcosmin,3,issue,802,https://github.com/clintharris,27,context,"I found this comment from DennisOSRM from Nov 18, 2013
+""Make sure that you load the correct files. Right now, you will need around 48 GB of RAM to run the server on the planet-wide dataset."" (#802)"
+,,,,,,,,,,,,
+Rapptz/discord.py,49179,https://github.com/Rapptz/discord.py/pull/2075#issue-432748710,pull_request,2075,https://github.com/diceroll123,1,pull_request,2074,https://github.com/diceroll123,0,depends,Heavily relies on #2074 being merged.
+,,,,,,,,,,,,
+mlflow/mlflow,39967,https://github.com/mlflow/mlflow/pull/1769#issue-483460505,pull_request,1769,https://github.com/Ben-Epstein,2,issue,1750,https://github.com/Ben-Epstein,6,fixes,This is a PR to fix issue #1750 adding ...
+mlflow/mlflow,39967,https://github.com/mlflow/mlflow/issues/2201#issue-537552030,issue,2201,https://github.com/Tradunsky,15,pull_request,1769,https://github.com/Ben-Epstein,2,context,#1769 # System information
+mlflow/mlflow,39967,https://github.com/mlflow/mlflow/issues/2455#issuecomment-589289105,issue,2455,https://github.com/Tradunsky,2,issue,2201,https://github.com/Tradunsky,15,context,@AveshCSingh Here is the error I mentioned in #2201 (comment)
+,,,,,,,,,,,,
+casesandberg/react-color,16426,https://github.com/casesandberg/react-color/pull/703#issue-608820815,pull_request,703,https://github.com/pizza3,1,issue,547,https://github.com/BernardoFBBraga,2,fixes,
+,,,,,,,,,,,,
+MithrilJS/mithril.js,36000,https://github.com/MithrilJS/mithril.js/issues/2392#issue-418906808,issue,2392,https://github.com/CarlLeth,1,issue,2333,https://github.com/qgustavor,0,duplicate,Duplicate of #2333
+MithrilJS/mithril.js,36000,https://github.com/MithrilJS/mithril.js/pull/2335#issue-389212439,pull_request,2335,https://github.com/dead-claudia,3,issue,2313,https://github.com/dead-claudia,0,fixes,Edit: Fixes #2313
+MithrilJS/mithril.js,36000,https://github.com/MithrilJS/mithril.js/pull/2335#issue-389212439,pull_request,2335,https://github.com/dead-claudia,3,issue,2333,https://github.com/qgustavor,0,fixes,Fixes #2333
+,,,,,,,,,,,,
+rlidwka/sinopia,52640,https://github.com/rlidwka/sinopia/issues/356#issue-122452619,issue,356,https://github.com/ghost,5,issue,289,https://github.com/alallier,13,similar,"I have already viewed the related topic about this issue like below two, but did not help me. #289 #124"
+,,,issue,356,,,issue,124,,,similar,
+rlidwka/sinopia,52640,https://github.com/rlidwka/sinopia/issues/289#issue-97950517,issue,289,https://github.com/alallier,13,issue,124,https://github.com/gywbd,3,context,"Issue #124 talks about the system clock being off by a year, that is not the case for me"
+,,,,,,,,,,,,
+mlflow/mlflow,39974,https://github.com/mlflow/mlflow/pull/1155#discussion_r280637436,pull_request,1187,https://github.com/aarondav,1,pull_request,1155,https://github.com/smurching,2,context,"Subsequently, I upgraded my server version to this PR (including running the alembic migration over the sqlalchemy store in #1155), and confirmed that file store & sqlalchemy store could continue to search, get_run, and create_run from the old client in 0.9.1."
+,,,pull_request,1187,,,pull_request,1124,,,similar,"BTW, it turns out there is actually a way to autogenerate R docs (basically there's a bash script you can run that'll generate .Rd doc files from the R source code, and then another command that'll compile those .Rd files into R-api.rst). #1124 is a PR standardizing this process,"
+mlflow/mlflow,39974,https://github.com/mlflow/mlflow/issues/1288#issue-445263712,issue,1288,https://github.com/rugeer,1,pull_request,1187,https://github.com/aarondav,1,fixes,Fixed in #1187.
+mlflow/mlflow,39974,https://github.com/mlflow/mlflow/issues/1385#issue-451623696,issue,1385,https://github.com/ananthc,1,pull_request,1292,https://github.com/smurching,0,irrelevant,"This should be fixed by #1292, which was merged after RC1."
+mlflow/mlflow,39974,https://github.com/mlflow/mlflow/pull/1371#issue-450950669,pull_request,1371,https://github.com/smurching,1,pull_request,1292,https://github.com/smurching,0,improves,We added new alembic.ini config files & moved around existing ones in #1292. This PR updates wheel build logic to include the moved .ini files in the wheel - otherwise running mlflow db upgrade from a wheel built via python setup.py bdist_wheelfails while trying to find the config file:
+mlflow/mlflow,39974,https://github.com/mlflow/mlflow/pull/1292#issue-445870898,pull_request,1292,https://github.com/smurching,0,issue,1229,https://github.com/seeder,0,fixes,Fixes #1229
+,,,,1292,,,,1155,,,depends on,"Creating their DB after 1.0, in which case we initialize it via the schema in initial_models.py and run the metric step migration from Add DB migration support + migration logic for metric x coordinates #1155"
+mlflow/mlflow,39974,https://github.com/mlflow/mlflow/pull/1155#discussion_r280637436,pull_request,1196,https://github.com/smurching,0,pull_request,1155,https://github.com/smurching,2,similar,Shout out to @dbczumar for noticing this in #1155
+mlflow/mlflow,39974,https://github.com/mlflow/mlflow/issues/2444#issue-567691424,issue,2444,https://github.com/Esadruhn,7,issue,1397,https://github.com/tkocmathla,7,irrelevant,"There is an old issue about this, with MySQL, but it is closed and supposedly solved: #1397"
+mlflow/mlflow,39974,https://github.com/mlflow/mlflow/pull/1404#issue-452651015,pull_request,1404,https://github.com/sueann,0,issue,1397,https://github.com/tkocmathla,7,fixes,Remove the drop_constraint calls to alembic since it generates invalid DROP CONSTRAINT statements for mysql. Solves #1397.
+,,,pull_request,1404,,,pull_request,1292,,,impact,"The migration script introduced in #1292 drops some CHECK constraints. To drop a check constraint in MySQL,
+- in versions 8.0.16+, you can use DROP CHECK
+- in previous versions, dropping checks is not supported
+However, alembic creates a DROP CONSTRAINT statement in its drop_constraint method, so the migration script here fails."
+,,,,,,,,,,,,
+mgonto/restangular,34730,https://github.com/mgonto/restangular/pull/1274#issue-118807801,pull_request,1274,https://github.com/pgom,2,pull_request,1088,https://github.com/oznu,11,context,This PR relates to #1088.
+,,,pull_request,1088,,,issue,749,,,fixes,Resolves #749
+,,,issue,1012,,,issue,749,,,context,Require.js is not yet supported officially although planned for upcoming release. Please refer to #749 for further updates.
+mgonto/restangular,34730,https://github.com/mgonto/restangular/issues/749#issuecomment-139865773,issue,749,https://github.com/iancrowther,27,issue,1012,https://github.com/subramn,2,duplicate,"Coming from #1012 and wondering when Restangular will officially support requirejs.
+Meanwhile is there any workaround?
+Thanks!"
+mgonto/restangular,34730,https://github.com/mgonto/restangular/issues/749#issuecomment-182229988,pull_request,749,https://github.com/iancrowther,27,pull_request,1284,https://github.com/dreef3,9,improves,"Definitely #1284 is the way to go.
+
+UMD is pretty much the 'everything to everyone' fix."
+,,,pull_request,1284,,,issue,749,,,improves,Another approach for #749.
+mgonto/restangular,34730,https://github.com/mgonto/restangular/issues/1065#issue-59247362,issue,1065,https://github.com/XVincentX,5,pull_request,1284,https://github.com/dreef3,9,irrelevant,This was fixed here: #1284
+,,,issue,1397,,,pull_request,1284,,,irrelevant,"There was a PR (#1284) for this not too long ago, but it hasn't been put into a tagged release yet."
+mgonto/restangular,34730,https://github.com/mgonto/restangular/issues/1303#issuecomment-243648166,issue,1303,https://github.com/steel119,9,issue,1397,https://github.com/kalpitpandit,19,context,You might be using an older version of Restangular. There are a couple commits to master that aren't in a release that fix this. See also #1397. Try using the version of Restangular on master for right now until 1.5.3 is released.
+mgonto/restangular,34730,https://github.com/mgonto/restangular/issues/1303#issuecomment-226682307,issue,1303,https://github.com/steel119,9,issue,1321,https://github.com/pedromarce,6,context,"@steel119 I don't know how exactly ngLodash would work with Restangular. Restangular references Lodash directly on window, but there's been added support for for modules, so maybe there's a way to hook into that?
+There's also been some talk of removing lodash. (1321)
+Anyhow, this seems like a reasonable thing to support, so I'd love to hear your thoughts on it/see a PR for it."
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+deployphp/deployer,20267,https://github.com/deployphp/deployer/pull/2560#issue-907407350,pull_request,2560,https://github.com/staabm,1,issue,2545,https://github.com/staabm,2,fixes,Bug fix get() throws ConfigurationException when default is passed as null #2545?
+,,,issue,2545,,,issue,2525,,,similar,"get checks if the value is null if yes, it throws an exception. I had the same problem already with #2525"
+deployphp/deployer,20267,https://github.com/deployphp/deployer/pull/2526#issue-868021186,pull_request,2526,https://github.com/Schrank,0,issue,2525,https://github.com/Schrank,0,fixes,"Bug fix Config option ""slack_channel"" does not exist. #2525
+  Changelog updated?"
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+casesandberg/react-color,16428,https://github.com/casesandberg/react-color/issues/636#issue-482858672,issue,636,https://github.com/yury-n,2,pull_request,670,https://github.com/casesandberg,0,other,
+casesandberg/react-color,16428,https://github.com/casesandberg/react-color/pull/258#issue-180790926,pull_request,258,https://github.com/louh,2,issue,216,https://github.com/louh,4,other,
+casesandberg/react-color,16428,https://github.com/casesandberg/react-color/issues/644#issue-494250023,issue,644,https://github.com/PCMACHero,4,pull_request,670,https://github.com/casesandberg,0,other,
+casesandberg/react-color,16428,https://github.com/casesandberg/react-color/issues/413#issue-254850144,issue,413,https://github.com/casesandberg,16,issue,395,https://github.com/sirjamesgray,0,other,
+casesandberg/react-color,16428,https://github.com/casesandberg/react-color/issues/652#issue-514450791,issue,652,https://github.com/mi6gan,1,issue,504,https://github.com/casesandberg,2,other,
+casesandberg/react-color,16428,https://github.com/casesandberg/react-color/pull/401#issue-254161458,pull_request,401,https://github.com/SpencerDawson,0,issue,399,https://github.com/scottkunkel,10,other,
+casesandberg/react-color,16428,https://github.com/casesandberg/react-color/issues/644#issuecomment-561717646,issue,644,https://github.com/PCMACHero,4,issue,656,https://github.com/mikalai-sauchanka,1,other,
+casesandberg/react-color,16428,https://github.com/casesandberg/react-color/issues/371#issue-239416855,issue,371,https://github.com/sergey-rogatin,1,issue,404,https://github.com/casesandberg,0,other,
+casesandberg/react-color,16428,https://github.com/casesandberg/react-color/issues/548#issuecomment-429383580,issue,548,https://github.com/earslap,2,issue,539,https://github.com/unkernet,1,other,
+casesandberg/react-color,16428,https://github.com/casesandberg/react-color/issues/540#issue-362959217,issue,540,https://github.com/StructByLightning,1,issue,216,https://github.com/louh,4,other,
+casesandberg/react-color,16428,https://github.com/casesandberg/react-color/issues/413#issuecomment-386885224,issue,413,https://github.com/casesandberg,16,pull_request,511,https://github.com/ekoeryanto,1,other,
+casesandberg/react-color,16428,https://github.com/casesandberg/react-color/issues/620#issuecomment-572171082,issue,620,https://github.com/sjwl123,5,pull_request,670,https://github.com/casesandberg,0,other,
+casesandberg/react-color,16428,https://github.com/casesandberg/react-color/issues/423#issuecomment-329303573,issue,423,https://github.com/doronbrikman,4,issue,413,https://github.com/casesandberg,16,other,
+casesandberg/react-color,16428,https://github.com/casesandberg/react-color/issues/684#issuecomment-593287246,issue,684,https://github.com/essencient,5,issue,683,https://github.com/Maadtin,1,other,
+casesandberg/react-color,16428,https://github.com/casesandberg/react-color/issues/686#issue-575863359,issue,686,https://github.com/SpaceWarf,1,issue,684,https://github.com/essencient,5,other,
+casesandberg/react-color,16428,https://github.com/casesandberg/react-color/issues/305#issuecomment-368937283,issue,305,https://github.com/gittestcoder,14,issue,413,https://github.com/casesandberg,16,other,
+casesandberg/react-color,16428,https://github.com/casesandberg/react-color/pull/316#issue-198733188,pull_request,316,https://github.com/alampros,2,issue,307,https://github.com/qasid,2,other,
+casesandberg/react-color,16428,https://github.com/casesandberg/react-color/issues/701#issuecomment-620135800,issue,701,https://github.com/Wink007,4,issue,694,https://github.com/ashot-israelyan,8,other,
+casesandberg/react-color,16428,https://github.com/casesandberg/react-color/issues/438#issuecomment-341635364,issue,438,https://github.com/jomnius,6,issue,413,https://github.com/casesandberg,16,other,
+casesandberg/react-color,16428,https://github.com/casesandberg/react-color/issues/413#issue-254850144,issue,413,https://github.com/casesandberg,16,issue,184,https://github.com/lgg,11,other,
+casesandberg/react-color,16428,https://github.com/casesandberg/react-color/issues/310#issuecomment-382884765,issue,310,https://github.com/stevenxxiu,6,issue,504,https://github.com/casesandberg,2,other,
+casesandberg/react-color,16428,https://github.com/casesandberg/react-color/issues/413#issue-254850144,issue,413,https://github.com/casesandberg,16,issue,313,https://github.com/maximzah,5,other,
+casesandberg/react-color,16428,https://github.com/casesandberg/react-color/issues/413#issue-254850144,issue,413,https://github.com/casesandberg,16,pull_request,316,https://github.com/alampros,2,other,
+casesandberg/react-color,16428,https://github.com/casesandberg/react-color/issues/620#issuecomment-611482845,issue,620,https://github.com/sjwl123,5,issue,701,https://github.com/Wink007,4,other,
+casesandberg/react-color,16428,https://github.com/casesandberg/react-color/issues/445#issue-278990085,issue,445,https://github.com/ant45de,2,issue,404,https://github.com/casesandberg,0,other,
+casesandberg/react-color,16428,https://github.com/casesandberg/react-color/issues/413#issue-254850144,issue,413,https://github.com/casesandberg,16,issue,66,https://github.com/vmasto,3,other,
+casesandberg/react-color,16428,https://github.com/casesandberg/react-color/issues/508#issuecomment-398012785,issue,508,https://github.com/alduro,12,issue,455,https://github.com/vudduu,4,other,
+casesandberg/react-color,16428,https://github.com/casesandberg/react-color/issues/413#issue-254850144,issue,413,https://github.com/casesandberg,16,issue,215,https://github.com/jackparmer,23,other,
+casesandberg/react-color,16428,https://github.com/casesandberg/react-color/issues/216#issue-174551488,issue,216,https://github.com/louh,4,issue,404,https://github.com/casesandberg,0,other,
+casesandberg/react-color,16428,https://github.com/casesandberg/react-color/issues/413#issue-254850144,issue,413,https://github.com/casesandberg,16,issue,359,https://github.com/sergop321,4,other,
+casesandberg/react-color,16428,https://github.com/casesandberg/react-color/issues/413#issue-254850144,issue,413,https://github.com/casesandberg,16,issue,364,https://github.com/jimmylinh,4,other,
+casesandberg/react-color,16428,https://github.com/casesandberg/react-color/issues/413#issue-254850144,issue,413,https://github.com/casesandberg,16,pull_request,366,https://github.com/pconerly,7,other,
+casesandberg/react-color,16428,https://github.com/casesandberg/react-color/issues/621#issue-452964176,issue,621,https://github.com/tanth1993,1,pull_request,670,https://github.com/casesandberg,0,other,
+casesandberg/react-color,16428,https://github.com/casesandberg/react-color/issues/365#issuecomment-310524468,issue,365,https://github.com/pconerly,4,pull_request,369,https://github.com/pconerly,1,other,
+casesandberg/react-color,16428,https://github.com/casesandberg/react-color/pull/670#issue-546997262,pull_request,670,https://github.com/casesandberg,0,pull_request,632,https://github.com/kgapich,0,other,
+,,,,,,,,,,,,
+Activiti/Activiti,430,https://github.com/Activiti/Activiti/issues/3518#issuecomment-765341128,issue,3518,https://github.com/Raluca-Plugariu,1,pull_request,3519,https://github.com/Raluca-Plugariu,2,fixes,Fixed in #3519
+,,,,,,,,,,,,
+mgonto/restangular,34735,https://github.com/mgonto/restangular/issues/538#issuecomment-33058227,issue,538,https://github.com/joshikeerti,1,issue,420,https://github.com/zoheb,27,duplicate,#420 (comment) would do exactly what you need.
+mgonto/restangular,34735,https://github.com/mgonto/restangular/issues/720#issuecomment-44606412,issue,720,https://github.com/ZAYEC77,2,issue,420,https://github.com/zoheb,27,uses,"It'd be done the same way you'd do it with $http.
+
+This might actually help out: #420 (comment)"
+mgonto/restangular,34735,https://github.com/mgonto/restangular/issues/1376#issue-156734982,issue,1376,https://github.com/turoni,2,issue,420,https://github.com/zoheb,27,similar,"My problem isn't fixed so I'm not sure if I understand completely but I was under the presumption that by using multipart/formdata in my html form it was already formatted correctly but apparently it was not so I've been able to add it like in #420. As I said, my problem isn't solved so I'm only pretty sure the problem is serverside but I'll close this for now till I know more."
+mgonto/restangular,34735,https://github.com/mgonto/restangular/issues/420#issuecomment-76689677,issue,420,https://github.com/zoheb,27,pull_request,1068,https://github.com/steinerj,10,fixes,"I'm having the exact same issue with using httpConfigs for objects created with .service
+
+I have provided a PR, because I think this is a bit of a inconsistency. See #1068"
+mgonto/restangular,34735,https://github.com/mgonto/restangular/pull/1068#issuecomment-226704399,pull_request,1068,https://github.com/steinerj,10,pull_request,1392,https://github.com/madflow,4,improves,This PR replaces #1068.
+,,,,,,,,,,,,
+apache/dubbo,13361,https://github.com/apache/dubbo/pull/2250#issue-350252537,pull_request,2250,https://github.com/Chancelife,2,issue,1713,https://github.com/ralf0131,4,fixes,#1713
+apache/dubbo,13361,https://github.com/apache/dubbo/pull/2264#issue-350259986,pull_request,2264,https://github.com/131250105,1,issue,1713,https://github.com/ralf0131,4,fixes,"What is the purpose of the change
+To solve issue: support log4j2 #1713"
+apache/dubbo,13361,https://github.com/apache/dubbo/pull/2266#issue-350260588,pull_request,2266,https://github.com/hexiloveecho,0,issue,1713,https://github.com/ralf0131,4,fixes,"Fix issue #1713 , by BaiJi the 269th team3"
+,,,pull_request,2279,,,issue,1713,,,fixes,"#1713
+to add log4j2 for dubbo."
+apache/dubbo,13361,https://github.com/apache/dubbo/pull/2280#issue-350267093,pull_request,2280,https://github.com/noahziheng,1,issue,1713,https://github.com/ralf0131,4,fixes,"Resolve #1713
+Add log4j2 support for logger."
+apache/dubbo,13361,https://github.com/apache/dubbo/pull/2285#issue-350267704,pull_request,2285,https://github.com/jrjsjtu,0,issue,1713,https://github.com/ralf0131,4,fixes,Fixed issue #1713.
+apache/dubbo,13361,https://github.com/apache/dubbo/pull/2293#issue-350272334,pull_request,2293,https://github.com/huchuanling,0,issue,1713,https://github.com/ralf0131,4,fixes,"#1713
+fix bugs for issue 1713"
+apache/dubbo,13361,https://github.com/apache/dubbo/pull/2279#issuecomment-413785303,pull_request,2279,https://github.com/wanwanpp,3,issue,2312,https://github.com/diecui1202,1,impact,"The two methods getLevel and getFile are used for telnet handler, but I found it's not correct.
+
+Therefore in this PR, the two methods are just empty implementation, I've started a new issue #2312 to track this."
+,,,,,,,,,,,,
+tensorpack/tensorpack,58936,https://github.com/tensorpack/tensorpack/issues/209#issuecomment-289578113,issue,209,https://github.com/JesseYang,3,issue,191,https://github.com/JesseYang,11,fixes,"Apart from using SimpleTrainer, you can also just use the debug hook I mentioned last time (#191). It should be less error-prone than injecting a debug session and make every ops under inspection."
+,,,issue,631,,,issue,191,,,uses,"I tried adding hook method as mentioned in #191, but same error prompts"
+tensorpack/tensorpack,58936,https://github.com/tensorpack/tensorpack/issues/916#issue-366716726,issue,916,https://github.com/jwook1004,11,issue,191,https://github.com/JesseYang,11,uses,"...  I checked via Tensorflow debugger (#191) that in the forward and backward convolutions (i.e, Conv2D and Conv2DBackpropInput) the quantized weights are used as the weight for both forward and backward computation.  ..."
+,,,issue,1142,,,issue,191,,,uses,(2) Following issue #191 ... 
+tensorpack/tensorpack,58936,https://github.com/tensorpack/tensorpack/issues/1153#issue-434152051,issue,1153,https://github.com/zhou-git,7,issue,1142,https://github.com/zhou-git,4,uses,"I am trying to debug a customized model built using examples/FasterRCNN as template. Thanks to your help #1142 , now I can run the debugger."
+tensorpack/tensorpack,58936,https://github.com/tensorpack/tensorpack/issues/1181#issue-442235138,issue,1181,https://github.com/zxpeter,4,issue,1153,https://github.com/zhou-git,7,context,I also checked related issues #325 and #1153.
+tensorpack/tensorpack,58936,https://github.com/tensorpack/tensorpack/issues/1181#issue-442235138,issue,1181,https://github.com/zxpeter,4,issue,325,https://github.com/kdplus,13,context,I also checked related issues #325 and #1153.
+tensorpack/tensorpack,58936,https://github.com/tensorpack/tensorpack/issues/1533#issue-946197671,issue,1533,https://github.com/ck6698000,1,issue,631,https://github.com/twangnh,4,uses,"I was trying to debug my session. After I add TFLocalCLIDebugHook() in Callbacks of training file (according to official reply here #631 (comment)), it report several errors as below."
+,,,,,,,,,,,,
+MithrilJS/mithril.js,36152,https://github.com/MithrilJS/mithril.js/pull/2032#issuecomment-348003943,pull_request,2032,https://github.com/pygy,10,pull_request,2034,https://github.com/pygy,12,context,"@tivac I still would like to have #2034 merged into both next and v1_1_x, then move the master ref to the tip of the v1_1_x branch:"
+MithrilJS/mithril.js,36152,https://github.com/MithrilJS/mithril.js/pull/2034#issue-277903308,pull_request,2034,https://github.com/pygy,12,issue,2036,https://github.com/pygy,1,fixes,"This fixes 1 and 2
+
+edit: and now 3, and also #2036"
+,,,,,,,,,,,,
+Activiti/Activiti,185,https://github.com/Activiti/Activiti/pull/3788#issue-1084980977,pull_request,3788,https://github.com/erdemedeiros,0,issue,3787,https://github.com/erdemedeiros,0,fixes,Fixes #3787
+Activiti/Activiti,185,https://github.com/Activiti/Activiti/pull/3799#issue-1101410215,pull_request,3799,https://github.com/erdemedeiros,0,issue,3787,https://github.com/erdemedeiros,0,context,"Simplify the propagation logic and make it consistent for user tasks, service tasks and call activities (...) Ref #3787"
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+grpc/grpc-web,23869,https://github.com/grpc/grpc-web/issues/769#issuecomment-606953600,issue,769,https://github.com/reselbob,3,issue,347,https://github.com/dv29,6,context,This issue will help you. It looks like the browser API is not enough. #347
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+mlflow/mlflow,38589,https://github.com/mlflow/mlflow/pull/3465#issuecomment-711984538,pull_request,3465,https://github.com/abawchen,9,pull_request,3544,https://github.com/harupy,3,irrelevant,"Hi @abawchen, the error in the R check is unrelated to this PR. I have filed a PR to fix it: #3544."
+mlflow/mlflow,38589,https://github.com/mlflow/mlflow/pull/3549#issuecomment-712980000,pull_request,3549,https://github.com/yitao-li,3,pull_request,3544,https://github.com/harupy,3,irrelevant,Rebasing should solve the error. #3544 fixed it.
+mlflow/mlflow,38589,https://github.com/mlflow/mlflow/pull/3568#issue-726392125,pull_request,3568,https://github.com/harupy,1,pull_request,3544,https://github.com/harupy,3,impact,"Reverts #3544 because the doc-link.yml workflow seems unstable (still not sure why) and sometimes hang. @dmatrixsorry, could you review this PR?"
+mlflow/mlflow,38589,https://github.com/mlflow/mlflow/pull/3542#issuecomment-711609096,pull_request,3542,https://github.com/harupy,1,pull_request,3544,https://github.com/harupy,3,fixes,Here's a RP to fix the R check: #3544
+,,,issue,1423,https://github.com/djacobs7,9,pull_request,3085,,,similar,"I implemented support for xgboost in #3085 (following the keras model implementation), so I think it wouldn't be too hard to adapt for h2o."
+mlflow/mlflow,38589,https://github.com/mlflow/mlflow/issues/1423#issuecomment-691249533,issue,1423,https://github.com/djacobs7,9,pull_request,3416,https://github.com/yitao-li,6,fixes,"@smurching @lorenzwalthert I created PR for this and saw it working in my local dev env, but there are a lot of unrelated failures from other tests in Github CI (mostly along the lines of http 404/experiment does not exist, etc). I wonder if I'm missing something."
+mlflow/mlflow,38589,https://github.com/mlflow/mlflow/issues/1423#issuecomment-704188862,issue,1423,https://github.com/djacobs7,9,issue,3418,https://github.com/mdneuzerling,10,context,Also note that there is a tidymodels flavor discussion in #3418.
+mlflow/mlflow,38589,https://github.com/mlflow/mlflow/issues/3047#issuecomment-653690308,issue,3047,https://github.com/yitao-li,3,pull_request,3048,https://github.com/lorenzwalthert,7,fixes,"I submitted #3048, you are welcome to have a look."
+,,,issue,3047,,,pull_request,2367,,,depends,"As discussed with Javier, this change should help unblock #2367"
+,,,issue,3047,,,pull_request,2367,,,depends,"I think we should at some point clean up all the CI/CD scripts for R, but I'd like to wait until after we merged #2367 because there is some interaction between the two topics."
+mlflow/mlflow,38589,https://github.com/mlflow/mlflow/pull/3048#issuecomment-653739487,pull_request,3048,https://github.com/lorenzwalthert,7,pull_request,3050,https://github.com/harupy,0,context,"For some reason, the lintr action for python now does not pass anymore, and people work on it in #3050, so I hope we can merge this soon."
+,,,pull_request,3048,,,pull_request,2724,,,improves,"Move the R tests from Travis to GitHub actions. This was previously attempted unsuccessfully because a missing libcurlsystem requirement was not installed in #2724,"
+,,,pull_request,3048,,,pull_request,2367,,,impact,it is supposed to unblock #2367 because of newer gcc versions.
+,,,pull_request,3048,,,pull_request,2367,,,depends,"I might do some more work on the R CI/CD to make it a bit cleaner after #2367, this is mainly c/p from Travis CI/CD."
+mlflow/mlflow,38589,https://github.com/mlflow/mlflow/pull/3055#issue-651531267,pull_request,3055,https://github.com/yitao-li,1,pull_request,3048,https://github.com/lorenzwalthert,7,improves,This PR makes 2 minor changes to the Github Actions workflow introduced in #3048 so that its behavior conforms to that of the original Travis CI workflow a bit more.
+mlflow/mlflow,38589,https://github.com/mlflow/mlflow/pull/2908#issue-633133325,pull_request,2908,https://github.com/smurching,5,pull_request,2724,https://github.com/aarondav,4,uses,"Adds most of the MLflow ""large"" tests that currently run in Travis to Github actions, following the pattern of #2700 and #2724, where we added MLflow small tests to github actions & later removed them from Travis CI once proven to be stable in Github actions."
+mlflow/mlflow,38589,https://github.com/mlflow/mlflow/pull/2908#issue-633133325,pull_request,2908,https://github.com/smurching,5,pull_request,2700,https://github.com/aarondav,3,uses,
+mlflow/mlflow,38589,https://github.com/mlflow/mlflow/pull/2367#issuecomment-650538695,pull_request,2367,https://github.com/lorenzwalthert,13,pull_request,2908,https://github.com/smurching,5,context,"@javierluraschi before doing anything else, it seems we need to fix xgboost installation problems due to new compiler requirements (gcc <= 5.0) (travis log of our build, dmlc/xgboost#5685). Our build is based on Ubuntu 14.04 (trusty) and uses gcc 4.84. Seems trusty is the last supported Ubuntu version for building an R project on Travis. Maybe switching to GitHub actions anyways? It has proven difficult according to #2908 but maybe that's resolved now also (did not sound like it was impossible)."
+,,,pull_request,2367,,,pull_request,2724,,,context,I am checking if I can port the R tests to GitHub Actions based on #2724.
+mlflow/mlflow,38589,https://github.com/mlflow/mlflow/pull/2367#issue-557778195,pull_request,2367,https://github.com/lorenzwalthert,13,pull_request,3085,https://github.com/lorenzwalthert,3,improves,"I messed this up @javierluraschi, because the sign-off required a rebase, which caused a lot of merge conflicts, I decided to squash before but then I ended up with a huge commit (because I cherry-picked/merged some commits from master before).
+
+I hence opened a new PR in #3085 to also commit things cleaner and get rid of the huge amount of experimental commits I made to try to get all three types of tests to pass."
+mlflow/mlflow,38589,https://github.com/mlflow/mlflow/issues/2770#issuecomment-623761982,issue,2770,https://github.com/persas,8,pull_request,2186,https://github.com/harupy,2,context,"Hi @persas! More than happy to answer any specific questions you have about Model Flavor development. As a reference, I would recommend taking a look at a recent pull request that introduced an XGBoost flavor to MLflow: #2124. In particular, the mlflow/xgboost.py implements the new flavor logic and APIs (i.e., log_model, save_model, load_model, and get_default_conda_env(). We also recommend introducing a Gensim flavor example once the feature has been implemented (see #2186 for reference about how to write examples for new flavors).
+"
+,,,issue,2770,,,pull_request,2124,,,context,"Hi @persas! More than happy to answer any specific questions you have about Model Flavor development. As a reference, I would recommend taking a look at a recent pull request that introduced an XGBoost flavor to MLflow: #2124. In particular, the mlflow/xgboost.py implements the new flavor logic and APIs (i.e., log_model, save_model, load_model, and get_default_conda_env(). We also recommend introducing a Gensim flavor example once the feature has been implemented (see #2186 for reference about how to write examples for new flavors).
+
+"
+mlflow/mlflow,38589,https://github.com/mlflow/mlflow/pull/3858#issue-769223373,pull_request,3858,https://github.com/yitao-li,1,issue,3817,https://github.com/yitao-li,0,fixes,
+mlflow/mlflow,38589,https://github.com/mlflow/mlflow/issues/3494#issuecomment-716606070,issue,3494,https://github.com/yitao-li,7,pull_request,3501,https://github.com/yitao-li,6,irrelevant,@yitao-li I think this is closed with #3501?
+mlflow/mlflow,38589,https://github.com/mlflow/mlflow/pull/3549#issue-724695312,pull_request,3549,https://github.com/yitao-li,3,pull_request,3501,https://github.com/yitao-li,6,improves,Fixing the missing update to R API documentation from #3501
+mlflow/mlflow,38589,https://github.com/mlflow/mlflow/issues/4529#issuecomment-881221637,issue,4529,https://github.com/FrieseWoudloper,3,issue,3817,https://github.com/yitao-li,0,context,#3817 would probably be a pre-condition for this
+mlflow/mlflow,38589,https://github.com/mlflow/mlflow/pull/3513#discussion_r504456278,pull_request,3542,https://github.com/harupy,1,pull_request,3513,https://github.com/harupy,1,improves,A follow-up for Add mlflow.shap.log_explanation #3513
+mlflow/mlflow,38589,https://github.com/mlflow/mlflow/pull/2878#issuecomment-834656537,pull_request,2878,https://github.com/persas,16,pull_request,4312,https://github.com/afparsons,6,improves,"@persas I cherry-picked your relevant commits (so that you would get the credit!) and resubmitted a pull request. Thanks for your hard work. Hopefully Gensim flavor support is added soon. 🤞
+
+#4312"
+mlflow/mlflow,38589,https://github.com/mlflow/mlflow/pull/3465#issue-710096031,pull_request,3465,https://github.com/abawchen,9,issue,1598,https://github.com/ahmed-shariff,5,fixes,
+mlflow/mlflow,38589,https://github.com/mlflow/mlflow/issues/3392#issue-694152349,issue,3392,https://github.com/smurching,8,pull_request,3513,https://github.com/harupy,1,fixes,Addressed by #3513.
+mlflow/mlflow,38589,https://github.com/mlflow/mlflow/pull/2142#issuecomment-558614107,pull_request,2142,https://github.com/harupy,1,pull_request,2124,https://github.com/harupy,2,improves,This PR is a follow up for #2124 .
+mlflow/mlflow,38589,https://github.com/mlflow/mlflow/issues/2770#issuecomment-642700188,issue,2770,https://github.com/persas,8,pull_request,2878,https://github.com/persas,16,fixes,I have submitted a PR: #2878 a few weeks ago with no response.
+mlflow/mlflow,38589,https://github.com/mlflow/mlflow/issues/3418#issuecomment-782174684,issue,3418,https://github.com/mdneuzerling,10,issue,3817,https://github.com/yitao-li,0,similar,
+,,,issue,3418,,,pull_request,3085,,,context,"Just to make sure we are on the same page here, we should clarify: The minimal requirements for a flavour in R are an S3 generic for mlflow_save_model(), mlflow_log_model(), mlflow_load_model() and mlflow_predict() like for crate (or what I added for {xgboost} in #3085) as well as writing MLmodel as a side effect with mlflow_save_model() and mlflow_log_model()(see crate)."
+mlflow/mlflow,38589,,pull_request,2136,https://github.com/harupy,3,pull_request,2170,https://github.com/harupy,1,impact,@smurching I opened a PR to update docstring #2170
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+casesandberg/react-color,16446,https://github.com/casesandberg/react-color/pull/671#issue-548475210,pull_request,671,https://github.com/casesandberg,0,issue,648,https://github.com/JCron245,1,fixes,Fixes #648.
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+ptomasroos/react-native-scrollable-tab-view,46143,https://github.com/ptomasroos/react-native-scrollable-tab-view/issues/185#issuecomment-194690479,issue,185,https://github.com/tofrookie,6,issue,187,https://github.com/sercanov,49,similar,related #187
+ptomasroos/react-native-scrollable-tab-view,46143,https://github.com/ptomasroos/react-native-scrollable-tab-view/issues/211#issuecomment-201015685,issue,211,https://github.com/donghanji,4,issue,187,https://github.com/sercanov,49,duplicate,#187
+,,,issue,215,,,issue,187,,,duplicate,There are few issues for that like #187.
+,,,pull_request,381,,,issue,187,,,fixes,Takes out <ViewPagerAndroid> entirely. #187
+ptomasroos/react-native-scrollable-tab-view,46143,https://github.com/ptomasroos/react-native-scrollable-tab-view/issues/609#issuecomment-294454394,issue,609,https://github.com/xsbailong,1,issue,187,https://github.com/sercanov,49,duplicate,duplicate of #187
+,,,issue,813,,,issue,187,,,similar,"I am trying to place the tabs inside a scroll view(parent), but the tabs doesnot seem to scroll with the parent scroll.
+Saw an issue regarding this #187 , but no solution to it."
+ptomasroos/react-native-scrollable-tab-view,46143,https://github.com/ptomasroos/react-native-scrollable-tab-view/issues/187#issuecomment-438943568,issue,187,https://github.com/sercanov,49,pull_request,949,https://github.com/ptomasroos,23,fixes,I've now chcked the fork out @spencerkingman-niche and I will incorporate the idea of replacing the PageView with a ScrollView instead on the next write which I'm doing at this moment in #949
+ptomasroos/react-native-scrollable-tab-view,46143,https://github.com/ptomasroos/react-native-scrollable-tab-view/issues/321#issuecomment-253158931,issue,321,https://github.com/xQuotes,3,issue,215,https://github.com/zjhsd2007,14,uses,i think there is a hack solution here: #215 and some discussion inside this issue
+ptomasroos/react-native-scrollable-tab-view,46143,,issue,366,https://github.com/peterhn,12,issue,321,https://github.com/xQuotes,3,duplicate,The issue is similar to: #321
+ptomasroos/react-native-scrollable-tab-view,46143,https://github.com/ptomasroos/react-native-scrollable-tab-view/pull/534#issuecomment-276012213,pull_request,534,https://github.com/gmlion,6,issue,366,https://github.com/peterhn,12,context,"Also, I have found the setTimeout initially on stackoverflow, but I see it's mentioned also here (albeit for a slightly different problem I think) #366, so the credits for the solution are @MirGhojam"
+ptomasroos/react-native-scrollable-tab-view,46143,https://github.com/ptomasroos/react-native-scrollable-tab-view/issues/521#issuecomment-276936892,issue,521,https://github.com/tinylpc,11,pull_request,534,https://github.com/gmlion,6,fixes,"Is #534 solving this?
+If so, it would be cool to have it tagged on npm :)"
+ptomasroos/react-native-scrollable-tab-view,46143,,pull_request,381,https://github.com/crozzfire,6,pull_request,445,https://github.com/walidvb,3,similar,Added a very similar PR that makes the use of ViewPagerAndroid optional
+ptomasroos/react-native-scrollable-tab-view,46143,https://github.com/ptomasroos/react-native-scrollable-tab-view/issues/813#issuecomment-362481232,issue,813,https://github.com/Thanmai-C,6,pull_request,667,https://github.com/tibbus,22,uses,"Check the below link, it might help
+#667 (commits)"
+ptomasroos/react-native-scrollable-tab-view,46143,https://github.com/ptomasroos/react-native-scrollable-tab-view/issues/638#issuecomment-309295086,issue,638,https://github.com/ashrithks,9,pull_request,667,https://github.com/tibbus,22,fixes,Here is the code and PR : #667
+ptomasroos/react-native-scrollable-tab-view,46143,https://github.com/ptomasroos/react-native-scrollable-tab-view/pull/667#issue-236738017,pull_request,667,https://github.com/tibbus,22,issue,628,https://github.com/davidfloegel,3,fixes,ISSUES : 638  628  385
+ptomasroos/react-native-scrollable-tab-view,46143,https://github.com/ptomasroos/react-native-scrollable-tab-view/issues/628#issuecomment-300143612,issue,628,https://github.com/davidfloegel,3,issue,385,https://github.com/bondanherumurti,11,duplicate,"Same issue is detailed here, also with a gif of desired result #385"
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+chaijs/chai,17472,https://github.com/chaijs/chai/issues/188#issue-17306734,issue,188,https://github.com/finian,1,issue,200,https://github.com/danb235,12,duplicate,"e.g. how to add extra messages in:
+(1).should.be.ok (...)
+see #200"
+chaijs/chai,17472,https://github.com/chaijs/chai/issues/200#issue-20713201,issue,200,https://github.com/danb235,12,issue,81,https://github.com/ghost,15,context,"#81 explained a way to show a custom error message with the expect syntax. Can the same be done with ""should""... if so how exactly would that look?"
+chaijs/chai,17472,https://github.com/chaijs/chai/issues/722#issue-159470248,issue,722,https://github.com/machineghost,3,issue,81,https://github.com/ghost,15,context,"This issue, #81, provides an incredibly short, incredibly useful withMessage ""plug-in"" for providing additional information when an expect assertion fails. (...)  Never mind, just discovered the optional message arguments to many of the ""expect"" style assertions."
+,,,,,,,,,,,,
+Activiti/Activiti,1985,https://github.com/Activiti/Activiti/issues/1481#issue-262759775,issue,1481,https://github.com/erdemedeiros,0,pull_request,1477,https://github.com/igdianov,1,impact,"Currently the read-only REST API for the audit model is done by handed coded controllers and resource assemblers. (...) 
+Refer to #1477 if necessary."
+,,,issue,1482,,,pull_request,1477,,,impact,"Currently the read-only REST API for the audit Mongo module is done by handed coded controllers and resource assemblers.  (...)
+Refer to #1477 if necessary."
+Activiti/Activiti,1985,https://github.com/Activiti/Activiti/pull/1500#issue-265466220,pull_request,1500,https://github.com/daisuke-yoshimoto,2,issue,1482,https://github.com/erdemedeiros,0,fixes,Refer to #1482
+,,,,,,,,,,,,
+chaijs/chai,17731,https://github.com/chaijs/chai/pull/213#issuecomment-29271887,pull_request,213,https://github.com/romario333,5,pull_request,211,https://github.com/nzakas,8,context,It seems that Travis is affected by this as well. PRs #211 and #214 fail with .bin/karma: No such file or directory.
+chaijs/chai,17731,https://github.com/chaijs/chai/pull/213#issuecomment-29271887,pull_request,213,https://github.com/romario333,5,pull_request,214,https://github.com/romario333,10,context,It seems that Travis is affected by this as well. PRs #211 and #214 fail with .bin/karma: No such file or directory.
+chaijs/chai,17731,https://github.com/chaijs/chai/pull/212#issuecomment-29271449,pull_request,212,https://github.com/romario333,5,pull_request,213,https://github.com/romario333,5,improves,Quick note: this pull request mixes two things together. I have opened new PR for this: #213
+chaijs/chai,17731,https://github.com/chaijs/chai/pull/251#issue-29625885,pull_request,251,https://github.com/romario333,1,pull_request,214,https://github.com/romario333,10,improves,This PR replaces PR #214.
+,,,,,,,,,,,,
+apache/dubbo,11717,https://github.com/apache/dubbo/issues/4793#issuecomment-527766846,issue,4793,https://github.com/supercocoa,6,pull_request,4802,https://github.com/tswstarplanet,2,ignore,
+apache/dubbo,11717,https://github.com/apache/dubbo/pull/5509#issue-540124601,pull_request,5509,https://github.com/mercyblitz,2,issue,5336,https://github.com/supercocoa,5,ignore,
+apache/dubbo,11717,https://github.com/apache/dubbo/issues/5336#issuecomment-554628064,issue,5336,https://github.com/supercocoa,5,issue,5207,https://github.com/jimgreat,2,ignore,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+mlflow/mlflow,37705,https://github.com/mlflow/mlflow/pull/493#issue-360401087,pull_request,493,https://github.com/joshuacook,1,issue,155,https://github.com/wmeints,8,fixes,This is a proposed solution to: #155
+mlflow/mlflow,37705,https://github.com/mlflow/mlflow/pull/493#issuecomment-422241809,pull_request,493,https://github.com/joshuacook,1,issue,269,https://github.com/andremesarovic,1,similar,"It seems fine for the server to continue to return a non-200 response to the client in this case (although the response should be an application-level error rather than an internal server error, as mentioned in #269)."
+mlflow/mlflow,37705,https://github.com/mlflow/mlflow/issues/269#issue-348804741,issue,269,https://github.com/andremesarovic,1,pull_request,5458,https://github.com/mrkaye97,22,fixes,"@andremesarovic Thank you for filing this issue! It has finally been addressed, most recently by #5458 to handle 400-level errors due to invalid request input."
+,,,pull_request,5458,,,issue,5208,,,fixes,Closes #5208
+mlflow/mlflow,37705,https://github.com/mlflow/mlflow/issues/5208#issue-1090735322,issue,5208,https://github.com/mrkaye97,6,issue,5199,https://github.com/mrkaye97,2,context,I keep getting 500 errors for things like supplying a parameter to an API call that's the wrong data type. See this issuefor an example.
+mlflow/mlflow,37705,https://github.com/mlflow/mlflow/issues/5208#issuecomment-1030858836,issue,5208,https://github.com/mrkaye97,6,pull_request,5350,https://github.com/mrkaye97,8,context,"In theory, I think this change should be fairly straightforward. See this comment in #5350 for an issue I'm having though."
+mlflow/mlflow,37705,https://github.com/mlflow/mlflow/issues/2628#issue-586980553,issue,2628,https://github.com/maximeturenne,2,pull_request,5458,https://github.com/mrkaye97,22,irrelevant,This has now been addressed via #5458.
+mlflow/mlflow,37705,https://github.com/mlflow/mlflow/pull/5350#issue-1125236856,pull_request,5350,https://github.com/mrkaye97,8,pull_request,5458,https://github.com/mrkaye97,22,irrelevant,Closing in favor of #5458
+mlflow/mlflow,37705,https://github.com/mlflow/mlflow/pull/5458#issuecomment-1089843203,pull_request,5458,https://github.com/mrkaye97,22,pull_request,5593,https://github.com/BenWilson2,0,irrelevant,I think the behavior you're seeing may be related to client-side validation in Python that we're removing via #5593; we recognize that the backend should be the source of truth regarding what constitutes valid input for MLflow APIs.
+mlflow/mlflow,37705,https://github.com/mlflow/mlflow/pull/5778#issue-1215607191,pull_request,5778,https://github.com/harupy,0,pull_request,5458,https://github.com/mrkaye97,22,impact,Fix a bug added in #5458.
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+MithrilJS/mithril.js,37322,https://github.com/MithrilJS/mithril.js/issues/104#issuecomment-44561549,issue,104,https://github.com/panesofglass,11,issue,98,https://github.com/pistolero,23,context,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+Project-OSRM/osrm-backend,44240,https://github.com/Project-OSRM/osrm-backend/pull/2400#issue-154556274,pull_request,2400,https://github.com/lbud,10,issue,2066,https://github.com/danpat,1,fixes,Closes #2066.
+Project-OSRM/osrm-backend,44240,https://github.com/Project-OSRM/osrm-backend/issues/2981#issue-180519096,issue,2981,https://github.com/daniel-j-h,0,pull_request,2400,https://github.com/lbud,10,impact,"also we just merged #2400 this needs response docs, too."
+Project-OSRM/osrm-backend,44240,https://github.com/Project-OSRM/osrm-backend/pull/3320#issue-189569057,pull_request,3320,https://github.com/danpat,0,issue,2981,https://github.com/daniel-j-h,0,fixes,Fixes #2981 - update tile plugin docs.
+,,,,,,,,,,,,
+summernote/summernote,55505,https://github.com/summernote/summernote/issues/3537#issuecomment-1005577512,issue,3537,https://github.com/es5es5,21,issue,4200,https://github.com/hakanerdal,4,duplicate,"Please refer to the more recent issue, which looks to be the same problem #4200"
+summernote/summernote,55505,https://github.com/summernote/summernote/issues/3537#issuecomment-570778077,issue,3537,https://github.com/es5es5,21,pull_request,3545,https://github.com/lqez,1,fixes,Sorry for delaying. This was not a simple issue as I expected. See #3545
+,,,issue,4205,,,issue,3537,,,impact,"Hello, I would like reopen issue #3537 because with summernote 0.8.20 the same problem occurs again."
+summernote/summernote,55505,https://github.com/summernote/summernote/issues/4205#issue-1094215774,issue,4205,https://github.com/mathieu-dumoutier,1,issue,4200,https://github.com/hakanerdal,4,duplicate,"Please refer and discuss on the already open issue #4200, thank you."
+summernote/summernote,55505,https://github.com/summernote/summernote/issues/4287#issuecomment-1119397238,issue,4287,https://github.com/davefv,3,issue,4200,https://github.com/hakanerdal,4,duplicate,"I'm sorry. If it is not intended to work in this way, the solution provided in #4200 already works for me. Thank you very much!!!"
+,,,issue,4200,,,issue,4177,,,context,"I think would also need to be looked at, along with the pinned issue. We need to fix the build process, this should be looked at as well. #4177"
+,,,issue,4271,,,issue,4200,,,duplicate,"Please continue this issue on #4200 as it looks to be the same problem. If it is different, please reopen of create a new issue, thank you."
+summernote/summernote,55505,https://github.com/summernote/summernote/issues/4296#issuecomment-1134032512,issue,4296,https://github.com/yzhou88,3,issue,4177,https://github.com/smoldaner,13,duplicate,"Please refer to the pinned issue #4177
+@lqez @easylogic @hackerwins This is also an ongoing issue that needs addressing, as I've mentioned elsewhere already, the whole build process needs fixing."
+,,,issue,4296,,,issue,4200,,,duplicate,"I think this issue also relates to #4200 , please discuss further there, just so we can keep everything together while the issue is worked on to be resolved."
+,,,pull_request,4299,,,issue,4177,,,fixes,"What are the relevant tickets?
+
+#4177"
+summernote/summernote,55505,https://github.com/summernote/summernote/pull/4308#issuecomment-1153406950,pull_request,4308,https://github.com/sjw-pc,2,pull_request,4299,https://github.com/easylogic,1,improves,source: #4299
+summernote/summernote,55505,https://github.com/summernote/summernote/pull/4294#issuecomment-1127665749,pull_request,4294,https://github.com/sjw-pc,13,issue,4177,https://github.com/smoldaner,13,context,"I commented on the pinned issue, with the output of what I got if you want to check it out. #4177 (comment)"
+,,,pull_request,4294,,,issue,4122,,,fixes,"I found 'this context 'invoke (eventName)' is a newly added code(#4122 ).This problem has not appeared before,so I boldly deleted it and didn't find any problems."
+summernote/summernote,55505,https://github.com/summernote/summernote/pull/4152#issue-1007940941,pull_request,4152,https://github.com/DiemenDesign,4,issue,4122,https://github.com/rostacik,11,fixes,"What are the relevant tickets?
+
+#4122"
+summernote/summernote,55505,https://github.com/summernote/summernote/pull/4206#issue-1094924943,pull_request,4206,https://github.com/DiemenDesign,1,pull_request,4152,https://github.com/DiemenDesign,4,improves,"What are the relevant tickets?
+#4152"
+,,,pull_request,4206,,,issue,4122,,,fixes,Add changes from issue #4122 suggested by @1der1
+summernote/summernote,55505,https://github.com/summernote/summernote/issues/4282#issue-1218610018,issue,4282,https://github.com/dmx-patrick,0,issue,4122,https://github.com/rostacik,11,context,Related issue: #4122
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+ag-grid/ag-grid,4821,https://github.com/ag-grid/ag-grid/issues/3734#issue-585657250,issue,3734,https://github.com/stephtea,9,issue,3680,https://github.com/simkessy,53,context,It is also referenced here: #3680
+,,,,,,,,,,,,
+Rapptz/discord.py,49494,https://github.com/Rapptz/discord.py/issues/1658#issuecomment-428724370,issue,1658,https://github.com/Phxntxm,3,pull_request,1659,https://github.com/Phxntxm,3,fixes,A pull request that addresses this: #1659
+,,,,,,,,,,,,
+John-Lluch/SWRevealViewController,25818,https://github.com/John-Lluch/SWRevealViewController/issues/551#issuecomment-185090684,issue,551,https://github.com/gabhisekdev,47,issue,524,https://github.com/Pocito,4,duplicate,"Please have a look here : http://www.appcoda.com/sidebar-menu-swift/
+And #524
+"
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+MithrilJS/mithril.js,36060,https://github.com/MithrilJS/mithril.js/pull/2234#issuecomment-426801412,pull_request,2234,https://github.com/ArjunVS1999,2,pull_request,2237,https://github.com/ArjunVS1999,0,context,"I also don't understand the point of your other PRs... #2235 is a mystery, #2236 patches a file that is generated automatically by the CI server and should never be modified by hand, and #2237 adds a JSON syntax error..."
+MithrilJS/mithril.js,36060,https://github.com/MithrilJS/mithril.js/pull/2234#issuecomment-426801412,pull_request,2234,https://github.com/ArjunVS1999,2,pull_request,2235,https://github.com/ArjunVS1999,0,context,
+MithrilJS/mithril.js,36060,https://github.com/MithrilJS/mithril.js/pull/2234#issuecomment-426801412,pull_request,2234,https://github.com/ArjunVS1999,2,pull_request,2236,https://github.com/ArjunVS1999,0,context,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+kubernetes-sigs/kustomize,30049,https://github.com/kubernetes-sigs/kustomize/pull/2768#issue-665370325,pull_request,2768,https://github.com/kzwang,5,issue,2208,https://github.com/Shplorf,8,fixes,Fixes #2208
+kubernetes-sigs/kustomize,30049,https://github.com/kubernetes-sigs/kustomize/pull/2762#issue-664911241,pull_request,2762,https://github.com/kzwang,5,issue,2761,https://github.com/kzwang,0,fixes,"Partially fixes #2761, retain components field in kustomize edit"
+kubernetes-sigs/kustomize,30049,https://github.com/kubernetes-sigs/kustomize/issues/3276#issue-750426304,issue,3276,https://github.com/james-callahan,11,pull_request,2768,https://github.com/kzwang,5,depends,"Additional context
+
+kustomize edit add was added in Support remote resources for kustomize edit add #2768"
+kubernetes-sigs/kustomize,30049,https://github.com/kubernetes-sigs/kustomize/pull/2769#issuecomment-663788945,pull_request,2769,https://github.com/kzwang,7,pull_request,2768,https://github.com/kzwang,5,improves,"@monopole thanks for the review, since #2768 is merged now, I'd like to make a small update to this PR to support loading components from remote as well."
+,,,pull_request,2769,,,issue,2761,,,fixes,fixes #2761
+,,,,,,,,,,,,
+MithrilJS/mithril.js,36194,https://github.com/MithrilJS/mithril.js/issues/1952#issuecomment-326185731,issue,1952,https://github.com/oldrich-s,2,issue,1427,https://github.com/darsain,12,duplicate,Duplicate of #1427
+,,,,,,,,,,,,
+TypeStrong/ts-node,62946,https://github.com/TypeStrong/ts-node/pull/554#issue-306177897,pull_request,554,https://github.com/blakeembrey,1,issue,46,https://github.com/amcdnl,82,fixes,Related to #46.
+TypeStrong/ts-node,62946,,issue,46,https://github.com/amcdnl,82,issue,188,https://github.com/k8w,24,similar,"...  If it's possible, someone can point me to, until then see #46."
+TypeStrong/ts-node,62946,https://github.com/TypeStrong/ts-node/issues/46#issuecomment-233808923,issue,46,https://github.com/amcdnl,82,pull_request,148,https://github.com/blakeembrey,1,fixes,Related to #46.
+TypeStrong/ts-node,62946,https://github.com/TypeStrong/ts-node/issues/221#issuecomment-253351569,issue,221,https://github.com/hivaga,3,issue,46,https://github.com/amcdnl,82,duplicate,The node devtools don't support source maps properly - see #46.
+TypeStrong/ts-node,62946,https://github.com/TypeStrong/ts-node/issues/671#issue-352665801,issue,671,https://github.com/kirill-kostenetskyi,1,issue,46,https://github.com/amcdnl,82,duplicate,"Hi there,
+Could somebody let me know what is my problem ? I've read thread with the same problem (#46) but nothing help me."
+,,,,,,,,,,,,
+mlflow/mlflow,40802,,pull_request,82,https://github.com/smurching,10,pull_request,96,https://github.com/aarondav,2,uses,"Fix the Python version to avoid differences in behavior for users with conda2/conda3, mirroring changes we made in https://github.com/databricks/mlflow/pull/96"
+mlflow/mlflow,40802,https://github.com/mlflow/mlflow/pull/82#issuecomment-401883581,pull_request,82,https://github.com/smurching,10,issue,100,https://github.com/aarondav,11,context,"In general this is hard to avoid, but I guess we should be mindful of backwards compatibility as you said in #100."
+mlflow/mlflow,40802,https://github.com/mlflow/mlflow/issues/100#issuecomment-401209343,issue,100,https://github.com/aarondav,11,issue,99,https://github.com/aarondav,3,similar,"Note that this is related to #99, but a different route is suggested for python version"
+,,,pull_request,164,,,pull_request,82,,,depends,This PR also updates the existing set of tests in test_projects.py to pytest format (this update depends on utility methods introduced in #82)
+mlflow/mlflow,40802,https://github.com/mlflow/mlflow/issues/147#issuecomment-405791560,issue,147,https://github.com/arinto,12,pull_request,164,https://github.com/smurching,2,fixes,Addresses #147.
+mlflow/mlflow,40802,,pull_request,153,https://github.com/juntai-zheng,3,pull_request,164,https://github.com/smurching,2,context,"I'd use the pytest tmpdir fixture in these tests instead of our TempDir utility method, see here. Also realizing some of the updates in https://github.com/databricks/mlflow/pull/164 will conflict with this PR - you can look at #164 for example code that uses the tmpdir fixture. In terms of resolving the conflicts I think we can just see which PR gets merged first & resolve the conflicts in the other."
+,,,pull_request,230,,,issue,99,,,ignore,note: could not find the information.
+mlflow/mlflow,40802,https://github.com/mlflow/mlflow/issues/288#issuecomment-412378967,issue,288,https://github.com/fclesio,4,pull_request,230,https://github.com/dbczumar,2,fixes,"Hi @fclesio, thanks for reporting this issue - we've seen this kind of failure before when attempting to load a model trained in Python 3 in a Python 2 environment (pickle protocol 3 is only available in Python >=3). #230 adds warnings for this case, and #225 aims to help address the issue by using the conda_env specified when exporting the model to load it back in."
+,,,issue,288,,,pull_request,225,,,fixes,
+mlflow/mlflow,40802,https://github.com/mlflow/mlflow/issues/194#issuecomment-410048849,issue,194,https://github.com/0wu,4,pull_request,225,https://github.com/0wu,7,fixes,This PR fixes #194
+mlflow/mlflow,40802,https://github.com/mlflow/mlflow/pull/225#issuecomment-411947162,pull_request,225,https://github.com/0wu,7,pull_request,218,https://github.com/smurching,5,depends,It looks that #218 has significantly changed the APIs used in this PR
+mlflow/mlflow,40802,https://github.com/mlflow/mlflow/pull/218#discussion_r208319441,pull_request,300,https://github.com/smurching,2,pull_request,218,https://github.com/smurching,5,improves,"In #218, we added support + a test for running projects without an MLproject / conda.yaml file in a conda environment ...
+
+This PR adds an analogous test for projects that do contain an MLproject & conda.yaml file ..."
+,,,pull_request,1037,,,pull_request,225,,,improves,This pull request is related to pyfunc should respect MLModel conda env file (#PR225)
+mlflow/mlflow,40802,https://github.com/mlflow/mlflow/pull/1163#issue-436445779,pull_request,1163,https://github.com/smurching,0,pull_request,1037,https://github.com/derron,2,impact,"This reverts commit e0fb2bf from #1037, which contains a useful fix for Conda users but unfortunately broke tests - we'll try to re-merge the PR such that it doesn't break tests after this revert."
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+jhen0409/react-native-debugger,25443,https://github.com/jhen0409/react-native-debugger/pull/198#issue-295084699,pull_request,198,https://github.com/hawkup,1,issue,194,https://github.com/macrozone,3,fixes,Fix #194 Added support rndebugger-open for RN >= 0.53.0
+,25443,,issue,201,,,issue,194,,,context,"I'm getting #194 initially, so after I've update to 0.3.16, I'm getting this now."
+jhen0409/react-native-debugger,25443,https://github.com/jhen0409/react-native-debugger/issues/201#issuecomment-365242323,issue,201,https://github.com/idrakimuhamad,3,pull_request,198,https://github.com/hawkup,1,impact,"Yeah, it looks like #198 doesn't solved the issue fully, I'll fix it later!"
+jhen0409/react-native-debugger,25443,https://github.com/jhen0409/react-native-debugger/pull/202#issue-296712920,pull_request,202,https://github.com/jhen0409,0,issue,201,https://github.com/idrakimuhamad,3,fixes,Closes #201.
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+apache/dubbo,8679,https://github.com/apache/dubbo/pull/9831#issue-1177739175,pull_request,9831,https://github.com/hanl754,2,issue,9829,https://github.com/hanl754,2,ignore,fix: #9829
+apache/dubbo,8679,https://github.com/apache/dubbo/pull/10010#issue-1228554168,pull_request,10010,https://github.com/chickenlj,0,issue,9829,https://github.com/hanl754,2,ignore,"related issue #9829
+
+This patch is more like a code optimization, it cannot fully solve the issue mentioned in #9829. We cannot simply change the mapping key for now. So the best way to solve it is to try to reuse ReferenceConfig all the time."
+,,,issue,10012,,,issue,9829,,,ignore,related #9829
+apache/dubbo,8679,https://github.com/apache/dubbo/pull/10016#issue-1229139267,pull_request,10016,https://github.com/chickenlj,0,issue,10012,https://github.com/saleson,3,ignore,related to #10012
+apache/dubbo,8679,https://github.com/apache/dubbo/pull/10017#issue-1229183633,pull_request,10017,https://github.com/chickenlj,2,issue,10012,https://github.com/saleson,3,ignore,related to #10012
+,,,issue,10044,,,issue,10012,,,ignore,"This issue was also reflected in #10012, but only the bug in SimpleReferenceCache class was fixed."
+apache/dubbo,8679,https://github.com/apache/dubbo/pull/10047#issue-1238054645,pull_request,10047,https://github.com/wangchengming666,1,issue,10044,https://github.com/saleson,1,ignore,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+casesandberg/react-color,16491,https://github.com/casesandberg/react-color/pull/599#issue-424559449,pull_request,599,https://github.com/J-Son89,5,issue,584,https://github.com/J-Son89,2,fixes,#584
+,,,,,,,,,,,,
+metafizzy/flickity,34155,https://github.com/metafizzy/flickity/issues/534#issuecomment-382506150,issue,534,https://github.com/illycz,45,issue,564,https://github.com/tobz-nz,12,context,@joshas Nice work. But flex-box is likely incompatible with wrapAround. From #564 (comment)
+,,https://github.com/metafizzy/flickity/issues/729#issuecomment-402721131,issue,729,,,issue,564,,,context,@leran Flickity may not work with cells with flex-box. See #564
+metafizzy/flickity,34155,https://github.com/metafizzy/flickity/issues/741#issuecomment-380553388,issue,741,https://github.com/joshas,1,issue,729,https://github.com/hirasso,5,duplicate,Thanks for reporting this issue. I'm already addressing this issue in #729. Fix coming in next release!
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+iron/iron,24942,https://github.com/iron/iron/issues/94#issue-37612160,issue,94,https://github.com/reem,0,issue,93,https://github.com/msierks,4,impact,"#93 points out that headers can't be written after the body. Right now this fails rather silently, which is extremely not ideal."
+,,https://github.com/iron/iron/pull/109#issue-38613892,pull_request,109,,,issue,93,,,fixes,Fixes #93
+iron/iron,24942,https://github.com/iron/iron/pull/109#issue-38613892,pull_request,109,https://github.com/reem,7,issue,94,https://github.com/reem,0,fixes,Fixes #94
+iron/iron,24942,https://github.com/iron/iron/pull/109#issue-38613892,pull_request,109,https://github.com/reem,7,issue,105,https://github.com/reem,0,fixes,Fixes #105
+iron/iron,24942,https://github.com/iron/iron/pull/109#issuecomment-50076139,pull_request,109,https://github.com/reem,7,pull_request,108,https://github.com/reem,2,context,but #108 adds a dependency to the implementation of it.
+iron/iron,24942,https://github.com/iron/iron/pull/112#issue-38697974,pull_request,112,https://github.com/reem,2,issue,106,https://github.com/reem,0,fixes,Fixes #106
+iron/iron,24942,,pull_request,109,https://github.com/reem,7,pull_request,112,https://github.com/reem,2,ignore,note: could not find the information.
+,,,pull_request,112,,,pull_request,109,,,ignore,note: could not find the information.
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+duo-labs/cloudmapper,22130,https://github.com/duo-labs/cloudmapper/issues/161#issuecomment-412531515,issue,161,https://github.com/ms4720,11,issue,164,https://github.com/0xdabbad00,3,impact,I've added #164 for now
+,,https://github.com/duo-labs/cloudmapper/issues/161#issuecomment-423401368,issue,161,,,issue,166,,,similar,"Similar issue in #166 on the collect command,"
+duo-labs/cloudmapper,22130,https://github.com/duo-labs/cloudmapper/issues/161#issuecomment-423401368,issue,161,https://github.com/ms4720,11,pull_request,203,https://github.com/0xdabbad00,0,context,"Similar issue in #166 on the collect command, which I resolved via #203."
+duo-labs/cloudmapper,22130,https://github.com/duo-labs/cloudmapper/issues/166#issuecomment-413076507,issue,166,https://github.com/tommy-bee,10,pull_request,167,https://github.com/0xdabbad00,0,fixes,The first issue should now be resolved in #167.
+duo-labs/cloudmapper,22130,https://github.com/duo-labs/cloudmapper/issues/166#issuecomment-423401539,issue,166,https://github.com/tommy-bee,10,pull_request,203,https://github.com/0xdabbad00,0,fixes,Should be resolved now via #203
+,22130,https://github.com/duo-labs/cloudmapper/issues/205#issue-362999552,issue,205,,,issue,166,,,similar,Similar to issue #166. Still getting this error with a new clone of the repo but in the prepare instead of collect.
+,22130,https://github.com/duo-labs/cloudmapper/issues/340#issuecomment-480910629,issue,340,,,issue,205,,,duplicate,"Thank you for identifying the problem and solution for this. This has similarly been documented in #205, so I'm going to close this ticket and continue leaving that one open until I fix this in the code."
+duo-labs/cloudmapper,22130,https://github.com/duo-labs/cloudmapper/pull/755#issue-681635485,pull_request,755,https://github.com/soffensive,1,issue,340,https://github.com/rams3sh,1,fixes,"Same problem appears for AWS account as described in
+
+#205
+#340"
+,22130,https://github.com/duo-labs/cloudmapper/pull/755#issue-681635485,pull_request,755,,,issue,205,,,fixes,"Same problem appears for AWS account as described in
+
+#205
+#340"
+duo-labs/cloudmapper,22130,https://github.com/duo-labs/cloudmapper/issues/540#issuecomment-534224094,issue,540,https://github.com/samyongsj,7,issue,340,https://github.com/rams3sh,1,duplicate,"Generically, this issue has been a problem in the past, for example #340."
+duo-labs/cloudmapper,22130,https://github.com/duo-labs/cloudmapper/issues/205#issuecomment-500276450,issue,205,https://github.com/sq-brootz,10,pull_request,432,https://github.com/0xdabbad00,0,fixes,Thanks all. Sorry this bug had been around for so long. It didn't make sense to me until @evilpete's comment. Should be resolved in #432
+duo-labs/cloudmapper,22130,https://github.com/duo-labs/cloudmapper/issues/412#issuecomment-500276321,issue,412,https://github.com/j-maciak,10,pull_request,432,https://github.com/0xdabbad00,0,fixes,Should be resolved by #432
+,22130,https://github.com/duo-labs/cloudmapper/issues/412#issue-445575498,issue,412,,,issue,205,,,duplicate,Appears related to #205
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+metafizzy/flickity,34418,https://github.com/metafizzy/flickity/issues/18#issue-55759472,issue,18,https://github.com/notflip,1,issue,6,https://github.com/desandro,0,duplicate,Closing as a duplicate of #6.
+metafizzy/flickity,34418,https://github.com/metafizzy/flickity/issues/19#issuecomment-71849608,issue,19,https://github.com/joepagan,2,issue,6,https://github.com/desandro,0,duplicate,Closing as a duplicate of #6
+metafizzy/flickity,34418,https://github.com/metafizzy/flickity/issues/31#issuecomment-72907757,issue,31,https://github.com/flogehring,3,issue,6,https://github.com/desandro,0,irrelevant,"Do you use latest version, looks like @desandro tried to fix it #6'"
+metafizzy/flickity,34418,https://github.com/metafizzy/flickity/issues/64#issuecomment-76015196,issue,64,https://github.com/gergelypap,3,issue,6,https://github.com/desandro,0,duplicate,"This sounds like a duplicate of #6,"
+,34418,https://github.com/metafizzy/flickity/issues/109#issuecomment-92918241,issue,109,,,issue,6,,,context,Are you using latest flickity build? See #6
+metafizzy/flickity,34418,https://github.com/metafizzy/flickity/issues/109#issuecomment-230758770,issue,109,https://github.com/drastick,12,issue,388,https://github.com/mojde-pajang,10,duplicate,See #388
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+MithrilJS/mithril.js,36212,https://github.com/MithrilJS/mithril.js/issues/1752#issue-217510771,issue,1752,https://github.com/StephanHoyer,1,pull_request,1753,https://github.com/StephanHoyer,1,fixes,Fixed in #1753.
+MithrilJS/mithril.js,36212,https://github.com/MithrilJS/mithril.js/issues/1760#issuecomment-290375164,issue,1760,https://github.com/ChrisGitIt,2,pull_request,1753,https://github.com/StephanHoyer,1,fixes,"Dupe of #1752, fixed in #1753."
+,,,issue,1760,,,issue,1752,,,duplicate,"Dupe of #1752, fixed in #1753."
+MithrilJS/mithril.js,36212,https://github.com/MithrilJS/mithril.js/issues/1768#issuecomment-291050054,issue,1768,https://github.com/tkazec,2,pull_request,1753,https://github.com/StephanHoyer,1,irrelevant,"Sorry, just saw #1753."
+,,https://github.com/MithrilJS/mithril.js/issues/1755#issue-217715014,issue,1755,,,pull_request,1753,,,context,"#1753 got merged directly to master instead of next, that should be undone and applied to next to follow current release practices."
+MithrilJS/mithril.js,36212,https://github.com/MithrilJS/mithril.js/issues/1755#issue-217715014,issue,1755,https://github.com/tivac,4,issue,1784,https://github.com/tivac,3,context,@isiahmeadows #1784 for my proposal on how to avoid this.
+,,https://github.com/MithrilJS/mithril.js/pull/1905#issue-243948939,pull_request,1905,,,issue,1784,,,fixes,Fixes #1784 (see that issue for more context)
+MithrilJS/mithril.js,36212,https://github.com/MithrilJS/mithril.js/pull/1909#issue-244238999,pull_request,1909,https://github.com/tivac,6,pull_request,1905,https://github.com/tivac,6,context,Based on a passing mention in #1905 (comment) I decided to push for something really wild. This will enforce consistent styling that is... somewhat similar to what @lhorie uses. There's some more vertical whitespace to it mostly. Still tabs and no semicolons though 
+MithrilJS/mithril.js,36212,https://github.com/MithrilJS/mithril.js/pull/1909#issuecomment-317160798,pull_request,1909,https://github.com/tivac,6,pull_request,1912,https://github.com/tivac,0,improves,Closing this in favor of #1912.
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+cglib/cglib,16885,https://github.com/cglib/cglib/pull/204#issue-1181331108,pull_request,204,https://github.com/natechadwick,0,issue,162,https://github.com/xunliu,0,fixes,Should resolve issues #180 and #162.
+cglib/cglib,16885,https://github.com/cglib/cglib/pull/204#issue-1181331108,pull_request,204,https://github.com/natechadwick,0,issue,180,https://github.com/MrPeabodyY,0,fixes,Should resolve issues #180 and #162.
+,,,,,,,,,,,,
+ag-grid/ag-grid,4854,https://github.com/ag-grid/ag-grid/issues/3160#issuecomment-592293858,issue,3160,https://github.com/areisle,24,pull_request,3701,https://github.com/csit-intern-james,13,fixes,"Hey @Paul6552 @AmareshB, I think we have the same problems. I opened a PR that may fix the issue. Could you give this a shot and see if it fixes your problem?"
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+duo-labs/cloudmapper,22393,https://github.com/duo-labs/cloudmapper/issues/36#issuecomment-367788273,issue,36,https://github.com/vichusharma,8,issue,5,https://github.com/0xdabbad00,1,context,"I ticketed #5 to provide some customization about what is displayed, but we'll focus on the filtering in this ticket."
+duo-labs/cloudmapper,22393,https://github.com/duo-labs/cloudmapper/issues/59#issue-301033805,issue,59,https://github.com/lorenzoaiello,1,issue,36,https://github.com/vichusharma,8,duplicate,duplicate of #36
+,,https://github.com/duo-labs/cloudmapper/issues/73#issuecomment-373037107,issue,73,,,issue,36,,,irrelevant,There are also enhancements planned in #36 and #71 to reduce the number of nodes further.
+duo-labs/cloudmapper,22393,https://github.com/duo-labs/cloudmapper/issues/73#issuecomment-373037107,issue,73,https://github.com/naveen2603,4,issue,71,https://github.com/lucas-apd,4,irrelevant,There are also enhancements planned in #36 and #71 to reduce the number of nodes further.
+duo-labs/cloudmapper,22393,https://github.com/duo-labs/cloudmapper/issues/75#issuecomment-375747483,issue,75,https://github.com/dmartsynkevych,5,issue,36,https://github.com/vichusharma,8,irrelevant,Do CloudFormation stack resources receive specific tags? If so the work for #36 may resolve this. (...) I'm closing this issue as the network diagram functionality of CloudMapper is no longer being maintained.
+duo-labs/cloudmapper,22393,https://github.com/duo-labs/cloudmapper/issues/291#issuecomment-464410011,issue,291,https://github.com/0xdabbad00,2,issue,36,https://github.com/vichusharma,8,context,"This might already be implemented from collapse-by-tag, also see #36 (...) I'm closing this issue as the network diagram functionality of CloudMapper is no longer being maintained."
+,,https://github.com/duo-labs/cloudmapper/issues/83#issuecomment-385793899,issue,83,,,issue,36,,,similar,"Currently, I don't have a good answer. Exporting the graphs to an image instead of for display in the browser is an open feature request in #79, improving the layout is covered in #6, and there are a couple of issues for filtering improvements, such as #36."
+duo-labs/cloudmapper,22393,https://github.com/duo-labs/cloudmapper/issues/83#issuecomment-385793899,issue,83,https://github.com/Viss,3,issue,79,https://github.com/kirkbrady,2,similar,"Currently, I don't have a good answer. Exporting the graphs to an image instead of for display in the browser is an open feature request in #79, improving the layout is covered in #6, and there are a couple of issues for filtering improvements, such as #36."
+,,https://github.com/duo-labs/cloudmapper/issues/83#issuecomment-385793899,issue,83,,,issue,6,,,similar,"Currently, I don't have a good answer. Exporting the graphs to an image instead of for display in the browser is an open feature request in #79, improving the layout is covered in #6, and there are a couple of issues for filtering improvements, such as #36."
+duo-labs/cloudmapper,22393,https://github.com/duo-labs/cloudmapper/issues/84#issuecomment-386719021,issue,84,https://github.com/hb3b,2,issue,83,https://github.com/Viss,3,duplicate,Similar concerns were raised recently in #83.
+duo-labs/cloudmapper,22393,https://github.com/duo-labs/cloudmapper/issues/6#issuecomment-490218632,issue,6,https://github.com/0xdabbad00,4,issue,368,https://github.com/0xdabbad00,1,improves,Attempted at a different visualization made in #368
+,,,pull_request,316,,,issue,36,,,fixes,Looks like this resolves #36
+duo-labs/cloudmapper,22393,https://github.com/duo-labs/cloudmapper/issues/36#issue-299336524,issue,36,https://github.com/vichusharma,8,pull_request,343,https://github.com/syucream,7,fixes,Filtering by tags resolved in #343
+,22393,,pull_request,352,,,issue,36,,,fixes,This resolves much of #36
+,22393,,pull_request,343,,,pull_request,316,,,similar,This has some similarities with the PR #316 which is specific to the tag Name and additionally filters to ELB and RDS resources.
+duo-labs/cloudmapper,22393,https://github.com/duo-labs/cloudmapper/pull/316#issue-418400974,pull_request,316,https://github.com/Azulinho,3,pull_request,352,https://github.com/0xdabbad00,1,improves,I added support in #352 to filter EC2's by tag by using --tags Name=Bastion which works similarly to the functionality you had provided. I still need to collect the tags of the other resources and then filter those. Thank you for having put together but I think the more generalized solution will benefit people more.
+duo-labs/cloudmapper,22393,https://github.com/duo-labs/cloudmapper/pull/343#issuecomment-483834335,pull_request,343,https://github.com/syucream,7,pull_request,352,https://github.com/0xdabbad00,1,improves,Uses changes from #343.
+,22393,,pull_request,352,,,pull_request,343,,,improves,Uses changes from #343.
+,22393,,issue,355,,,pull_request,352,,,improves,"Recently (#352) functionality was added to filter on the tags of EC2s. I need to collect the tags of other resources, filter on them, and document this in the README."
+duo-labs/cloudmapper,22393,https://github.com/duo-labs/cloudmapper/issues/355#issue-434017638,issue,355,https://github.com/0xdabbad00,1,pull_request,361,https://github.com/0xdabbad00,0,fixes,Resolved in #361
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+jupyterhub/jupyterhub,26745,https://github.com/jupyterhub/jupyterhub/issues/1363#issue-252748817,issue,1363,https://github.com/krak3nnn,12,pull_request,3701,https://github.com/minrk,4,context,I stumbled upon #3701 (comment) and then understood that I was missing
+jupyterhub/jupyterhub,26745,https://github.com/jupyterhub/jupyterhub/pull/3701#issue-1069354094,pull_request,3701,https://github.com/minrk,4,pull_request,3027,https://github.com/scivm,9,fixes,closes #3027
+,,,issue,3780,,,pull_request,3701,,,impact,@bviviano guessed that it could be #3701 that introduced a breaking change above.
+,,,issue,3780,,,pull_request,3757,,,context,"#3701 shouldn't matter, it was superceded by #3757"
+jupyterhub/jupyterhub,26745,https://github.com/jupyterhub/jupyterhub/issues/3780#issuecomment-1054701907,issue,3780,https://github.com/bviviano,17,pull_request,3808,https://github.com/manics,2,fixes,Closes #3780
+,,,pull_request,3808,,,issue,3780,,,fixes,Closes #3780
+jupyterhub/jupyterhub,26745,https://github.com/jupyterhub/jupyterhub/pull/3813#issue-1158564863,pull_request,3813,https://github.com/rzo1,3,pull_request,3808,https://github.com/manics,2,improves,"As discussed in #3808, this PR updates the apache proxy configuration"
+jupyterhub/jupyterhub,26745,https://github.com/jupyterhub/jupyterhub/pull/3701#issuecomment-1003421641,pull_request,3701,https://github.com/minrk,4,issue,3737,https://github.com/ykazakov,20,context,Please could you add your JupyterHub deployment details and logs to #3737 ?
+,,,pull_request,3757,,,issue,3737,,,fixes,I believe this closes #3737
+jupyterhub/jupyterhub,26745,https://github.com/jupyterhub/jupyterhub/pull/3757#issue-1096311379,pull_request,3757,https://github.com/minrk,2,pull_request,3746,https://github.com/manics,0,improves,"This adds the failing case noted in #3746 which works now. It failed because CHP adds its own X-Forwarded-Proto, so the value was https, http - exactly the two-hop failure mentioned in #3737 that is handled as intended now."
+,,,pull_request,3746,,,issue,3737,,,fixes,Some extra tests I added whilst investigating #3737
+,,,pull_request,3757,,,issue,1477,,,context,related issues: #1477
+jupyterhub/jupyterhub,26745,https://github.com/jupyterhub/jupyterhub/pull/1540#issue-274511385,pull_request,1540,https://github.com/minrk,3,issue,1477,https://github.com/psyvision,15,fixes,"@psyvision this is me punting on #1477, giving you an escape hatch for when the default cookie options are wrong, rather than coming up with a more robust detection for https."
+jupyterhub/jupyterhub,26745,https://github.com/jupyterhub/jupyterhub/issues/3758#issuecomment-1008537606,issue,3758,https://github.com/manics,4,pull_request,3757,https://github.com/minrk,2,impact,"Failed to figure out whats wrong. But, I concluded that re-running the tests that previously succeeded for the PR merged to master just before #3757, it works, while re-running current HEAD fails. I think it may be a failure of the latest PR but I'm not sure."
+jupyterhub/jupyterhub,26745,https://github.com/jupyterhub/jupyterhub/pull/3759#issue-1097612035,pull_request,3759,https://github.com/minrk,1,issue,3737,https://github.com/ykazakov,20,fixes,I'd like to get this out promptly due to the regression in 2.0.1 (#3737) for which there is not an easy workaround.
+,,,issue,3737,,,issue,3711,,,similar,The symptoms appear to be similar to #3711 except that they are now not caused by base_url.
+jupyterhub/jupyterhub,26745,https://github.com/jupyterhub/jupyterhub/pull/3715#issue-1079214589,pull_request,3715,https://github.com/naatebarber,1,issue,3711,https://github.com/ykazakov,2,fixes,Closes #3711
+jupyterhub/jupyterhub,26745,https://github.com/jupyterhub/jupyterhub/issues/3729#issue-1084690585,issue,3729,https://github.com/amoshche,3,pull_request,3715,https://github.com/naatebarber,1,context,This will be fixed in the next release #3715
+,,,issue,3729,,,issue,3711,,,duplicate,This bug should be fixed by issue #3711.
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+Activiti/Activiti,123,https://github.com/Activiti/Activiti/pull/3873#issue-1168446326,pull_request,3873,https://github.com/erdemedeiros,0,issue,3825,https://github.com/erdemedeiros,0,fixes,Part of #3825
+Activiti/Activiti,123,https://github.com/Activiti/Activiti/pull/3826#issue-1138406679,pull_request,3826,https://github.com/erdemedeiros,0,issue,3825,https://github.com/erdemedeiros,0,fixes,Part of #3825
+Activiti/Activiti,123,https://github.com/Activiti/Activiti/pull/3828#issue-1139889903,pull_request,3828,https://github.com/erdemedeiros,0,issue,3825,https://github.com/erdemedeiros,0,fixes,Part of #3825
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+Activiti/Activiti,383,https://github.com/Activiti/Activiti/pull/3572#issue-816619804,pull_request,3572,https://github.com/Giovanni007,1,issue,3571,https://github.com/Giovanni007,0,fixes,Ref #3571 The issue happened when using ACS with Tomcat so it is also in Activiti 5.x and not only in Activiti 7.
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+summernote/summernote,56191,https://github.com/summernote/summernote/pull/2377#issue-243249037,pull_request,2377,https://github.com/hackerwins,1,pull_request,2048,https://github.com/lection,3,other,
+summernote/summernote,56191,https://github.com/summernote/summernote/issues/387#issuecomment-43582240,issue,387,https://github.com/Ephemera,3,issue,331,https://github.com/jpaxsontn,2,duplicate,
+summernote/summernote,56191,https://github.com/summernote/summernote/issues/645#issue-44860993,issue,645,https://github.com/yamila-fraiman,2,issue,96,https://github.com/hatpick,4,other,
+summernote/summernote,56191,https://github.com/summernote/summernote/pull/904#issue-57320813,pull_request,904,https://github.com/hackerwins,2,issue,903,https://github.com/Pyohwan,2,other,
+summernote/summernote,56191,https://github.com/summernote/summernote/issues/3466#issuecomment-582249955,issue,3466,https://github.com/skeets23,6,issue,62,https://github.com/andr2,3,other,
+summernote/summernote,56191,https://github.com/summernote/summernote/issues/907#issue-57577006,issue,907,https://github.com/david-whitehead-uni,2,issue,933,https://github.com/felixgomez,2,other,
+summernote/summernote,56191,https://github.com/summernote/summernote/pull/2834#issue-325997624,pull_request,2834,https://github.com/manish2bharti,1,issue,1385,https://github.com/periscuelo,2,other,
+summernote/summernote,56191,https://github.com/summernote/summernote/pull/2835#issue-326032445,pull_request,2835,https://github.com/manish2bharti,10,issue,1385,https://github.com/periscuelo,2,other,
+summernote/summernote,56191,https://github.com/summernote/summernote/issues/1301#issue-104048883,issue,1301,https://github.com/Oviglo,10,pull_request,1948,https://github.com/xavier-d,13,other,
+summernote/summernote,56191,https://github.com/summernote/summernote/pull/2373#issue-240412262,pull_request,2373,https://github.com/dittos,1,issue,1819,https://github.com/zhoulijoe,7,other,
+summernote/summernote,56191,https://github.com/summernote/summernote/issues/2229#issuecomment-469321115,issue,2229,https://github.com/RajamohanShilpa,3,issue,2076,https://github.com/bankamohit,1,other,
+summernote/summernote,56191,https://github.com/summernote/summernote/pull/2377#issue-243249037,pull_request,2377,https://github.com/hackerwins,1,issue,2075,https://github.com/HumaMilisic,3,other,
+summernote/summernote,56191,https://github.com/summernote/summernote/pull/1948#issuecomment-266263494,pull_request,1948,https://github.com/xavier-d,13,pull_request,2101,https://github.com/reinaldocoelho,11,other,
+summernote/summernote,56191,https://github.com/summernote/summernote/issues/926#issuecomment-75989761,issue,926,https://github.com/eesdil,4,issue,903,https://github.com/Pyohwan,2,other,
+summernote/summernote,56191,https://github.com/summernote/summernote/pull/1258#issue-98210847,pull_request,1258,https://github.com/hackerwins,0,issue,928,https://github.com/winter38,1,other,
+summernote/summernote,56191,https://github.com/summernote/summernote/issues/1193#issuecomment-125055426,issue,1193,https://github.com/SudShekhar,7,issue,1185,https://github.com/bbyrdhouse,4,other,
+summernote/summernote,56191,https://github.com/summernote/summernote/pull/1311#issuecomment-313634217,pull_request,1311,https://github.com/Oviglo,14,pull_request,2366,https://github.com/reinaldocoelho,8,other,
+summernote/summernote,56191,https://github.com/summernote/summernote/pull/2373#issue-240412262,pull_request,2373,https://github.com/dittos,1,issue,2342,https://github.com/Hideiki,0,fixes,
+summernote/summernote,56191,https://github.com/summernote/summernote/issues/935#issuecomment-107118727,issue,935,https://github.com/imranazad,2,issue,93,https://github.com/rakucmr,13,other,
+summernote/summernote,56191,https://github.com/summernote/summernote/pull/904#issue-57320813,pull_request,904,https://github.com/hackerwins,2,pull_request,805,https://github.com/Gorash,0,fixes,
+summernote/summernote,56191,https://github.com/summernote/summernote/issues/2615#issue-284159466,issue,2615,https://github.com/marcinpiekarski,4,issue,1185,https://github.com/bbyrdhouse,4,other,
+summernote/summernote,56191,https://github.com/summernote/summernote/issues/437#issue-35760405,issue,437,https://github.com/Sebartus,1,issue,96,https://github.com/hatpick,4,other,
+summernote/summernote,56191,https://github.com/summernote/summernote/issues/60#issue-20193471,issue,60,https://github.com/ShimShamSam,1,issue,93,https://github.com/rakucmr,13,other,
+summernote/summernote,56191,https://github.com/summernote/summernote/issues/447#issuecomment-70035585,issue,447,https://github.com/loicbenoit,11,issue,96,https://github.com/hatpick,4,other,
+summernote/summernote,56191,https://github.com/summernote/summernote/issues/1217#issue-95227750,issue,1217,https://github.com/jocenunes,2,issue,1248,https://github.com/iohannis,4,other,
+summernote/summernote,56191,https://github.com/summernote/summernote/pull/1258#issue-98210847,pull_request,1258,https://github.com/hackerwins,0,issue,963,https://github.com/grusingh,2,other,
+summernote/summernote,56191,https://github.com/summernote/summernote/pull/2377#issue-243249037,pull_request,2377,https://github.com/hackerwins,1,pull_request,2373,https://github.com/dittos,1,other,
+summernote/summernote,56191,https://github.com/summernote/summernote/pull/2373#issue-240412262,pull_request,2373,https://github.com/dittos,1,issue,2253,https://github.com/Luncher,2,other,
+summernote/summernote,56191,https://github.com/summernote/summernote/issues/111#issue-23783668,issue,111,https://github.com/matcheson,1,issue,80,https://github.com/vedraan,3,other,
+summernote/summernote,56191,https://github.com/summernote/summernote/issues/1875#issuecomment-346860069,issue,1875,https://github.com/colinhall17,3,issue,2391,https://github.com/Rah1x,2,other,
+summernote/summernote,56191,https://github.com/summernote/summernote/issues/1501#issue-121982986,issue,1501,https://github.com/hurkgu,1,issue,2391,https://github.com/Rah1x,2,other,
+summernote/summernote,56191,https://github.com/summernote/summernote/issues/1498#issuecomment-164138669,issue,1498,https://github.com/caub,5,pull_request,1311,https://github.com/Oviglo,14,other,
+summernote/summernote,56191,https://github.com/summernote/summernote/issues/93#issue-22415592,issue,93,https://github.com/rakucmr,13,pull_request,2366,https://github.com/reinaldocoelho,8,other,
+summernote/summernote,56191,https://github.com/summernote/summernote/issues/111#issue-23783668,issue,111,https://github.com/matcheson,1,issue,96,https://github.com/hatpick,4,other,
+summernote/summernote,56191,https://github.com/summernote/summernote/pull/2373#issue-240412262,pull_request,2373,https://github.com/dittos,1,issue,2276,https://github.com/alec-netsphere,3,other,
+summernote/summernote,56191,https://github.com/summernote/summernote/issues/3305#issuecomment-542092950,issue,3305,https://github.com/dominic-berta,1,pull_request,3432,https://github.com/DiemenDesign,0,other,
+summernote/summernote,56191,https://github.com/summernote/summernote/issues/1385#issue-111895245,issue,1385,https://github.com/periscuelo,2,issue,2391,https://github.com/Rah1x,2,other,
+summernote/summernote,56191,https://github.com/summernote/summernote/pull/2666#issuecomment-361045255,pull_request,2666,https://github.com/DiemenDesign,24,pull_request,2048,https://github.com/lection,3,other,
+summernote/summernote,56191,https://github.com/summernote/summernote/issues/2229#issue-209081404,issue,2229,https://github.com/RajamohanShilpa,3,pull_request,1258,https://github.com/hackerwins,0,other,
+summernote/summernote,56191,https://github.com/summernote/summernote/pull/1258#issue-98210847,pull_request,1258,https://github.com/hackerwins,0,issue,1257,https://github.com/pjacquemin,6,other,
+summernote/summernote,56191,https://github.com/summernote/summernote/pull/904#issue-57320813,pull_request,904,https://github.com/hackerwins,2,issue,880,https://github.com/hvvjoy,7,other,
+summernote/summernote,56191,https://github.com/summernote/summernote/pull/3060#issue-385791187,pull_request,3060,https://github.com/hendrismit,1,issue,1819,https://github.com/zhoulijoe,7,other,
+summernote/summernote,56191,https://github.com/summernote/summernote/issues/3448#issuecomment-544464686,issue,3448,https://github.com/theworlt,4,pull_request,3432,https://github.com/DiemenDesign,0,other,

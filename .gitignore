@@ -12,3 +12,4 @@ pattern_dump/**/*.pk
 graphml_dump/**/*.graphml
 tmp.data
 comments_dump/**/*.json
+generate_topology_images/*.png
