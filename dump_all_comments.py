@@ -4,7 +4,7 @@ from json import dumps
 from tqdm import tqdm
 from time import mktime
 
-for path in tqdm(all_graphs(), total=num_graphs()):
+for path in tqdm(all_graphs(), total=num_graphs(), leave=True):
     repo_name = fetch_repo(str(path), from_graph=True)
     objects = []
     with open(f"raw_data/nodes_{repo_name}_comments.pk", "rb") as x:

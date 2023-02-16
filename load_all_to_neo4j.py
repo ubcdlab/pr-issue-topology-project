@@ -15,7 +15,7 @@ cypher_command = []
 
 
 path_list_len = len(list(all_graphs()))
-for path in tqdm(all_graphs(), total=path_list_len):
+for path in tqdm(all_graphs(), total=path_list_len, leave=True):
     path_str = str(path)
     target_repo = to_json(path_str)["repo_url"].replace("https://github.com/", "")
 
