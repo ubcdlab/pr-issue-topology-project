@@ -13,11 +13,15 @@ if "to_write" in argv:
     print("Writing to file...")
     to_write = True
 
-if not isfile(f"pattern_dump/{size}.pk"):
+edge_direction = False
+if "edge_direction" in argv:
+    edge_direction = True
+
+if not isfile(f"pattern_dump/{size}{'_undirected' if not edge_direction else ''}.pk"):
     print("Please run generate_all_patterns_of_size.py before this.")
     exit(1)
 
-with open(f"pattern_dump/{size}.pk", "rb") as x:
+with open(f"pattern_dump/{size}{'_undirected' if not edge_direction else ''}.pk", "rb") as x:
     all_patterns = load(x)
 
 total_patterns = sum(all_patterns.values())
@@ -30,5 +34,5 @@ for i in range(len(top_20_patterns)):
 print(table)
 
 if to_write:
-    with open(f"image_dump/{size}/patterns.txt", "w") as x:
+    with open(f"image_dump/{'undirected_' if not edge_direction else ''}{size}/patterns.txt", "w") as x:
         x.write(str(table))

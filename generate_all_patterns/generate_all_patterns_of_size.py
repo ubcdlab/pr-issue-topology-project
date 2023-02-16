@@ -34,6 +34,10 @@ if "with_status" in argv:
     print("Including status...")
     with_status = True
 
+edge_direction = False
+if "edge_direction" in argv:
+    edge_direction = True
+
 total_patterns = 0
 all_patterns = defaultdict(int)
 
@@ -55,7 +59,7 @@ def parallelize_graph_processing(path: Path):
 
     nodes, _, comment_list, timeline_list, _ = pr.read_repo_local_file(None, target_repo)
 
-    local_graph = nx.DiGraph()
+    local_graph = nx.DiGraph() if edge_direction else nx.Graph()
     to_add = []
     edges_to_add = []
     for index, node in enumerate(nodes):
@@ -105,7 +109,7 @@ def parallelize_graph_processing(path: Path):
 
 def generate_images(args):
     i, component, all_patterns = args
-    pos = nx.nx_agraph.graphviz_layout(graph)
+    pos = nx.nx_agraph.graphviz_layout(component)
     types = nx.get_node_attributes(component, "type")
     numbers = nx.get_node_attributes(component, "number")
     statuses = nx.get_node_attributes(component, "status")
@@ -153,15 +157,15 @@ def generate_images(args):
     nx.draw_networkx_edges(component, pos)
     nx.draw_networkx_edge_labels(component, pos=pos, edge_labels=edge_labels, font_size=10)
     try:
-        makedirs(f"image_dump/{size}")
+        makedirs(f"image_dump/{'undirected_' if not edge_direction else ''}{size}")
     except:
         pass
     plt.tight_layout()
-    plt.savefig(f"image_dump/{size}/{i}.png")
+    plt.savefig(f"image_dump/{'undirected_' if not edge_direction else ''}{size}/{i}.png")
     plt.clf()
 
 
-if not isfile(f"pattern_dump/graph_{size}.pk"):
+if not isfile(f"pattern_dump/graph_{size}{'_undirected' if not edge_direction else ''}.pk"):
     result = []
     with Pool(cpu_count() // 2) as p:
         with tqdm(total=num_graphs()) as pbar:
@@ -191,14 +195,14 @@ if not isfile(f"pattern_dump/graph_{size}.pk"):
         makedirs(f"pattern_dump/")
     except:
         pass
-    with open(f"pattern_dump/{size}.pk", "wb") as x:
+    with open(f"pattern_dump/{size}{'_undirected' if not edge_direction else ''}.pk", "wb") as x:
         dump(all_patterns, x)
-    with open(f"pattern_dump/graph_{size}.pk", "wb") as x:
+    with open(f"pattern_dump/graph_{size}{'_undirected' if not edge_direction else ''}.pk", "wb") as x:
         dump(graph, x)
 else:
-    with open(f"pattern_dump/{size}.pk", "rb") as x:
+    with open(f"pattern_dump/{size}{'_undirected' if not edge_direction else ''}.pk", "rb") as x:
         all_patterns = load(x)
-    with open(f"pattern_dump/graph_{size}.pk", "rb") as x:
+    with open(f"pattern_dump/graph_{size}{'_undirected' if not edge_direction else ''}.pk", "rb") as x:
         graph = load(x)
     total_patterns = sum(all_patterns.values())
 

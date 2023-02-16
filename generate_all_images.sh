@@ -14,3 +14,4 @@ python -m generate_all_patterns.generate_all_patterns_of_size size=12 to_render
 python -m generate_all_patterns.generate_all_patterns_of_size size=13 to_render
 python -m generate_all_patterns.generate_all_patterns_of_size size=14 to_render
 python -m generate_all_patterns.generate_all_patterns_of_size size=15 to_render
+
