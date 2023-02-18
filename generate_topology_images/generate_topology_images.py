@@ -23,9 +23,6 @@ class ComponentNode:
     quotes: str
 
 
-# The idea is to draw each component_id so that you have nodes (according to their types: node_N_type), their Ids (node_N_id), and edges (“Link Type”). Node authors, num comments, and Quotes are not relevant.
-
-
 def generate_image(graph: nx.DiGraph, component_id: int, repo: str):
     def special_case_size() -> bool:
         return component_id not in [38589, 16428]
@@ -37,15 +34,20 @@ def generate_image(graph: nx.DiGraph, component_id: int, repo: str):
     labels = dict()
     edge_labels = dict()
     colors = []
-    plt.figure(1, figsize=(10, 10))
+    if special_case_size():
+        plt.figure(1, figsize=(17, 17), dpi=80)
+    if graph.size() >= 10:
+        plt.figure(1, figsize=(15, 15), dpi=120)
+    else:
+        plt.figure(1, figsize=(10, 10))
     plt.title(f"Component #{component_id} in {repo}")
     issues = list(filter(lambda cn: types[cn] == "issue", graph.nodes))
     prs = list(filter(lambda cn: types[cn] == "pull_request", graph.nodes))
     issue_colors = [
-        "#f46d75" if statuses[cn] == "closed" else "#64389f" if statuses[cn] == "merged" else "#77dd77" for cn in issues
+        "#f46d75" if statuses[cn] == "closed" else "#9d78cf" if statuses[cn] == "merged" else "#77dd77" for cn in issues
     ]
     pr_colors = [
-        "#f46d75" if statuses[cn] == "closed" else "#64389f" if statuses[cn] == "merged" else "#77dd77" for cn in prs
+        "#f46d75" if statuses[cn] == "closed" else "#9d78cf" if statuses[cn] == "merged" else "#77dd77" for cn in prs
     ]
     nx.draw(
         graph,
@@ -53,8 +55,8 @@ def generate_image(graph: nx.DiGraph, component_id: int, repo: str):
         nodelist=issues,
         node_color=issue_colors,
         node_shape="s",
-        font_size=10 if special_case_size() else 8,
-        node_size=200 if special_case_size() else 150,
+        font_size=10,
+        node_size=400 if special_case_size() else 250,
     )
     nx.draw(
         graph,
@@ -62,18 +64,18 @@ def generate_image(graph: nx.DiGraph, component_id: int, repo: str):
         nodelist=prs,
         node_color=pr_colors,
         node_shape="o",
-        font_size=10 if special_case_size() else 8,
-        node_size=200 if special_case_size() else 150,
+        font_size=10,
+        node_size=400 if special_case_size() else 250,
     )
     for cn in graph.nodes:
-        labels[cn] = f"{types[cn]} #{numbers[cn]}"
+        labels[cn] = f"{'I' if types[cn] == 'issue' else 'PR'} #{numbers[cn]}"
     link_types = nx.get_edge_attributes(graph, "link_type")
     for ce in graph.edges:
         if link_types[ce] != "other":
             edge_labels[ce] = link_types[ce]
-    nx.draw_networkx_labels(graph, pos=pos, labels=labels, font_size=10 if special_case_size() else 8)
+    nx.draw_networkx_labels(graph, pos=pos, labels=labels, font_size=12 if special_case_size() else 10)
     nx.draw_networkx_edges(graph, pos)
-    nx.draw_networkx_edge_labels(graph, pos=pos, edge_labels=edge_labels, font_size=10 if special_case_size() else 8)
+    nx.draw_networkx_edge_labels(graph, pos=pos, edge_labels=edge_labels, font_size=10)
     plt.tight_layout()
     plt.savefig(f"{component_id}.png")
     plt.clf()
