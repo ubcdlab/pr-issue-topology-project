@@ -13,3 +13,5 @@ graphml_dump/**/*.graphml
 tmp.data
 comments_dump/**/*.json
 generate_topology_images/*.png
+password
+generate_neo4j_images/**/*.png
