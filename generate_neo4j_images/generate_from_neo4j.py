@@ -1,8 +1,19 @@
+from typing import List
 from click import command, option
 import networkx as nx
 from tqdm import tqdm
 from neo4j import GraphDatabase
 import matplotlib.pyplot as plt
+from dataclasses import dataclass
+from random import sample
+
+
+class HashableDiGraph(nx.DiGraph):
+    def __hash__(self):
+        return int(nx.weisfeiler_lehman_graph_hash(self), base=16)
+
+    def __eq__(self, other):
+        return nx.weisfeiler_lehman_graph_hash(self) == nx.weisfeiler_lehman_graph_hash(other)
 
 
 @command()
@@ -16,12 +27,11 @@ def main(cypher_path: str):
         summary = result.consume()
         return records, summary
 
-    def generate_image(graph: nx.DiGraph, id: int, repo: str):
+    def generate_image(graph: HashableDiGraph, id: int, hl_info: List[int]):
         pos = nx.nx_agraph.graphviz_layout(graph)
         types = nx.get_node_attributes(graph, "type")
         numbers = nx.get_node_attributes(graph, "number")
         statuses = nx.get_node_attributes(graph, "status")
-        highlights = nx.get_node_attributes(graph, "to_highlight")
         labels = dict()
         edge_labels = dict()
         colors = []
@@ -29,19 +39,19 @@ def main(cypher_path: str):
             plt.figure(1, figsize=(15, 15), dpi=120)
         else:
             plt.figure(1, figsize=(10, 10))
-        plt.title(f"From {repo}:")
+        plt.title(f"From {graph.graph['repo']}:")
         issues = list(filter(lambda cn: types[cn] == "issue", graph.nodes))
         prs = list(filter(lambda cn: types[cn] == "pull_request", graph.nodes))
         issue_colors = [
             "#f46d75" if statuses[cn] == "closed" else "#9d78cf" if statuses[cn] == "merged" else "#77dd77"
             for cn in issues
         ]
-        issue_edge_colors = ["#fede00" if highlights[cn] else issue_colors[i] for i, cn in enumerate(issues)]
+        issue_edge_colors = ["#fede00" if numbers[cn] in hl_info else issue_colors[i] for i, cn in enumerate(issues)]
         pr_colors = [
             "#f46d75" if statuses[cn] == "closed" else "#9d78cf" if statuses[cn] == "merged" else "#77dd77"
             for cn in prs
         ]
-        pr_edge_colors = ["#fede00" if highlights[cn] else pr_colors[i] for i, cn in enumerate(prs)]
+        pr_edge_colors = ["#fede00" if numbers[cn] in hl_info else pr_colors[i] for i, cn in enumerate(prs)]
         nx.draw(
             graph,
             pos,
@@ -65,7 +75,9 @@ def main(cypher_path: str):
         for cn in graph.nodes:
             labels[cn] = f"{'I' if types[cn] == 'issue' else 'PR'} #{numbers[cn]}"
         link_types = nx.get_edge_attributes(graph, "link_type")
-        edge_colors = ["#fede00" if graph[u][v]["to_highlight"] else "#000000" for u, v in graph.edges]
+        edge_colors = [
+            "#fede00" if numbers[u] in hl_info and numbers[v] in hl_info else "#000000" for u, v in graph.edges
+        ]
         for ce in graph.edges:
             if link_types[ce] != "other":
                 edge_labels[ce] = link_types[ce]
@@ -81,13 +93,12 @@ def main(cypher_path: str):
     db = GraphDatabase.driver("bolt://localhost:7687", auth=("neo4j", password))
     session = db.session(database="neo4j")
     records, summary = session.execute_read(run_command)
-    # TODO: randomize
-    for i, record in tqdm(enumerate(records), total=len(records)):
-        to_highlight = [record.get("i")._properties["number"]]
-        to_highlight += [pr._properties["number"] for pr in record.get("pull_requests")]
+
+    graph_to_highlight_map = {}
+    for record in tqdm(records, total=len(records), leave=False):
         cypher_nodes = record.get("nodes")
         cypher_edges = record.get("relationships")
-        g = nx.DiGraph()
+        g = HashableDiGraph(repo=cypher_nodes[0]._properties["repository"])
         nodes = [
             (
                 n._properties["number"],
@@ -95,7 +106,6 @@ def main(cypher_path: str):
                     "type": n._properties["type"],
                     "status": n._properties["status"],
                     "number": n._properties["number"],
-                    "to_highlight": n._properties["number"] in to_highlight,
                 },
             )
             for n in cypher_nodes
@@ -106,18 +116,28 @@ def main(cypher_path: str):
                 e.nodes[1]._properties["number"],
                 {
                     "link_type": e._properties["labels"],
-                    "to_highlight": e.nodes[0]._properties["number"] in to_highlight
-                    and e.nodes[1]._properties["number"] in to_highlight,
                 },
             )
             for e in cypher_edges
         ]
         g.add_nodes_from(nodes)
         g.add_edges_from(edges)
-        repo = cypher_nodes[0]._properties["repository"]
-        generate_image(g, i, repo)
+        # TODO: make more general
+        to_highlight = [record.get("i")._properties["number"]]
+        to_highlight += [pr._properties["number"] for pr in record.get("pull_requests")]
+        if g in graph_to_highlight_map:
+            graph_to_highlight_map[g] += to_highlight
+            continue
+        graph_to_highlight_map[g] = to_highlight
 
-        break
+    to_sample = min(len(records) // 2, 20)
+    for i, graph in tqdm(
+        enumerate(sample(list(graph_to_highlight_map.keys()), to_sample)),
+        total=len(graph_to_highlight_map),
+        leave=False,
+    ):
+        image_hl_info = graph_to_highlight_map[graph]
+        generate_image(graph, i, image_hl_info)
 
     session.close()
     db.close()
