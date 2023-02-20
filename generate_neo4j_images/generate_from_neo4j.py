@@ -6,6 +6,7 @@ from neo4j import GraphDatabase
 import matplotlib.pyplot as plt
 from dataclasses import dataclass
 from random import sample
+from os import makedirs
 
 
 class HashableDiGraph(nx.DiGraph):
@@ -18,7 +19,8 @@ class HashableDiGraph(nx.DiGraph):
 
 @command()
 @option("--cypher", "cypher_path")
-def main(cypher_path: str):
+@option("--name", "query_name")
+def main(cypher_path: str, query_name: str):
     command = open(cypher_path, "r").read()
 
     def run_command(tx):
@@ -39,7 +41,7 @@ def main(cypher_path: str):
             plt.figure(1, figsize=(15, 15), dpi=120)
         else:
             plt.figure(1, figsize=(10, 10))
-        plt.title(f"From {graph.graph['repo']}:")
+        plt.title(f"{query_name.capitalize()} topology\nFrom {graph.graph['repo']}:")
         issues = list(filter(lambda cn: types[cn] == "issue", graph.nodes))
         prs = list(filter(lambda cn: types[cn] == "pull_request", graph.nodes))
         issue_colors = [
@@ -85,7 +87,11 @@ def main(cypher_path: str):
         nx.draw_networkx_edges(graph, pos, edge_color=edge_colors)
         nx.draw_networkx_edge_labels(graph, pos=pos, edge_labels=edge_labels, font_size=10)
         plt.tight_layout()
-        plt.savefig(f"generate_neo4j_images/images/{id}.png")
+        try:
+            makedirs(f"generate_neo4j_images/images/{query_name}/")
+        except:
+            pass
+        plt.savefig(f"generate_neo4j_images/images/{query_name}/{id}.png")
         plt.clf()
 
     with open("generate_neo4j_images/password", "r") as x:
@@ -122,9 +128,13 @@ def main(cypher_path: str):
         ]
         g.add_nodes_from(nodes)
         g.add_edges_from(edges)
-        # TODO: make more general
-        to_highlight = [record.get("i")._properties["number"]]
-        to_highlight += [pr._properties["number"] for pr in record.get("pull_requests")]
+        to_highlight = []
+        for key in record.keys():
+            if key != "nodes" and key != "relationships":
+                if type(record.get(key)) != list:
+                    to_highlight += [record.get(key)._properties["number"]]
+                else:
+                    to_highlight += [list_item._properties["number"] for list_item in record.get(key)]
         if g in graph_to_highlight_map:
             graph_to_highlight_map[g] += to_highlight
             continue
