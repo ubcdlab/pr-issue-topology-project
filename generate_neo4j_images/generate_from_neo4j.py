@@ -1,12 +1,15 @@
-from typing import List
 from click import command, option
 import networkx as nx
 from tqdm import tqdm
 from neo4j import GraphDatabase
 import matplotlib.pyplot as plt
-from dataclasses import dataclass
 from random import sample
-from os import makedirs
+from sys import path
+
+
+path.append("..")
+
+from scripts.helpers import generate_image
 
 
 class HashableDiGraph(nx.DiGraph):
@@ -28,71 +31,6 @@ def main(cypher_path: str, query_name: str):
         records = list(result)
         summary = result.consume()
         return records, summary
-
-    def generate_image(graph: HashableDiGraph, id: int, hl_info: List[int]):
-        pos = nx.nx_agraph.graphviz_layout(graph)
-        types = nx.get_node_attributes(graph, "type")
-        numbers = nx.get_node_attributes(graph, "number")
-        statuses = nx.get_node_attributes(graph, "status")
-        labels = dict()
-        edge_labels = dict()
-        colors = []
-        if graph.size() >= 10:
-            plt.figure(1, figsize=(15, 15), dpi=120)
-        else:
-            plt.figure(1, figsize=(10, 10))
-        plt.title(f"{query_name.capitalize()} topology\nFrom {graph.graph['repo']}:")
-        issues = list(filter(lambda cn: types[cn] == "issue", graph.nodes))
-        prs = list(filter(lambda cn: types[cn] == "pull_request", graph.nodes))
-        issue_colors = [
-            "#f46d75" if statuses[cn] == "closed" else "#9d78cf" if statuses[cn] == "merged" else "#77dd77"
-            for cn in issues
-        ]
-        issue_edge_colors = ["#fede00" if numbers[cn] in hl_info else issue_colors[i] for i, cn in enumerate(issues)]
-        pr_colors = [
-            "#f46d75" if statuses[cn] == "closed" else "#9d78cf" if statuses[cn] == "merged" else "#77dd77"
-            for cn in prs
-        ]
-        pr_edge_colors = ["#fede00" if numbers[cn] in hl_info else pr_colors[i] for i, cn in enumerate(prs)]
-        nx.draw(
-            graph,
-            pos,
-            nodelist=issues,
-            node_color=issue_colors,
-            edgecolors=issue_edge_colors,
-            node_shape="s",
-            font_size=10,
-            node_size=250,
-        )
-        nx.draw(
-            graph,
-            pos,
-            nodelist=prs,
-            node_color=pr_colors,
-            edgecolors=pr_edge_colors,
-            node_shape="o",
-            font_size=10,
-            node_size=250,
-        )
-        for cn in graph.nodes:
-            labels[cn] = f"{'I' if types[cn] == 'issue' else 'PR'} #{numbers[cn]}"
-        link_types = nx.get_edge_attributes(graph, "link_type")
-        edge_colors = [
-            "#fede00" if numbers[u] in hl_info and numbers[v] in hl_info else "#000000" for u, v in graph.edges
-        ]
-        for ce in graph.edges:
-            if link_types[ce] != "other":
-                edge_labels[ce] = link_types[ce]
-        nx.draw_networkx_labels(graph, pos=pos, labels=labels, font_size=10)
-        nx.draw_networkx_edges(graph, pos, edge_color=edge_colors)
-        nx.draw_networkx_edge_labels(graph, pos=pos, edge_labels=edge_labels, font_size=10)
-        plt.tight_layout()
-        try:
-            makedirs(f"generate_neo4j_images/images/{query_name}/")
-        except:
-            pass
-        plt.savefig(f"generate_neo4j_images/images/{query_name}/{id}.png")
-        plt.clf()
 
     with open("generate_neo4j_images/password", "r") as x:
         password = x.readline().strip()
@@ -147,7 +85,16 @@ def main(cypher_path: str, query_name: str):
         leave=False,
     ):
         image_hl_info = graph_to_highlight_map[graph]
-        generate_image(graph, i, image_hl_info)
+        generate_image(
+            graph,
+            i,
+            f"{query_name.capitalize()} topology\nFrom {graph.graph['repo']}:",
+            15 if graph.size() >= 10 else 10,
+            f"generate_neo4j_images/images/{query_name}/",
+            dpi=120 if graph.size() >= 10 else 100,
+            to_highlight=graph_to_highlight_map[graph],
+            node_size=250,
+        )
 
     session.close()
     db.close()

@@ -3,6 +3,7 @@ from sys import path
 from os import makedirs
 from os.path import isfile
 from pathlib import Path
+from typing import Any
 import networkx as nx
 import matplotlib.pyplot as plt
 from matplotlib import use
@@ -13,7 +14,7 @@ from click import command, option
 
 path.append("..")
 
-from scripts.helpers import all_graphs, num_graphs, to_json
+from scripts.helpers import all_graphs, num_graphs, to_json, generate_image
 from pipeline.picklereader import PickleReader
 from pipeline.NetworkVisCreator import NetworkVisCreator
 
@@ -38,7 +39,7 @@ def main(size: int, to_render: bool, with_status: bool, edge_direction: bool):
 
         nodes, _, comment_list, timeline_list, _ = pr.read_repo_local_file(None, target_repo)
 
-        local_graph = nx.DiGraph() if edge_direction else nx.Graph()
+        local_graph = nx.DiGraph(repository=target_repo) if edge_direction else nx.Graph(repository=target_repo)
         to_add = []
         edges_to_add = []
         for index, node in enumerate(nodes):
@@ -84,65 +85,6 @@ def main(size: int, to_render: bool, with_status: bool, edge_direction: bool):
         local_graph.add_nodes_from(to_add)
         local_graph.add_edges_from(edges_to_add)
         return local_graph
-
-    def generate_images(args):
-        i, component, all_patterns = args
-        pos = nx.nx_agraph.graphviz_layout(component)
-        types = nx.get_node_attributes(component, "type")
-        numbers = nx.get_node_attributes(component, "number")
-        statuses = nx.get_node_attributes(component, "status")
-        repository = list(nx.get_node_attributes(component, "repository").values())[0]
-        labels = dict()
-        edge_labels = dict()
-        colors = []
-        plt.figure(1, figsize=(10, 10))
-        plt.title(
-            f"#{i+1} most frequent pattern of size {size}\n{all_patterns[component]} occurrences, {all_patterns[component]/total_patterns:.2}% of size\nExample occurrence in {repository}"
-        )
-        issues = list(filter(lambda cn: types[cn] == "issue", component.nodes))
-        prs = list(filter(lambda cn: types[cn] == "pull_request", component.nodes))
-        issue_colors = [
-            "#f46d75" if statuses[cn] == "closed" else "#64389f" if statuses[cn] == "merged" else "#77dd77"
-            for cn in issues
-        ]
-        pr_colors = [
-            "#f46d75" if statuses[cn] == "closed" else "#64389f" if statuses[cn] == "merged" else "#77dd77"
-            for cn in prs
-        ]
-        nx.draw(
-            component,
-            pos,
-            nodelist=issues,
-            node_color=issue_colors,
-            node_shape="s",
-            font_size=10,
-            node_size=200,
-        )
-        nx.draw(
-            component,
-            pos,
-            nodelist=prs,
-            node_color=pr_colors,
-            node_shape="o",
-            font_size=10,
-            node_size=200,
-        )
-        for cn in component.nodes:
-            labels[cn] = f"{types[cn]} #{numbers[cn]}"
-        link_types = nx.get_edge_attributes(component, "link_type")
-        for ce in component.edges:
-            if link_types[ce] != "other":
-                edge_labels[ce] = link_types[ce]
-        nx.draw_networkx_labels(component, pos=pos, labels=labels, font_size=10)
-        nx.draw_networkx_edges(component, pos)
-        nx.draw_networkx_edge_labels(component, pos=pos, edge_labels=edge_labels, font_size=10)
-        try:
-            makedirs(f"image_dump/{'undirected_' if not edge_direction else ''}{size}")
-        except:
-            pass
-        plt.tight_layout()
-        plt.savefig(f"image_dump/{'undirected_' if not edge_direction else ''}{size}/{i}.png")
-        plt.clf()
 
     if to_render:
         print("Rendering to images...")
@@ -200,12 +142,23 @@ def main(size: int, to_render: bool, with_status: bool, edge_direction: bool):
             graph = load(x)
         total_patterns = sum(all_patterns.values())
 
+    def generate_image_wrapper(args: Any):
+        i, component, all_patterns = args
+        generate_image(
+            component,
+            i,
+            f"#{i+1} most frequent pattern of size {component.size()}\n{all_patterns[component]} occurrences, {all_patterns[component]/total_patterns:.2}% of size\nExample occurrence in {component.graph['repository']}",
+            10,
+            f"image_dump/{'undirected_' if not edge_direction else ''}{component.size()}",
+        )
+
     if to_render:
         use("agg")
         top_20_patterns = list(map(lambda x: x[0], sorted(all_patterns.items(), key=lambda x: x[1], reverse=True)[:20]))
         with Pool(cpu_count() // 2) as p:
             with tqdm(total=len(top_20_patterns), leave=False) as pbar:
                 for _ in p.imap_unordered(
-                    generate_images, [(i, component, all_patterns) for i, component in enumerate(top_20_patterns)]
+                    generate_image_wrapper,
+                    [(i, component, all_patterns) for i, component in enumerate(top_20_patterns)],
                 ):
                     pbar.update()
