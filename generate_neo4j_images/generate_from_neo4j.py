@@ -1,3 +1,4 @@
+from collections import defaultdict
 from click import command, option
 import networkx as nx
 from tqdm import tqdm
@@ -5,6 +6,7 @@ from neo4j import GraphDatabase
 import matplotlib.pyplot as plt
 from random import sample
 from sys import path
+from prettytable import PrettyTable
 
 
 path.append("..")
@@ -23,7 +25,8 @@ class HashableDiGraph(nx.DiGraph):
 @command()
 @option("--cypher", "cypher_path")
 @option("--name", "query_name")
-def main(cypher_path: str, query_name: str):
+@option("--size-distribution", "size_distribution", is_flag=True, default=False)
+def main(cypher_path: str, query_name: str, size_distribution: bool):
     command = open(cypher_path, "r").read()
 
     def run_command(tx):
@@ -39,9 +42,20 @@ def main(cypher_path: str, query_name: str):
     records, summary = session.execute_read(run_command)
 
     graph_to_highlight_map = {}
+    size_counts_map = defaultdict(int)
     for record in tqdm(records, total=len(records), leave=False):
         cypher_nodes = record.get("nodes")
         cypher_edges = record.get("relationships")
+        to_highlight = []
+        for key in record.keys():
+            if key != "nodes" and key != "relationships":
+                if type(record.get(key)) != list:
+                    to_highlight += [record.get(key)._properties["number"]]
+                else:
+                    to_highlight += [list_item._properties["number"] for list_item in record.get(key)]
+        if size_distribution:
+            size_counts_map[len(to_highlight)] += 1
+            continue
         g = HashableDiGraph(repo=cypher_nodes[0]._properties["repository"])
         nodes = [
             (
@@ -66,17 +80,20 @@ def main(cypher_path: str, query_name: str):
         ]
         g.add_nodes_from(nodes)
         g.add_edges_from(edges)
-        to_highlight = []
-        for key in record.keys():
-            if key != "nodes" and key != "relationships":
-                if type(record.get(key)) != list:
-                    to_highlight += [record.get(key)._properties["number"]]
-                else:
-                    to_highlight += [list_item._properties["number"] for list_item in record.get(key)]
         if g in graph_to_highlight_map:
             graph_to_highlight_map[g] += to_highlight
             continue
         graph_to_highlight_map[g] = to_highlight
+
+    if size_distribution:
+        total = sum(size_counts_map.values())
+        table = PrettyTable()
+        table.field_names = ["Size", "Count", "Percentage of Total"]
+        for k, v in size_counts_map.items():
+            table.add_row([k, v, f"{v/total:.2%}"])
+        print(table)
+        print(f"Total matches: {total}")
+        exit(0)
 
     to_sample = min(len(records) // 2, 20)
     for i, graph in tqdm(
