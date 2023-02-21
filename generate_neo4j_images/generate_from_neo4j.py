@@ -42,6 +42,7 @@ def main(cypher_path: str, query_name: str, size_distribution: bool):
     records, summary = session.execute_read(run_command)
 
     graph_to_highlight_map = {}
+    graph_to_edges_highlight_map = {}
     size_counts_map = defaultdict(int)
     for record in tqdm(records, total=len(records), leave=False):
         cypher_nodes = record.get("nodes")
@@ -78,6 +79,9 @@ def main(cypher_path: str, query_name: str, size_distribution: bool):
             )
             for e in cypher_edges
         ]
+        graph_to_edges_highlight_map[g] = [
+            (e.nodes[0]._properties["number"], e.nodes[1]._properties["number"]) for e in cypher_edges
+        ]
         g.add_nodes_from(nodes)
         g.add_edges_from(edges)
         if g in graph_to_highlight_map:
@@ -110,6 +114,7 @@ def main(cypher_path: str, query_name: str, size_distribution: bool):
             f"generate_neo4j_images/images/{query_name}/",
             dpi=120 if graph.size() >= 10 else 100,
             to_highlight=graph_to_highlight_map[graph],
+            relationships_to_highlight=graph_to_edges_highlight_map[graph],
             node_size=250,
         )
 

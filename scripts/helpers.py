@@ -56,6 +56,7 @@ def generate_image(
     font_size: int = 10,
     dpi: int = 100,
     to_highlight: List[int] = [],
+    relationships_to_highlight: List[Tuple[int, int]] = [],
 ):
     use("agg")
     pos = nx.nx_agraph.graphviz_layout(component)
@@ -100,10 +101,7 @@ def generate_image(
     for cn in component.nodes:
         labels[cn] = f"{'I' if types[cn] == 'issue' else 'PR'} #{numbers[cn]}"
     link_types = nx.get_edge_attributes(component, "link_type")
-    edge_colors = [
-        "#fede00" if numbers[u] in to_highlight and numbers[v] in to_highlight else "#000000"
-        for u, v in component.edges
-    ]
+    edge_colors = ["#fede00" if (u, v) in relationships_to_highlight else "#000000" for u, v in component.edges]
     for ce in component.edges:
         if link_types[ce] not in ignore_link_types:
             edge_labels[ce] = link_types[ce]

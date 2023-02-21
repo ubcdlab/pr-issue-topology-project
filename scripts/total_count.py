@@ -7,4 +7,4 @@ for path in pathlist:
     graph_json = to_json(path_str)
     count += len(graph_json["nodes"])
 
-print(f"Total number of nodes: {count}")
+print(f"Total number of components: {count}")
