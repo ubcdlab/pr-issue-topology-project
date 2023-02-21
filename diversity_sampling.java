@@ -1,20 +1,13 @@
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-
 import com.opencsv.CSVWriter;
+
+import java.io.*;
+import java.util.*;
 
 public class diversity_sampling {
 
     private static final int SAMPLE_SIZE = 64;
-    private static final float DEFAULT_NUMERIC_METRIC_SIMILARITY_THRESHOLD = 0.2f;
+    private static final float DEFAULT_NUMERIC_METRIC_SIMILARITY_THRESHOLD = 0.3f;
+    // private static final float DEFAULT_NUMERIC_METRIC_SIMILARITY_THRESHOLD = 0.2f;
     private static HashMap<String, HashSet<Component>> cache = new HashMap<String, HashSet<Component>>();
     public static void main(String[] args) {
         try {
@@ -30,7 +23,7 @@ public class diversity_sampling {
     }
     
     private static void write_to_csv(HashSet<Component> sample) throws IOException {
-        File file = new File("./unified_json/java_sample_new.csv");
+        File file = new File("./unified_json/java_sample_new_2.csv");
         FileWriter outputfile = new FileWriter(file);
 
         CSVWriter writer = new CSVWriter(outputfile);

@@ -15,3 +15,5 @@ comments_dump/**/*.json
 generate_topology_images/*.png
 password
 generate_neo4j_images/**/*.png
+.*class
+unified_json/second_sample_images/**/*.png
