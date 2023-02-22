@@ -1,7 +1,7 @@
 from pathlib import Path
 from json import loads
 from re import match
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 import networkx as nx
 from os import makedirs
 import matplotlib.pyplot as plt
@@ -55,8 +55,9 @@ def generate_image(
     node_size: int = 200,
     font_size: int = 10,
     dpi: int = 100,
-    to_highlight: List[int] = [],
-    relationships_to_highlight: List[Tuple[int, int]] = [],
+    to_highlight: List[int] | Dict[int, int] = [],
+    relationships_to_highlight: List[Tuple[int, int] | Tuple[int, int, int]] = [],
+    central=None,
 ):
     use("agg")
     pos = nx.nx_agraph.graphviz_layout(component)
@@ -68,16 +69,32 @@ def generate_image(
     colors = []
     plt.figure(key, figsize=(side_length, side_length), dpi=dpi)
     plt.title(title)
+    COLOR_GROUP_MAP = ["#fede00", "#FF0000", "#ffa500", "#ffff00", "#008000", "#0000ff", "#4b0082"]
     issues = list(filter(lambda cn: types[cn] == "issue", component.nodes))
     prs = list(filter(lambda cn: types[cn] == "pull_request", component.nodes))
+    central = list(filter(lambda cn: numbers[cn] == central, component.nodes))
     issue_colors = [
         "#f46d75" if statuses[cn] == "closed" else "#64389f" if statuses[cn] == "merged" else "#77dd77" for cn in issues
     ]
-    issue_edge_colors = ["#fede00" if numbers[cn] in to_highlight else issue_colors[i] for i, cn in enumerate(issues)]
+    issue_edge_colors = [
+        "#fede00"
+        if (type(to_highlight) == list and numbers[cn] in to_highlight) or numbers[cn] == central
+        else COLOR_GROUP_MAP[to_highlight[numbers[cn]]]
+        if type(to_highlight) == dict and numbers[cn] in to_highlight
+        else issue_colors[i]
+        for i, cn in enumerate(issues)
+    ]
     pr_colors = [
         "#f46d75" if statuses[cn] == "closed" else "#64389f" if statuses[cn] == "merged" else "#77dd77" for cn in prs
     ]
-    pr_edge_colors = ["#fede00" if numbers[cn] in to_highlight else pr_colors[i] for i, cn in enumerate(prs)]
+    pr_edge_colors = [
+        "#fede00"
+        if (type(to_highlight) == list and numbers[cn] in to_highlight) or numbers[cn] == central
+        else COLOR_GROUP_MAP[to_highlight[numbers[cn]]]
+        if type(to_highlight) == dict and numbers[cn] in to_highlight
+        else pr_colors[i]
+        for i, cn in enumerate(prs)
+    ]
     nx.draw(
         component,
         pos,
@@ -88,20 +105,31 @@ def generate_image(
         font_size=font_size,
         node_size=node_size,
     )
-    nx.draw(
-        component,
-        pos,
-        nodelist=prs,
-        node_color=pr_colors,
-        edgecolors=pr_edge_colors,
-        node_shape="o",
-        font_size=font_size,
-        node_size=node_size,
-    )
+    if central:
+        nx.draw(
+            component,
+            pos,
+            nodelist=central,
+            node_color="#fede00",
+            node_shape="*",
+            font_size=font_size,
+            node_size=node_size,
+        )
+    nx.draw(component, pos, nodelist=[])
     for cn in component.nodes:
         labels[cn] = f"{'I' if types[cn] == 'issue' else 'PR'} #{numbers[cn]}"
     link_types = nx.get_edge_attributes(component, "link_type")
-    edge_colors = ["#fede00" if (u, v) in relationships_to_highlight else "#000000" for u, v in component.edges]
+    edge_colors = [
+        (
+            COLOR_GROUP_MAP[next(filter(lambda a: (a[0], a[1]) == (u, v), relationships_to_highlight))[2]]
+            if next(filter(lambda a: (a[0], a[1]) == (u, v), relationships_to_highlight))[2]
+            else "#fede00"
+        )
+        if relationships_to_highlight
+        and len(list(filter(lambda a: (a[0], a[1]) == (u, v), relationships_to_highlight))) != 0
+        else "#000000"
+        for u, v in component.edges
+    ]
     for ce in component.edges:
         if link_types[ce] not in ignore_link_types:
             edge_labels[ce] = link_types[ce]
