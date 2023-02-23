@@ -48,16 +48,36 @@ def main(cypher_path: str, query_name: str, size_distribution: bool):
         cypher_nodes = record.get("nodes")
         cypher_edges = record.get("relationships")
         to_highlight = []
+        g = HashableDiGraph(repo=cypher_nodes[0]._properties["repository"])
         for key in record.keys():
             if key != "nodes" and key != "relationships":
                 if type(record.get(key)) != list:
-                    to_highlight += [record.get(key)._properties["number"]]
+                    n = record.get(key)
+                    to_highlight += [n._properties["number"]]
+                    g.add_node(
+                        n._properties["number"],
+                        type=n._properties["type"],
+                        status=n._properties["status"],
+                        number=n._properties["number"],
+                    )
                 else:
                     to_highlight += [list_item._properties["number"] for list_item in record.get(key)]
+                    g.add_nodes_from(
+                        [
+                            (
+                                n._properties["number"],
+                                {
+                                    "type": n._properties["type"],
+                                    "status": n._properties["status"],
+                                    "number": n._properties["number"],
+                                },
+                            )
+                            for n in record.get(key)
+                        ]
+                    )
         if size_distribution:
             size_counts_map[len(to_highlight)] += 1
             continue
-        g = HashableDiGraph(repo=cypher_nodes[0]._properties["repository"])
         nodes = [
             (
                 n._properties["number"],
@@ -79,11 +99,14 @@ def main(cypher_path: str, query_name: str, size_distribution: bool):
             )
             for e in cypher_edges
         ]
-        graph_to_edges_highlight_map[g] = [
-            (e.nodes[0]._properties["number"], e.nodes[1]._properties["number"]) for e in cypher_edges
-        ]
         g.add_nodes_from(nodes)
         g.add_edges_from(edges)
+        assert all([t in g.nodes() for t in to_highlight])
+        graph_to_edges_highlight_map[g] = [
+            (e.nodes[0]._properties["number"], e.nodes[1]._properties["number"])
+            for e in cypher_edges
+            if e.nodes[0]._properties["number"] in to_highlight and e.nodes[1]._properties["number"] in to_highlight
+        ]
         if g in graph_to_highlight_map:
             graph_to_highlight_map[g] += to_highlight
             continue
@@ -93,7 +116,7 @@ def main(cypher_path: str, query_name: str, size_distribution: bool):
         total = sum(size_counts_map.values())
         table = PrettyTable()
         table.field_names = ["Size", "Count", "Percentage of Total"]
-        for k, v in size_counts_map.items():
+        for k, v in sorted(size_counts_map.items(), key=lambda i: i[1], reverse=True):
             table.add_row([k, v, f"{v/total:.2%}"])
         print(table)
         print(f"Total matches: {total}")
@@ -102,7 +125,7 @@ def main(cypher_path: str, query_name: str, size_distribution: bool):
     to_sample = min(len(records) // 2, 20)
     for i, graph in tqdm(
         enumerate(sample(list(graph_to_highlight_map.keys()), to_sample)),
-        total=len(graph_to_highlight_map),
+        total=to_sample,
         leave=False,
     ):
         image_hl_info = graph_to_highlight_map[graph]

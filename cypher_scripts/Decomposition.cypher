@@ -1,7 +1,7 @@
 //Decomposition w/ Subgraphs
-match (i:issue {status: "closed"})<-[r {labels: "fixes"}]-(pr:pull_request {status: "merged"})
+match (i:issue {status: "closed"})-[r {labels: "fixes"}]-(pr:pull_request {status: "merged"})
 with i, collect(distinct pr) as pull_requests
 where size(pull_requests) > 1
-call apoc.path.subgraphAll(i, {limit: 50})
+call apoc.path.subgraphAll(i, {limit: case 50 > size(pull_requests) when true then 50 when false then size(pull_requests) + 1 end, bfs: true })
 yield nodes, relationships
 return i, pull_requests, nodes, relationships

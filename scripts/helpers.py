@@ -131,11 +131,15 @@ def generate_image(
     edge_colors = [
         (
             COLOR_GROUP_MAP[next(filter(lambda a: (a[0], a[1]) == (u, v), relationships_to_highlight))[2]]
-            if next(filter(lambda a: (a[0], a[1]) == (u, v), relationships_to_highlight))[2]
+            if len(relationships_to_highlight[0]) == 3
+            and next(filter(lambda a: (a[0], a[1]) == (u, v), relationships_to_highlight))[2]
             else "#fede00"
         )
-        if relationships_to_highlight
-        and len(list(filter(lambda a: (a[0], a[1]) == (u, v), relationships_to_highlight))) != 0
+        if (
+            relationships_to_highlight
+            and len(list(filter(lambda a: (a[0], a[1]) == (u, v), relationships_to_highlight))) != 0
+        )
+        or (u in to_highlight and v in to_highlight)
         else "#000000"
         for u, v in component.edges
     ]
