@@ -105,6 +105,16 @@ def generate_image(
         font_size=font_size,
         node_size=node_size,
     )
+    nx.draw(
+        component,
+        pos,
+        nodelist=prs,
+        node_color=pr_colors,
+        edgecolors=pr_edge_colors,
+        node_shape="o",
+        font_size=font_size,
+        node_size=node_size,
+    )
     if central:
         nx.draw(
             component,
@@ -115,7 +125,6 @@ def generate_image(
             font_size=font_size,
             node_size=node_size,
         )
-    nx.draw(component, pos, nodelist=[])
     for cn in component.nodes:
         labels[cn] = f"{'I' if types[cn] == 'issue' else 'PR'} #{numbers[cn]}"
     link_types = nx.get_edge_attributes(component, "link_type")
