@@ -19,6 +19,9 @@ The attributes available in the database are:
 - `closed_at`: Unix timestamp or 0 if node's `status` is `open`.
 - `number`: node identifier, same as pull request or issue number on GitHub
 - `link_type`: only for edges; one of `fixes`, `duplicate`, or `other`
+- `user`: the GitHub username of the user that created the node (or for edges, the comment linking the two nodes)
+- `user_url`: URL to GitHub page of user
+- `url`: URL to node's GitHub page; similarly, `link_url` links to the mentioning issue's GitHub page
 
 ## Querying
 

@@ -37,6 +37,9 @@ for path in tqdm(all_graphs(), total=path_list_len, leave=True):
             updated_at=int(node.updated_at.timestamp()),
             labels="pull_request" if node.pull_request is not None else "issue",
             number=node.number,
+            user=node.user.login,
+            url=node.html_url,
+            user_url=node.user.html_url,
         )
         node_timeline = timeline_list[-index - 1]
         node_timeline = list(
@@ -52,6 +55,9 @@ for path in tqdm(all_graphs(), total=path_list_len, leave=True):
                 f"{target_repo}#{node.number}",
                 link_type=nwvc.find_automatic_links(node.number, mention.source.issue.body, mentioning_issue_comments),
                 labels=nwvc.find_automatic_links(node.number, mention.source.issue.body, mentioning_issue_comments),
+                user=mention.actor.login if mention.actor else "",
+                link_url=mention.source.issue.html_url,
+                user_url=mention.actor.html_url if mention.actor else "",
             )
     try:
         makedirs(f"graphml_dump/")
