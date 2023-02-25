@@ -39,7 +39,7 @@ def main(cypher_path: str, query_name: str, size_distribution: bool):
         password = x.readline().strip()
     db = GraphDatabase.driver("bolt://localhost:7687", auth=("neo4j", password))
     session = db.session(database="neo4j")
-    records, summary = session.execute_read(run_command)
+    records, _ = session.execute_read(run_command)
 
     graph_to_highlight_map = {}
     graph_to_edges_highlight_map = {}
