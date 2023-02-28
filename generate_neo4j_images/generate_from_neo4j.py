@@ -48,12 +48,14 @@ def main(cypher_path: str, query_name: str, size_distribution: bool):
         cypher_nodes = record.get("nodes")
         cypher_edges = record.get("relationships")
         to_highlight = []
-        g = HashableDiGraph(repo=cypher_nodes[0]._properties["repository"])
+        g = HashableDiGraph(repo=cypher_nodes[0]._properties["repository"], link=None)
         for key in record.keys():
             if key != "nodes" and key != "relationships":
                 if type(record.get(key)) != list:
                     n = record.get(key)
                     to_highlight += [n._properties["number"]]
+                    if not g.graph["link"]:
+                        g.graph["link"] = n._properties["url"]
                     g.add_node(
                         n._properties["number"],
                         type=n._properties["type"],
@@ -139,6 +141,7 @@ def main(cypher_path: str, query_name: str, size_distribution: bool):
             to_highlight=graph_to_highlight_map[graph],
             relationships_to_highlight=graph_to_edges_highlight_map[graph],
             node_size=250,
+            link=graph.graph["link"],
         )
 
     session.close()

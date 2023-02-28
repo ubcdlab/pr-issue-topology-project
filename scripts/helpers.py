@@ -58,6 +58,7 @@ def generate_image(
     to_highlight: List[int] | Dict[int, int] = [],
     relationships_to_highlight: List[Tuple[int, int] | Tuple[int, int, int]] = [],
     central=None,
+    link=None,
 ):
     use("agg")
     pos = nx.nx_agraph.graphviz_layout(component)
@@ -149,6 +150,8 @@ def generate_image(
     nx.draw_networkx_labels(component, pos=pos, labels=labels, font_size=font_size)
     nx.draw_networkx_edges(component, pos, edge_color=edge_colors)
     nx.draw_networkx_edge_labels(component, pos=pos, edge_labels=edge_labels, font_size=font_size)
+    if link:
+        plt.figtext(0.5, 0.01, link, horizontalalignment="center")
     try:
         makedirs(file_path)
     except:
