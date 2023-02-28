@@ -101,7 +101,7 @@ def generate_image(
         pos,
         nodelist=issues,
         node_color=issue_colors,
-        edgecolors=issue_colors,
+        edgecolors=issue_edge_colors,
         node_shape="s",
         font_size=font_size,
         node_size=node_size,
@@ -129,21 +129,21 @@ def generate_image(
     for cn in component.nodes:
         labels[cn] = f"{'I' if types[cn] == 'issue' else 'PR'} #{numbers[cn]}"
     link_types = nx.get_edge_attributes(component, "link_type")
-    edge_colors = [
-        (
-            COLOR_GROUP_MAP[next(filter(lambda a: (a[0], a[1]) == (u, v), relationships_to_highlight))[2]]
-            if len(relationships_to_highlight[0]) == 3
-            and next(filter(lambda a: (a[0], a[1]) == (u, v), relationships_to_highlight))[2]
-            else "#fede00"
-        )
-        if (
-            relationships_to_highlight
-            and len(list(filter(lambda a: (a[0], a[1]) == (u, v), relationships_to_highlight))) != 0
-        )
-        or (u in to_highlight and v in to_highlight)
-        else "#000000"
-        for u, v in component.edges
-    ]
+    if relationships_to_highlight:
+        if len(relationships_to_highlight[0]) == 3:
+            edge_colors = [
+                COLOR_GROUP_MAP[next(filter(lambda a: (a[0], a[1]) == (u, v), relationships_to_highlight))[2]]
+                if len(relationships_to_highlight[0]) == 3
+                and next(filter(lambda a: (a[0], a[1]) == (u, v), relationships_to_highlight))[2]
+                else "#fede00"
+                if next(filter(lambda a: (a[0], a[1]) == (u, v), relationships_to_highlight))
+                else "#000000"
+                for u, v in component.edges
+            ]
+        else:
+            edge_colors = ["#fede00" if (u, v) in relationships_to_highlight else "#000000" for u, v in component.edges]
+    else:
+        edge_colors = ["#000000" for u, v in component.edges]
     for ce in component.edges:
         if link_types[ce] not in ignore_link_types:
             edge_labels[ce] = link_types[ce]

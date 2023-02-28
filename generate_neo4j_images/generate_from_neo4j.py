@@ -50,7 +50,7 @@ def main(cypher_path: str, query_name: str, size_distribution: bool):
         to_highlight = []
         g = HashableDiGraph(repo=cypher_nodes[0]._properties["repository"], link=None)
         for key in record.keys():
-            if key != "nodes" and key != "relationships":
+            if key != "nodes" and key != "relationships" and key != "match_relationships":
                 if type(record.get(key)) != list:
                     n = record.get(key)
                     to_highlight += [n._properties["number"]]
@@ -104,11 +104,22 @@ def main(cypher_path: str, query_name: str, size_distribution: bool):
         g.add_nodes_from(nodes)
         g.add_edges_from(edges)
         assert all([t in g.nodes() for t in to_highlight])
-        graph_to_edges_highlight_map[g] = [
-            (e.nodes[0]._properties["number"], e.nodes[1]._properties["number"])
-            for e in cypher_edges
-            if e.nodes[0]._properties["number"] in to_highlight and e.nodes[1]._properties["number"] in to_highlight
-        ]
+        edges_to_hl = []
+        if "match_relationships" not in record.keys():
+            edges_to_hl = [
+                (e.nodes[0]._properties["number"], e.nodes[1]._properties["number"])
+                for e in cypher_edges
+                if e.nodes[0]._properties["number"] in to_highlight and e.nodes[1]._properties["number"] in to_highlight
+            ]
+        else:
+            edges_to_hl = [
+                (e.nodes[0]._properties["number"], e.nodes[1]._properties["number"])
+                for e in record.get("match_relationships")
+            ]
+        if g in graph_to_edges_highlight_map:
+            graph_to_edges_highlight_map[g] += edges_to_hl
+        else:
+            graph_to_edges_highlight_map[g] = edges_to_hl
         if g in graph_to_highlight_map:
             graph_to_highlight_map[g] += to_highlight
             continue
