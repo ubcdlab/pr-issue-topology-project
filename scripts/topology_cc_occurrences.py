@@ -1,3 +1,4 @@
+from os import makedirs
 from typing import Dict, List
 from click import command, option
 from tqdm import tqdm
@@ -6,6 +7,7 @@ from sys import path
 from prettytable import PrettyTable
 from dataclasses import dataclass
 from statistics import fmean, pstdev
+from csv import writer
 
 
 path.append("..")
@@ -19,7 +21,9 @@ class CCResult:
 
 @command()
 @option("--cypher", "cypher_path")
-def main(cypher_path: str):
+@option("--to-csv", "to_csv", is_flag=True, default=False)
+@option("--name", "name", default="")
+def main(cypher_path: str, to_csv: bool, name: str):
     # should be a _WProportions Cypher file
     command = open(cypher_path, "r").read()
 
@@ -48,26 +52,37 @@ def main(cypher_path: str):
     table = PrettyTable()
     table.field_names = [
         "Size",
+        "# Matches",
+        "% Total Matches",
         "Average MTCO",
         "Low MTCO",
         "High MTCO",
         "STDev MTCO",
-        "# Matches",
-        "% Total Matches",
     ]
     for k, v in sorted(size_map.items(), key=lambda i: i[1].matches, reverse=True):
         table.add_row(
             [
                 k,
+                v.matches,
+                f"{v.matches / total:.2f}%",
                 f"{fmean(v.proportions):.3f}",
                 f"{min(v.proportions):.3f}",
                 f"{max(v.proportions):.3f}",
                 f"{pstdev(v.proportions):.3f}",
-                v.matches,
-                f"{v.matches / total:.2f}%",
             ]
         )
-    print(table)
+    if to_csv:
+        if not name:
+            print("--name required with --to-csv.")
+            exit(1)
+        try:
+            makedirs(f"neo4j_statistics/")
+        except:
+            pass
+        with open(f"neo4j_statistics/{name}_statistics.csv", "w") as x:
+            x.write(table.get_csv_string())
+    else:
+        print(table)
 
     session.close()
     db.close()

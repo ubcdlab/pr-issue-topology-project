@@ -46,7 +46,11 @@ def main(cypher_path: str, query_name: str, size_distribution: bool):
     size_counts_map = defaultdict(int)
     for record in tqdm(records, total=len(records), leave=False):
         cypher_nodes = record.get("nodes")
-        cypher_edges = record.get("relationships")
+        cypher_edges = (
+            record.get("relationships") + record.get("match_relationships")
+            if "match_relationships" in record.keys()
+            else []
+        )
         to_highlight = []
         g = HashableDiGraph(repo=cypher_nodes[0]._properties["repository"], link=None)
         for key in record.keys():

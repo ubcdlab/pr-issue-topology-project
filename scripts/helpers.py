@@ -66,6 +66,7 @@ def generate_image(
     numbers = nx.get_node_attributes(component, "number")
     statuses = nx.get_node_attributes(component, "status")
     labels = dict()
+    to_highlight_labels = dict()
     edge_labels = dict()
     colors = []
     plt.figure(key, figsize=(side_length, side_length), dpi=dpi)
@@ -75,7 +76,7 @@ def generate_image(
     prs = list(filter(lambda cn: types[cn] == "pull_request", component.nodes))
     central = list(filter(lambda cn: numbers[cn] == central, component.nodes))
     issue_colors = [
-        "#f46d75" if statuses[cn] == "closed" else "#64389f" if statuses[cn] == "merged" else "#77dd77" for cn in issues
+        "#f46d75" if statuses[cn] == "closed" else "#a57cde" if statuses[cn] == "merged" else "#77dd77" for cn in issues
     ]
     issue_edge_colors = [
         "#fede00"
@@ -86,7 +87,7 @@ def generate_image(
         for i, cn in enumerate(issues)
     ]
     pr_colors = [
-        "#f46d75" if statuses[cn] == "closed" else "#64389f" if statuses[cn] == "merged" else "#77dd77" for cn in prs
+        "#f46d75" if statuses[cn] == "closed" else "#a57cde" if statuses[cn] == "merged" else "#77dd77" for cn in prs
     ]
     pr_edge_colors = [
         "#fede00"
@@ -105,6 +106,7 @@ def generate_image(
         node_shape="s",
         font_size=font_size,
         node_size=node_size,
+        linewidths=2,
     )
     nx.draw(
         component,
@@ -115,6 +117,7 @@ def generate_image(
         node_shape="o",
         font_size=font_size,
         node_size=node_size,
+        linewidths=2,
     )
     if central:
         nx.draw(
@@ -125,9 +128,14 @@ def generate_image(
             node_shape="*",
             font_size=font_size,
             node_size=node_size,
+            linewidths=2,
         )
     for cn in component.nodes:
-        labels[cn] = f"{'I' if types[cn] == 'issue' else 'PR'} #{numbers[cn]}"
+        label = f"{'I' if types[cn] == 'issue' else 'PR'} #{numbers[cn]}"
+        if numbers[cn] in to_highlight:
+            to_highlight_labels[cn] = label
+        else:
+            labels[cn] = label
     link_types = nx.get_edge_attributes(component, "link_type")
     if relationships_to_highlight:
         if len(relationships_to_highlight[0]) == 3:
@@ -148,6 +156,7 @@ def generate_image(
         if link_types[ce] not in ignore_link_types:
             edge_labels[ce] = link_types[ce]
     nx.draw_networkx_labels(component, pos=pos, labels=labels, font_size=font_size)
+    nx.draw_networkx_labels(component, pos=pos, labels=to_highlight_labels, font_size=font_size, font_weight="bold")
     nx.draw_networkx_edges(component, pos, edge_color=edge_colors)
     nx.draw_networkx_edge_labels(component, pos=pos, edge_labels=edge_labels, font_size=font_size)
     if link:
