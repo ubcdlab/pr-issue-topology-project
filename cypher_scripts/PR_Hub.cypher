@@ -1,5 +1,6 @@
 //PR Hub
 match (pr:pull_request)-[r]-(pr2:pull_request)
+where pr2.creation_date > pr.creation_date
 with pr, collect(distinct pr2) as prs, collect(distinct pr2.user) as users, collect(distinct r) as match_relationships
 where size(prs) >= 3 and size(users) >= 2
 call apoc.path.subgraphAll(pr, {limit: case 50 > size(prs) when true then 50 when false then size(prs) + 1 end, bfs: true })

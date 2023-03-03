@@ -14,14 +14,6 @@ path.append("..")
 from scripts.helpers import generate_image
 
 
-class HashableDiGraph(nx.DiGraph):
-    def __hash__(self):
-        return int(nx.weisfeiler_lehman_graph_hash(self), base=16)
-
-    def __eq__(self, other):
-        return nx.weisfeiler_lehman_graph_hash(self) == nx.weisfeiler_lehman_graph_hash(other)
-
-
 @command()
 @option("--cypher", "cypher_path")
 @option("--name", "query_name")
@@ -52,14 +44,13 @@ def main(cypher_path: str, query_name: str, size_distribution: bool):
             else []
         )
         to_highlight = []
-        g = HashableDiGraph(repo=cypher_nodes[0]._properties["repository"], link=None)
+        g = nx.Graph(repo=cypher_nodes[0]._properties["repository"], link=None)
         for key in record.keys():
             if key != "nodes" and key != "relationships" and key != "match_relationships":
                 if type(record.get(key)) != list:
                     n = record.get(key)
                     to_highlight += [n._properties["number"]]
-                    if not g.graph["link"]:
-                        g.graph["link"] = n._properties["url"]
+                    g.graph["link"] = n._properties["url"]
                     g.add_node(
                         n._properties["number"],
                         type=n._properties["type"],
@@ -120,13 +111,7 @@ def main(cypher_path: str, query_name: str, size_distribution: bool):
                 (e.nodes[0]._properties["number"], e.nodes[1]._properties["number"])
                 for e in record.get("match_relationships")
             ]
-        if g in graph_to_edges_highlight_map:
-            graph_to_edges_highlight_map[g] += edges_to_hl
-        else:
-            graph_to_edges_highlight_map[g] = edges_to_hl
-        if g in graph_to_highlight_map:
-            graph_to_highlight_map[g] += to_highlight
-            continue
+        graph_to_edges_highlight_map[g] = edges_to_hl
         graph_to_highlight_map[g] = to_highlight
 
     if size_distribution:
@@ -145,7 +130,6 @@ def main(cypher_path: str, query_name: str, size_distribution: bool):
         total=to_sample,
         leave=False,
     ):
-        image_hl_info = graph_to_highlight_map[graph]
         generate_image(
             graph,
             i,
