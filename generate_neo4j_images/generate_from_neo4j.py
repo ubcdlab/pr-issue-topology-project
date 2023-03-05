@@ -22,7 +22,7 @@ def main(cypher_path: str, query_name: str, size_distribution: bool):
     command = open(cypher_path, "r").read()
 
     def run_command(tx):
-        result = tx.run(command)
+        result = tx.run(command, {"mode": "ids" if query_name == "pr_hub" else ""})
         records = list(result)
         summary = result.consume()
         return records, summary
