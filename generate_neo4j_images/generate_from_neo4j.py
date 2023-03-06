@@ -108,6 +108,7 @@ def main(cypher_path: str, query_name: str, size_distribution: bool):
                 if "optional_r" in record.keys() and record.get("optional_r") is not None
                 else []
             )
+            if "number" in e.nodes[0]._properties and "number" in e.nodes[1]._properties
         ]
         g.add_nodes_from(nodes)
         g.add_edges_from(edges)
@@ -123,6 +124,7 @@ def main(cypher_path: str, query_name: str, size_distribution: bool):
             edges_to_hl = [
                 (e.nodes[0]._properties["number"], e.nodes[1]._properties["number"])
                 for e in record.get("match_relationships")
+                if "number" in e.nodes[0]._properties and "number" in e.nodes[1]._properties
             ]
         graph_to_edges_highlight_map[g] = edges_to_hl
         graph_to_highlight_map[g] = to_highlight
