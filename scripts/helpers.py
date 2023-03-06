@@ -140,16 +140,25 @@ def generate_image(
     if relationships_to_highlight:
         if len(relationships_to_highlight[0]) == 3:
             edge_colors = [
-                COLOR_GROUP_MAP[next(filter(lambda a: (a[0], a[1]) == (u, v), relationships_to_highlight))[2]]
+                COLOR_GROUP_MAP[
+                    next(
+                        filter(lambda a: (a[0], a[1]) == (u, v) or (a[0], a[1]) == (v, u), relationships_to_highlight)
+                    )[2]
+                ]
                 if len(relationships_to_highlight[0]) == 3
-                and next(filter(lambda a: (a[0], a[1]) == (u, v), relationships_to_highlight))[2]
+                and next(
+                    filter(lambda a: (a[0], a[1]) == (u, v) or (a[0], a[1]) == (v, u), relationships_to_highlight)
+                )[2]
                 else "#fede00"
-                if next(filter(lambda a: (a[0], a[1]) == (u, v), relationships_to_highlight))
+                if next(filter(lambda a: (a[0], a[1]) == (u, v) or (a[0], a[1]) == (v, u), relationships_to_highlight))
                 else "#000000"
                 for u, v in component.edges
             ]
         else:
-            edge_colors = ["#fede00" if (u, v) in relationships_to_highlight else "#000000" for u, v in component.edges]
+            edge_colors = [
+                "#fede00" if (u, v) in relationships_to_highlight or (v, u) in relationships_to_highlight else "#000000"
+                for u, v in component.edges
+            ]
     else:
         edge_colors = ["#000000" for u, v in component.edges]
     for ce in component.edges:

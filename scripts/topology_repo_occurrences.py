@@ -32,7 +32,6 @@ match (n:pull_request {repository: $repository}) return count(distinct n) as pr_
 @command()
 @option("--cypher", "cypher_path")
 def main(cypher_path: str):
-    # should be a _WProportions Cypher file
     command = open(cypher_path, "r").read()
     param_repository = None
 

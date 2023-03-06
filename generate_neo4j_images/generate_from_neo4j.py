@@ -46,7 +46,15 @@ def main(cypher_path: str, query_name: str, size_distribution: bool):
         to_highlight = []
         g = nx.Graph(repo=cypher_nodes[0]._properties["repository"], link=None)
         for key in record.keys():
-            if key != "nodes" and key != "relationships" and key != "match_relationships":
+            if key not in [
+                "nodes",
+                "relationships",
+                "match_relationships",
+                "all_ids",
+                "optional_issue",
+                "optional_r",
+                "proportion",
+            ] or (key == "optional_issue" and record.get(key) is not None):
                 if type(record.get(key)) != list:
                     n = record.get(key)
                     to_highlight += [n._properties["number"]]
@@ -95,6 +103,11 @@ def main(cypher_path: str, query_name: str, size_distribution: bool):
                 },
             )
             for e in cypher_edges
+            + (
+                [record.get("optional_r")]
+                if "optional_r" in record.keys() and record.get("optional_r") is not None
+                else []
+            )
         ]
         g.add_nodes_from(nodes)
         g.add_edges_from(edges)

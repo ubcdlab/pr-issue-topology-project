@@ -24,7 +24,6 @@ class CCResult:
 @option("--to-csv", "to_csv", is_flag=True, default=False)
 @option("--name", "name", default="")
 def main(cypher_path: str, to_csv: bool, name: str):
-    # should be a _WProportions Cypher file
     command = open(cypher_path, "r").read()
 
     def run_command(tx):
