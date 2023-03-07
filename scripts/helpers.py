@@ -3,7 +3,7 @@ from json import loads
 from re import match
 from typing import List, Tuple, Dict
 import networkx as nx
-from os import makedirs
+from os import makedirs, scandir, remove
 import matplotlib.pyplot as plt
 from matplotlib import use
 
@@ -174,6 +174,8 @@ def generate_image(
         makedirs(file_path)
     except:
         pass
+    for file in scandir(file_path):
+        remove(file.path)
     plt.tight_layout()
     plt.savefig(f"{file_path}{key}.png")
     plt.clf()

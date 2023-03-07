@@ -139,7 +139,7 @@ def main(cypher_path: str, query_name: str, size_distribution: bool):
         print(f"Total matches: {total}")
         exit(0)
 
-    to_sample = min(len(records) // 2, 20)
+    to_sample = min(len(records) // 2, 40)
     for i, graph in tqdm(
         enumerate(sample(list(graph_to_highlight_map.keys()), to_sample)),
         total=to_sample,

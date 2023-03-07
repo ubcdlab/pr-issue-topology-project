@@ -1,6 +1,7 @@
 // PR Stack
 match (pr:pull_request)-[r1]->(pr_2:pull_request)-[r2]->(pr_3:pull_request)
 optional match (optional_issue:issue)-[optional_r]-(pr)
+where not (optional_issue)--(pr_2) and not (optional_issue)--(pr_3)
 unwind [pr.number, pr_2.number, pr_3.number] as number_list
 unwind [pr.status, pr_2.status, pr_3.status] as status_list
 with pr, pr_2, pr_3, collect(distinct number_list) as number_list, [r2] as match_relationships, collect(distinct id(pr))+collect(distinct id(pr_2))+collect(distinct id(pr_3)) as known_stacks, optional_issue, optional_r, status_list
