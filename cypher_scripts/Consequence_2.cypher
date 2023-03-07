@@ -1,6 +1,7 @@
 // Consequence-2
+with [80808, 92085] as exclude_ids
 match (i:issue {status:"closed"})-[r {labels: "fixes"}]-(p:pull_request {status: "merged"}), (i2:issue {status:"closed"})-[r2]-(p), (i2)-[r3]-(p2:pull_request {status:"merged"})
-where (i2.creation_date > p.creation_date or i2.creation_date > i.creation_date) and i.number <> i2.number and p.number <> p2.number
+where (i2.creation_date > p.creation_date or i2.creation_date > i.creation_date) and i.number <> i2.number and p.number <> p2.number and not id(p) in exclude_ids and not id(p2) in exclude_ids
 with i, p, i2, p2, [r,r2,r3] as match_relationships, collect(distinct id(i)) as known_consq
 call apoc.path.subgraphAll(i, {limit: 50, bfs: true })
 yield nodes, relationships
