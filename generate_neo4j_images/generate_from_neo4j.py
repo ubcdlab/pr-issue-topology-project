@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 from random import sample
 from sys import path
 from prettytable import PrettyTable
+from os import scandir, remove
 
 
 path.append("..")
@@ -43,6 +44,8 @@ def main(cypher_path: str, query_name: str, size_distribution: bool):
             if "match_relationships" in record.keys()
             else []
         )
+        if "optional_r" in record.keys() and record.get("optional_r") is not None:
+            cypher_edges += [record.get("optional_r")]
         to_highlight = []
         g = nx.Graph(repo=cypher_nodes[0]._properties["repository"], link=None)
         for key in record.keys():
@@ -103,11 +106,6 @@ def main(cypher_path: str, query_name: str, size_distribution: bool):
                 },
             )
             for e in cypher_edges
-            + (
-                [record.get("optional_r")]
-                if "optional_r" in record.keys() and record.get("optional_r") is not None
-                else []
-            )
             if "number" in e.nodes[0]._properties and "number" in e.nodes[1]._properties
         ]
         g.add_nodes_from(nodes)
@@ -123,7 +121,14 @@ def main(cypher_path: str, query_name: str, size_distribution: bool):
         else:
             edges_to_hl = [
                 (e.nodes[0]._properties["number"], e.nodes[1]._properties["number"])
-                for e in record.get("match_relationships")
+                for e in (
+                    record.get("match_relationships")
+                    + (
+                        [record.get("optional_r")]
+                        if "optional_r" in record.keys() and record.get("optional_r") is not None
+                        else []
+                    )
+                )
                 if "number" in e.nodes[0]._properties and "number" in e.nodes[1]._properties
             ]
         graph_to_edges_highlight_map[g] = edges_to_hl
@@ -139,7 +144,10 @@ def main(cypher_path: str, query_name: str, size_distribution: bool):
         print(f"Total matches: {total}")
         exit(0)
 
-    to_sample = min(len(records) // 2, 40)
+    # to_sample = min(len(records) // 2, 20)
+    to_sample = min(len(records), 40)  # sample more
+    for file in scandir(f"generate_neo4j_images/images/{query_name}/"):
+        remove(file.path)
     for i, graph in tqdm(
         enumerate(sample(list(graph_to_highlight_map.keys()), to_sample)),
         total=to_sample,

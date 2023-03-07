@@ -174,8 +174,6 @@ def generate_image(
         makedirs(file_path)
     except:
         pass
-    for file in scandir(file_path):
-        remove(file.path)
     plt.tight_layout()
     plt.savefig(f"{file_path}{key}.png")
     plt.clf()
