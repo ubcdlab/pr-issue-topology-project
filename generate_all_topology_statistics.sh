@@ -10,6 +10,5 @@ python -m scripts.topology_cc_occurrences --cypher=cypher_scripts/Improvement.cy
 python -m scripts.topology_cc_occurrences --cypher=cypher_scripts/Optimization.cypher --name=optimization --to-csv
 python -m scripts.topology_cc_occurrences --cypher=cypher_scripts/PR_Hub.cypher --name=pr_hub --to-csv
 python -m scripts.topology_cc_occurrences --cypher=cypher_scripts/PR_Stack.cypher --name=pr_stack --to-csv
-python -m scripts.topology_cc_occurrences --cypher=cypher_scripts/Release.cypher --name=release --to-csv
 python -m scripts.topology_cc_occurrences --cypher=cypher_scripts/Same_Author.cypher --name=same_author --to-csv
 

@@ -10,6 +10,5 @@ python -m generate_neo4j_images.generate_from_neo4j --cypher=cypher_scripts/Impr
 python -m generate_neo4j_images.generate_from_neo4j --cypher=cypher_scripts/Optimization.cypher --name=optimization
 python -m generate_neo4j_images.generate_from_neo4j --cypher=cypher_scripts/PR_Hub.cypher --name=pr_hub
 python -m generate_neo4j_images.generate_from_neo4j --cypher=cypher_scripts/PR_Stack.cypher --name=pr_stack
-python -m generate_neo4j_images.generate_from_neo4j --cypher=cypher_scripts/Release.cypher --name=release
 python -m generate_neo4j_images.generate_from_neo4j --cypher=cypher_scripts/Same_Author.cypher --name=same_author
 
