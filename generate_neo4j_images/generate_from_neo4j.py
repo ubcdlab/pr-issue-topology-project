@@ -6,7 +6,6 @@ from neo4j import GraphDatabase
 import matplotlib.pyplot as plt
 from random import sample
 from sys import path
-from prettytable import PrettyTable
 from os import scandir, remove
 
 
@@ -18,8 +17,7 @@ from scripts.helpers import generate_image
 @command()
 @option("--cypher", "cypher_path")
 @option("--name", "query_name")
-@option("--size-distribution", "size_distribution", is_flag=True, default=False)
-def main(cypher_path: str, query_name: str, size_distribution: bool):
+def main(cypher_path: str, query_name: str):
     command = open(cypher_path, "r").read()
 
     def run_command(tx):
@@ -36,7 +34,6 @@ def main(cypher_path: str, query_name: str, size_distribution: bool):
 
     graph_to_highlight_map = {}
     graph_to_edges_highlight_map = {}
-    size_counts_map = defaultdict(int)
     for record in tqdm(records, total=len(records), leave=False):
         cypher_nodes = record.get("nodes")
         cypher_edges = (
@@ -83,9 +80,6 @@ def main(cypher_path: str, query_name: str, size_distribution: bool):
                             for n in record.get(key)
                         ]
                     )
-        if size_distribution:
-            size_counts_map[len(to_highlight)] += 1
-            continue
         nodes = [
             (
                 n._properties["number"],
@@ -133,16 +127,6 @@ def main(cypher_path: str, query_name: str, size_distribution: bool):
             ]
         graph_to_edges_highlight_map[g] = edges_to_hl
         graph_to_highlight_map[g] = to_highlight
-
-    if size_distribution:
-        total = sum(size_counts_map.values())
-        table = PrettyTable()
-        table.field_names = ["Size", "Count", "Percentage of Total"]
-        for k, v in sorted(size_counts_map.items(), key=lambda i: i[1], reverse=True):
-            table.add_row([k, v, f"{v/total:.2%}"])
-        print(table)
-        print(f"Total matches: {total}")
-        exit(0)
 
     # to_sample = min(len(records) // 2, 20)
     to_sample = min(len(records), 40)  # sample more
