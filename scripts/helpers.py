@@ -59,6 +59,7 @@ def generate_image(
     relationships_to_highlight: List[Tuple[int, int] | Tuple[int, int, int]] = [],
     central=None,
     link=None,
+    legend: List[str] = [],
 ):
     use("agg")
     pos = nx.nx_agraph.graphviz_layout(component)
@@ -68,7 +69,6 @@ def generate_image(
     labels = dict()
     to_highlight_labels = dict()
     edge_labels = dict()
-    colors = []
     plt.figure(key, figsize=(side_length, side_length), dpi=dpi)
     plt.title(title)
     COLOR_GROUP_MAP = ["#fede00", "#FF0000", "#ffa500", "#ffff00", "#008000", "#0000ff", "#4b0082"]
@@ -170,6 +170,9 @@ def generate_image(
     nx.draw_networkx_edge_labels(component, pos=pos, edge_labels=edge_labels, font_size=font_size)
     if link:
         plt.figtext(0.5, 0.01, link, horizontalalignment="center")
+    if len(legend):
+        custom_lines = [plt.Line2D([0], [0], color=COLOR_GROUP_MAP[i + 1], lw=4) for i in range(len(legend))]
+        plt.legend(custom_lines, legend)
     try:
         makedirs(file_path)
     except:

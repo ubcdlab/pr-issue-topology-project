@@ -1,4 +1,5 @@
 from collections import defaultdict
+from os.path import isdir
 from click import command, option
 import networkx as nx
 from tqdm import tqdm
@@ -7,6 +8,7 @@ import matplotlib.pyplot as plt
 from random import sample
 from sys import path
 from os import scandir, remove
+from typing import List
 
 
 path.append("..")
@@ -17,7 +19,8 @@ from scripts.helpers import generate_image
 @command()
 @option("--cypher", "cypher_path")
 @option("--name", "query_name")
-def main(cypher_path: str, query_name: str):
+@option("--lname", "legend_names", default=[], multiple=True)
+def main(cypher_path: str, query_name: str, legend_names: List[str]):
     command = open(cypher_path, "r").read()
 
     def run_command(tx):
@@ -130,8 +133,9 @@ def main(cypher_path: str, query_name: str):
 
     # to_sample = min(len(records) // 2, 20)
     to_sample = min(len(records), 40)  # sample more
-    for file in scandir(f"generate_neo4j_images/images/{query_name}/"):
-        remove(file.path)
+    if isdir(f"generate_neo4j_images/images/{query_name}/"):
+        for file in scandir(f"generate_neo4j_images/images/{query_name}/"):
+            remove(file.path)
     for i, graph in tqdm(
         enumerate(sample(list(graph_to_highlight_map.keys()), to_sample)),
         total=to_sample,
@@ -148,6 +152,7 @@ def main(cypher_path: str, query_name: str):
             relationships_to_highlight=graph_to_edges_highlight_map[graph],
             node_size=250,
             link=graph.graph["link"],
+            legend=[s.capitalize() for s in legend_names],
         )
 
     session.close()
