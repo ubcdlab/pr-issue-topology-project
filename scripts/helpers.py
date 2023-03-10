@@ -57,7 +57,7 @@ def generate_image(
     dpi: int = 100,
     to_highlight: List[int] | Dict[int, int] = [],
     relationships_to_highlight: List[Tuple[int, int] | Tuple[int, int, int]] = [],
-    central=None,
+    central: List[int] = None,
     link=None,
     legend: List[str] = [],
 ):
@@ -74,7 +74,7 @@ def generate_image(
     COLOR_GROUP_MAP = ["#fede00", "#FF0000", "#ffa500", "#ffff00", "#008000", "#0000ff", "#4b0082"]
     issues = list(filter(lambda cn: types[cn] == "issue", component.nodes))
     prs = list(filter(lambda cn: types[cn] == "pull_request", component.nodes))
-    central = list(filter(lambda cn: numbers[cn] == central, component.nodes))
+    central = list(filter(lambda cn: numbers[cn] in central, component.nodes))
     issue_colors = [
         "#f46d75" if statuses[cn] == "closed" else "#a57cde" if statuses[cn] == "merged" else "#77dd77" for cn in issues
     ]
@@ -146,11 +146,15 @@ def generate_image(
                     )[2]
                 ]
                 if len(relationships_to_highlight[0]) == 3
-                and next(
-                    filter(lambda a: (a[0], a[1]) == (u, v) or (a[0], a[1]) == (v, u), relationships_to_highlight)
-                )[2]
+                and len(
+                    list(filter(lambda a: (a[0], a[1]) == (u, v) or (a[0], a[1]) == (v, u), relationships_to_highlight))
+                )
+                != 0
                 else "#fede00"
-                if next(filter(lambda a: (a[0], a[1]) == (u, v) or (a[0], a[1]) == (v, u), relationships_to_highlight))
+                if len(
+                    list(filter(lambda a: (a[0], a[1]) == (u, v) or (a[0], a[1]) == (v, u), relationships_to_highlight))
+                )
+                != 0
                 else "#000000"
                 for u, v in component.edges
             ]
