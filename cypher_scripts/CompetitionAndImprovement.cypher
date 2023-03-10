@@ -13,18 +13,11 @@ with i_1, collect(distinct pr) as pull_requests_1, collect (distinct pr.user) as
 where size([p_r in pull_requests_1 where p_r.status="merged"]) = 1 and size([p_r in pull_requests_1 where p_r.status="closed"]) >= 1 and size(pull_requests_1) >= 2 and size(users) > 1 and max_date - min_date <= 604800 // dates are in Unix timestamps so difference is in seconds
 with i_1, pull_requests_1, match_relationships_1, [i_1]+pull_requests_1 as competition_match, pr_hub_ids
 
-with i_1, pull_requests_1, match_relationships_1, competition_match, pr_hub_ids+[80808, 92085] as exclude_ids
-match (i_2:issue {status:"closed"})-[r {labels: "fixes"}]-(p_2:pull_request {status: "merged"}), (i2_2:issue {status:"closed"})-[r2]-(p)
-optional match (i2)-[r3]-(p2_2:pull_request {status:"merged"})
-where p2_2.number <> p.number
-with i_1, pull_requests_1, match_relationships_1, i_2, p_2, i2_2, p2_2, [r, r2, r3] as match_relationships_2, apoc.coll.intersection(competition_match, [id(i_2), id(p_2), id(i2_2), id(p2_2)]) as intersection, competition_match
-where (i2_2.creation_date > p_2.creation_date or i2_2.creation_date > i_2.creation_date) and i_2.number <> i2_2.number and p_2.number <> p2_2.number and not id(p_2) in exclude_ids and not id(p2_2) in exclude_ids and (id(i_2) in competition_match or id(p_2) in competition_match or id(i2_2) in competition_match or (p2_2 <> null and id(p2_2) in competition_match))
+match (pr1_2:pull_request)-[r_2 {labels:"fixes"}]-(i_2:issue),(pr1_2)-[r_3]-(pr2_2:pull_request),(pr2_2)-[r_4 {labels:"fixes"}]-(i_2)
+where not id(i_2) in pr_hub_ids and not id(pr1_2) in pr_hub_ids and not id(pr2_2) in pr_hub_ids and pr1_2.number<>pr2_2.number and i_2.status ="closed" and pr1_2.status="merged" and pr2_2.status="merged" and pr2_2.creation_date > pr1_2.creation_date and (pr1_2 in competition_match or i_2 in competition_match or pr2_2 in competition_match)
+with i_1, pull_requests_1, match_relationships_1, pr1_2, i_2, pr2_2, [r_2, r_3, r_4] as match_relationships_2, apoc.coll.intersection(competition_match, [pr1_2,i_2,pr2_2]) as intersection
 
-match (n) where id(n) in intersection 
-with i_1, pull_requests_1, match_relationships_1, i_2, p_2, i2_2, p2_2, match_relationships_2, collect(n) as central
-
-call apoc.path.subgraphAll(central[0], {limit: case 50 > size(pull_requests_1) + 5 when true then 50 when false then size(pull_requests_1) + 5 end, bfs: true })
+call apoc.path.subgraphAll(intersection[0], {limit: case 50 > size(pull_requests_1) + 4 when true then 50 when false then size(pull_requests_1) + 4 end, bfs: true })
 yield nodes, relationships
-return i_1, pull_requests_1, match_relationships_1, i_2, p_2, i2_2, p2_2, match_relationships_2, nodes, relationships, central
+return i_1, pull_requests_1, match_relationships_1, pr1_2,  i_2, pr2_2, match_relationships_2, nodes, relationships, intersection as central
 
-limit 10

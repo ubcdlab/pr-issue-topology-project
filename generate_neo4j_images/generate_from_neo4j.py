@@ -8,7 +8,6 @@ import matplotlib.pyplot as plt
 from random import sample
 from sys import path
 from os import scandir, remove
-from typing import List
 
 
 path.append("..")
@@ -19,8 +18,7 @@ from scripts.helpers import generate_image
 @command()
 @option("--cypher", "cypher_path")
 @option("--name", "query_name")
-@option("--lname", "legend_names", default=[], multiple=True)
-def main(cypher_path: str, query_name: str, legend_names: List[str]):
+def main(cypher_path: str, query_name: str):
     command = open(cypher_path, "r").read()
 
     def run_command(tx):
@@ -39,10 +37,8 @@ def main(cypher_path: str, query_name: str, legend_names: List[str]):
     graph_to_edges_highlight_map = {}
     for record in tqdm(records, total=len(records), leave=False):
         cypher_nodes = record.get("nodes")
-        cypher_edges = (
-            record.get("relationships") + record.get("match_relationships")
-            if "match_relationships" in record.keys()
-            else []
+        cypher_edges = record.get("relationships") + (
+            record.get("match_relationships") if "match_relationships" in record.keys() else []
         )
         if "optional_r" in record.keys() and record.get("optional_r") is not None:
             cypher_edges += [record.get("optional_r")]
@@ -152,7 +148,6 @@ def main(cypher_path: str, query_name: str, legend_names: List[str]):
             relationships_to_highlight=graph_to_edges_highlight_map[graph],
             node_size=250,
             link=graph.graph["link"],
-            legend=[s.capitalize() for s in legend_names],
         )
 
     session.close()
