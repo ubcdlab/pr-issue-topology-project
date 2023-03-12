@@ -38,7 +38,7 @@ Prints or writes information on the time delta between the earliest node creatio
 
 The `--output_csv` flag specifies a location to export the CSV information to.
 
-	By default, the script will only compute statistics for large components, or those with more than 100 nodes. The `--small` flag will compute statistics for small components, or those with 20 nodes or fewer. The `--size` flag will compute statistics only for components of a specific size. `--size` takes precedence over `--small`.
+    By default, the script will only compute statistics for large components, or those with more than 100 nodes. The `--small` flag will compute statistics for small components, or those with 20 nodes or fewer. The `--size` flag will compute statistics only for components of a specific size. `--size` takes precedence over `--small`.
 
 `--save-all` overrides all of these size settings, and will compute statistics for all components.
 
@@ -48,3 +48,34 @@ The `--repo-str` flag can be used to compute statistics only for components in a
 
 This script is used to test if there is a significant difference in the time deltas of large components as opposed to small components. A t-test of the two median deltas returned `p < 1.3 * 10^-9`.
 
+## Neo4J Query Match Size Distributions
+
+`python -m scripts.neo4j_size_distributions --cypher=[cypher_path] --name=[pattern_name] --to-csv=False`
+
+Reads the Cypher query supplied and executes it on a local Neo4J database. Prints a table of statistics mapping the size of a match to its frequency. This is useful for calculating statistics on how many 'spoke' nodes are in matches for topologies with node multiplicity or a star topology (i.e. competition, with its `n` PRs connected to a single issue).
+
+The `--to-csv` parameter will redirect output to a CSV file located in `neo4j_statistics/size_distribution/` named by the `--name` parameter.
+
+## Repo Component Statistics
+
+`python -m scripts.repo_component_statistics --print-repos=False`
+
+Computes the number of connected components in the graph of each repository, and prints summary statistics for their distribution.
+
+The `--print-repos` flag will print an additional table mapping each repository to the number of connected components in it, sorted in decreasing order by number of components.
+
+## Topology Occurrences in Connected Component Statistics
+
+`python -m scripts.topology_cc_occurrences --cypher=[cypher_path] --name=[file_name] --to-csv=False`
+
+Computes match topology connected component opportunities for connected components of each size across all repositories. Prints statistics summaries for each connected component size, ordered by number of matches of the topology in connected components of that size.
+
+MTCO (matched topology component opportunities) describes the number of times the topology could have occurred within a component but did not, over the total number of nodes in the topology. This metric represents how likely a topology occurred by chance in the component, with higher MTCOs indicating that it’s more unlikely a match occurred by chance. MTCOs of 0 indicate that there were no other opportunities of the topology occurring within the component (if all nodes were of a different node type or status, for example), and higher MTCOs represent more potential for a match to have occurred.
+
+Queries passed into this script are expected to have a `proportion` result returned. This result should be match-specific, and should be `# of nodes of same type and same status as a 'main' node in the topology in component / # nodes in component`. See `cypher_scripts/` for examples of how this is computed. This requires calling the query twice: first to collect all possible IDs, then again to search for nodes in a match's connected component and finding 'missed opportunities'.
+
+The `--to-csv` flag saves the results into a CSV file named by `--name` in `neo4j_statistics/`. instead of printing them.
+
+Regenerate statistics in `neo4j_statistics` for all topologies with `./generate_all_topologies.sh`
+
+The script `scripts/topology_repo_occurrences` computes the same statistics, but groups results based on matches within the same repository instead of the same component size across all repositories.

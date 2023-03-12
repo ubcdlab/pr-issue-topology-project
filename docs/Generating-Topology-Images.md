@@ -3,6 +3,7 @@
 We generate images of topologies to aid in visualization and manual coding in several places.
 
 The main helper for this is available in `scripts/helpers`. It takes in several parameters, including:
+
 - a component to graph
 - a key to uniquely identify the graph, usually a component ID or frequency ranking; also used for image filename
 - a title to display at the top of the image
@@ -14,10 +15,19 @@ The main helper for this is available in `scripts/helpers`. It takes in several 
 - optionally, DPI to change the visual size of the image; used in conjunction with the side length
 - optionally, a list of node numbers to highlight
 - optionally, a list of tuples representing directed edges to highlight
+- optionally, a list of 'central' nodes to label with stars; used to represent 'intersecting' nodes when generating images for topology sequences
+- optionally, a GitHub link to one of the nodes in a match
+- optionally, a list of labels to use in a legend; used to label topology highlight colours when more than one topology is matched in a sequence
 
-Images render taking into consideration node status, node type, node number, edge direction, and edge type. A square represents an issue, and a circle represents a PR. Red nodes represent closed nodes, green represents open, and purple represents merged, as in accordance with GitHub UI. Nodes are labelled with their type ("I" for issue or "PR" for pull request) and identifier within the GitHub repository. Edges are labelled with 'fixes' or 'duplicate'; edges of type 'other' are not explicitly labelled. 
+Images render taking into consideration node status, node type, node number, edge direction, and edge type. A square represents an issue, and a circle represents a PR. Red nodes represent closed nodes, green represents open, and purple represents merged, as in accordance with GitHub UI. Nodes are labelled with their type ("I" for issue or "PR" for pull request) and identifier within the GitHub repository. Edges are labelled with 'fixes' or 'duplicate'; edges of type 'other' are not explicitly labelled.
 
 Rendering images can be a bottleneck for processing, especially if the graphs are large. To optimize, many of the image generation scripts utilize multiprocessing on `cpu_count / 2` cores to speed up rendering. The image generation also uses the non-interactive `agg` backend and the `graphviz_layout` to generate visualizations faster. Avoid repeatedly calling `nx.draw()`, and opt to aggregate node and edge attributes like colour into lists to render all at once with calls to `nx.draw_nodes()` or `nx.draw_edges()`.
+
+Image generation relies on the presence of several specially named return variables in the query. Each query must return:
+
+- `nodes`: the nodes in the connected component, usually retrived with `apoc.path.subgraphAll(node, {limit: 50})`
+- `relationships`: the relationships of the connected component, also returned by `apoc.path.subgraphAll()`
+- `match_relationships`: the relationships within the component matched by the actual topology, edges in `match_relationships` may exist in `relationships`
 
 ## Generating Topology Images
 
@@ -31,17 +41,17 @@ Images will be saved to `generate_topology_images/`.
 
 ## Generating Images from Neo4J Query Results
 
-`python -m generate_neo4j_images/generate_from_neo4j --cypher=[cypher_path] --name=[folder_name] --size_distribution=False`
+`python -m generate_neo4j_images/generate_from_neo4j --cypher=[cypher_path] --name=[folder_name]`
 
-Reads the Cypher query supplied, executes it on a local Neo4J database, and writes images to the folder name supplied (e.g. `generate_neo4j_images/competition/`). 
+Reads the Cypher query supplied, executes it on a local Neo4J database, and writes images to the folder name supplied (e.g. `generate_neo4j_images/competition/`).
 
 Requires a `password` file in the same directory (`generate_from_neo4j`) containing the plain text of the Neo4J instance password. The script also assumes the default Neo4J username of `neo4j` is used.
 
-Each folder will contain a random sample of `min(# records / 2, 20)` matches, visualized in context with the connected components they originate from. Each match has been highlighted in yellow. Some images may have multiple highlights, which indicates that multiple instances of the topology pattern were found in that component.
+Each folder will contain a random sample of `min(# records / 2, 20)` matches, visualized in context with the connected components they originate from. Each match has been highlighted in yellow.
 
 The components aren't full components and are limited to 50 nodes surrounding the result to make visualization easier. The full component (i.e. not limited to 50 nodes) may contain more instances of topologies that haven't been randomly sampled, but these instances will not appear in the visualization.
 
-The `--size-distribution` parameter does not generate images, but instead generates a table of the frequency distribution of Neo4J query match sizes.
+Regenerate images for all topologies with `./generate_all_topologies.sh`
 
 ## Generating Images of Connected Components
 
@@ -49,7 +59,7 @@ The `--size-distribution` parameter does not generate images, but instead genera
 
 Generates images of the most frequent components of a given size by reading graph data from local Pickle files in `raw_data/`. Images are placed in folders according to their size. Within each size folder, the images will be keyed by their ranking (i.e. `0.png` was most frequent component, `19.png` was the 20th most frequent component).
 
-These images are an *example* of the most frequent connected component of that size. Other isomorphic connected components will count towards the connected component's frequency but not be visualized separately.
+These images are an _example_ of the most frequent connected component of that size. Other isomorphic connected components will count towards the connected component's frequency but not be visualized separately.
 
 Images are titled with their component frequencies (both absolute and percentage of all components of size).
 
@@ -60,3 +70,19 @@ If `--edge-direction` is true, the graph will render as an undirected graph (i.e
 For documentation on the `--size`, `--status`, and `--edge-direction` parameters, see documentation on [Most Frequent Connected Components](./Most-Frequent-CCs.md).
 
 Images will be saved to `image_dump/[size]/`.
+
+## Generating Images of Sequential Topology Matches
+
+`python -m generate_neo4j_images.generate_pattern_sequences --cypher=[cypher_path] --name=[pattern_name] --lname=[first_pattern_name] --lname=[second_pattern_name] ...`
+
+Generates images from a Neo4J topology query. See above for more information on image generation.
+
+A 'sequential' topology match is defined as a topology match in which one of its nodes is also part of another match for another topology.
+
+Queries passed into this script expect results columns to be labelled in the format `[variable_name]_[1, 2, 3...]`. For example, a query should return `nodes, relationships, pr_1, i_1, match_relationships_1, pr_2, i_2, i2_2, match_relationships_2`. See `cypher_scripts/` for more examples.
+
+It is important that each topology returns its own `match_relationships` object. They will be coloured differently in the end image to differentiate topologies.
+
+There can be any number of `--lname` parameters, corresponding to the names of the topologies making up a topology sequence. They should be in the same order as matched, i.e. the topology whose results are labelled with `_1` in the query should be provided in the CLI first. These names will appear in a legend in each image.
+
+In these images, any nodes matched in both topologies will be additionally labelled with a star. They represent the 'intersection' of the two topologies.
