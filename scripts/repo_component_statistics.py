@@ -1,13 +1,9 @@
 from collections import defaultdict
 from statistics import median, pstdev, fmean
 from sys import path
-from os import makedirs
-from os.path import isfile
 from pathlib import Path
-from typing import Any
 import networkx as nx
 import matplotlib.pyplot as plt
-from matplotlib import use
 from prettytable import PrettyTable
 from tqdm import tqdm
 from multiprocessing import Pool, cpu_count
@@ -15,7 +11,7 @@ from click import command, option
 
 path.append("..")
 
-from scripts.helpers import all_graphs, num_graphs, to_json, generate_image
+from scripts.helpers import all_graphs, num_graphs, to_json
 from pipeline.picklereader import PickleReader
 from pipeline.NetworkVisCreator import NetworkVisCreator
 
