@@ -9,22 +9,21 @@ return collect(distinct id(hub))+apoc.coll.toSet(apoc.coll.flatten(collect(pr_id
 
 match (i_1:issue)-[r {labels:"fixes"}]-(pr:pull_request)
 where i_1.status = "closed"
-with i_1, collect(distinct pr) as pull_requests_1, collect (distinct pr.user) as users, collect(r) as match_relationships_1, max(pr.creation_date) as max_date, min(pr.creation_date) as min_date, pr_hub_ids
+with i_1, collect(distinct pr) as pull_requests_1, collect(distinct id(pr)) as pr_ids, collect (distinct pr.user) as users, collect(r) as match_relationships_1, max(pr.creation_date) as max_date, min(pr.creation_date) as min_date, pr_hub_ids
 where size([p_r in pull_requests_1 where p_r.status="merged"]) = 1 and size([p_r in pull_requests_1 where p_r.status="closed"]) >= 1 and size(pull_requests_1) >= 2 and size(users) > 1 and max_date - min_date <= 604800 // dates are in Unix timestamps so difference is in seconds
-with i_1, pull_requests_1, match_relationships_1, [i_1]+pull_requests_1 as competition_match, pr_hub_ids
+with i_1, pull_requests_1, match_relationships_1, [id(i_1)]+pr_ids as competition_match, pr_hub_ids
 
 with i_1, pull_requests_1, match_relationships_1, competition_match, pr_hub_ids+[80808, 92085] as exclude_ids
 match (i_2:issue {status:"closed"})-[r {labels: "fixes"}]-(p_2:pull_request {status: "merged"}), (i2_2:issue {status:"closed"})-[r2]-(p)
-optional match (i2)-[r3]-(p2_2:pull_request {status:"merged"})
-where p2_2.number <> p.number
+where (id(i_2) in competition_match or id(p_2) in competition_match or id(i2_2) in competition_match) and not id(p_2) in exclude_ids and (i2_2.creation_date > p_2.creation_date or i2_2.creation_date > i_2.creation_date) and i_2.number <> i2_2.number
+optional match (i2)-[r3]-(p2_2:pull_request {status:"merged"}) where p2_2.number <> p.number and not id(p2_2) in exclude_ids
 with i_1, pull_requests_1, match_relationships_1, i_2, p_2, i2_2, p2_2, [r, r2, r3] as match_relationships_2, apoc.coll.intersection(competition_match, [id(i_2), id(p_2), id(i2_2), id(p2_2)]) as intersection, competition_match
-where (i2_2.creation_date > p_2.creation_date or i2_2.creation_date > i_2.creation_date) and i_2.number <> i2_2.number and p_2.number <> p2_2.number and not id(p_2) in exclude_ids and not id(p2_2) in exclude_ids and (id(i_2) in competition_match or id(p_2) in competition_match or id(i2_2) in competition_match or (p2_2 <> null and id(p2_2) in competition_match))
 
-match (n) where id(n) in intersection 
-with i_1, pull_requests_1, match_relationships_1, i_2, p_2, i2_2, p2_2, match_relationships_2, collect(n) as central
+call apoc.get.nodes(intersection)
+yield node as central
 
 call apoc.path.subgraphAll(central[0], {limit: case 50 > size(pull_requests_1) + 5 when true then 50 when false then size(pull_requests_1) + 5 end, bfs: true })
 yield nodes, relationships
 return i_1, pull_requests_1, match_relationships_1, i_2, p_2, i2_2, p2_2, match_relationships_2, nodes, relationships, central
 
-limit 10
+limit 100
