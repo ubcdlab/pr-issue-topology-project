@@ -29,6 +29,9 @@ class IssuePrCountStatistics:
     pr_open: int
     pr_closed: int
     pr_merged: int
+    edges_fixes: int
+    edges_duplicate: int
+    edges_count: int
     count: int
 
 
@@ -118,6 +121,12 @@ def main():
                             else:
                                 to_add_to.issue_closed += 1
                             to_add_to.issue_count += 1
+                    for edge in res.subgraph(component).edges(data=True):
+                        if edge[2]["link_type"] == "fixes":
+                            to_add_to.edges_fixes += 1
+                        elif edge[2]["link_type"] == "duplicate":
+                            to_add_to.edges_duplicate += 1
+                        to_add_to.edges_count += 1
                 pbar.update()
 
     table = PrettyTable()
@@ -129,6 +138,9 @@ def main():
         "PRs",
         "PRs %",
         "PR Status Distribution",
+        "Edges",
+        "Fixes Edges #, %",
+        "Duplicate Edges #, %",
     ]
     table.add_row(
         [
@@ -139,6 +151,9 @@ def main():
             small_statistics.pr_count,
             f"{small_statistics.pr_count/small_statistics.count:.2%}",
             f"{small_statistics.pr_open/small_statistics.pr_count:.2%} open, {small_statistics.pr_closed/small_statistics.pr_count:.2%} closed, {small_statistics.pr_merged/small_statistics.pr_count:.2%} merged",
+            small_statistics.edges_count,
+            f"{small_statistics.edges_fixes/small_statistics.edges_count:.2%} ({small_statistics.edges_fixes})"
+            f"{small_statistics.edges_duplicate/small_statistics.edges_count:.2%} ({small_statistics.edges_duplicate})",
         ]
     )
     print(table)
@@ -162,6 +177,9 @@ def main():
             large_statistics.pr_count,
             f"{large_statistics.pr_count/large_statistics.count:.2%}",
             f"{large_statistics.pr_open/large_statistics.pr_count:.2%} open, {large_statistics.pr_closed/large_statistics.pr_count:.2%} closed, {large_statistics.pr_merged/large_statistics.pr_count:.2%} merged",
+            large_statistics.edges_count,
+            f"{large_statistics.edges_fixes/large_statistics.edges_count:.2%} ({large_statistics.edges_fixes})"
+            f"{large_statistics.edges_duplicate/large_statistics.edges_count:.2%} ({large_statistics.edges_duplicate})",
         ]
     )
     print(table)
