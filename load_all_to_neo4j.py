@@ -12,9 +12,8 @@ from pipeline.NetworkVisCreator import NetworkVisCreator
 pr = PickleReader([])
 nwvc = NetworkVisCreator(None, [])
 cypher_command = []
-
-
 path_list_len = len(list(all_graphs()))
+
 for path in tqdm(all_graphs(), total=path_list_len, leave=True):
     path_str = str(path)
     target_repo = to_json(path_str)["repo_url"].replace("https://github.com/", "")
@@ -53,7 +52,12 @@ for path in tqdm(all_graphs(), total=path_list_len, leave=True):
             local_graph.add_edge(
                 f"{target_repo}#{mention.source.issue.number}",
                 f"{target_repo}#{node.number}",
-                link_type=nwvc.find_automatic_links(node.number, mention.source.issue.body, mentioning_issue_comments),
+                link_type=nwvc.find_automatic_links(
+                    node.number,
+                    mention.source.issue.body,
+                    mentioning_issue_comments,
+                    repo=target_repo.replace("/", r"\/"),
+                ),
                 labels=nwvc.find_automatic_links(node.number, mention.source.issue.body, mentioning_issue_comments),
                 user=mention.actor.login if mention.actor else "",
                 link_url=mention.source.issue.html_url,

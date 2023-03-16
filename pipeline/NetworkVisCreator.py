@@ -315,12 +315,12 @@ class NetworkVisCreator(picklereader.PickleReader):
 
         return graph_dict
 
-    def find_automatic_links(self, issue_number, issue_body, comments):
+    def find_automatic_links(self, issue_number, issue_body, comments, repo=""):
         if issue_body is None:
             issue_body = ""
         if comments is None:
             comments = []
-        REGEX_STRING = f"(close|closes|closed|fix|fixes|fixed|resolve|resolves|resolved) #{issue_number}"
+        REGEX_STRING = rf"(close|closes|closed|fix|fixes|fixed|resolve|resolves|resolved) (#{issue_number}|(http(s)?:\/\/)?github.com\/{repo}\/(pull|issues)/{issue_number})"
         REGEX_DUPLICATE_STRING = f"Duplicate of #{issue_number}"
 
         match = re.search(REGEX_STRING, issue_body, re.IGNORECASE)
