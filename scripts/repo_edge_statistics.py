@@ -83,7 +83,8 @@ def parallelize_graph_processing(path: Path):
 
 @command()
 @option("--print-repos", "print_repos", is_flag=True, default=False)
-def main(print_repos: bool):
+@option("--print-absolute", "print_abs", is_flag=True, default=False)
+def main(print_repos: bool, print_abs: bool):
     total = RepoLinkStatistics(0, 0, 0)
     repo_to_rls = {}
 
@@ -112,7 +113,7 @@ def main(print_repos: bool):
 
     table = PrettyTable()
     table.field_names = ["Type", "% of Total", "Min", "Max", "Mean", "Median", "STDEV"]
-    print("Total count: ", total.count)
+    print("Total count:", total.count)
     table.add_row(
         [
             "Fixes",
@@ -136,6 +137,20 @@ def main(print_repos: bool):
         ]
     )
     print(table)
+
+    if print_abs:
+        table = PrettyTable()
+        table.field_names = ["Min", "Max", "Mean", "Median", "STDEV"]
+        table.add_row(
+            [
+                f"{min(map(lambda x: x.count, repo_to_rls.values()))}",
+                f"{max(map(lambda x: x.count, repo_to_rls.values()))}",
+                f"{fmean(map(lambda x: x.count, repo_to_rls.values()))}",
+                f"{median(map(lambda x: x.count, repo_to_rls.values()))}",
+                f"{stdev(map(lambda x: x.count, repo_to_rls.values()))}",
+            ]
+        )
+        print(table)
 
 
 if __name__ == "__main__":
