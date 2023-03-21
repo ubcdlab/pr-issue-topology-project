@@ -24,3 +24,5 @@ tmp.sh
 repo_component_size_freq_img/*.png
 misc_images/*.png
 repo_to_point_map.pickle
+repo_to_edges_map.pickle
+repo_to_density_map.pickle

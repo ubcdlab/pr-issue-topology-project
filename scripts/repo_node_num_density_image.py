@@ -79,41 +79,38 @@ def parallelize_graph_processing(path: Path):
 
 
 def main():
-    repo_to_point_map = defaultdict(dict)
+    repo_to_density_map = defaultdict(dict)
     font = {"fontname": "IBM Plex Sans"}
-    if not os_path.exists("repo_to_point_map.pickle"):
+    if not os_path.exists("repo_to_density_map.pickle"):
         with Pool(cpu_count() // 2) as p:
             with tqdm(total=num_graphs(), leave=False) as pbar:
                 for res in p.imap_unordered(
                     parallelize_graph_processing,
                     all_graphs(),
                 ):
-                    repo_to_point_map[res.graph["repository"]] = {}
-                    repo_to_point_map[res.graph["repository"]][res.number_of_nodes()] = nx.number_connected_components(
-                        res
-                    )
+                    repo_to_density_map[res.graph["repository"]] = {}
+                    repo_to_density_map[res.graph["repository"]][res.number_of_nodes()] = nx.density(res)
 
                     pbar.update()
-        with open("repo_to_point_map.pickle", "wb") as x:
-            dump(repo_to_point_map, x)
+        with open("repo_to_density_map.pickle", "wb") as x:
+            dump(repo_to_density_map, x)
     else:
-        with open("repo_to_point_map.pickle", "rb") as x:
-            repo_to_point_map = load(x)
+        with open("repo_to_density_map.pickle", "rb") as x:
+            repo_to_density_map = load(x)
 
     plt.rcParams["font.sans-serif"] = "IBM Plex Sans"
     plt.rcParams["font.family"] = "sans-serif"
     plt.xlabel("Number of Nodes (log scale)", **font)
-    plt.ylabel("Number of Connected Components (log scale)", **font)
+    plt.ylabel("Density", **font)
     ax = plt.gca()
-    ax.set_yscale("log")
     ax.set_xscale("log")
     legend = None
-    plt.title(f"Node to connected component counts for all projects", **font)
+    plt.title(f"Node count to graph density for all projects", **font)
     cmap = plt.cm.get_cmap("RdYlGn", num_graphs())
-    repo_to_point_map = dict(
-        sorted(repo_to_point_map.items(), key=lambda item: list(item[1].values())[0], reverse=True)
+    repo_to_density_map = dict(
+        sorted(repo_to_density_map.items(), key=lambda item: list(item[1].values())[0], reverse=True)
     )
-    for i, data_dict in enumerate(repo_to_point_map.values()):
+    for i, data_dict in enumerate(repo_to_density_map.values()):
         x = data_dict.keys()
         y = data_dict.values()
         plt.scatter(x, y, color=cmap(i))
@@ -121,18 +118,18 @@ def main():
     ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
     min_top = [
         plt.Line2D([0], [0], color="w", marker="o", markerfacecolor=cmap(i), label=x, markersize=8)
-        for i, x in enumerate(list(repo_to_point_map.keys())[:5])
+        for i, x in enumerate(list(repo_to_density_map.keys())[:5])
     ]
     max_top = [
         plt.Line2D([0], [0], color="w", marker="o", markerfacecolor=cmap(num_graphs() - 5 + i), label=x, markersize=8)
-        for i, x in enumerate(list(repo_to_point_map.keys())[-5:])
+        for i, x in enumerate(list(repo_to_density_map.keys())[-5:])
     ]
     plt.legend(handles=min_top + max_top, loc="center left", bbox_to_anchor=(1, 0.5))
     try:
         makedirs("misc_images/")
     except:
         pass
-    plt.savefig(f"misc_images/nodes_to_num_components.png", bbox_inches="tight", dpi=150)
+    plt.savefig(f"misc_images/nodes_to_densities.png", bbox_inches="tight", dpi=150)
 
 
 if __name__ == "__main__":
