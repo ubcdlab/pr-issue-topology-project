@@ -23,3 +23,4 @@ cypher_scripts/PR_Stack_Gen.cypher
 tmp.sh
 repo_component_size_freq_img/*.png
 misc_images/*.png
+repo_to_point_map.pickle
