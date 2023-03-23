@@ -104,12 +104,15 @@ def main():
     plt.ylabel("Density", **font)
     ax = plt.gca()
     ax.set_xscale("log")
+    ax.spines[["right", "top"]].set_visible(False)
     legend = None
-    plt.title(f"Node count to graph density for all projects", **font)
     cmap = plt.cm.get_cmap("RdYlGn", num_graphs())
     repo_to_density_map = dict(
         sorted(repo_to_density_map.items(), key=lambda item: list(item[1].values())[0], reverse=True)
     )
+    ax.set_axisbelow(True)
+    ax.yaxis.grid(True, zorder=-1, which="major", color="#ddd")
+    ax.xaxis.grid(True, zorder=-1, which="minor", color="#ddd")
     for i, data_dict in enumerate(repo_to_density_map.values()):
         x = data_dict.keys()
         y = data_dict.values()

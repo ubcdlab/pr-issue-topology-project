@@ -107,9 +107,12 @@ def main():
     ax = plt.gca()
     ax.set_yscale("log")
     ax.set_xscale("log")
+    ax.spines[["right", "top"]].set_visible(False)
     legend = None
-    plt.title(f"Node to connected component counts for all projects", **font)
     cmap = plt.cm.get_cmap("RdYlGn", num_graphs())
+    ax.set_axisbelow(True)
+    ax.yaxis.grid(True, zorder=-1, which="minor", color="#ddd")
+    ax.xaxis.grid(True, zorder=-1, which="minor", color="#ddd")
     repo_to_point_map = dict(
         sorted(repo_to_point_map.items(), key=lambda item: list(item[1].values())[0], reverse=True)
     )

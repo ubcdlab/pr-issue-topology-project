@@ -105,12 +105,15 @@ def main():
     ax = plt.gca()
     ax.set_yscale("log")
     ax.set_xscale("log")
+    ax.spines[["right", "top"]].set_visible(False)
     legend = None
-    plt.title(f"Node to edge counts for all projects", **font)
     cmap = plt.cm.get_cmap("RdYlGn", num_graphs())
     repo_to_edges_map = dict(
         sorted(repo_to_edges_map.items(), key=lambda item: list(item[1].values())[0], reverse=True)
     )
+    ax.set_axisbelow(True)
+    ax.yaxis.grid(True, zorder=-1, which="minor", color="#ddd")
+    ax.xaxis.grid(True, zorder=-1, which="minor", color="#ddd")
     for i, data_dict in enumerate(repo_to_edges_map.values()):
         x = data_dict.keys()
         y = data_dict.values()
@@ -131,6 +134,7 @@ def main():
     except:
         pass
     plt.savefig(f"misc_images/nodes_to_edges.png", bbox_inches="tight", dpi=150)
+    print(repo_to_edges_map.keys(), repo_to_edges_map["Rapptz/discord.py"])
 
 
 if __name__ == "__main__":
