@@ -75,15 +75,36 @@ def parallelize_graph_processing(path: Path):
 
 @command()
 @option("--print-repos", "print_repos", is_flag=True, default=False)
-def main(print_repos: bool):
+@option("--isolated", "isolated", is_flag=True, default=False)
+@option("--diad", "diad", is_flag=True, default=False)
+@option("--iandd", "iandd", is_flag=True, default=False)
+def main(print_repos: bool, isolated: bool, diad: bool, iandd: bool):
     total_components = 0
-    repo_to_components = defaultdict(int)
+    total_isolates = 0
+    total_diad = 0
+    repo_to_components = defaultdict(float)
 
     with Pool(cpu_count() // 2) as p:
         with tqdm(total=num_graphs(), leave=False) as pbar:
             for res in p.imap_unordered(parallelize_graph_processing, all_graphs()):
-                total_components += nx.number_connected_components(res)
-                repo_to_components[res.graph["repository"]] = nx.number_connected_components(res)
+                if isolated:
+                    total_isolates += len(list(nx.isolates(res)))
+                    repo_to_components[res.graph["repository"]] = len(
+                        list(nx.isolates(res))
+                    ) / nx.number_connected_components(res)
+                elif diad:
+                    diads = len(list(filter(lambda x: len(x) == 2, nx.connected_components(res))))
+                    total_diad += diads
+                    repo_to_components[res.graph["repository"]] = diads / nx.number_connected_components(res)
+                elif iandd:
+                    diads = len(list(filter(lambda x: len(x) == 2, nx.connected_components(res))))
+                    total_components += diads + len(list(nx.isolates(res)))
+                    repo_to_components[res.graph["repository"]] = (
+                        diads + len(list(nx.isolates(res)))
+                    ) / nx.number_connected_components(res)
+                else:
+                    total_components += nx.number_connected_components(res)
+                    repo_to_components[res.graph["repository"]] = nx.number_connected_components(res)
                 pbar.update()
 
     if print_repos:
@@ -95,7 +116,20 @@ def main(print_repos: bool):
         print(table)
 
     table = PrettyTable()
-    table.field_names = ["Total Component Count", "Min", "Max", "Mean", "Median", "STDEV"]
+    table.field_names = [
+        "Total Component Count"
+        if not isolated
+        else "Total Isolated Node Count"
+        if not diad
+        else "Total Diad Node Count"
+        if not iandd
+        else "Total Isolated + Diad Node Count",
+        "Min",
+        "Max",
+        "Mean",
+        "Median",
+        "STDEV",
+    ]
     table.add_row(
         [
             total_components,
@@ -104,6 +138,15 @@ def main(print_repos: bool):
             fmean(repo_to_components.values()),
             median(repo_to_components.values()),
             pstdev(repo_to_components.values()),
+        ]
+        if not isolated and not diad and not iandd
+        else [
+            total_isolates if isolated else total_diad if not iandd else total_components,
+            f"{min(repo_to_components.values()):.2%}",
+            f"{max(repo_to_components.values()):.2%}",
+            f"{fmean(repo_to_components.values()):.2%}",
+            f"{median(repo_to_components.values()):.2%}",
+            f"{pstdev(repo_to_components.values()):.2%}",
         ]
     )
     print(table)
