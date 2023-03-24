@@ -8,6 +8,7 @@ from pathlib import Path
 import networkx as nx
 import matplotlib.pyplot as plt
 from matplotlib import rc
+from numpy import corrcoef
 from prettytable import PrettyTable
 from tqdm import tqdm
 from multiprocessing import Pool, cpu_count
@@ -78,7 +79,9 @@ def parallelize_graph_processing(path: Path):
     return local_graph
 
 
-def main():
+@command()
+@option("--print-corr", "print_corr", is_flag=True, default=False)
+def main(print_corr: bool):
     repo_to_density_map = defaultdict(dict)
     font = {"fontname": "IBM Plex Sans"}
     if not os_path.exists("repo_to_density_map.pickle"):
@@ -113,10 +116,14 @@ def main():
     ax.set_axisbelow(True)
     ax.yaxis.grid(True, zorder=-1, which="major", color="#ddd")
     ax.xaxis.grid(True, zorder=-1, which="minor", color="#ddd")
+    xs = []
+    ys = []
     for i, data_dict in enumerate(repo_to_density_map.values()):
         x = data_dict.keys()
         y = data_dict.values()
         plt.scatter(x, y, color=cmap(i))
+        xs.extend(x)
+        ys.extend(y)
     box = ax.get_position()
     ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
     min_top = [
@@ -133,6 +140,7 @@ def main():
     except:
         pass
     plt.savefig(f"misc_images/nodes_to_densities.png", bbox_inches="tight", dpi=150)
+    print(corrcoef(xs, ys))
 
 
 if __name__ == "__main__":
