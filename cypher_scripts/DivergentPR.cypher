@@ -1,14 +1,11 @@
-//Optimization
 call {
-match (pr:pull_request)-[r {labels:"fixes"}]-(i:issue)
-where pr.status = "merged"
+match (pr:pull_request {status: "merged"})-[r {labels:"fixes"}]-(i:issue)
 with pr, collect(distinct i) as issues, collect(distinct r) as match_relationships
 where size([issue in issues where issue.status="closed"]) > 1
 return collect(distinct id(pr)) as known_optimization
 }
 
-match (pr:pull_request)-[r {labels:"fixes"}]-(i:issue)
-where pr.status = "merged"
+match (pr:pull_request {status: "merged"})-[r {labels:"fixes"}]-(i:issue)
 with pr, collect(distinct i) as issues, collect(distinct r) as match_relationships, known_optimization
 where size([issue in issues where issue.status="closed"]) > 1
 with pr, [issue in issues where issue.status="closed"] as closed_issues, match_relationships, known_optimization

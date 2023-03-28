@@ -1,4 +1,3 @@
-//Duplicate Hub
 call {
 match (i:issue)-[r {labels:"duplicate"}]-(i2:issue)
 where i2.creation_date > i.creation_date and i2.user <> i.user
