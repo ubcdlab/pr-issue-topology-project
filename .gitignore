@@ -27,3 +27,4 @@ repo_to_point_map.pickle
 repo_to_edges_map.pickle
 repo_to_density_map.pickle
 cc_size_to_duration.pickle
+dd_blot.pickle
