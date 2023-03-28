@@ -38,7 +38,7 @@ Prints or writes information on the time delta between the earliest node creatio
 
 The `--output_csv` flag specifies a location to export the CSV information to.
 
-    By default, the script will only compute statistics for large components, or those with more than 100 nodes. The `--small` flag will compute statistics for small components, or those with 20 nodes or fewer. The `--size` flag will compute statistics only for components of a specific size. `--size` takes precedence over `--small`.
+    By default, the script will only compute statistics for large components, or those with more than 100 nodes. The `--small` flag will compute statistics for small components, or those with 10 nodes or fewer. The `--size` flag will compute statistics only for components of a specific size. `--size` takes precedence over `--small`.
 
 `--save-all` overrides all of these size settings, and will compute statistics for all components.
 

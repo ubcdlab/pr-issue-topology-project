@@ -23,10 +23,6 @@ pr = PickleReader([])
 nwvc = NetworkVisCreator(None, [])
 
 
-def power_law(x, m, c):
-    return x**m * c
-
-
 def parallelize_graph_processing(path: Path):
     path_str = str(path)
     target_repo = to_json(path_str)["repo_url"].replace("https://github.com/", "")
@@ -98,123 +94,12 @@ def main(print_plaw: bool):
     ax.yaxis.grid(True, zorder=-1, which="major", color="#ddd")
     ax.xaxis.grid(True, zorder=-1, which="minor", color="#ddd")
     deg_to_freq_map = defaultdict(int)
-    deg_to_freq_map = {
-        0: 55878,
-        1: 22216,
-        2: 7457,
-        3: 2789,
-        4: 1230,
-        5: 593,
-        6: 315,
-        7: 183,
-        8: 112,
-        9: 96,
-        10: 44,
-        11: 36,
-        12: 24,
-        13: 29,
-        14: 14,
-        15: 10,
-        16: 7,
-        17: 11,
-        18: 10,
-        19: 6,
-        20: 4,
-        21: 6,
-        22: 4,
-        23: 5,
-        24: 8,
-        25: 2,
-        26: 6,
-        27: 0,
-        28: 0,
-        29: 6,
-        30: 2,
-        31: 0,
-        32: 2,
-        33: 1,
-        34: 0,
-        35: 1,
-        36: 2,
-        37: 1,
-        38: 1,
-        39: 0,
-        40: 1,
-        41: 1,
-        42: 1,
-        43: 0,
-        44: 2,
-        45: 0,
-        46: 1,
-        47: 0,
-        48: 2,
-        49: 1,
-        50: 0,
-        51: 1,
-        52: 0,
-        53: 1,
-        54: 0,
-        55: 0,
-        56: 1,
-        57: 0,
-        58: 0,
-        59: 0,
-        60: 0,
-        61: 0,
-        62: 0,
-        63: 0,
-        64: 0,
-        65: 0,
-        66: 0,
-        67: 0,
-        68: 0,
-        69: 0,
-        70: 0,
-        71: 1,
-        72: 0,
-        73: 0,
-        74: 0,
-        75: 0,
-        76: 0,
-        77: 0,
-        78: 0,
-        79: 0,
-        80: 0,
-        81: 0,
-        82: 0,
-        83: 0,
-        84: 0,
-        85: 0,
-        86: 0,
-        87: 0,
-        88: 0,
-        89: 1,
-        90: 0,
-        91: 0,
-        92: 0,
-        93: 0,
-        94: 0,
-        95: 0,
-        96: 0,
-        97: 0,
-        98: 0,
-        99: 0,
-        100: 0,
-        101: 0,
-        102: 0,
-        103: 0,
-        104: 0,
-        105: 0,
-        106: 0,
-        107: 1,
-    }
-    deg_to_freq_map = dict(filter(lambda x: x[1] != 0, deg_to_freq_map.items()))
-    # with Pool(cpu_count() // 2) as p:
-    #    with tqdm(total=num_graphs(), leave=False) as pbar:
-    #        for res in p.imap_unordered(parallelize_graph_processing, all_graphs()):
-    #            for i, val in enumerate(nx.degree_histogram(res)):
-    #                deg_to_freq_map[i] += val
-    #            pbar.update()
+    with Pool(cpu_count() // 2) as p:
+        with tqdm(total=num_graphs(), leave=False) as pbar:
+            for res in p.imap_unordered(parallelize_graph_processing, all_graphs()):
+                for i, val in enumerate(nx.degree_histogram(res)):
+                    deg_to_freq_map[i] += val
+                pbar.update()
     num_nodes = []
     for i in range(1, max(deg_to_freq_map.keys()) + 1):
         num_nodes.append(deg_to_freq_map.get(i, 0))
@@ -223,11 +108,6 @@ def main(print_plaw: bool):
     if print_plaw:
         print("α:", fit.power_law.alpha)
         print("KS:", fit.power_law.KS())
-    # plt.scatter(deg_to_freq_map.keys(), deg_to_freq_map.values())
-    # fit.power_law.plot_pdf(
-    #    color="dimgray",
-    #    linestyle="--",
-    # )
     plplot(num_nodes, fit.power_law.xmin, fit.power_law.alpha, fit.power_law.KS())
     try:
         makedirs("misc_images/")
