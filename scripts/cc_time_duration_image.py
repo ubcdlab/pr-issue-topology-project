@@ -84,7 +84,7 @@ def main():
                     all_graphs(),
                 ):
                     for cc in res:
-                        cc_size_to_duration_map[cc.size].append(cc.max_time - cc.min_time)
+                        cc_size_to_duration_map[cc.size].append((cc.max_time - cc.min_time) / 86400)
 
                     pbar.update()
         with open("cc_size_to_duration.pickle", "wb") as x:
@@ -96,7 +96,7 @@ def main():
     plt.rcParams["font.sans-serif"] = "IBM Plex Sans"
     plt.rcParams["font.family"] = "sans-serif"
     plt.xlabel("Component Size", **font)
-    plt.ylabel("Component Duration (log scale, sec.)", **font)
+    plt.ylabel("Component Duration (log scale, days.)", **font)
     ax = plt.gca()
     ax.set_yscale("log")
     ax.set_xscale("log")
@@ -104,16 +104,22 @@ def main():
     ax.set_axisbelow(True)
     ax.yaxis.grid(True, zorder=-1, which="minor", color="#ddd")
     ax.xaxis.grid(True, zorder=-1, which="minor", color="#ddd")
+    cc_size_to_duration_map = dict(sorted(cc_size_to_duration_map.items(), key=lambda x: x[0]))
     plt.bar(
         list(cc_size_to_duration_map.keys()),
-        list(map(lambda x: mean(x), cc_size_to_duration_map.values())),
+        list(map(lambda x: x / 86400, list(map(lambda x: mean(x), cc_size_to_duration_map.values())))),
         width=0.1 * array(list(cc_size_to_duration_map.keys())),
     )
-    non_singular = dict(filter(lambda x: len(x[1]) > 1, cc_size_to_duration_map.items()))
+    non_singular = dict(filter(lambda x: len(x[1]) > 1, list(cc_size_to_duration_map.items())[:31]))
     plt.errorbar(
         list(non_singular.keys()),
-        list(map(lambda x: mean(x), non_singular.values())),
-        yerr=list(map(lambda x: stdev(x) / sqrt(len(x)) if len(x) > 1 else 0, non_singular.values())),
+        list(map(lambda x: x / 86400, list(map(lambda x: mean(x), non_singular.values())))),
+        yerr=list(
+            map(
+                lambda x: x / 86400,
+                list(map(lambda x: stdev(x) / sqrt(len(x)) if len(x) > 1 else 0, list(non_singular.values()))),
+            )
+        ),
         capsize=3,
         linestyle="None",
         fmt="",
