@@ -93,6 +93,7 @@ def main():
     ax.yaxis.set_visible(False)
     if not isfile("dd_blot.pickle"):
         fits = []
+        repo_to_fit_map = {}
         with Pool(cpu_count() // 2) as p:
             with tqdm(total=num_graphs(), leave=False) as pbar:
                 for res in p.imap_unordered(parallelize_graph_processing, all_graphs()):
@@ -105,19 +106,24 @@ def main():
 
                     fit = Fit(num_nodes, discrete=True)
                     fits.append(fit.power_law.alpha)
+                    repo_to_fit_map[res.graph["repository"]] = fit.power_law.alpha
                     pbar.update()
         with open("dd_blot.pickle", "wb") as x:
             dump(fits, x)
+        with open("dd_blot_map.pickle", "wb") as x:
+            dump(repo_to_fit_map, x)
     else:
         with open("dd_blot.pickle", "rb") as x:
             fits = load(x)
+        with open("dd_blot_map.pickle", "rb") as x:
+            repo_to_fit_map = load(x)
     quantiles = quantile(fits, array([0.00, 0.25, 0.50, 0.75, 1.00]))
     ax.vlines(quantiles, [1] * quantiles.size, [1.2] * quantiles.size, color="black", ls=":", lw=0.5, zorder=0)
     ax.set_ylim(1, 1.3)
     for i in range(len(quantiles)):
         ax.text(quantiles[i], 1.22, f"{quantiles[i]:.3f}", **font, fontsize=8, ha="center")
     ax.set_ylim(0.5, 1.5)
-    plt.boxplot(fits, vert=False)
+    plt.boxplot(fits, vert=False, patch_artist=True)
 
     try:
         makedirs("misc_images/")
@@ -125,6 +131,7 @@ def main():
         pass
     plt.tight_layout()
     plt.savefig(f"misc_images/degree_distribution_bplot.png", bbox_inches="tight", dpi=150)
+    print(dict(filter(lambda x: x[1] > quantiles[3] + 3 * (quantiles[3] - quantiles[1]) / 2, repo_to_fit_map.items())))
 
 
 if __name__ == "__main__":
