@@ -86,11 +86,13 @@ def main():
     font = {"fontname": "IBM Plex Sans"}
     plt.rcParams["font.sans-serif"] = "IBM Plex Sans"
     plt.rcParams["font.family"] = "sans-serif"
-    plt.xlabel("Power Law Exponent ", **font)
+    plt.xlabel("Power Law Exponent ", **font, fontsize=12)
     # plt.ylabel("Frequency", **font)
     ax = plt.gca()
     ax.set_axisbelow(True)
     ax.yaxis.set_visible(False)
+    plt.rc("xtick", labelsize=12)
+    ax.spines[["right", "top", "left"]].set_visible(False)
     if not isfile("dd_blot.pickle"):
         fits = []
         repo_to_fit_map = {}
@@ -117,13 +119,14 @@ def main():
             fits = load(x)
         with open("dd_blot_map.pickle", "rb") as x:
             repo_to_fit_map = load(x)
+    fits = list(map(lambda x: x + 1, fits))
     quantiles = quantile(fits, array([0.00, 0.25, 0.50, 0.75, 1.00]))
     ax.vlines(quantiles, [1] * quantiles.size, [1.2] * quantiles.size, color="black", ls=":", lw=0.5, zorder=0)
     ax.set_ylim(1, 1.3)
     for i in range(len(quantiles)):
-        ax.text(quantiles[i], 1.22, f"{quantiles[i]:.3f}", **font, fontsize=8, ha="center")
+        ax.text(quantiles[i], 1.22, f"{quantiles[i]:.2f}", **font, fontsize=12, ha="center")
     ax.set_ylim(0.5, 1.5)
-    plt.boxplot(fits, vert=False, patch_artist=True)
+    plt.boxplot(fits, vert=False)
 
     try:
         makedirs("misc_images/")

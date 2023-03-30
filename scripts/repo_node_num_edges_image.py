@@ -98,10 +98,13 @@ def main():
         with open("repo_to_edges_map.pickle", "rb") as x:
             repo_to_edges_map = load(x)
 
+    plt.figure(figsize=(8, 4))
+
     plt.rcParams["font.sans-serif"] = "IBM Plex Sans"
     plt.rcParams["font.family"] = "sans-serif"
     plt.xlabel("Number of Nodes (log scale)", **font)
     plt.ylabel("Number of Edges (log scale)", **font)
+
     ax = plt.gca()
     ax.set_yscale("log")
     ax.set_xscale("log")

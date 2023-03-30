@@ -1,5 +1,5 @@
 from collections import Counter, defaultdict
-from statistics import median, pstdev, fmean
+from statistics import mean, median, pstdev, fmean
 from os import makedirs
 from sys import path
 from pathlib import Path
@@ -80,12 +80,13 @@ def parallelize_graph_processing(path: Path):
 @command()
 @option("--print-plaw", "print_plaw", is_flag=True, default=False)
 def main(print_plaw: bool):
-    use("agg")
+    # use("agg")
     font = {"fontname": "IBM Plex Sans"}
     plt.rcParams["font.sans-serif"] = "IBM Plex Sans"
     plt.rcParams["font.family"] = "sans-serif"
     plt.xlabel("Degree", **font)
     plt.ylabel("Frequency", **font)
+    plt.figure(figsize=(6.4, 3.2))
     ax = plt.gca()
     ax.set_xscale("log")
     ax.set_yscale("log")
@@ -100,6 +101,7 @@ def main(print_plaw: bool):
                 for i, val in enumerate(nx.degree_histogram(res)):
                     deg_to_freq_map[i] += val
                 pbar.update()
+    deg_to_freq_map = dict(filter(lambda x: x[1] != 0, deg_to_freq_map.items()))
     num_nodes = []
     for i in range(1, max(deg_to_freq_map.keys()) + 1):
         num_nodes.append(deg_to_freq_map.get(i, 0))
@@ -108,7 +110,21 @@ def main(print_plaw: bool):
     if print_plaw:
         print("α:", fit.power_law.alpha)
         print("KS:", fit.power_law.KS())
-    plplot(num_nodes, fit.power_law.xmin, fit.power_law.alpha, fit.power_law.KS())
+
+    def yfit(x):
+        return num_nodes[0] * pow(x, -(fit.power_law.alpha + 1))
+
+    plt.xlabel("Degree", **font)
+    plt.ylabel("Frequency", **font)
+    ax.set_xscale("log")
+    ax.set_yscale("log")
+    ax.spines[["right", "top"]].set_visible(False)
+    ax.set_axisbelow(True)
+    ax.yaxis.grid(True, zorder=-1, which="major", color="#ddd")
+    ax.xaxis.grid(True, zorder=-1, which="minor", color="#ddd")
+    plt.scatter(deg_to_freq_map.keys(), deg_to_freq_map.values(), s=20)
+    plt.plot(deg_to_freq_map.keys(), list(map(lambda x: yfit(x), deg_to_freq_map.keys())), "k--")
+    plt.legend(title=f"α = {(fit.power_law.alpha+1):.2f}\nKS = {fit.power_law.KS():.2f}", labelspacing=0)
     try:
         makedirs("misc_images/")
     except:

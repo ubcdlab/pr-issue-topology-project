@@ -100,7 +100,7 @@ def plplot(x, xmin, alpha, ks):
         cf1 = range(int(xmin), q[-1] + 2)
         cf2 = list(map(lambda Z: 1.0 - Z, reduce(lambda X, Y: X + [Y + X[-1]], cf, [0])))
         cf2 = list(map(lambda X: X * float(c2[c1.index(int(xmin))]), cf2))
-
+        plt.figure(figsize=(8, 4))
         h[0] = plt.scatter(c1, c2)
         h[1] = plt.loglog(cf1, cf2, "k--", linewidth=1)
         font = {"fontname": "IBM Plex Sans"}
@@ -114,12 +114,10 @@ def plplot(x, xmin, alpha, ks):
         ax.yaxis.grid(True, zorder=-1, which="major", color="#ddd")
         ax.xaxis.grid(True, zorder=-1, which="minor", color="#ddd")
 
-        # xr1 = pow(10, floor(log(min(x), 10)))
-        # xr2 = pow(10, ceil(log(min(x), 10)))
         # yr1 = pow(10, floor(log(1.0 / n, 10)))
         # yr2 = 1
 
-        # plt.axhspan(ymin=yr1, ymax=yr2, xmin=xr1, xmax=xr2)
+        # plt.axhspan(ymin=yr1, ymax=yr2)
         # plt.ylabel("Pr(X >= x)", fontsize=16)
         # plt.xlabel("x", fontsize=16)
         plt.legend(title=f"α = {alpha:.2f}\nKS = {ks:.2f}", labelspacing=0)

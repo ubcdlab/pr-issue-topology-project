@@ -1,7 +1,7 @@
 from collections import defaultdict
 from os import makedirs
 from pickle import dump, load
-from statistics import median, pstdev, fmean, stdev
+from statistics import correlation, median, pstdev, fmean, stdev
 from sys import path
 from os import path as os_path
 from pathlib import Path
@@ -128,6 +128,13 @@ def main():
         elinewidth=0.75,
         capthick=0.75,
     )
+    print(
+        correlation(
+            list(cc_size_to_duration_map.keys())[15:],
+            list(map(lambda x: x / 86400, list(map(lambda x: mean(x), cc_size_to_duration_map.values()))))[15:],
+        )
+    )
+
     try:
         makedirs("misc_images/")
     except:
