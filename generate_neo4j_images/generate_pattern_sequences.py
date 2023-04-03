@@ -124,7 +124,7 @@ def main(cypher_path: str, query_name: str, legend_names: List[str]):
             node_size=250,
             central=graph_to_central_map[graph],
             link=graph.graph["link"],
-            legend=[s.capitalize() for s in legend_names],
+            legend=[s.capitalize() if not s[0].isupper() else s for s in legend_names],
         )
 
     session.close()
