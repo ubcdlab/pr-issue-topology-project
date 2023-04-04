@@ -1,7 +1,7 @@
 from collections import defaultdict
 from dataclasses import dataclass
 from os.path import isdir
-from statistics import mean
+from statistics import mean, pstdev
 from typing import List, Set
 from click import command, option
 import networkx as nx
@@ -30,7 +30,9 @@ class MTOCStatistics:
 @option("--cypher", "cypher_path")
 @option("--type", "node_type")
 @option("--status", "node_status")
-def main(cypher_path: str, node_type: str, node_status: str):
+@option("--latex", "latex", is_flag=True, default=False)
+@option("--integrating", "integrating", is_flag=True, default=False)
+def main(cypher_path: str, node_type: str, node_status: str, latex: bool, integrating: bool):
     command = open(cypher_path, "r").read()
 
     def run_command(tx):
@@ -59,7 +61,8 @@ def main(cypher_path: str, node_type: str, node_status: str):
                 map(
                     lambda x: x["id"],
                     filter(
-                        lambda x: x["id"] in cypher_node_nums and x["type"] == node_type and x["status"] == node_status,
+                        lambda x: x["id"] in cypher_node_nums
+                        and ((x["type"] == node_type and x["status"] == node_status) or integrating),
                         candidates,
                     ),
                 )
@@ -79,6 +82,10 @@ def main(cypher_path: str, node_type: str, node_status: str):
     for repo, mtoc in repo_to_matches_map.items():
         table.add_row([repo, f"{len(mtoc.in_topology) / mtoc.graph_nodes:.2%}", mtoc.matches])
     print(table)
+    if latex:
+        print(table.get_latex_string().replace("%", "\\%"))
+    print(f"{mean(list(map(lambda x: len(x[1].in_topology) / x[1].graph_nodes, repo_to_matches_map.items()))):.2%}")
+    print(f"{pstdev(list(map(lambda x: len(x[1].in_topology) / x[1].graph_nodes, repo_to_matches_map.items()))):.2%}")
 
     session.close()
     db.close()
