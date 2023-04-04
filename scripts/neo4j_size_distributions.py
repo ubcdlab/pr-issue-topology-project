@@ -1,4 +1,5 @@
 from collections import defaultdict
+from statistics import mean, pstdev, median
 from click import command, option
 from tqdm import tqdm
 from neo4j import GraphDatabase
@@ -33,6 +34,7 @@ def main(cypher_path: str, to_csv: bool, name: str):
     records, _ = session.execute_read(run_command)
 
     size_counts_map = defaultdict(int)
+    sizes = []
     for record in tqdm(records, total=len(records), leave=False):
         to_highlight = []
         for key in record.keys():
@@ -51,6 +53,7 @@ def main(cypher_path: str, to_csv: bool, name: str):
                 else:
                     to_highlight += [list_item._properties["number"] for list_item in record.get(key)]
         size_counts_map[len(to_highlight)] += 1
+        sizes.append(len(to_highlight))
         continue
 
     total = sum(size_counts_map.values())
@@ -72,6 +75,13 @@ def main(cypher_path: str, to_csv: bool, name: str):
     else:
         print(table)
         print(f"Total matches: {total}")
+
+    table = PrettyTable()
+    table.field_names = ["Average Size", "Min", "Max", "Median", "STDEV"]
+    table.add_row(
+        [f"{mean(sizes):.2f}", f"{min(sizes):.2f}", f"{max(sizes):.2f}", f"{median(sizes):.2f}", f"{pstdev(sizes):.2f}"]
+    )
+    print(table)
 
     session.close()
     db.close()

@@ -91,15 +91,15 @@ def parallelize_graph_processing(path: Path):
 
 @command()
 def main():
-    small_statistics = IssuePrCountStatistics(0, 0, 0, 0, 0, 0, 0, 0)
-    large_statistics = IssuePrCountStatistics(0, 0, 0, 0, 0, 0, 0, 0)
+    small_statistics = IssuePrCountStatistics(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+    large_statistics = IssuePrCountStatistics(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 
     with Pool(cpu_count() // 2) as p:
         with tqdm(total=num_graphs(), leave=False) as pbar:
             for res in p.imap_unordered(parallelize_graph_processing, all_graphs()):
                 for component in nx.connected_components(res):
                     to_add_to = None
-                    if len(component) < 20:
+                    if len(component) < 10:
                         to_add_to = small_statistics
                     elif len(component) > 100:
                         to_add_to = large_statistics
@@ -152,7 +152,7 @@ def main():
             f"{small_statistics.pr_count/small_statistics.count:.2%}",
             f"{small_statistics.pr_open/small_statistics.pr_count:.2%} open, {small_statistics.pr_closed/small_statistics.pr_count:.2%} closed, {small_statistics.pr_merged/small_statistics.pr_count:.2%} merged",
             small_statistics.edges_count,
-            f"{small_statistics.edges_fixes/small_statistics.edges_count:.2%} ({small_statistics.edges_fixes})"
+            f"{small_statistics.edges_fixes/small_statistics.edges_count:.2%} ({small_statistics.edges_fixes})",
             f"{small_statistics.edges_duplicate/small_statistics.edges_count:.2%} ({small_statistics.edges_duplicate})",
         ]
     )
@@ -167,6 +167,9 @@ def main():
         "PRs",
         "PRs %",
         "PR Status Distribution",
+        "Edges",
+        "Fixes Edges #, %",
+        "Duplicate Edges #, %",
     ]
     table.add_row(
         [
@@ -178,7 +181,7 @@ def main():
             f"{large_statistics.pr_count/large_statistics.count:.2%}",
             f"{large_statistics.pr_open/large_statistics.pr_count:.2%} open, {large_statistics.pr_closed/large_statistics.pr_count:.2%} closed, {large_statistics.pr_merged/large_statistics.pr_count:.2%} merged",
             large_statistics.edges_count,
-            f"{large_statistics.edges_fixes/large_statistics.edges_count:.2%} ({large_statistics.edges_fixes})"
+            f"{large_statistics.edges_fixes/large_statistics.edges_count:.2%} ({large_statistics.edges_fixes})",
             f"{large_statistics.edges_duplicate/large_statistics.edges_count:.2%} ({large_statistics.edges_duplicate})",
         ]
     )
