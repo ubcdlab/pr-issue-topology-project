@@ -22,6 +22,7 @@ from scripts.helpers import generate_image, fetch_path, to_json
 @dataclass(repr=True)
 class MTOCStatistics:
     in_topology: Set
+    candidates: Set
     matches: int
     graph_nodes: int
 
@@ -55,14 +56,38 @@ def main(cypher_path: str, node_type: str, node_status: str, latex: bool, integr
         graph = to_json(f"data/graph_{repo.replace('/','-')}.json")
         candidates = list(filter(lambda x: x["connected_component_size"][0] > 2, graph["nodes"]))
         if repo not in repo_to_matches_map:
-            repo_to_matches_map[repo] = MTOCStatistics(set(), 0, len(candidates))
+            repo_to_matches_map[repo] = MTOCStatistics(set(), set(), 0, len(candidates))
         repo_to_matches_map[repo].in_topology.update(
             list(
                 map(
                     lambda x: x["id"],
                     filter(
-                        lambda x: x["id"] in cypher_node_nums
-                        and ((x["type"] == node_type and x["status"] == node_status) or integrating),
+                        lambda x: x["id"] in cypher_node_nums,
+                        candidates,
+                    ),
+                )
+            )
+        )
+        repo_to_matches_map[repo].matches += 1
+    for record in tqdm(records, total=len(records), leave=False):
+        cypher_nodes = record.get("nodes")
+        repo = cypher_nodes[0]._properties["repository"]
+        graph = to_json(f"data/graph_{repo.replace('/','-')}.json")
+        candidates = list(filter(lambda x: x["connected_component_size"][0] > 2, graph["nodes"]))
+        repo_to_matches_map[repo].candidates.update(
+            list(
+                map(
+                    lambda x: x["id"],
+                    filter(
+                        lambda x: x["type"] == node_type
+                        and x["status"] == node_status
+                        or (
+                            integrating
+                            and (
+                                (x["type"] == "issue" and x["status"] == "closed")
+                                or (x["type"] == "pull_request" and x["status"] == "merged")
+                            )
+                        ),
                         candidates,
                     ),
                 )
@@ -73,19 +98,25 @@ def main(cypher_path: str, node_type: str, node_status: str, latex: bool, integr
     repo_to_matches_map = dict(
         sorted(
             repo_to_matches_map.items(),
-            key=lambda x: len(x[1].in_topology) / x[1].graph_nodes,
+            key=lambda x: len(x[1].candidates.difference(x[1].in_topology)) / len(x[1].candidates),
             reverse=True,
         )
     )
     table = PrettyTable()
-    table.field_names = ["Repository", "MTOC", "Matches"]
+    table.field_names = ["Repository", "MTRO", "Matches"]
     for repo, mtoc in repo_to_matches_map.items():
-        table.add_row([repo, f"{len(mtoc.in_topology) / mtoc.graph_nodes:.2%}", mtoc.matches])
+        table.add_row(
+            [repo, f"{len(mtoc.candidates.difference(mtoc.in_topology)) / len(mtoc.candidates):.2%}", mtoc.matches]
+        )
     print(table)
     if latex:
         print(table.get_latex_string().replace("%", "\\%"))
-    print(f"{mean(list(map(lambda x: len(x[1].in_topology) / x[1].graph_nodes, repo_to_matches_map.items()))):.2%}")
-    print(f"{pstdev(list(map(lambda x: len(x[1].in_topology) / x[1].graph_nodes, repo_to_matches_map.items()))):.2%}")
+    print(
+        f"Mean MTRO: {mean(list(map(lambda x: len(x[1].candidates.difference(x[1].in_topology)) / len(x[1].candidates), repo_to_matches_map.items()))):.2%}"
+    )
+    print(
+        f"STDev MTRO: {pstdev(list(map(lambda x: len(x[1].candidates.difference(x[1].in_topology)) / len(x[1].candidates), repo_to_matches_map.items()))):.2%}"
+    )
 
     session.close()
     db.close()
