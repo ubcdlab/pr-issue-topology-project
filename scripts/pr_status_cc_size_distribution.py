@@ -166,6 +166,7 @@ def main():
         label="Merged PRs",
         width=0.1 * array(list(total_map.keys())),
     )
+    plt.legend()
 
     try:
         makedirs("misc_images/")

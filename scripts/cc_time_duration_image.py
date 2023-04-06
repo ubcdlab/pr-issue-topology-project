@@ -130,10 +130,14 @@ def main():
     )
     print(
         correlation(
-            list(cc_size_to_duration_map.keys())[15:],
-            list(map(lambda x: x / 86400, list(map(lambda x: mean(x), cc_size_to_duration_map.values()))))[15:],
+            list(cc_size_to_duration_map.keys()),
+            list(map(lambda x: x / 86400, list(map(lambda x: mean(x), cc_size_to_duration_map.values())))),
         )
     )
+    print(mean(list(map(lambda x: x / 86400, list(map(lambda x: mean(x), cc_size_to_duration_map.values()))))[:10]))
+    print(pstdev(list(map(lambda x: x / 86400, list(map(lambda x: mean(x), cc_size_to_duration_map.values()))))[:10]))
+    print(mean(list(map(lambda x: x / 86400, list(map(lambda x: mean(x), cc_size_to_duration_map.values()))))[-10:]))
+    print(pstdev(list(map(lambda x: x / 86400, list(map(lambda x: mean(x), cc_size_to_duration_map.values()))))[-10:]))
 
     try:
         makedirs("misc_images/")

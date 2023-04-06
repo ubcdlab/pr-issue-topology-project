@@ -121,11 +121,24 @@ def main():
 
     all_total = sum(cc_size_distribution_issues_map.values()) + sum(cc_size_distribution_prs_map.values())
     y = list(map(lambda x: x[1] / (x[0] + cc_size_distribution_prs_map[x[0]]), cc_size_distribution_issues_map.items()))
-    plt.scatter(
+    plt.bar(
         cc_size_distribution_issues_map.keys(),
         y,
-        s=10,
+        color="#1894C9",
+        label="Issues",
+        width=0.1 * array(list(cc_size_distribution_issues_map.keys())),
     )
+    old_y = y
+    y = list(map(lambda x: 1 - x, y))
+    plt.bar(
+        cc_size_distribution_issues_map.keys(),
+        y,
+        bottom=old_y,
+        color="#EA9649",
+        label="Pull Requests",
+        width=0.1 * array(list(cc_size_distribution_issues_map.keys())),
+    )
+    plt.legend()
 
     try:
         makedirs("misc_images/")
@@ -133,7 +146,8 @@ def main():
         pass
     plt.savefig(f"misc_images/issue_pr_ratio_cc_size.png", bbox_inches="tight", dpi=150)
 
-    print(correlation(list(cc_size_distribution_issues_map.keys()), y))
+    print(correlation(list(cc_size_distribution_issues_map.keys()), old_y))
+    print(correlation(list(cc_size_distribution_prs_map.keys()), y))
 
 
 if __name__ == "__main__":

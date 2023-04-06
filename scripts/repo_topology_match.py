@@ -93,7 +93,6 @@ def main(cypher_path: str, node_type: str, node_status: str, latex: bool, integr
                 )
             )
         )
-        repo_to_matches_map[repo].matches += 1
 
     repo_to_matches_map = dict(
         sorted(
