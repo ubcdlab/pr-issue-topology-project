@@ -57,7 +57,7 @@ def main(cypher_path: str, query_name: str):
                 if type(record.get(key)) != list:
                     n = record.get(key)
                     to_highlight += [n._properties["number"]]
-                    g.graph["link"] = n._properties["url"]
+                    g.graph["link"] = n._properties["url"] if "url" in n._properties else ""
                     g.add_node(
                         n._properties["number"],
                         type=n._properties["type"],
