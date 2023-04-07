@@ -128,7 +128,8 @@ def main(cypher_path: str, query_name: str):
         graph_to_highlight_map[g] = to_highlight
 
     # to_sample = min(len(records) // 2, 20)
-    to_sample = min(len(records), 40)  # sample more
+    # to_sample = min(len(records), 40)  # sample more
+    to_sample = len(records)
     if isdir(f"generate_neo4j_images/images/{query_name}/"):
         for file in scandir(f"generate_neo4j_images/images/{query_name}/"):
             remove(file.path)

@@ -10,5 +10,5 @@ python -m generate_neo4j_images.generate_from_neo4j --cypher=cypher_scripts/Exte
 python -m generate_neo4j_images.generate_from_neo4j --cypher=cypher_scripts/DivergentPR.cypher --name=divergent
 python -m generate_neo4j_images.generate_from_neo4j --cypher=cypher_scripts/IntegratingPRHub.cypher --name=pr_hub
 python -m generate_neo4j_images.generate_from_neo4j --cypher=cypher_scripts/DependentPRs.cypher --name=dependent
-python -m generate_neo4j_images.generate_from_neo4j --cypher=cypher_scripts/Same_Author.cypher --name=same_author
+# python -m generate_neo4j_images.generate_from_neo4j --cypher=cypher_scripts/Same_Author.cypher --name=same_author
 
