@@ -24,3 +24,5 @@ tmp.sh
 repo_component_size_freq_img/*.png
 misc_images/*.png
 *.pickle
+emails/*.txt
+scripts/token.txt
