@@ -90,7 +90,6 @@ def main():
     plt.ylabel("% of Total", **font)
     ax = plt.gca()
     ax.set_xscale("log")
-    ax.set_yscale("log")
     ax.spines[["right", "top"]].set_visible(False)
     ax.set_axisbelow(True)
     ax.yaxis.grid(True, zorder=-1, which="major", color="#ddd")
@@ -102,14 +101,14 @@ def main():
             with tqdm(total=num_graphs(), leave=False) as pbar:
                 for res in p.imap_unordered(parallelize_graph_processing, all_graphs()):
                     for component in nx.connected_components(res):
-                        cc_size_distribution_issues_map[len(component)] += len(
+                        cc_size_distribution_prs_map[len(component)] += len(
                             list(
                                 filter(
                                     lambda x: x[1]["type"] == "pull_request", res.subgraph(component).nodes(data=True)
                                 )
                             )
                         )
-                        cc_size_distribution_prs_map[len(component)] += len(
+                        cc_size_distribution_issues_map[len(component)] += len(
                             list(filter(lambda x: x[1]["type"] == "issue", res.subgraph(component).nodes(data=True)))
                         )
                     pbar.update()
@@ -117,10 +116,11 @@ def main():
             dump([cc_size_distribution_issues_map, cc_size_distribution_prs_map], x)
     else:
         with open("cc_size_node_distribution.pickle", "rb") as x:
-            cc_size_distribution_issues_map, cc_size_distribution_prs_map = load(x)
+            # cc_size_distribution_issues_map, cc_size_distribution_prs_map = load(x) # use this line, using below to avoid recomputing local results
+            cc_size_distribution_prs_map, cc_size_distribution_issues_map = load(x)
 
     all_total = sum(cc_size_distribution_issues_map.values()) + sum(cc_size_distribution_prs_map.values())
-    y = list(map(lambda x: x[1] / (x[0] + cc_size_distribution_prs_map[x[0]]), cc_size_distribution_issues_map.items()))
+    y = list(map(lambda x: x[1] / (x[1] + cc_size_distribution_prs_map[x[0]]), cc_size_distribution_issues_map.items()))
     plt.bar(
         cc_size_distribution_issues_map.keys(),
         y,
@@ -148,6 +148,7 @@ def main():
 
     print(correlation(list(cc_size_distribution_issues_map.keys()), old_y))
     print(correlation(list(cc_size_distribution_prs_map.keys()), y))
+    print(cc_size_distribution_issues_map[1] / (cc_size_distribution_issues_map[1] + cc_size_distribution_prs_map[1]))
 
 
 if __name__ == "__main__":
