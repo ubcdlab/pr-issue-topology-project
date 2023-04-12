@@ -55,7 +55,7 @@ def main(cypher_path: str, name: str):
             users[n._properties["user"]] += 1
         for mr in cypher_mr:
             users[mr._properties["user"]] += 1
-    users = dict(sorted(users.items(), key=lambda x: x[1]))
+    users = dict(sorted(users.items(), key=lambda x: x[1], reverse=True))
 
     emails = set()
     res = get(f"https://api.github.com/rate_limit", headers=headers)
@@ -85,12 +85,32 @@ def main(cypher_path: str, name: str):
         if len(res) == 0:
             continue
         res = get(
-            f"https://api.github.com/repos/{res[0]['full_name']}/commits/{res[0]['default_branch']}",
+            f"https://api.github.com/repos/{res[0]['full_name']}/commits?author={user}",
             headers=headers,
         )
         res = loads(res.text)
-        if "commit" in res and not res["commit"]["author"]["email"].endswith("users.noreply.github.com"):
+        if len(res) == 0:
+            continue
+        if "message" in res:
+            print(res["message"])
+            continue
+        res = res[0]
+        if (
+            "commit" in res
+            and not res["commit"]["author"]["email"].endswith("users.noreply.github.com")
+            and "author" in res
+            and res["author"]
+            and res["author"]["login"] == user
+        ):
             emails.add(res["commit"]["author"]["email"])
+        elif (
+            "commit" in res
+            and not res["commit"]["committer"]["email"].endswith("users.noreply.github.com")
+            and "committer" in res
+            and res["committer"]
+            and res["committer"]["login"] == user
+        ):
+            emails.add(res["commit"]["committer"]["email"])
     with open(f"emails/{name}.txt", "w") as x:
         x.write("\n".join(emails))
 
