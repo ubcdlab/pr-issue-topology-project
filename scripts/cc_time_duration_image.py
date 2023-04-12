@@ -134,10 +134,11 @@ def main():
             list(map(lambda x: x / 86400, list(map(lambda x: mean(x), cc_size_to_duration_map.values())))),
         )
     )
-    print(mean(list(map(lambda x: x / 86400, list(map(lambda x: mean(x), cc_size_to_duration_map.values()))))[:10]))
-    print(pstdev(list(map(lambda x: x / 86400, list(map(lambda x: mean(x), cc_size_to_duration_map.values()))))[:10]))
+    print(mean(list(map(lambda x: x / 86400, list(map(lambda x: mean(x), cc_size_to_duration_map.values()))))[:5]))
+    print(pstdev(list(map(lambda x: x / 86400, list(map(lambda x: mean(x), cc_size_to_duration_map.values()))))[:5]))
     print(mean(list(map(lambda x: x / 86400, list(map(lambda x: mean(x), cc_size_to_duration_map.values()))))[-10:]))
     print(pstdev(list(map(lambda x: x / 86400, list(map(lambda x: mean(x), cc_size_to_duration_map.values()))))[-10:]))
+    print(list(map(lambda x: x / 86400, list(map(lambda x: mean(x), cc_size_to_duration_map.values()))))[0])
 
     try:
         makedirs("misc_images/")
