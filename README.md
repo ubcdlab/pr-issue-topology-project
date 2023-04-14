@@ -1,20 +1,20 @@
+# Revealing Work Practices in Pull-Based Software Development through Issue-PR Graph Topologies
 
-# Yank Solicitation Project Crawler and Visualiser
-## Dependencies
-- [D3.js](https://d3js.org/), bundled within the `./js` directory as `d3.v6.min.js`
-## Running and using the visualisation
-From the root directory, host a local web server (`python3 -m http.server` usually does the trick), and then navigate to `localhost:8000` (assuming the server is hosted on port 8000).
+Scripts and data for quantitative analysis in the above paper and associated CPSC448 Directed Studies work.
 
-From the dropdown menus that are shown, select the GitHub repositories that you wish to view. 
-<img width="784" alt="image" src="https://user-images.githubusercontent.com/11191061/176245665-21b681f4-600e-4194-bbcd-5b559745560d.png">
+The goal of this work is to enable topological analysis of PR-Issue networks on GitHub via graph database queries, an image generation module, and many statistics scripts.
 
-The network visualisation for the repo will be loaded. The usual operations, such as scrolling the view up/down/left/right (trucking and booming), as well as zooming in and out, are supported.
+For documentation, see [the `docs/` folder](./docs/).
 
-<img width="628" alt="image" src="https://user-images.githubusercontent.com/11191061/176245756-b9a794c5-55ff-49e2-94da-333c06a49b41.png">
+- To get started with the graph database data, see [this file](./docs/Neo4J.md).
+- To learn more about the image generation module, see [this file](./docs/Generating-Topology-Images.md).
+- The full database dump is available [here](./neo4j.dump)
+- The Cypher queries are [here](./cypher_scripts/).
 
-Currently, you can filter the visualised network graph to show only the desired connected component sizes. Drag the blue slider to restrict the range of connected component sizes to show. For example, if the endpoints of the slider shows `[10, 134]`, then only connected components of size between 10 nodes and 134 nodes *inclusive* will be shown.
+My (Emilie's) CPSC448 paper is available [here](#TODO).
 
-You can also right click on a node within the network to open a link (in a new tab) directly to the issue/pull request the node represents. This behaviour can be disabled by unchecking the "right click to open node link" checkbox (usually for debugging purposes).
-
-## Running the crawler
-Work in progress
+- RQ1 corresponds to work in [`cypher_scripts`] (./cypher_scripts), [`generate_neo4j_images`](./generate_neo4j_images), and [these](./scripts/repo_topology_frequencies.py) [scripts](./scripts/neo4j_size_distributions.py).
+- RQ2 corresponds to work in [these](./scripts/repo_topology_match.py) [three](./scripts/biggest_repos.py) [scripts](./scripts/most_common_repo_matches.py).
+- RQ3 corresponds to work in [this script](./scripts/repo_topology_match.py).
+- RQ4 corresponds to work in these scripts: [this](./scripts/issue_pr_cc_size_distribution.py), [this](./scripts/issue_status_cc_size_distribution.py), [this](./scripts/pr_status_cc_size_distribution.py), and [this](./scripts/cc_time_duration_image.py).
+- RQ5 corresponds to work in [`image_dump`](./image_dump) and [`generate_all_patterns`](./generate_all_patterns).
