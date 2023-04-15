@@ -57,7 +57,7 @@ def main(cypher_path: str, name: str):
             users[mr._properties["user"]] += 1
     users = dict(sorted(users.items(), key=lambda x: x[1], reverse=True))
 
-    emails = set()
+    emails = {}
     res = get(f"https://api.github.com/rate_limit", headers=headers)
     res = loads(res.text)
     print(f"{res['resources']['core']['remaining']} left, resets at {res['resources']['core']['reset']}")
@@ -102,7 +102,7 @@ def main(cypher_path: str, name: str):
             and res["author"]
             and res["author"]["login"] == user
         ):
-            emails.add(res["commit"]["author"]["email"])
+            emails[user] = res["commit"]["author"]["email"]
         elif (
             "commit" in res
             and not res["commit"]["committer"]["email"].endswith("users.noreply.github.com")
@@ -110,9 +110,12 @@ def main(cypher_path: str, name: str):
             and res["committer"]
             and res["committer"]["login"] == user
         ):
-            emails.add(res["commit"]["committer"]["email"])
-    with open(f"emails/{name}.txt", "w") as x:
-        x.write("\n".join(emails))
+            emails[user] = res["commit"]["committer"]["email"]
+    with open(f"emails/{name}_query.txt", "w") as x:
+        contents = ""
+        for user, email in emails.items():
+            contents += f"""call {{MATCH (n {{user: "{user}"}}) SET n.email = "{email}"}}\n"""
+        x.write(contents)
 
     session.close()
     db.close()
