@@ -60,6 +60,7 @@ def generate_image(
     central: List[int] = None,
     link=None,
     legend: List[str] = [],
+    emails: str = "",
 ):
     use("agg")
     pos = nx.nx_agraph.graphviz_layout(component)
@@ -178,6 +179,8 @@ def generate_image(
     if len(legend):
         custom_lines = [plt.Line2D([0], [0], color=COLOR_GROUP_MAP[i + 1], lw=4) for i in range(len(legend))]
         plt.legend(custom_lines, legend)
+    if emails:
+        plt.legend(title=emails, labelspacing=0)
     try:
         makedirs(file_path)
     except:

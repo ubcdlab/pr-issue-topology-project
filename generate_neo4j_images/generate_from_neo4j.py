@@ -44,6 +44,7 @@ def main(cypher_path: str, query_name: str):
             cypher_edges += [record.get("optional_r")]
         to_highlight = []
         g = nx.Graph(repo=cypher_nodes[0]._properties["repository"], link=None)
+        emails = ""
         for key in record.keys():
             if key not in [
                 "nodes",
@@ -64,6 +65,8 @@ def main(cypher_path: str, query_name: str):
                         status=n._properties["status"],
                         number=n._properties["number"],
                     )
+                    if "email" in n._properties:
+                        emails += f"{'PR' if n._properties['type'] == 'pull_request' else 'I'} {n._properties['number']}: {n._properties['email']}\n"
                 else:
                     to_highlight += [list_item._properties["number"] for list_item in record.get(key)]
                     g.add_nodes_from(
@@ -79,6 +82,9 @@ def main(cypher_path: str, query_name: str):
                             for n in record.get(key)
                         ]
                     )
+                    for n in record.get(key):
+                        if "email" in n._properties:
+                            emails += f"{'PR' if n._properties['type'] == 'pull_request' else 'I'} {n._properties['number']}: {n._properties['email']}\n"
         nodes = [
             (
                 n._properties["number"],
@@ -124,6 +130,14 @@ def main(cypher_path: str, query_name: str):
                 )
                 if "number" in e.nodes[0]._properties and "number" in e.nodes[1]._properties
             ]
+            for e in record.get("match_relationships") + (
+                [record.get("optional_r")]
+                if "optional_r" in record.keys() and record.get("optional_r") is not None
+                else []
+            ):
+                if "email" in e._properties:
+                    emails += f"{'PR' if e.nodes[0]._properties['type'] == 'pull_request' else 'I'} {e.nodes[0]._properties['number']} → {'PR' if e.nodes[1]._properties['type'] == 'pull_request' else 'I'} {e.nodes[1]._properties['number']}: {e._properties['email']}\n"
+        g.graph["emails"] = emails.rstrip("\n")
         graph_to_edges_highlight_map[g] = edges_to_hl
         graph_to_highlight_map[g] = to_highlight
 
@@ -149,6 +163,7 @@ def main(cypher_path: str, query_name: str):
             relationships_to_highlight=graph_to_edges_highlight_map[graph],
             node_size=250,
             link=graph.graph["link"],
+            emails=graph.graph["emails"],
         )
 
     session.close()
