@@ -6,7 +6,8 @@ token.txt
 unified_json/result.json
 __pycache__/
 scripts_dump/*
-data/graph_Project-OSRM-osrm-backend.json
+data/*.json
+raw_data/*
 image_dump/**/*.png
 pattern_dump/**/*.pk
 graphml_dump/**/*.graphml
@@ -14,7 +15,7 @@ tmp.data
 comments_dump/**/*.json
 generate_topology_images/*.png
 password
-# generate_neo4j_images/**/*.png
+generate_neo4j_images/**/*.png
 .*class
 unified_json/second_sample_images/**/*.png
 neo4j_statistics/*.csv
