@@ -1,6 +1,6 @@
 # Revealing Work Practices in Pull-Based Software Development through Issue-PR Graph Topologies
 
-Scripts and data for quantitative analysis in the above paper and associated CPSC448 Directed Studies work.
+Scripts and data for quantitative analysis in the above paper and associated CPSC448 Directed Studies work. Additional data is available [here](https://osf.io/29aev/).
 
 The goal of this work is to enable topological analysis of PR-Issue networks on GitHub via graph database queries, an image generation module, and many statistics scripts.
 
@@ -11,7 +11,7 @@ For documentation, see [the `docs/` folder](./docs/).
 - The full database dump is available [here](./neo4j.dump)
 - The Cypher queries are [here](./cypher_scripts/).
 
-My (Emilie's) CPSC448 paper is available [here](#TODO).
+My (Emilie's) CPSC448 paper is available [here](./CPSC448-Paper-Emilie-Ma.pdf).
 
 - RQ1 corresponds to work in [`cypher_scripts`](./cypher_scripts), [`generate_neo4j_images`](./generate_neo4j_images), and [these](./scripts/repo_topology_frequencies.py) [scripts](./scripts/neo4j_size_distributions.py).
 - RQ2 corresponds to work in [these](./scripts/repo_topology_match.py) [three](./scripts/biggest_repos.py) [scripts](./scripts/most_common_repo_matches.py).
