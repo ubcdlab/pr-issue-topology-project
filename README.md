@@ -10,4 +10,4 @@ For documentation, see [the `docs/` folder](./docs/).
 - To learn more about the image generation module, see [this documentation](./docs/Generating-Topology-Images.md).
 - The full database dump is available [here](https://osf.io/3kexy). To import the database in your Neo4J instance, follow the [Neo4J documentation here](https://neo4j.com/docs/aura/auradb/importing/import-database/).
 - The Cypher queries are [here](./cypher_scripts/). To run the queries and return the issues and PRs that are part of each workflow type, drag and drop the query over the query GUI.
-- The scripts for component sampling are [here](./pipeline/) and additional documentation is [here](https://docs.google.com/document/d/1MWDp3d1xirGBRDDQPGLe2bq1639bEWLQTMzbUCWDdOo/view#heading=h.9q8lgk5wlfct).
+- The scripts for component sampling are [here](./archive/pipeline/) and additional documentation is [here](https://docs.google.com/document/d/1MWDp3d1xirGBRDDQPGLe2bq1639bEWLQTMzbUCWDdOo/view#heading=h.9q8lgk5wlfct).
