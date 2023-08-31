@@ -8,6 +8,7 @@ __pycache__/
 scripts_dump/*
 data/*.json
 raw_data/*
+data/*
 image_dump/**/*.png
 pattern_dump/**/*.pk
 graphml_dump/**/*.graphml
