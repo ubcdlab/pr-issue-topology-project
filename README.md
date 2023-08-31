@@ -4,7 +4,7 @@ Scripts and data for quantitative analysis in the above paper and associated CPS
 
 The raw data scraped from GitHub, including the issues, the PRs, their links, and their comment data, is available as Pickle files, downloadable [here](https://osf.io/29aev/). The OSF dataset also includes the Neo4J database dump as well as all generated workflow type instance images.
 
-For documentation, see [the `docs/` folder](./docs/).
+For documentation, see [the `docs/` folder](./docs/). To install the required Python dependencies, run `pip install -r requirements.txt`.
 
 - To get started with the graph database data, see [this documentation](./docs/Neo4J.md).
 - To learn more about the image generation module, see [this documentation](./docs/Generating-Topology-Images.md).

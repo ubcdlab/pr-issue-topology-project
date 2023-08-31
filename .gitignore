@@ -1,5 +1,6 @@
 token.txt
 *.txt
+!requirements.txt
 .DS_Store
 .token
 .*
