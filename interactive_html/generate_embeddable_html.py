@@ -100,6 +100,7 @@ def main(cypher_path: str, query_name: str):
                     "type": n._properties["type"],
                     "status": n._properties["status"],
                     "number": n._properties["number"],
+                    "url": n._properties["url"],
                 },
             )
             for n in cypher_nodes
@@ -239,7 +240,7 @@ def main(cypher_path: str, query_name: str):
         taptool.callback = OpenURL(url="@url")
 
         output_file(
-            f"interactive_html/embeddable/{query_name}/{graph.graph['repo']}{i}.html"
+            f"interactive_html/embeddable/{query_name}/{graph.graph['repo'].replace('/','-')}-{i}.html"
         )
         save(plot)
 

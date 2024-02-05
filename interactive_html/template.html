@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Workflow Types Explorer</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css"
+    />
+  </head>
+  <body style="height: 100%; display: flex; flex-direction: column">
+    <h1>{{repo}} Workflow Type Matches</h1>
+    <label for="workflow-type">Workflow type match:</label>
+    <select
+      id="select"
+      name="workflow-type"
+      onchange="setWorkflowType()"
+      style="width: fit-content"
+    >
+      {% for workflow_type in workflow_types %}
+      <optgroup label="{{workflow_type}}">
+        {% for match in workflow_types[workflow_type] %}
+        <option value="{{match[1]}}">{{match[0]}}</option>
+        {% endfor %}
+      </optgroup>
+      {% endfor %}
+    </select>
+    <iframe
+      src=""
+      frameborder="0"
+      id="iframe"
+      style="width: 100%; flex-grow: 1"
+    ></iframe>
+    <p>
+      <em
+        >The workflow type matches shown above are not an exhaustive list.
+        Scraping occurred in Summer 2022.</em
+      >
+    </p>
+  </body>
+</html>
+
+<script>
+  const setWorkflowType = () => {
+    const workflowTypeURL = document.getElementById("select").value;
+    document.getElementById("iframe").src = workflowTypeURL;
+  };
+
+  setWorkflowType();
+</script>

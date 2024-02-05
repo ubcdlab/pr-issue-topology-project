@@ -31,3 +31,4 @@ emails/*.txt
 scripts/token.txt
 venv/*
 interactive_html/embeddable/*
+interactive_html/repos/*
