@@ -29,3 +29,5 @@ misc_images/*.png
 *.pickle
 emails/*.txt
 scripts/token.txt
+venv/*
+interactive_html/embeddable/*
