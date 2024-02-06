@@ -38,7 +38,9 @@ def main(repo: str):
                     .replace("_", " ")
                     .title()
                     .replace("Pr", "PR")
-                ].append([root.replace(rootdir, "") + "_" + str(counter.get(root))])
+                ].append(
+                    [root.replace(rootdir, "") + "_" + str(counter.get(root)), rel_path]
+                )
 
     with open("interactive_html/template.html", "r") as x:
         t = Template("\n".join(x.readlines()))

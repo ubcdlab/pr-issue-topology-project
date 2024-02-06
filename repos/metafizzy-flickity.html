@@ -1,77 +1,173 @@
 <!DOCTYPE html>
+
 <html lang="en" style="height: 100%">
+
   <head>
+
     <meta charset="UTF-8" />
+
     <title>Workflow Types Explorer</title>
+
     <link
+
       rel="stylesheet"
+
       href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css"
+
     />
+
   </head>
+
   <body style="display: flex; flex-direction: column">
-    <h1>{{repo}} Workflow Type Matches</h1>
+
+    <h1>metafizzy/flickity Workflow Type Matches</h1>
+
     <label for="workflow-type">Workflow type match:</label>
+
     <select
+
       id="select"
+
       name="workflow-type"
+
       onchange="setWorkflowType()"
+
       style="width: fit-content"
+
     >
-      {% for workflow_type in workflow_types %}
-      <optgroup label="{{workflow_type}}">
-        {% for match in workflow_types[workflow_type] %}
-        <option value="{{match[1]}}">{{match[0]}}</option>
-        {% endfor %}
+
+      
+
+      <optgroup label="Duplicate Issue Hub">
+
+        
+
+        <option value="../embeddable/duplicate_issue_hub/metafizzy-flickity-1655361808.html">duplicate_issue_hub_1</option>
+
+        
+
+        <option value="../embeddable/duplicate_issue_hub/metafizzy-flickity-1647357181.html">duplicate_issue_hub_2</option>
+
+        
+
+        <option value="../embeddable/duplicate_issue_hub/metafizzy-flickity-1550970575.html">duplicate_issue_hub_3</option>
+
+        
+
+        <option value="../embeddable/duplicate_issue_hub/metafizzy-flickity-1506119375.html">duplicate_issue_hub_4</option>
+
+        
+
+        <option value="../embeddable/duplicate_issue_hub/metafizzy-flickity-1657337726.html">duplicate_issue_hub_5</option>
+
+        
+
+        <option value="../embeddable/duplicate_issue_hub/metafizzy-flickity-1589517174.html">duplicate_issue_hub_6</option>
+
+        
+
       </optgroup>
-      {% endfor %}
+
+      
+
     </select>
+
     <iframe
+
       src=""
+
       frameborder="0"
+
       id="iframe"
+
       style="width: 100%; flex-grow: 1; min-height: 500px"
+
     ></iframe>
+
     <details open>
+
       <summary>About this workflow type</summary>
+
       <img
+
         src="#"
+
         id="workflow-type-image"
+
         style="width: 60%; margin: 0 auto; display: block"
+
       />
+
       <p id="workflow-type-desc" style="padding: 1rem 0 0"></p>
+
     </details>
+
     <p>
+
       <em
+
         >The workflow type matches shown above are not an exhaustive list.
+
         Scraping occurred in Summer 2022.</em
+
       >
+
     </p>
+
   </body>
+
 </html>
 
+
+
 <script>
+
   const setWorkflowType = () => {
+
     const workflowTypeURL = document.getElementById("select").value;
+
     document.getElementById("iframe").src = workflowTypeURL;
+
     const workflowTypeNameNormalized = document
+
       .querySelector("#select option:checked")
+
       .parentElement.label.toLowerCase()
+
       .replaceAll(" ", "_");
+
     document.getElementById("workflow-type-image").src =
+
       "../workflow_type_images/" + workflowTypeNameNormalized + ".jpg";
+
     let description;
+
     if (workflowTypeNameNormalized === "extended_prs") {
+
       description = `An Extended PR can represent work that is either detrimental or beneficial. In the presented examples, an Extended PR represents a form of waste due to rework, i.e., “revising work that should have been done correctly”. However, we also identified Extended PRs that were beneficial because the second PR improved the implementation provided by the first one.`;
+
     } else if (workflowTypeNameNormalized === "duplicate_issue_hub") {
+
       description = `This workflow type abstracts a situation where contributors are not aware of previous work and therefore end up reporting issues that have already been created.`;
+
     } else if (workflowTypeNameNormalized === "competing_prs") {
+
       description = `One way to view the Competing PRs workflow is that it enables open source projects to select the best implementation. However, recent research shows that there are different reasons influencing whether contributions (PRs) are accepted. We therefore consider Competing PRs as a form of waste in software development, potentially due to poor communication.`;
+
     } else if (workflowTypeNameNormalized === "divergent_pr") {
+
       description = `This workflow type abstracts a somewhat common practice in software development in which a single commit bundles multiple changes to the codebase.`;
+
     }
+
     document.getElementById("workflow-type-desc").innerText = description;
+
   };
 
-  document.getElementById("select").value = "{{last_updated}}";
+
+
+  document.getElementById("select").value = "../embeddable/duplicate_issue_hub/metafizzy-flickity-1506119375.html";
+
   setWorkflowType();
+
 </script>
