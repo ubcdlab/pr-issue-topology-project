@@ -74,6 +74,7 @@ def main(cypher_path: str, query_name: str):
                         status=n._properties["status"],
                         number=n._properties["number"],
                         url=n._properties["url"],
+                        last_updated=n._properties["updated_at"],
                     )
                 else:
                     to_highlight += [
@@ -88,6 +89,7 @@ def main(cypher_path: str, query_name: str):
                                     "status": n._properties["status"],
                                     "number": n._properties["number"],
                                     "url": n._properties["url"],
+                                    "last_updated": n._properties["updated_at"],
                                 },
                             )
                             for n in record.get(key)
@@ -101,6 +103,7 @@ def main(cypher_path: str, query_name: str):
                     "status": n._properties["status"],
                     "number": n._properties["number"],
                     "url": n._properties["url"],
+                    "last_updated": n._properties["updated_at"],
                 },
             )
             for n in cypher_nodes
@@ -165,15 +168,27 @@ def main(cypher_path: str, query_name: str):
         colors = {}
         for cn in graph.nodes:
             colors[cn] = (
-                "#f46d75"
-                if statuses[cn] == "closed"
-                else "#a57cde" if statuses[cn] == "merged" else "#77dd77"
+                (
+                    "#f46d75"
+                    if statuses[cn] == "closed"
+                    else "#a57cde" if statuses[cn] == "merged" else "#77dd77"
+                )
+                if numbers[cn] in graph_to_highlight_map[graph]
+                else (
+                    "#f9b6ba"
+                    if statuses[cn] == "closed"
+                    else "#d2bdee" if statuses[cn] == "merged" else "#bbeebb"
+                )
             )
         markers = {
             cn: "circle" if types[cn] == "pull_request" else "square" for cn in types
         }
         node_edges = {
             cn: "#fede00" if numbers[cn] in graph_to_highlight_map[graph] else "#000000"
+            for cn in numbers
+        }
+        node_opacity = {
+            cn: 1 if numbers[cn] in graph_to_highlight_map[graph] else 0.5
             for cn in numbers
         }
         edge_edges = {
@@ -185,10 +200,21 @@ def main(cypher_path: str, query_name: str):
             )
             for u, v in graph.edges
         }
+        edges_opacity = {
+            (u, v): (
+                1
+                if (u, v) in graph_to_edges_highlight_map[graph]
+                or (v, u) in graph_to_edges_highlight_map[graph]
+                else 0.4
+            )
+            for u, v in graph.edges
+        }
         nx.set_node_attributes(graph, colors, "color")
         nx.set_node_attributes(graph, markers, "marker")
         nx.set_node_attributes(graph, node_edges, "edge_color")
+        nx.set_node_attributes(graph, node_opacity, "opacity")
         nx.set_edge_attributes(graph, edge_edges, "edge_color")
+        nx.set_edge_attributes(graph, edges_opacity, "opacity")
 
         plot = figure(
             tools="pan,wheel_zoom,box_zoom,reset,tap",
@@ -206,18 +232,27 @@ def main(cypher_path: str, query_name: str):
         labels_dict["x"] = [pos[cn][0] for cn in pos]
         labels_dict["y"] = [pos[cn][1] for cn in pos]
         labels_dict["text"] = [
-            f"{'I' if types[cn] == 'issue' else 'PR'} #{numbers[cn]}" for cn in pos
+            f"{'Issue' if types[cn] == 'issue' else 'PR'} #{numbers[cn]}" for cn in pos
+        ]
+        labels_dict["text_size"] = [
+            "24px" if numbers[cn] in graph_to_highlight_map[graph] else "16px"
+            for cn in pos
+        ]
+        labels_dict["text_opacity"] = [
+            1 if numbers[cn] in graph_to_highlight_map[graph] else 0.5 for cn in pos
         ]
         source = ColumnDataSource(labels_dict)
         labels = LabelSet(
             x="x",
             y="y",
             text="text",
+            text_font_size="text_size",
+            text_alpha="text_opacity",
             source=source,
             text_color="#000000",
             text_align="center",
-            text_baseline="bottom",
-            y_offset=-30,
+            text_baseline="top",
+            y_offset=-15,
         )
         plot.renderers.append(labels)
 
@@ -226,11 +261,12 @@ def main(cypher_path: str, query_name: str):
             fill_color="color",
             marker="marker",
             line_color="edge_color",
+            line_alpha="opacity",
             line_width=3,
             tags=["link"],
         )
         graph_plot.edge_renderer.glyph = MultiLine(
-            line_color="edge_color", line_width=2
+            line_color="edge_color", line_width=2, line_alpha="opacity"
         )
         graph_plot.node_renderer.selection_glyph = graph_plot.node_renderer.glyph
         graph_plot.node_renderer.nonselection_glyph = graph_plot.node_renderer.glyph
@@ -239,8 +275,11 @@ def main(cypher_path: str, query_name: str):
         taptool = plot.select(type=TapTool)
         taptool.callback = OpenURL(url="@url")
 
+        most_recently_updated = max(
+            nx.get_node_attributes(graph, "last_updated").values()
+        )
         output_file(
-            f"interactive_html/embeddable/{query_name}/{graph.graph['repo'].replace('/','-')}-{i}.html"
+            f"interactive_html/embeddable/{query_name}/{graph.graph['repo'].replace('/','-')}-{most_recently_updated}.html"
         )
         save(plot)
 

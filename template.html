@@ -20,7 +20,9 @@
       {% for workflow_type in workflow_types %}
       <optgroup label="{{workflow_type}}">
         {% for match in workflow_types[workflow_type] %}
-        <option value="{{match[1]}}">{{match[0]}}</option>
+        <option value="{{match[1]}}" selected="{{match[1] == last_updated}}">
+          {{match[0]}}
+        </option>
         {% endfor %}
       </optgroup>
       {% endfor %}
