@@ -10,7 +10,9 @@ from os import makedirs, scandir, remove
 from bokeh.models import (
     Circle,
     CustomJS,
+    GlobalInlineStyleSheet,
     HTMLLabelSet,
+    InlineStyleSheet,
     LabelSet,
     MultiLine,
     OpenURL,
@@ -220,12 +222,14 @@ def main(cypher_path: str, query_name: str):
         nx.set_edge_attributes(graph, edge_edges, "edge_color")
         nx.set_edge_attributes(graph, edges_opacity, "opacity")
 
+        stylesheet = GlobalInlineStyleSheet(css="body {overflow:hidden}")
         plot = figure(
             tools="pan,wheel_zoom,box_zoom,reset,tap",
             active_drag="pan",
             active_scroll="wheel_zoom",
             toolbar_location=None,
             sizing_mode="stretch_both",
+            stylesheets=[stylesheet],
         )
         plot.xaxis.major_label_text_font_size = "0pt"
         plot.yaxis.major_label_text_font_size = "0pt"
