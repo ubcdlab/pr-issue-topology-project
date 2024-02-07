@@ -10,6 +10,7 @@ from os import makedirs, scandir, remove
 from bokeh.models import (
     Circle,
     CustomJS,
+    HTMLLabelSet,
     LabelSet,
     MultiLine,
     OpenURL,
@@ -18,7 +19,9 @@ from bokeh.models import (
     ColumnDataSource,
     Tap,
     TapTool,
+    Tooltip,
     WheelZoomTool,
+    HoverTool,
 )
 from bokeh.io import output_file, save
 from bokeh.plotting import figure, from_networkx
@@ -165,6 +168,7 @@ def main(cypher_path: str, query_name: str):
         numbers = nx.get_node_attributes(graph, "number")
         types = nx.get_node_attributes(graph, "type")
         statuses = nx.get_node_attributes(graph, "status")
+        urls = nx.get_node_attributes(graph, "url")
         colors = {}
         for cn in graph.nodes:
             colors[cn] = (
@@ -184,7 +188,7 @@ def main(cypher_path: str, query_name: str):
             cn: "circle" if types[cn] == "pull_request" else "square" for cn in types
         }
         node_edges = {
-            cn: "#fede00" if numbers[cn] in graph_to_highlight_map[graph] else "#000000"
+            cn: "#0096FF" if numbers[cn] in graph_to_highlight_map[graph] else "#000000"
             for cn in numbers
         }
         node_opacity = {
@@ -193,7 +197,7 @@ def main(cypher_path: str, query_name: str):
         }
         edge_edges = {
             (u, v): (
-                "#fede00"
+                "#0096FF"
                 if (u, v) in graph_to_edges_highlight_map[graph]
                 or (v, u) in graph_to_edges_highlight_map[graph]
                 else "#000000"
@@ -241,15 +245,19 @@ def main(cypher_path: str, query_name: str):
         labels_dict["text_opacity"] = [
             1 if numbers[cn] in graph_to_highlight_map[graph] else 0.5 for cn in pos
         ]
+        labels_dict["edge_color"] = [
+            "#0096FF" if numbers[cn] in graph_to_highlight_map[graph] else "#000000"
+            for cn in pos
+        ]
         source = ColumnDataSource(labels_dict)
-        labels = LabelSet(
+        labels = HTMLLabelSet(
             x="x",
             y="y",
             text="text",
             text_font_size="text_size",
             text_alpha="text_opacity",
             source=source,
-            text_color="#000000",
+            text_color="edge_color",
             text_align="center",
             text_baseline="top",
             y_offset=-15,
@@ -274,6 +282,8 @@ def main(cypher_path: str, query_name: str):
 
         taptool = plot.select(type=TapTool)
         taptool.callback = OpenURL(url="@url")
+
+        plot.add_tools(HoverTool(tooltips=[("", "Click to open GitHub URL")]))
 
         most_recently_updated = max(
             nx.get_node_attributes(graph, "last_updated").values()
