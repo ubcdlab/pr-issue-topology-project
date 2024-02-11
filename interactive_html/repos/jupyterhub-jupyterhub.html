@@ -236,11 +236,47 @@
 
     document.getElementById("workflow-type-desc").innerText = description;
 
+    const searchParams = new URLSearchParams(window.location.search);
+
+    searchParams.set(
+
+      "match",
+
+      document.querySelector("#select option:checked").textContent
+
+    );
+
+    const newRelativePathQuery =
+
+      window.location.pathname + "?" + searchParams.toString();
+
+    history.pushState(null, "", newRelativePathQuery);
+
   };
 
 
 
-  document.getElementById("select").value = "../embeddable/competing_prs/jupyterhub-jupyterhub-1478918383.html";
+  const urlParams = new URLSearchParams(window.location.search);
+
+  const namedMatch = urlParams.get("match");
+
+  if (namedMatch) {
+
+    const namedValue = document.querySelectorAll("option").forEach((el) => {
+
+      if (el.textContent === namedMatch) {
+
+        document.getElementById("select").value = el.value;
+
+      }
+
+    });
+
+  } else {
+
+    document.getElementById("select").value = "../embeddable/competing_prs/jupyterhub-jupyterhub-1478918383.html";
+
+  }
 
   setWorkflowType();
 
