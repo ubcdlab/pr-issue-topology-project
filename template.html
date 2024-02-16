@@ -64,7 +64,7 @@
       "../workflow_type_images/" + workflowTypeNameNormalized + ".jpg";
     let description;
     if (workflowTypeNameNormalized === "extended_prs") {
-      description = `An Extended PR can represent work that is either detrimental or beneficial. In the presented examples, an Extended PR represents a form of waste due to rework, i.e., “revising work that should have been done correctly”. However, we also identified Extended PRs that were beneficial because the second PR improved the implementation provided by the first one.`;
+      description = `An Extended PR indicates two options: 1. A second PR that fixes a previous PR that did not completely fix the issue that needed to be addressed, or 2. A second PR that improved the implementation of a previous PR`;
     } else if (workflowTypeNameNormalized === "duplicate_issue_hub") {
       description = `This workflow type abstracts a situation where contributors are not aware of previous work and therefore end up reporting issues that have already been created.`;
     } else if (workflowTypeNameNormalized === "competing_prs") {
