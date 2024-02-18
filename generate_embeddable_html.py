@@ -232,7 +232,13 @@ def main(cypher_path: str, query_name: str):
             stylesheets=[stylesheet],
         )
         plot.xaxis.major_label_text_font_size = "0pt"
+        plot.xaxis.major_tick_line_color = None
+        plot.xaxis.minor_tick_line_color = None
+        plot.xaxis.axis_line_color = "#e5e5e5"
         plot.yaxis.major_label_text_font_size = "0pt"
+        plot.yaxis.major_tick_line_color = None
+        plot.yaxis.minor_tick_line_color = None
+        plot.yaxis.axis_line_color = "#e5e5e5"
         graph_plot = from_networkx(graph, nx.spring_layout, center=(0, 0))
         pos = graph_plot.layout_provider.graph_layout
 

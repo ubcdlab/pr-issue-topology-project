@@ -22,115 +22,157 @@
 
     <h1>kubernetes-sigs/kustomize Workflow Type Matches</h1>
 
-    <label for="workflow-type">Workflow type match:</label>
+    <div style="display: flex; flex-direction: row; margin-bottom: 8px">
 
-    <select
+      <div style="flex-basis: 50%">
 
-      id="select"
+        <label for="verified-workflow-type"
 
-      name="workflow-type"
+          >Verified workflow type matches:</label
 
-      onchange="setWorkflowType()"
+        >
 
-      style="width: fit-content"
+        <select
 
-    >
+          id="verified-select"
 
-      
+          name="verified-workflow-type"
 
-      <optgroup label="Competing PRs">
+          onchange="setWorkflowType('verified-select')"
 
-        
+          style="width: fit-content"
 
-        <option value="../embeddable/competing_prs/kubernetes-sigs-kustomize-1618358973.html">competing_prs_1</option>
+        >
 
-        
+          
 
-        <option value="../embeddable/competing_prs/kubernetes-sigs-kustomize-1604714966.html">competing_prs_2</option>
+          <optgroup label="Duplicate Issue Hub">
 
-        
+            
 
-      </optgroup>
+            <option value="../embeddable/duplicate_issue_hub/kubernetes-sigs-kustomize-1609901356.html">duplicate_issue_hub_1</option>
 
-      
+            
 
-      <optgroup label="Duplicate Issue Hub">
+            <option value="../embeddable/duplicate_issue_hub/kubernetes-sigs-kustomize-1654175499.html">duplicate_issue_hub_2</option>
 
-        
+            
 
-        <option value="../embeddable/duplicate_issue_hub/kubernetes-sigs-kustomize-1609901356.html">duplicate_issue_hub_1</option>
+            <option value="../embeddable/duplicate_issue_hub/kubernetes-sigs-kustomize-1651629329.html">duplicate_issue_hub_3</option>
 
-        
+            
 
-        <option value="../embeddable/duplicate_issue_hub/kubernetes-sigs-kustomize-1654175499.html">duplicate_issue_hub_2</option>
+          </optgroup>
 
-        
+          
 
-        <option value="../embeddable/duplicate_issue_hub/kubernetes-sigs-kustomize-1651629329.html">duplicate_issue_hub_3</option>
+          <optgroup label="Divergent PR">
 
-        
+            
 
-      </optgroup>
+            <option value="../embeddable/divergent_pr/kubernetes-sigs-kustomize-1655768119.html">divergent_pr_1</option>
 
-      
+            
 
-      <optgroup label="Divergent PR">
+            <option value="../embeddable/divergent_pr/kubernetes-sigs-kustomize-1651243162.html">divergent_pr_2</option>
 
-        
+            
 
-        <option value="../embeddable/divergent_pr/kubernetes-sigs-kustomize-1655768119.html">divergent_pr_1</option>
+            <option value="../embeddable/divergent_pr/kubernetes-sigs-kustomize-1657816928.html">divergent_pr_3</option>
 
-        
+            
 
-        <option value="../embeddable/divergent_pr/kubernetes-sigs-kustomize-1651243162.html">divergent_pr_2</option>
+            <option value="../embeddable/divergent_pr/kubernetes-sigs-kustomize-1649780909.html">divergent_pr_4</option>
 
-        
+            
 
-        <option value="../embeddable/divergent_pr/kubernetes-sigs-kustomize-1657816928.html">divergent_pr_3</option>
+            <option value="../embeddable/divergent_pr/kubernetes-sigs-kustomize-1601404609.html">divergent_pr_5</option>
 
-        
+            
 
-        <option value="../embeddable/divergent_pr/kubernetes-sigs-kustomize-1649780909.html">divergent_pr_4</option>
+            <option value="../embeddable/divergent_pr/kubernetes-sigs-kustomize-1657689620.html">divergent_pr_6</option>
 
-        
+            
 
-        <option value="../embeddable/divergent_pr/kubernetes-sigs-kustomize-1601404609.html">divergent_pr_5</option>
+            <option value="../embeddable/divergent_pr/kubernetes-sigs-kustomize-1623971596.html">divergent_pr_7</option>
 
-        
+            
 
-        <option value="../embeddable/divergent_pr/kubernetes-sigs-kustomize-1657689620.html">divergent_pr_6</option>
+            <option value="../embeddable/divergent_pr/kubernetes-sigs-kustomize-1657720120.html">divergent_pr_8</option>
 
-        
+            
 
-        <option value="../embeddable/divergent_pr/kubernetes-sigs-kustomize-1623971596.html">divergent_pr_7</option>
+            <option value="../embeddable/divergent_pr/kubernetes-sigs-kustomize-1657264555.html">divergent_pr_9</option>
 
-        
+            
 
-        <option value="../embeddable/divergent_pr/kubernetes-sigs-kustomize-1657720120.html">divergent_pr_8</option>
+            <option value="../embeddable/divergent_pr/kubernetes-sigs-kustomize-1605325146.html">divergent_pr_10</option>
 
-        
+            
 
-        <option value="../embeddable/divergent_pr/kubernetes-sigs-kustomize-1657264555.html">divergent_pr_9</option>
+            <option value="../embeddable/divergent_pr/kubernetes-sigs-kustomize-1654502474.html">divergent_pr_11</option>
 
-        
+            
 
-        <option value="../embeddable/divergent_pr/kubernetes-sigs-kustomize-1605325146.html">divergent_pr_10</option>
+            <option value="../embeddable/divergent_pr/kubernetes-sigs-kustomize-1579135179.html">divergent_pr_12</option>
 
-        
+            
 
-        <option value="../embeddable/divergent_pr/kubernetes-sigs-kustomize-1654502474.html">divergent_pr_11</option>
+          </optgroup>
 
-        
+          
 
-        <option value="../embeddable/divergent_pr/kubernetes-sigs-kustomize-1579135179.html">divergent_pr_12</option>
+        </select>
 
-        
-
-      </optgroup>
+      </div>
 
       
 
-    </select>
+      <div style="flex-basis: 50%">
+
+        <label for="unverified-workflow-type"
+
+          >Unverified workflow type matches:</label
+
+        >
+
+        <select
+
+          id="unverified-select"
+
+          name="unverified-workflow-type"
+
+          onchange="setWorkflowType('unverified-select')"
+
+          style="width: fit-content"
+
+        >
+
+          
+
+          <optgroup label="Competing PRs">
+
+            
+
+            <option value="../embeddable/competing_prs/kubernetes-sigs-kustomize-1618358973.html">competing_prs_1</option>
+
+            
+
+            <option value="../embeddable/competing_prs/kubernetes-sigs-kustomize-1604714966.html">competing_prs_2</option>
+
+            
+
+          </optgroup>
+
+          
+
+        </select>
+
+      </div>
+
+      
+
+    </div>
 
     <iframe
 
@@ -188,15 +230,15 @@
 
 <script>
 
-  const setWorkflowType = () => {
+  const setWorkflowType = (id) => {
 
-    const workflowTypeURL = document.getElementById("select").value;
+    const workflowTypeURL = document.getElementById(id).value;
 
     document.getElementById("iframe").src = workflowTypeURL;
 
     const workflowTypeNameNormalized = document
 
-      .querySelector("#select option:checked")
+      .querySelector(`#${id} option:checked`)
 
       .parentElement.label.toLowerCase()
 
@@ -204,7 +246,7 @@
 
     document.getElementById("workflow-type-image").src =
 
-      "../workflow_type_images/" + workflowTypeNameNormalized + ".jpg";
+      "../workflow_type_images/" + workflowTypeNameNormalized + ".png";
 
     let description;
 
@@ -234,7 +276,7 @@
 
       "match",
 
-      document.querySelector("#select option:checked").textContent
+      document.querySelector(`#${id} option:checked`).textContent
 
     );
 
@@ -243,6 +285,16 @@
       window.location.pathname + "?" + searchParams.toString();
 
     history.pushState(null, "", newRelativePathQuery);
+
+    if (id === "unverified-select") {
+
+      document.getElementById("verified-select").value = "";
+
+    } else {
+
+      document.getElementById("unverified-select").value = "";
+
+    }
 
   };
 
@@ -258,7 +310,9 @@
 
       if (el.textContent === namedMatch) {
 
-        document.getElementById("select").value = el.value;
+        el.parentNode.parentNode.value = el.value;
+
+        setWorkflowType(el.parentNode.parentNode.id);
 
       }
 
@@ -266,10 +320,18 @@
 
   } else {
 
-    document.getElementById("select").value = "../embeddable/divergent_pr/kubernetes-sigs-kustomize-1579135179.html";
+    document.querySelectorAll("option").forEach((el) => {
+
+      if (el.textContent === "../embeddable/divergent_pr/kubernetes-sigs-kustomize-1579135179.html") {
+
+        el.parentNode.parentNode.value = "../embeddable/divergent_pr/kubernetes-sigs-kustomize-1579135179.html";
+
+        setWorkflowType(el.parentNode.parentNode.id);
+
+      }
+
+    });
 
   }
-
-  setWorkflowType();
 
 </script>

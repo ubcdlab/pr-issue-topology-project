@@ -10,21 +10,48 @@
   </head>
   <body style="display: flex; flex-direction: column">
     <h1>{{repo}} Workflow Type Matches</h1>
-    <label for="workflow-type">Workflow type match:</label>
-    <select
-      id="select"
-      name="workflow-type"
-      onchange="setWorkflowType()"
-      style="width: fit-content"
-    >
-      {% for workflow_type in workflow_types %}
-      <optgroup label="{{workflow_type}}">
-        {% for match in workflow_types[workflow_type] %}
-        <option value="{{match[1]}}">{{match[0]}}</option>
-        {% endfor %}
-      </optgroup>
-      {% endfor %}
-    </select>
+    <div style="display: flex; flex-direction: row; margin-bottom: 8px">
+      <div style="flex-basis: 50%">
+        <label for="verified-workflow-type"
+          >Verified workflow type matches:</label
+        >
+        <select
+          id="verified-select"
+          name="verified-workflow-type"
+          onchange="setWorkflowType('verified-select')"
+          style="width: fit-content"
+        >
+          {% for workflow_type in verified_workflow_types %}
+          <optgroup label="{{workflow_type}}">
+            {% for match in verified_workflow_types[workflow_type] %}
+            <option value="{{match[1]}}">{{match[0]}}</option>
+            {% endfor %}
+          </optgroup>
+          {% endfor %}
+        </select>
+      </div>
+      {% if unverified_workflow_types|length != 0 %}
+      <div style="flex-basis: 50%">
+        <label for="unverified-workflow-type"
+          >Unverified workflow type matches:</label
+        >
+        <select
+          id="unverified-select"
+          name="unverified-workflow-type"
+          onchange="setWorkflowType('unverified-select')"
+          style="width: fit-content"
+        >
+          {% for workflow_type in unverified_workflow_types %}
+          <optgroup label="{{workflow_type}}">
+            {% for match in unverified_workflow_types[workflow_type] %}
+            <option value="{{match[1]}}">{{match[0]}}</option>
+            {% endfor %}
+          </optgroup>
+          {% endfor %}
+        </select>
+      </div>
+      {% endif %}
+    </div>
     <iframe
       src=""
       frameborder="0"
@@ -53,15 +80,15 @@
 </html>
 
 <script>
-  const setWorkflowType = () => {
-    const workflowTypeURL = document.getElementById("select").value;
+  const setWorkflowType = (id) => {
+    const workflowTypeURL = document.getElementById(id).value;
     document.getElementById("iframe").src = workflowTypeURL;
     const workflowTypeNameNormalized = document
-      .querySelector("#select option:checked")
+      .querySelector(`#${id} option:checked`)
       .parentElement.label.toLowerCase()
       .replaceAll(" ", "_");
     document.getElementById("workflow-type-image").src =
-      "../workflow_type_images/" + workflowTypeNameNormalized + ".jpg";
+      "../workflow_type_images/" + workflowTypeNameNormalized + ".png";
     let description;
     if (workflowTypeNameNormalized === "extended_prs") {
       description = `An Extended PR indicates two options: 1. A second PR that fixes a previous PR that did not completely fix the issue that needed to be addressed, or 2. A second PR that improved the implementation of a previous PR`;
@@ -76,11 +103,16 @@
     const searchParams = new URLSearchParams(window.location.search);
     searchParams.set(
       "match",
-      document.querySelector("#select option:checked").textContent
+      document.querySelector(`#${id} option:checked`).textContent
     );
     const newRelativePathQuery =
       window.location.pathname + "?" + searchParams.toString();
     history.pushState(null, "", newRelativePathQuery);
+    if (id === "unverified-select") {
+      document.getElementById("verified-select").value = "";
+    } else {
+      document.getElementById("unverified-select").value = "";
+    }
   };
 
   const urlParams = new URLSearchParams(window.location.search);
@@ -88,11 +120,16 @@
   if (namedMatch) {
     const namedValue = document.querySelectorAll("option").forEach((el) => {
       if (el.textContent === namedMatch) {
-        document.getElementById("select").value = el.value;
+        el.parentNode.parentNode.value = el.value;
+        setWorkflowType(el.parentNode.parentNode.id);
       }
     });
   } else {
-    document.getElementById("select").value = "{{last_updated}}";
+    document.querySelectorAll("option").forEach((el) => {
+      if (el.textContent === "{{last_updated}}") {
+        el.parentNode.parentNode.value = "{{last_updated}}";
+        setWorkflowType(el.parentNode.parentNode.id);
+      }
+    });
   }
-  setWorkflowType();
 </script>

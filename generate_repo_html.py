@@ -12,6 +12,16 @@ from random import sample
 from os import makedirs, scandir, remove
 from jinja2 import Template
 
+manually_verified = [
+    "MithrilJS-mithril.js-1645939388.html",
+    "mlflow-mlflow-1655337135.html",
+    "Rapptz-discord.py-1617112879.html",
+    "MithrilJS-mithril.js-1652713638.html",
+    "mlflow-mlflow-1635821214.html",
+    "mlflow-mlflow-1656691361.html",
+    "jupyterhub-jupyterhub-1519952687.html",
+]
+
 
 @command()
 @option("--repo", "repo")
@@ -39,8 +49,33 @@ def main(repo: str):
                     .title()
                     .replace("Pr", "PR")
                 ].append(
-                    [root.replace(rootdir, "") + "_" + str(counter.get(root)), rel_path]
+                    [
+                        root.replace(rootdir, "") + "_" + str(counter.get(root)),
+                        rel_path,
+                        file,
+                    ]
                 )
+
+    verified = defaultdict(list)
+    if len(workflow_types["Duplicate Issue Hub"]):
+        verified["Duplicate Issue Hub"] = workflow_types["Duplicate Issue Hub"]
+    if len(workflow_types["Divergent PR"]):
+        verified["Divergent PR"] = workflow_types["Divergent PR"]
+    for key in ["Competing PRs", "Extended PRs"]:
+        verified[key] = list(
+            filter(lambda x: x[2] in manually_verified, workflow_types[key])
+        )
+        if len(verified[key]) == 0:
+            del verified[key]
+
+    del workflow_types["Duplicate Issue Hub"]
+    del workflow_types["Divergent PR"]
+    for key in ["Competing PRs", "Extended PRs"]:
+        workflow_types[key] = list(
+            filter(lambda x: x[2] not in manually_verified, workflow_types[key])
+        )
+        if len(workflow_types[key]) == 0:
+            del workflow_types[key]
 
     with open("interactive_html/template.html", "r") as x:
         t = Template("\n".join(x.readlines()))
@@ -49,7 +84,8 @@ def main(repo: str):
         x.write(
             t.render(
                 repo=repo,
-                workflow_types=workflow_types,
+                unverified_workflow_types=workflow_types,
+                verified_workflow_types=verified,
                 last_updated=most_recently_updated,
             )
         )

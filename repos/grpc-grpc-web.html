@@ -22,43 +22,57 @@
 
     <h1>grpc/grpc-web Workflow Type Matches</h1>
 
-    <label for="workflow-type">Workflow type match:</label>
+    <div style="display: flex; flex-direction: row; margin-bottom: 8px">
 
-    <select
+      <div style="flex-basis: 50%">
 
-      id="select"
+        <label for="verified-workflow-type"
 
-      name="workflow-type"
+          >Verified workflow type matches:</label
 
-      onchange="setWorkflowType()"
+        >
 
-      style="width: fit-content"
+        <select
 
-    >
+          id="verified-select"
+
+          name="verified-workflow-type"
+
+          onchange="setWorkflowType('verified-select')"
+
+          style="width: fit-content"
+
+        >
+
+          
+
+          <optgroup label="Divergent PR">
+
+            
+
+            <option value="../embeddable/divergent_pr/grpc-grpc-web-1654469441.html">divergent_pr_1</option>
+
+            
+
+            <option value="../embeddable/divergent_pr/grpc-grpc-web-1656276702.html">divergent_pr_2</option>
+
+            
+
+            <option value="../embeddable/divergent_pr/grpc-grpc-web-1631117517.html">divergent_pr_3</option>
+
+            
+
+          </optgroup>
+
+          
+
+        </select>
+
+      </div>
 
       
 
-      <optgroup label="Divergent PR">
-
-        
-
-        <option value="../embeddable/divergent_pr/grpc-grpc-web-1654469441.html">divergent_pr_1</option>
-
-        
-
-        <option value="../embeddable/divergent_pr/grpc-grpc-web-1656276702.html">divergent_pr_2</option>
-
-        
-
-        <option value="../embeddable/divergent_pr/grpc-grpc-web-1631117517.html">divergent_pr_3</option>
-
-        
-
-      </optgroup>
-
-      
-
-    </select>
+    </div>
 
     <iframe
 
@@ -116,15 +130,15 @@
 
 <script>
 
-  const setWorkflowType = () => {
+  const setWorkflowType = (id) => {
 
-    const workflowTypeURL = document.getElementById("select").value;
+    const workflowTypeURL = document.getElementById(id).value;
 
     document.getElementById("iframe").src = workflowTypeURL;
 
     const workflowTypeNameNormalized = document
 
-      .querySelector("#select option:checked")
+      .querySelector(`#${id} option:checked`)
 
       .parentElement.label.toLowerCase()
 
@@ -132,7 +146,7 @@
 
     document.getElementById("workflow-type-image").src =
 
-      "../workflow_type_images/" + workflowTypeNameNormalized + ".jpg";
+      "../workflow_type_images/" + workflowTypeNameNormalized + ".png";
 
     let description;
 
@@ -162,7 +176,7 @@
 
       "match",
 
-      document.querySelector("#select option:checked").textContent
+      document.querySelector(`#${id} option:checked`).textContent
 
     );
 
@@ -171,6 +185,16 @@
       window.location.pathname + "?" + searchParams.toString();
 
     history.pushState(null, "", newRelativePathQuery);
+
+    if (id === "unverified-select") {
+
+      document.getElementById("verified-select").value = "";
+
+    } else {
+
+      document.getElementById("unverified-select").value = "";
+
+    }
 
   };
 
@@ -186,7 +210,9 @@
 
       if (el.textContent === namedMatch) {
 
-        document.getElementById("select").value = el.value;
+        el.parentNode.parentNode.value = el.value;
+
+        setWorkflowType(el.parentNode.parentNode.id);
 
       }
 
@@ -194,10 +220,18 @@
 
   } else {
 
-    document.getElementById("select").value = "../embeddable/divergent_pr/grpc-grpc-web-1631117517.html";
+    document.querySelectorAll("option").forEach((el) => {
+
+      if (el.textContent === "../embeddable/divergent_pr/grpc-grpc-web-1631117517.html") {
+
+        el.parentNode.parentNode.value = "../embeddable/divergent_pr/grpc-grpc-web-1631117517.html";
+
+        setWorkflowType(el.parentNode.parentNode.id);
+
+      }
+
+    });
 
   }
-
-  setWorkflowType();
 
 </script>
