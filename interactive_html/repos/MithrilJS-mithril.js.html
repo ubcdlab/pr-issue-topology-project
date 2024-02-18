@@ -22,107 +22,121 @@
 
     <h1>MithrilJS/mithril.js Workflow Type Matches</h1>
 
-    <label for="workflow-type">Workflow type match:</label>
+    <div style="display: flex; flex-direction: row; margin-bottom: 8px">
 
-    <select
+      <div style="flex-basis: 50%">
 
-      id="select"
+        <label for="verified-workflow-type"
 
-      name="workflow-type"
+          >Verified workflow type matches:</label
 
-      onchange="setWorkflowType()"
+        >
 
-      style="width: fit-content"
+        <select
 
-    >
+          id="verified-select"
+
+          name="verified-workflow-type"
+
+          onchange="setWorkflowType('verified-select')"
+
+          style="width: fit-content"
+
+        >
+
+          
+
+          <optgroup label="Duplicate Issue Hub">
+
+            
+
+            <option value="../embeddable/duplicate_issue_hub/MithrilJS-mithril.js-1654002802.html">duplicate_issue_hub_1</option>
+
+            
+
+            <option value="../embeddable/duplicate_issue_hub/MithrilJS-mithril.js-1546065045.html">duplicate_issue_hub_2</option>
+
+            
+
+          </optgroup>
+
+          
+
+          <optgroup label="Divergent PR">
+
+            
+
+            <option value="../embeddable/divergent_pr/MithrilJS-mithril.js-1618517368.html">divergent_pr_1</option>
+
+            
+
+            <option value="../embeddable/divergent_pr/MithrilJS-mithril.js-1645479007.html">divergent_pr_2</option>
+
+            
+
+            <option value="../embeddable/divergent_pr/MithrilJS-mithril.js-1652713638.html">divergent_pr_3</option>
+
+            
+
+            <option value="../embeddable/divergent_pr/MithrilJS-mithril.js-1645939388.html">divergent_pr_4</option>
+
+            
+
+            <option value="../embeddable/divergent_pr/MithrilJS-mithril.js-1543388534.html">divergent_pr_5</option>
+
+            
+
+            <option value="../embeddable/divergent_pr/MithrilJS-mithril.js-1645499865.html">divergent_pr_6</option>
+
+            
+
+            <option value="../embeddable/divergent_pr/MithrilJS-mithril.js-1559164581.html">divergent_pr_7</option>
+
+            
+
+            <option value="../embeddable/divergent_pr/MithrilJS-mithril.js-1562174650.html">divergent_pr_8</option>
+
+            
+
+            <option value="../embeddable/divergent_pr/MithrilJS-mithril.js-1467331113.html">divergent_pr_9</option>
+
+            
+
+          </optgroup>
+
+          
+
+          <optgroup label="Competing PRs">
+
+            
+
+            <option value="../embeddable/competing_prs/MithrilJS-mithril.js-1645939388.html">competing_prs_1</option>
+
+            
+
+          </optgroup>
+
+          
+
+          <optgroup label="Extended PRs">
+
+            
+
+            <option value="../embeddable/extended_prs/MithrilJS-mithril.js-1652713638.html">extended_prs_1</option>
+
+            
+
+          </optgroup>
+
+          
+
+        </select>
+
+      </div>
 
       
 
-      <optgroup label="Competing PRs">
-
-        
-
-        <option value="../embeddable/competing_prs/MithrilJS-mithril.js-1645939388.html">competing_prs_1</option>
-
-        
-
-      </optgroup>
-
-      
-
-      <optgroup label="Duplicate Issue Hub">
-
-        
-
-        <option value="../embeddable/duplicate_issue_hub/MithrilJS-mithril.js-1654002802.html">duplicate_issue_hub_1</option>
-
-        
-
-        <option value="../embeddable/duplicate_issue_hub/MithrilJS-mithril.js-1546065045.html">duplicate_issue_hub_2</option>
-
-        
-
-      </optgroup>
-
-      
-
-      <optgroup label="Extended PRs">
-
-        
-
-        <option value="../embeddable/extended_prs/MithrilJS-mithril.js-1652713638.html">extended_prs_1</option>
-
-        
-
-      </optgroup>
-
-      
-
-      <optgroup label="Divergent PR">
-
-        
-
-        <option value="../embeddable/divergent_pr/MithrilJS-mithril.js-1618517368.html">divergent_pr_1</option>
-
-        
-
-        <option value="../embeddable/divergent_pr/MithrilJS-mithril.js-1645479007.html">divergent_pr_2</option>
-
-        
-
-        <option value="../embeddable/divergent_pr/MithrilJS-mithril.js-1652713638.html">divergent_pr_3</option>
-
-        
-
-        <option value="../embeddable/divergent_pr/MithrilJS-mithril.js-1645939388.html">divergent_pr_4</option>
-
-        
-
-        <option value="../embeddable/divergent_pr/MithrilJS-mithril.js-1543388534.html">divergent_pr_5</option>
-
-        
-
-        <option value="../embeddable/divergent_pr/MithrilJS-mithril.js-1645499865.html">divergent_pr_6</option>
-
-        
-
-        <option value="../embeddable/divergent_pr/MithrilJS-mithril.js-1559164581.html">divergent_pr_7</option>
-
-        
-
-        <option value="../embeddable/divergent_pr/MithrilJS-mithril.js-1562174650.html">divergent_pr_8</option>
-
-        
-
-        <option value="../embeddable/divergent_pr/MithrilJS-mithril.js-1467331113.html">divergent_pr_9</option>
-
-        
-
-      </optgroup>
-
-      
-
-    </select>
+    </div>
 
     <iframe
 
@@ -180,15 +194,15 @@
 
 <script>
 
-  const setWorkflowType = () => {
+  const setWorkflowType = (id) => {
 
-    const workflowTypeURL = document.getElementById("select").value;
+    const workflowTypeURL = document.getElementById(id).value;
 
     document.getElementById("iframe").src = workflowTypeURL;
 
     const workflowTypeNameNormalized = document
 
-      .querySelector("#select option:checked")
+      .querySelector(`#${id} option:checked`)
 
       .parentElement.label.toLowerCase()
 
@@ -196,7 +210,7 @@
 
     document.getElementById("workflow-type-image").src =
 
-      "../workflow_type_images/" + workflowTypeNameNormalized + ".jpg";
+      "../workflow_type_images/" + workflowTypeNameNormalized + ".png";
 
     let description;
 
@@ -226,7 +240,7 @@
 
       "match",
 
-      document.querySelector("#select option:checked").textContent
+      document.querySelector(`#${id} option:checked`).textContent
 
     );
 
@@ -235,6 +249,16 @@
       window.location.pathname + "?" + searchParams.toString();
 
     history.pushState(null, "", newRelativePathQuery);
+
+    if (id === "unverified-select") {
+
+      document.getElementById("verified-select").value = "";
+
+    } else {
+
+      document.getElementById("unverified-select").value = "";
+
+    }
 
   };
 
@@ -250,7 +274,9 @@
 
       if (el.textContent === namedMatch) {
 
-        document.getElementById("select").value = el.value;
+        el.parentNode.parentNode.value = el.value;
+
+        setWorkflowType(el.parentNode.parentNode.id);
 
       }
 
@@ -258,10 +284,18 @@
 
   } else {
 
-    document.getElementById("select").value = "../embeddable/divergent_pr/MithrilJS-mithril.js-1467331113.html";
+    document.querySelectorAll("option").forEach((el) => {
+
+      if (el.textContent === "../embeddable/divergent_pr/MithrilJS-mithril.js-1467331113.html") {
+
+        el.parentNode.parentNode.value = "../embeddable/divergent_pr/MithrilJS-mithril.js-1467331113.html";
+
+        setWorkflowType(el.parentNode.parentNode.id);
+
+      }
+
+    });
 
   }
-
-  setWorkflowType();
 
 </script>

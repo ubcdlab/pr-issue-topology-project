@@ -22,115 +22,165 @@
 
     <h1>mlflow/mlflow Workflow Type Matches</h1>
 
-    <label for="workflow-type">Workflow type match:</label>
+    <div style="display: flex; flex-direction: row; margin-bottom: 8px">
 
-    <select
+      <div style="flex-basis: 50%">
 
-      id="select"
+        <label for="verified-workflow-type"
 
-      name="workflow-type"
+          >Verified workflow type matches:</label
 
-      onchange="setWorkflowType()"
+        >
 
-      style="width: fit-content"
+        <select
 
-    >
+          id="verified-select"
+
+          name="verified-workflow-type"
+
+          onchange="setWorkflowType('verified-select')"
+
+          style="width: fit-content"
+
+        >
+
+          
+
+          <optgroup label="Duplicate Issue Hub">
+
+            
+
+            <option value="../embeddable/duplicate_issue_hub/mlflow-mlflow-1655426692.html">duplicate_issue_hub_1</option>
+
+            
+
+            <option value="../embeddable/duplicate_issue_hub/mlflow-mlflow-1596725407.html">duplicate_issue_hub_2</option>
+
+            
+
+          </optgroup>
+
+          
+
+          <optgroup label="Divergent PR">
+
+            
+
+            <option value="../embeddable/divergent_pr/mlflow-mlflow-1646363372.html">divergent_pr_1</option>
+
+            
+
+            <option value="../embeddable/divergent_pr/mlflow-mlflow-1651246649.html">divergent_pr_2</option>
+
+            
+
+            <option value="../embeddable/divergent_pr/mlflow-mlflow-1549396627.html">divergent_pr_3</option>
+
+            
+
+            <option value="../embeddable/divergent_pr/mlflow-mlflow-1657264823.html">divergent_pr_4</option>
+
+            
+
+            <option value="../embeddable/divergent_pr/mlflow-mlflow-1654241051.html">divergent_pr_5</option>
+
+            
+
+            <option value="../embeddable/divergent_pr/mlflow-mlflow-1623771769.html">divergent_pr_6</option>
+
+            
+
+            <option value="../embeddable/divergent_pr/mlflow-mlflow-1654508450.html">divergent_pr_7</option>
+
+            
+
+          </optgroup>
+
+          
+
+          <optgroup label="Competing PRs">
+
+            
+
+            <option value="../embeddable/competing_prs/mlflow-mlflow-1655337135.html">competing_prs_2</option>
+
+            
+
+          </optgroup>
+
+          
+
+          <optgroup label="Extended PRs">
+
+            
+
+            <option value="../embeddable/extended_prs/mlflow-mlflow-1656691361.html">extended_prs_1</option>
+
+            
+
+            <option value="../embeddable/extended_prs/mlflow-mlflow-1635821214.html">extended_prs_2</option>
+
+            
+
+          </optgroup>
+
+          
+
+        </select>
+
+      </div>
 
       
 
-      <optgroup label="Competing PRs">
+      <div style="flex-basis: 50%">
 
-        
+        <label for="unverified-workflow-type"
 
-        <option value="../embeddable/competing_prs/mlflow-mlflow-1652978477.html">competing_prs_1</option>
+          >Unverified workflow type matches:</label
 
-        
+        >
 
-        <option value="../embeddable/competing_prs/mlflow-mlflow-1655337135.html">competing_prs_2</option>
+        <select
 
-        
+          id="unverified-select"
 
-        <option value="../embeddable/competing_prs/mlflow-mlflow-1655479503.html">competing_prs_3</option>
+          name="unverified-workflow-type"
 
-        
+          onchange="setWorkflowType('unverified-select')"
 
-        <option value="../embeddable/competing_prs/mlflow-mlflow-1655426696.html">competing_prs_4</option>
+          style="width: fit-content"
 
-        
+        >
 
-      </optgroup>
+          
 
-      
+          <optgroup label="Competing PRs">
 
-      <optgroup label="Duplicate Issue Hub">
+            
 
-        
+            <option value="../embeddable/competing_prs/mlflow-mlflow-1652978477.html">competing_prs_1</option>
 
-        <option value="../embeddable/duplicate_issue_hub/mlflow-mlflow-1655426692.html">duplicate_issue_hub_1</option>
+            
 
-        
+            <option value="../embeddable/competing_prs/mlflow-mlflow-1655479503.html">competing_prs_3</option>
 
-        <option value="../embeddable/duplicate_issue_hub/mlflow-mlflow-1596725407.html">duplicate_issue_hub_2</option>
+            
 
-        
+            <option value="../embeddable/competing_prs/mlflow-mlflow-1655426696.html">competing_prs_4</option>
 
-      </optgroup>
+            
 
-      
+          </optgroup>
 
-      <optgroup label="Extended PRs">
+          
 
-        
+        </select>
 
-        <option value="../embeddable/extended_prs/mlflow-mlflow-1656691361.html">extended_prs_1</option>
-
-        
-
-        <option value="../embeddable/extended_prs/mlflow-mlflow-1635821214.html">extended_prs_2</option>
-
-        
-
-      </optgroup>
+      </div>
 
       
 
-      <optgroup label="Divergent PR">
-
-        
-
-        <option value="../embeddable/divergent_pr/mlflow-mlflow-1646363372.html">divergent_pr_1</option>
-
-        
-
-        <option value="../embeddable/divergent_pr/mlflow-mlflow-1651246649.html">divergent_pr_2</option>
-
-        
-
-        <option value="../embeddable/divergent_pr/mlflow-mlflow-1549396627.html">divergent_pr_3</option>
-
-        
-
-        <option value="../embeddable/divergent_pr/mlflow-mlflow-1657264823.html">divergent_pr_4</option>
-
-        
-
-        <option value="../embeddable/divergent_pr/mlflow-mlflow-1654241051.html">divergent_pr_5</option>
-
-        
-
-        <option value="../embeddable/divergent_pr/mlflow-mlflow-1623771769.html">divergent_pr_6</option>
-
-        
-
-        <option value="../embeddable/divergent_pr/mlflow-mlflow-1654508450.html">divergent_pr_7</option>
-
-        
-
-      </optgroup>
-
-      
-
-    </select>
+    </div>
 
     <iframe
 
@@ -188,15 +238,15 @@
 
 <script>
 
-  const setWorkflowType = () => {
+  const setWorkflowType = (id) => {
 
-    const workflowTypeURL = document.getElementById("select").value;
+    const workflowTypeURL = document.getElementById(id).value;
 
     document.getElementById("iframe").src = workflowTypeURL;
 
     const workflowTypeNameNormalized = document
 
-      .querySelector("#select option:checked")
+      .querySelector(`#${id} option:checked`)
 
       .parentElement.label.toLowerCase()
 
@@ -204,7 +254,7 @@
 
     document.getElementById("workflow-type-image").src =
 
-      "../workflow_type_images/" + workflowTypeNameNormalized + ".jpg";
+      "../workflow_type_images/" + workflowTypeNameNormalized + ".png";
 
     let description;
 
@@ -234,7 +284,7 @@
 
       "match",
 
-      document.querySelector("#select option:checked").textContent
+      document.querySelector(`#${id} option:checked`).textContent
 
     );
 
@@ -243,6 +293,16 @@
       window.location.pathname + "?" + searchParams.toString();
 
     history.pushState(null, "", newRelativePathQuery);
+
+    if (id === "unverified-select") {
+
+      document.getElementById("verified-select").value = "";
+
+    } else {
+
+      document.getElementById("unverified-select").value = "";
+
+    }
 
   };
 
@@ -258,7 +318,9 @@
 
       if (el.textContent === namedMatch) {
 
-        document.getElementById("select").value = el.value;
+        el.parentNode.parentNode.value = el.value;
+
+        setWorkflowType(el.parentNode.parentNode.id);
 
       }
 
@@ -266,10 +328,18 @@
 
   } else {
 
-    document.getElementById("select").value = "../embeddable/divergent_pr/mlflow-mlflow-1549396627.html";
+    document.querySelectorAll("option").forEach((el) => {
+
+      if (el.textContent === "../embeddable/divergent_pr/mlflow-mlflow-1549396627.html") {
+
+        el.parentNode.parentNode.value = "../embeddable/divergent_pr/mlflow-mlflow-1549396627.html";
+
+        setWorkflowType(el.parentNode.parentNode.id);
+
+      }
+
+    });
 
   }
-
-  setWorkflowType();
 
 </script>
