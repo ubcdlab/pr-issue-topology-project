@@ -126,7 +126,7 @@
     });
   } else {
     document.querySelectorAll("option").forEach((el) => {
-      if (el.textContent === "{{last_updated}}") {
+      if (el.value === "{{last_updated}}") {
         el.parentNode.parentNode.value = "{{last_updated}}";
         setWorkflowType(el.parentNode.parentNode.id);
       }
