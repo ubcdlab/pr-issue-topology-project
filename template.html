@@ -52,14 +52,21 @@
       </div>
       {% endif %}
     </div>
-    <iframe
-      src=""
-      frameborder="0"
-      id="iframe"
-      style="flex-grow: 1; min-height: 500px"
-      width="800"
-      height="500"
-    ></iframe>
+    <div style="position: relative">
+      <iframe
+        src=""
+        frameborder="0"
+        id="iframe"
+        style="flex-grow: 1; min-height: 500px"
+        width="800"
+        height="500"
+      ></iframe>
+      <img
+        src="../workflow_type_images/legend.png"
+        alt="Legend"
+        style="position: absolute; top: 15px; left: 15px; height: 200px"
+      />
+    </div>
     <p><em>Click nodes to open GitHub URLs.</em></p>
     <details open>
       <summary>About this workflow type</summary>
