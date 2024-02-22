@@ -1,5 +1,6 @@
 from collections import defaultdict
-from os.path import isdir
+from os.path import isdir, dirname, abspath
+from sys import path
 from click import command, option
 import networkx as nx
 from tqdm import tqdm
@@ -8,25 +9,20 @@ import matplotlib.pyplot as plt
 from random import sample
 from os import makedirs, scandir, remove
 from bokeh.models import (
-    Circle,
-    CustomJS,
     GlobalInlineStyleSheet,
     HTMLLabelSet,
-    InlineStyleSheet,
-    LabelSet,
     MultiLine,
     OpenURL,
-    PanTool,
     Scatter,
     ColumnDataSource,
-    Tap,
     TapTool,
-    Tooltip,
-    WheelZoomTool,
     HoverTool,
+    Legend,
 )
 from bokeh.io import output_file, save
 from bokeh.plotting import figure, from_networkx
+
+path.append(dirname(dirname(abspath(__file__))))
 
 
 @command()
@@ -80,6 +76,9 @@ def main(cypher_path: str, query_name: str):
                         number=n._properties["number"],
                         url=n._properties["url"],
                         last_updated=n._properties["updated_at"],
+                        title=(
+                            n._properties["title"] if "title" in n._properties else ""
+                        ),
                     )
                 else:
                     to_highlight += [
@@ -95,6 +94,11 @@ def main(cypher_path: str, query_name: str):
                                     "number": n._properties["number"],
                                     "url": n._properties["url"],
                                     "last_updated": n._properties["updated_at"],
+                                    "title": (
+                                        n._properties["title"]
+                                        if "title" in n._properties
+                                        else ""
+                                    ),
                                 },
                             )
                             for n in record.get(key)
@@ -109,6 +113,9 @@ def main(cypher_path: str, query_name: str):
                     "number": n._properties["number"],
                     "url": n._properties["url"],
                     "last_updated": n._properties["updated_at"],
+                    "title": (
+                        n._properties["title"] if "title" in n._properties else ""
+                    ),
                 },
             )
             for n in cypher_nodes
@@ -118,7 +125,7 @@ def main(cypher_path: str, query_name: str):
                 e.nodes[0]._properties["number"],
                 e.nodes[1]._properties["number"],
                 {
-                    "link_type": e._properties["labels"],
+                    "title": e._properties["labels"],
                 },
             )
             for e in cypher_edges
@@ -172,6 +179,8 @@ def main(cypher_path: str, query_name: str):
         statuses = nx.get_node_attributes(graph, "status")
         urls = nx.get_node_attributes(graph, "url")
         colors = {}
+        descriptions = {}
+        titles = nx.get_node_attributes(graph, "title")
         for cn in graph.nodes:
             colors[cn] = (
                 (
@@ -185,6 +194,15 @@ def main(cypher_path: str, query_name: str):
                     if statuses[cn] == "closed"
                     else "#d2bdee" if statuses[cn] == "merged" else "#bbeebb"
                 )
+            )
+            descriptions[cn] = (
+                (
+                    "Closed"
+                    if statuses[cn] == "closed"
+                    else "Merged" if statuses[cn] == "merged" else "Open"
+                )
+                + " "
+                + ("PR" if types[cn] == "pull_request" else "Issue")
             )
         markers = {
             cn: "circle" if types[cn] == "pull_request" else "square" for cn in types
@@ -216,6 +234,7 @@ def main(cypher_path: str, query_name: str):
             for u, v in graph.edges
         }
         nx.set_node_attributes(graph, colors, "color")
+        nx.set_node_attributes(graph, descriptions, "desc")
         nx.set_node_attributes(graph, markers, "marker")
         nx.set_node_attributes(graph, node_edges, "edge_color")
         nx.set_node_attributes(graph, node_opacity, "opacity")
@@ -239,6 +258,7 @@ def main(cypher_path: str, query_name: str):
         plot.yaxis.major_tick_line_color = None
         plot.yaxis.minor_tick_line_color = None
         plot.yaxis.axis_line_color = "#e5e5e5"
+        plot.grid.grid_line_alpha = 0
         graph_plot = from_networkx(graph, nx.spring_layout, center=(0, 0))
         pos = graph_plot.layout_provider.graph_layout
 
@@ -293,7 +313,18 @@ def main(cypher_path: str, query_name: str):
         taptool = plot.select(type=TapTool)
         taptool.callback = OpenURL(url="@url")
 
-        plot.add_tools(HoverTool(tooltips=[("", "Click to open GitHub URL")]))
+        titles_dict = {}
+        titles_dict["title"] = [titles[cn] for cn in pos]
+        titles_source = ColumnDataSource(titles_dict)
+        plot.add_tools(
+            HoverTool(
+                tooltips=[
+                    ("", "@title"),
+                    ("", "@desc"),
+                    ("", "Click to open GitHub URL"),
+                ]
+            )
+        )
 
         most_recently_updated = max(
             nx.get_node_attributes(graph, "last_updated").values()
