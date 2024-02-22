@@ -12,7 +12,7 @@ class PickleReader(object):
         target_repo_no_slash = target_repo.replace("/", "-")  # slashes breaks file path
         # PATH_FROM_PARENT_DIR = f'raw_data/nodes_{target_repo_no_slash}'
         # PATH = os.path.abspath(os.path.join(os.path.abspath('..'), PATH_FROM_PARENT_DIR))
-        PATH = Path(__file__).resolve().parents[1].joinpath(f"raw_data/nodes_{target_repo_no_slash}")
+        PATH = Path(__file__).resolve().parents[2].joinpath(f"raw_data/nodes_{target_repo_no_slash}")
         nodes, node_list, comment_list, timeline_list, review_comment_list = ([] for i in range(5))
         try:
             nodes = pickle.load(open(f"{PATH}.pk", "rb"))
