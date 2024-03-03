@@ -68,6 +68,118 @@
 
       
 
+      <div style="flex-basis: 50%">
+
+        <label for="unverified-workflow-type"
+
+          >Unverified workflow type matches:</label
+
+        >
+
+        <select
+
+          id="unverified-select"
+
+          name="unverified-workflow-type"
+
+          onchange="setWorkflowType('unverified-select')"
+
+          style="width: fit-content"
+
+        >
+
+          
+
+          <optgroup label="Consequent Issue">
+
+            
+
+            <option value="../embeddable/consequent_issue/summernote-summernote-1607188010.html">consequent_issue_1</option>
+
+            
+
+            <option value="../embeddable/consequent_issue/summernote-summernote-1544717081.html">consequent_issue_2</option>
+
+            
+
+            <option value="../embeddable/consequent_issue/summernote-summernote-1535203832.html">consequent_issue_3</option>
+
+            
+
+            <option value="../embeddable/consequent_issue/summernote-summernote-1551964613.html">consequent_issue_4</option>
+
+            
+
+            <option value="../embeddable/consequent_issue/summernote-summernote-1511540452.html">consequent_issue_5</option>
+
+            
+
+          </optgroup>
+
+          
+
+          <optgroup label="Integrating PR Hub">
+
+            
+
+            <option value="../embeddable/integrating_pr_hub/summernote-summernote-1577556365.html">integrating_pr_hub_1</option>
+
+            
+
+            <option value="../embeddable/integrating_pr_hub/summernote-summernote-1620912361.html">integrating_pr_hub_2</option>
+
+            
+
+            <option value="../embeddable/integrating_pr_hub/summernote-summernote-1650408746.html">integrating_pr_hub_3</option>
+
+            
+
+            <option value="../embeddable/integrating_pr_hub/summernote-summernote-1607122448.html">integrating_pr_hub_4</option>
+
+            
+
+            <option value="../embeddable/integrating_pr_hub/summernote-summernote-1607176708.html">integrating_pr_hub_5</option>
+
+            
+
+            <option value="../embeddable/integrating_pr_hub/summernote-summernote-1652171037.html">integrating_pr_hub_6</option>
+
+            
+
+          </optgroup>
+
+          
+
+          <optgroup label="Consequent Issue PRs">
+
+            
+
+            <option value="../embeddable/consequent_issue_prs/summernote-summernote-1656655602.html">consequent_issue_prs_1</option>
+
+            
+
+          </optgroup>
+
+          
+
+          <optgroup label="Dependent PRs">
+
+            
+
+            <option value="../embeddable/dependent_prs/summernote-summernote-1606608576.html">dependent_prs_1</option>
+
+            
+
+          </optgroup>
+
+          
+
+        </select>
+
+      </div>
+
+      
+
     </div>
 
     <div style="position: relative">
@@ -176,7 +288,35 @@
 
       description = `This workflow type abstracts a somewhat common practice in software development in which a single commit bundles multiple changes to the codebase.`;
 
+    } else if (workflowTypeNameNormalized === "dependent_prs") {
+
+      description = `The Dependent PR workflow describes a situation in which pull requests are connected to other pull requests in a chain. Usually, the chained PRs have the same author, or a limited set of authors. This workflow facilitates the review and merging process across different branches `;
+
+    } else if (workflowTypeNameNormalized === "decomposed_issue") {
+
+      description = `This workflow type models a good and well-known software engineering practice in which work is divided into smaller pieces to facilitate its execution, improve documentation, decouple modules, etc.`;
+
+    } else if (
+
+      workflowTypeNameNormalized === "consequent_issue" ||
+
+      workflowTypeNameNormalized === "consequent_issue_prs"
+
+    ) {
+
+      description =
+
+        "This workflow type can be translated into a situation where a solution (PR) to an Issue impacts the rest of the project in such a way that a new Issue is created after the PR.";
+
+    } else if (workflowTypeNameNormalized === "integrating_pr_hub") {
+
+      description =
+
+        "In this workflow type, a developer links to other developers’ contributions to help surface these contributions and to coordinate the software development process.";
+
     }
+
+
 
     document.getElementById("workflow-type-desc").innerText = description;
 

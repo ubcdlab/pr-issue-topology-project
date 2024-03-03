@@ -68,6 +68,70 @@
 
       
 
+      <div style="flex-basis: 50%">
+
+        <label for="unverified-workflow-type"
+
+          >Unverified workflow type matches:</label
+
+        >
+
+        <select
+
+          id="unverified-select"
+
+          name="unverified-workflow-type"
+
+          onchange="setWorkflowType('unverified-select')"
+
+          style="width: fit-content"
+
+        >
+
+          
+
+          <optgroup label="Consequent Issue">
+
+            
+
+            <option value="../embeddable/consequent_issue/MagicStack-uvloop-1633492730.html">consequent_issue_1</option>
+
+            
+
+          </optgroup>
+
+          
+
+          <optgroup label="Decomposed Issue">
+
+            
+
+            <option value="../embeddable/decomposed_issue/MagicStack-uvloop-1633492730.html">decomposed_issue_1</option>
+
+            
+
+          </optgroup>
+
+          
+
+          <optgroup label="Consequent Issue PRs">
+
+            
+
+            <option value="../embeddable/consequent_issue_prs/MagicStack-uvloop-1633492730.html">consequent_issue_prs_1</option>
+
+            
+
+          </optgroup>
+
+          
+
+        </select>
+
+      </div>
+
+      
+
     </div>
 
     <div style="position: relative">
@@ -176,7 +240,35 @@
 
       description = `This workflow type abstracts a somewhat common practice in software development in which a single commit bundles multiple changes to the codebase.`;
 
+    } else if (workflowTypeNameNormalized === "dependent_prs") {
+
+      description = `The Dependent PR workflow describes a situation in which pull requests are connected to other pull requests in a chain. Usually, the chained PRs have the same author, or a limited set of authors. This workflow facilitates the review and merging process across different branches `;
+
+    } else if (workflowTypeNameNormalized === "decomposed_issue") {
+
+      description = `This workflow type models a good and well-known software engineering practice in which work is divided into smaller pieces to facilitate its execution, improve documentation, decouple modules, etc.`;
+
+    } else if (
+
+      workflowTypeNameNormalized === "consequent_issue" ||
+
+      workflowTypeNameNormalized === "consequent_issue_prs"
+
+    ) {
+
+      description =
+
+        "This workflow type can be translated into a situation where a solution (PR) to an Issue impacts the rest of the project in such a way that a new Issue is created after the PR.";
+
+    } else if (workflowTypeNameNormalized === "integrating_pr_hub") {
+
+      description =
+
+        "In this workflow type, a developer links to other developers’ contributions to help surface these contributions and to coordinate the software development process.";
+
     }
+
+
 
     document.getElementById("workflow-type-desc").innerText = description;
 

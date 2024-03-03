@@ -88,6 +88,182 @@
 
       
 
+      <div style="flex-basis: 50%">
+
+        <label for="unverified-workflow-type"
+
+          >Unverified workflow type matches:</label
+
+        >
+
+        <select
+
+          id="unverified-select"
+
+          name="unverified-workflow-type"
+
+          onchange="setWorkflowType('unverified-select')"
+
+          style="width: fit-content"
+
+        >
+
+          
+
+          <optgroup label="Consequent Issue">
+
+            
+
+            <option value="../embeddable/consequent_issue/Project-OSRM-osrm-backend-1647498899.html">consequent_issue_1</option>
+
+            
+
+            <option value="../embeddable/consequent_issue/Project-OSRM-osrm-backend-1586131850.html">consequent_issue_2</option>
+
+            
+
+            <option value="../embeddable/consequent_issue/Project-OSRM-osrm-backend-1641829852.html">consequent_issue_3</option>
+
+            
+
+            <option value="../embeddable/consequent_issue/Project-OSRM-osrm-backend-1638141657.html">consequent_issue_4</option>
+
+            
+
+            <option value="../embeddable/consequent_issue/Project-OSRM-osrm-backend-1620225947.html">consequent_issue_5</option>
+
+            
+
+          </optgroup>
+
+          
+
+          <optgroup label="Decomposed Issue">
+
+            
+
+            <option value="../embeddable/decomposed_issue/Project-OSRM-osrm-backend-1524786907.html">decomposed_issue_1</option>
+
+            
+
+            <option value="../embeddable/decomposed_issue/Project-OSRM-osrm-backend-1620225947.html">decomposed_issue_2</option>
+
+            
+
+          </optgroup>
+
+          
+
+          <optgroup label="Integrating PR Hub">
+
+            
+
+            <option value="../embeddable/integrating_pr_hub/Project-OSRM-osrm-backend-1632172755.html">integrating_pr_hub_1</option>
+
+            
+
+            <option value="../embeddable/integrating_pr_hub/Project-OSRM-osrm-backend-1630687944.html">integrating_pr_hub_2</option>
+
+            
+
+            <option value="../embeddable/integrating_pr_hub/Project-OSRM-osrm-backend-1554893370.html">integrating_pr_hub_3</option>
+
+            
+
+            <option value="../embeddable/integrating_pr_hub/Project-OSRM-osrm-backend-1513455786.html">integrating_pr_hub_4</option>
+
+            
+
+            <option value="../embeddable/integrating_pr_hub/Project-OSRM-osrm-backend-1515620441.html">integrating_pr_hub_5</option>
+
+            
+
+            <option value="../embeddable/integrating_pr_hub/Project-OSRM-osrm-backend-1507592684.html">integrating_pr_hub_6</option>
+
+            
+
+            <option value="../embeddable/integrating_pr_hub/Project-OSRM-osrm-backend-1657420578.html">integrating_pr_hub_7</option>
+
+            
+
+            <option value="../embeddable/integrating_pr_hub/Project-OSRM-osrm-backend-1652327126.html">integrating_pr_hub_8</option>
+
+            
+
+          </optgroup>
+
+          
+
+          <optgroup label="Consequent Issue PRs">
+
+            
+
+            <option value="../embeddable/consequent_issue_prs/Project-OSRM-osrm-backend-1646519750.html">consequent_issue_prs_1</option>
+
+            
+
+            <option value="../embeddable/consequent_issue_prs/Project-OSRM-osrm-backend-1632172755.html">consequent_issue_prs_2</option>
+
+            
+
+            <option value="../embeddable/consequent_issue_prs/Project-OSRM-osrm-backend-1524786907.html">consequent_issue_prs_3</option>
+
+            
+
+            <option value="../embeddable/consequent_issue_prs/Project-OSRM-osrm-backend-1630905231.html">consequent_issue_prs_4</option>
+
+            
+
+            <option value="../embeddable/consequent_issue_prs/Project-OSRM-osrm-backend-1631275622.html">consequent_issue_prs_5</option>
+
+            
+
+            <option value="../embeddable/consequent_issue_prs/Project-OSRM-osrm-backend-1579501279.html">consequent_issue_prs_6</option>
+
+            
+
+            <option value="../embeddable/consequent_issue_prs/Project-OSRM-osrm-backend-1605731638.html">consequent_issue_prs_7</option>
+
+            
+
+            <option value="../embeddable/consequent_issue_prs/Project-OSRM-osrm-backend-1484691603.html">consequent_issue_prs_8</option>
+
+            
+
+            <option value="../embeddable/consequent_issue_prs/Project-OSRM-osrm-backend-1568710833.html">consequent_issue_prs_9</option>
+
+            
+
+            <option value="../embeddable/consequent_issue_prs/Project-OSRM-osrm-backend-1584264870.html">consequent_issue_prs_10</option>
+
+            
+
+          </optgroup>
+
+          
+
+          <optgroup label="Dependent PRs">
+
+            
+
+            <option value="../embeddable/dependent_prs/Project-OSRM-osrm-backend-1606367489.html">dependent_prs_1</option>
+
+            
+
+            <option value="../embeddable/dependent_prs/Project-OSRM-osrm-backend-1630688410.html">dependent_prs_2</option>
+
+            
+
+          </optgroup>
+
+          
+
+        </select>
+
+      </div>
+
+      
+
     </div>
 
     <div style="position: relative">
@@ -196,7 +372,35 @@
 
       description = `This workflow type abstracts a somewhat common practice in software development in which a single commit bundles multiple changes to the codebase.`;
 
+    } else if (workflowTypeNameNormalized === "dependent_prs") {
+
+      description = `The Dependent PR workflow describes a situation in which pull requests are connected to other pull requests in a chain. Usually, the chained PRs have the same author, or a limited set of authors. This workflow facilitates the review and merging process across different branches `;
+
+    } else if (workflowTypeNameNormalized === "decomposed_issue") {
+
+      description = `This workflow type models a good and well-known software engineering practice in which work is divided into smaller pieces to facilitate its execution, improve documentation, decouple modules, etc.`;
+
+    } else if (
+
+      workflowTypeNameNormalized === "consequent_issue" ||
+
+      workflowTypeNameNormalized === "consequent_issue_prs"
+
+    ) {
+
+      description =
+
+        "This workflow type can be translated into a situation where a solution (PR) to an Issue impacts the rest of the project in such a way that a new Issue is created after the PR.";
+
+    } else if (workflowTypeNameNormalized === "integrating_pr_hub") {
+
+      description =
+
+        "In this workflow type, a developer links to other developers’ contributions to help surface these contributions and to coordinate the software development process.";
+
     }
+
+
 
     document.getElementById("workflow-type-desc").innerText = description;
 
@@ -252,9 +456,9 @@
 
     document.querySelectorAll("option").forEach((el) => {
 
-      if (el.value === "../embeddable/divergent_pr/Project-OSRM-osrm-backend-1524786907.html") {
+      if (el.value === "../embeddable/consequent_issue_prs/Project-OSRM-osrm-backend-1484691603.html") {
 
-        el.parentNode.parentNode.value = "../embeddable/divergent_pr/Project-OSRM-osrm-backend-1524786907.html";
+        el.parentNode.parentNode.value = "../embeddable/consequent_issue_prs/Project-OSRM-osrm-backend-1484691603.html";
 
         setWorkflowType(el.parentNode.parentNode.id);
 

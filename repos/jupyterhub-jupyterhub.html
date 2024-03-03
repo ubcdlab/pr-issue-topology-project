@@ -126,6 +126,18 @@
 
           
 
+          <optgroup label="Integrating PR Hub">
+
+            
+
+            <option value="../embeddable/integrating_pr_hub/jupyterhub-jupyterhub-1657795356.html">integrating_pr_hub_4</option>
+
+            
+
+          </optgroup>
+
+          
+
         </select>
 
       </div>
@@ -154,6 +166,50 @@
 
           
 
+          <optgroup label="Consequent Issue">
+
+            
+
+            <option value="../embeddable/consequent_issue/jupyterhub-jupyterhub-1551786813.html">consequent_issue_1</option>
+
+            
+
+            <option value="../embeddable/consequent_issue/jupyterhub-jupyterhub-1522089245.html">consequent_issue_2</option>
+
+            
+
+            <option value="../embeddable/consequent_issue/jupyterhub-jupyterhub-1613618569.html">consequent_issue_3</option>
+
+            
+
+            <option value="../embeddable/consequent_issue/jupyterhub-jupyterhub-1582578080.html">consequent_issue_4</option>
+
+            
+
+            <option value="../embeddable/consequent_issue/jupyterhub-jupyterhub-1657247424.html">consequent_issue_5</option>
+
+            
+
+            <option value="../embeddable/consequent_issue/jupyterhub-jupyterhub-1657883376.html">consequent_issue_6</option>
+
+            
+
+            <option value="../embeddable/consequent_issue/jupyterhub-jupyterhub-1521972363.html">consequent_issue_7</option>
+
+            
+
+            <option value="../embeddable/consequent_issue/jupyterhub-jupyterhub-1653253846.html">consequent_issue_8</option>
+
+            
+
+            <option value="../embeddable/consequent_issue/jupyterhub-jupyterhub-1653690101.html">consequent_issue_9</option>
+
+            
+
+          </optgroup>
+
+          
+
           <optgroup label="Competing PRs">
 
             
@@ -167,6 +223,102 @@
             
 
             <option value="../embeddable/competing_prs/jupyterhub-jupyterhub-1478918383.html">competing_prs_3</option>
+
+            
+
+          </optgroup>
+
+          
+
+          <optgroup label="Decomposed Issue">
+
+            
+
+            <option value="../embeddable/decomposed_issue/jupyterhub-jupyterhub-1557784363.html">decomposed_issue_1</option>
+
+            
+
+            <option value="../embeddable/decomposed_issue/jupyterhub-jupyterhub-1653253392.html">decomposed_issue_2</option>
+
+            
+
+            <option value="../embeddable/decomposed_issue/jupyterhub-jupyterhub-1519416094.html">decomposed_issue_3</option>
+
+            
+
+          </optgroup>
+
+          
+
+          <optgroup label="Integrating PR Hub">
+
+            
+
+            <option value="../embeddable/integrating_pr_hub/jupyterhub-jupyterhub-1653168790.html">integrating_pr_hub_1</option>
+
+            
+
+            <option value="../embeddable/integrating_pr_hub/jupyterhub-jupyterhub-1635976459.html">integrating_pr_hub_2</option>
+
+            
+
+            <option value="../embeddable/integrating_pr_hub/jupyterhub-jupyterhub-1657247424.html">integrating_pr_hub_3</option>
+
+            
+
+          </optgroup>
+
+          
+
+          <optgroup label="Consequent Issue PRs">
+
+            
+
+            <option value="../embeddable/consequent_issue_prs/jupyterhub-jupyterhub-1653253392.html">consequent_issue_prs_1</option>
+
+            
+
+            <option value="../embeddable/consequent_issue_prs/jupyterhub-jupyterhub-1606226831.html">consequent_issue_prs_2</option>
+
+            
+
+            <option value="../embeddable/consequent_issue_prs/jupyterhub-jupyterhub-1528833911.html">consequent_issue_prs_3</option>
+
+            
+
+            <option value="../embeddable/consequent_issue_prs/jupyterhub-jupyterhub-1654708429.html">consequent_issue_prs_4</option>
+
+            
+
+            <option value="../embeddable/consequent_issue_prs/jupyterhub-jupyterhub-1653512464.html">consequent_issue_prs_5</option>
+
+            
+
+            <option value="../embeddable/consequent_issue_prs/jupyterhub-jupyterhub-1657247424.html">consequent_issue_prs_6</option>
+
+            
+
+            <option value="../embeddable/consequent_issue_prs/jupyterhub-jupyterhub-1578599111.html">consequent_issue_prs_7</option>
+
+            
+
+            <option value="../embeddable/consequent_issue_prs/jupyterhub-jupyterhub-1657880957.html">consequent_issue_prs_8</option>
+
+            
+
+            <option value="../embeddable/consequent_issue_prs/jupyterhub-jupyterhub-1613618648.html">consequent_issue_prs_9</option>
+
+            
+
+            <option value="../embeddable/consequent_issue_prs/jupyterhub-jupyterhub-1613648287.html">consequent_issue_prs_10</option>
+
+            
+
+            <option value="../embeddable/consequent_issue_prs/jupyterhub-jupyterhub-1599262400.html">consequent_issue_prs_11</option>
+
+            
+
+            <option value="../embeddable/consequent_issue_prs/jupyterhub-jupyterhub-1653690101.html">consequent_issue_prs_12</option>
 
             
 
@@ -288,7 +440,35 @@
 
       description = `This workflow type abstracts a somewhat common practice in software development in which a single commit bundles multiple changes to the codebase.`;
 
+    } else if (workflowTypeNameNormalized === "dependent_prs") {
+
+      description = `The Dependent PR workflow describes a situation in which pull requests are connected to other pull requests in a chain. Usually, the chained PRs have the same author, or a limited set of authors. This workflow facilitates the review and merging process across different branches `;
+
+    } else if (workflowTypeNameNormalized === "decomposed_issue") {
+
+      description = `This workflow type models a good and well-known software engineering practice in which work is divided into smaller pieces to facilitate its execution, improve documentation, decouple modules, etc.`;
+
+    } else if (
+
+      workflowTypeNameNormalized === "consequent_issue" ||
+
+      workflowTypeNameNormalized === "consequent_issue_prs"
+
+    ) {
+
+      description =
+
+        "This workflow type can be translated into a situation where a solution (PR) to an Issue impacts the rest of the project in such a way that a new Issue is created after the PR.";
+
+    } else if (workflowTypeNameNormalized === "integrating_pr_hub") {
+
+      description =
+
+        "In this workflow type, a developer links to other developers’ contributions to help surface these contributions and to coordinate the software development process.";
+
     }
+
+
 
     document.getElementById("workflow-type-desc").innerText = description;
 

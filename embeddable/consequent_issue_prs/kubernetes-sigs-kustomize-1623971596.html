@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Bokeh Plot</title>
+    <style>
+      html, body {
+        box-sizing: border-box;
+        display: flow-root;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+    <script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-3.3.4.min.js"></script>
+    <script type="text/javascript">
+        Bokeh.set_log_level("info");
+    </script>
+  </head>
+  <body>
+    <div id="f7143f16-5f39-4da9-8322-a7c48bf89d99" data-root-id="p35083" style="display: contents;"></div>
+  
+    <script type="application/json" id="p35154">
+      {"793c0a9e-2144-46c7-8741-23c167b96e97":{"version":"3.3.4","title":"Bokeh Application","roots":[{"type":"object","name":"Figure","id":"p35083","attributes":{"stylesheets":[{"type":"object","name":"GlobalInlineStyleSheet","id":"p35082","attributes":{"css":"body {overflow:hidden}"}}],"sizing_mode":"stretch_both","x_range":{"type":"object","name":"DataRange1d","id":"p35084"},"y_range":{"type":"object","name":"DataRange1d","id":"p35085"},"x_scale":{"type":"object","name":"LinearScale","id":"p35092"},"y_scale":{"type":"object","name":"LinearScale","id":"p35093"},"title":{"type":"object","name":"Title","id":"p35090"},"renderers":[{"type":"object","name":"HTMLLabelSet","id":"p35135","attributes":{"source":{"type":"object","name":"ColumnDataSource","id":"p35132","attributes":{"selected":{"type":"object","name":"Selection","id":"p35133","attributes":{"indices":[],"line_indices":[]}},"selection_policy":{"type":"object","name":"UnionRenderers","id":"p35134"},"data":{"type":"map","entries":[["x",[-0.28129829336462336,-0.12559552782756775,0.140586288265532,0.48446132387428753,0.04516270262005804,-0.5786840421725714,-0.6846324513951153,1.0]],["y",[0.602736843657196,0.06552134977421219,-0.3608252377357991,-0.2376288483236687,0.5898606644000458,-0.2594631334437508,0.05006537315168491,-0.45026701147992026]],["text",["Issue #3927","PR #3931","Issue #3983","PR #3984","Issue #4003","PR #3932","Issue #3928","PR #3991"]],["text_size",["24px","24px","24px","24px","16px","16px","16px","16px"]],["text_opacity",[1,1,1,1,0.5,0.5,0.5,0.5]],["edge_color",["#0096FF","#0096FF","#0096FF","#0096FF","#000000","#000000","#000000","#000000"]]]}}},"x":{"type":"field","field":"x"},"y":{"type":"field","field":"y"},"text":{"type":"field","field":"text"},"y_offset":{"type":"value","value":-15},"text_color":{"type":"field","field":"edge_color"},"text_alpha":{"type":"field","field":"text_opacity"},"text_font_size":{"type":"field","field":"text_size"},"text_align":{"type":"value","value":"center"},"text_baseline":{"type":"value","value":"top"}}},{"type":"object","name":"GraphRenderer","id":"p35114","attributes":{"layout_provider":{"type":"object","name":"StaticLayoutProvider","id":"p35131","attributes":{"graph_layout":{"type":"map","entries":[[3927,{"type":"ndarray","array":{"type":"bytes","data":"qfyajsoA0r/yQvPGnknjPw=="},"shape":[2],"dtype":"float64","order":"little"}],[3931,{"type":"ndarray","array":{"type":"bytes","data":"l4lFpoMTwL8fU3jWAcawPw=="},"shape":[2],"dtype":"float64","order":"little"}],[3983,{"type":"ndarray","array":{"type":"bytes","data":"GOkuQ7v+wT8+Y+m8whfXvw=="},"shape":[2],"dtype":"float64","order":"little"}],[3984,{"type":"ndarray","array":{"type":"bytes","data":"KuKNEWoB3z9UchFCn2rOvw=="},"shape":[2],"dtype":"float64","order":"little"}],[4003,{"type":"ndarray","array":{"type":"bytes","data":"PRaB1ZAfpz/fcNl4I+DiPw=="},"shape":[2],"dtype":"float64","order":"little"}],[3932,{"type":"ndarray","array":{"type":"bytes","data":"GiV7ZZSE4r9mJipCC5vQvw=="},"shape":[2],"dtype":"float64","order":"little"}],[3928,{"type":"ndarray","array":{"type":"bytes","data":"7baQUILo5b+gcbIoK6KpPw=="},"shape":[2],"dtype":"float64","order":"little"}],[3991,{"type":"ndarray","array":{"type":"bytes","data":"AAAAAAAA8D/PhzG6LNHcvw=="},"shape":[2],"dtype":"float64","order":"little"}]]}}},"node_renderer":{"type":"object","name":"GlyphRenderer","id":"p35119","attributes":{"data_source":{"type":"object","name":"ColumnDataSource","id":"p35116","attributes":{"selected":{"type":"object","name":"Selection","id":"p35117","attributes":{"indices":[],"line_indices":[]}},"selection_policy":{"type":"object","name":"UnionRenderers","id":"p35118"},"data":{"type":"map","entries":[["url",["https://github.com/kubernetes-sigs/kustomize/issues/3927","https://github.com/kubernetes-sigs/kustomize/pull/3931","https://github.com/kubernetes-sigs/kustomize/issues/3983","https://github.com/kubernetes-sigs/kustomize/pull/3984","https://github.com/kubernetes-sigs/kustomize/issues/4003","https://github.com/kubernetes-sigs/kustomize/pull/3932","https://github.com/kubernetes-sigs/kustomize/issues/3928","https://github.com/kubernetes-sigs/kustomize/pull/3991"]],["color",["#f46d75","#a57cde","#f46d75","#a57cde","#f9b6ba","#f9b6ba","#f9b6ba","#d2bdee"]],["opacity",[1,1,1,1,0.5,0.5,0.5,0.5]],["number",[3927,3931,3983,3984,4003,3932,3928,3991]],["status",["closed","merged","closed","merged","closed","closed","closed","merged"]],["title",["Replacements transformer overwrites source field (when multiple fieldPaths are specified?)","Fix issues with replacements","`replacements` doesn't work for mapping values with '.'","Replacement with dot","`kustomize build` with replacements alter the replacement source","test to demonstrate replacements failing with '.' character","Replacements transformer list indexing fails for keys with '.' character","convert vars to replacements: mapping value with dot"]],["type",["issue","pull_request","issue","pull_request","issue","pull_request","issue","pull_request"]],["desc",["Closed Issue","Merged PR","Closed Issue","Merged PR","Closed Issue","Closed PR","Closed Issue","Merged PR"]],["edge_color",["#0096FF","#0096FF","#0096FF","#0096FF","#000000","#000000","#000000","#000000"]],["last_updated",[1622768221,1623415252,1623399133,1623399134,1623971596,1622174129,1622768221,1623820063]],["marker",["square","circle","square","circle","square","circle","square","circle"]],["index",[3927,3931,3983,3984,4003,3932,3928,3991]]]}}},"view":{"type":"object","name":"CDSView","id":"p35120","attributes":{"filter":{"type":"object","name":"AllIndices","id":"p35121"}}},"glyph":{"type":"object","name":"Scatter","id":"p35139","attributes":{"tags":["link"],"size":{"type":"value","value":20},"line_color":{"type":"field","field":"edge_color"},"line_alpha":{"type":"field","field":"opacity"},"line_width":{"type":"value","value":3},"fill_color":{"type":"field","field":"color"},"marker":{"type":"field","field":"marker"}}},"selection_glyph":{"id":"p35139"},"nonselection_glyph":{"id":"p35139"}}},"edge_renderer":{"type":"object","name":"GlyphRenderer","id":"p35126","attributes":{"data_source":{"type":"object","name":"ColumnDataSource","id":"p35123","attributes":{"selected":{"type":"object","name":"Selection","id":"p35124","attributes":{"indices":[],"line_indices":[]}},"selection_policy":{"type":"object","name":"UnionRenderers","id":"p35125"},"data":{"type":"map","entries":[["opacity",[0.4,1,0.4,1,0.4,0.4,0.4,1,0.4,0.4]],["edge_color",["#000000","#0096FF","#000000","#0096FF","#000000","#000000","#000000","#0096FF","#000000","#000000"]],["title",["other","fixes","other","other","other","fixes","other","other","other","other"]],["start",[3927,3927,3931,3931,3931,3931,3931,3983,3984,3932]],["end",[4003,3931,4003,3983,3984,3928,3932,3984,3991,3928]]]}}},"view":{"type":"object","name":"CDSView","id":"p35127","attributes":{"filter":{"type":"object","name":"AllIndices","id":"p35128"}}},"glyph":{"type":"object","name":"MultiLine","id":"p35140","attributes":{"line_color":{"type":"field","field":"edge_color"},"line_alpha":{"type":"field","field":"opacity"},"line_width":{"type":"value","value":2}}}}},"selection_policy":{"type":"object","name":"NodesOnly","id":"p35129"},"inspection_policy":{"type":"object","name":"NodesOnly","id":"p35130"}}}],"toolbar":{"type":"object","name":"Toolbar","id":"p35091","attributes":{"tools":[{"type":"object","name":"PanTool","id":"p35104"},{"type":"object","name":"WheelZoomTool","id":"p35105","attributes":{"renderers":"auto"}},{"type":"object","name":"BoxZoomTool","id":"p35106","attributes":{"overlay":{"type":"object","name":"BoxAnnotation","id":"p35107","attributes":{"syncable":false,"level":"overlay","visible":false,"left":{"type":"number","value":"nan"},"right":{"type":"number","value":"nan"},"top":{"type":"number","value":"nan"},"bottom":{"type":"number","value":"nan"},"left_units":"canvas","right_units":"canvas","top_units":"canvas","bottom_units":"canvas","line_color":"black","line_alpha":1.0,"line_width":2,"line_dash":[4,4],"fill_color":"lightgrey","fill_alpha":0.5}}}},{"type":"object","name":"ResetTool","id":"p35112"},{"type":"object","name":"TapTool","id":"p35113","attributes":{"renderers":"auto","callback":{"type":"object","name":"OpenURL","id":"p35141","attributes":{"url":"@url"}}}},{"type":"object","name":"HoverTool","id":"p35145","attributes":{"renderers":"auto","tooltips":[["","@title"],["","@desc"],["","Click to open GitHub URL"]]}}],"active_drag":{"id":"p35104"},"active_scroll":{"id":"p35105"}}},"toolbar_location":null,"left":[{"type":"object","name":"LinearAxis","id":"p35099","attributes":{"ticker":{"type":"object","name":"BasicTicker","id":"p35100","attributes":{"mantissas":[1,2,5]}},"formatter":{"type":"object","name":"BasicTickFormatter","id":"p35101"},"major_label_policy":{"type":"object","name":"AllLabels","id":"p35102"},"major_label_text_font_size":"0pt","axis_line_color":"#e5e5e5","major_tick_line_color":null,"minor_tick_line_color":null}}],"below":[{"type":"object","name":"LinearAxis","id":"p35094","attributes":{"ticker":{"type":"object","name":"BasicTicker","id":"p35095","attributes":{"mantissas":[1,2,5]}},"formatter":{"type":"object","name":"BasicTickFormatter","id":"p35096"},"major_label_policy":{"type":"object","name":"AllLabels","id":"p35097"},"major_label_text_font_size":"0pt","axis_line_color":"#e5e5e5","major_tick_line_color":null,"minor_tick_line_color":null}}],"center":[{"type":"object","name":"Grid","id":"p35098","attributes":{"axis":{"id":"p35094"},"grid_line_alpha":0}},{"type":"object","name":"Grid","id":"p35103","attributes":{"dimension":1,"axis":{"id":"p35099"},"grid_line_alpha":0}}]}}]}}
+    </script>
+    <script type="text/javascript">
+      (function() {
+        const fn = function() {
+          Bokeh.safely(function() {
+            (function(root) {
+              function embed_document(root) {
+              const docs_json = document.getElementById('p35154').textContent;
+              const render_items = [{"docid":"793c0a9e-2144-46c7-8741-23c167b96e97","roots":{"p35083":"f7143f16-5f39-4da9-8322-a7c48bf89d99"},"root_ids":["p35083"]}];
+              root.Bokeh.embed.embed_items(docs_json, render_items);
+              }
+              if (root.Bokeh !== undefined) {
+                embed_document(root);
+              } else {
+                let attempts = 0;
+                const timer = setInterval(function(root) {
+                  if (root.Bokeh !== undefined) {
+                    clearInterval(timer);
+                    embed_document(root);
+                  } else {
+                    attempts++;
+                    if (attempts > 100) {
+                      clearInterval(timer);
+                      console.log("Bokeh: ERROR: Unable to run BokehJS code because BokehJS library is missing");
+                    }
+                  }
+                }, 10, root)
+              }
+            })(window);
+          });
+        };
+        if (document.readyState != "loading") fn();
+        else document.addEventListener("DOMContentLoaded", fn);
+      })();
+    </script>
+  </body>
+</html>

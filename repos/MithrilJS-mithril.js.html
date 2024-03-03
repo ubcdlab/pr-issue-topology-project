@@ -130,6 +130,190 @@
 
           
 
+          <optgroup label="Consequent Issue">
+
+            
+
+            <option value="../embeddable/consequent_issue/MithrilJS-mithril.js-1652713638.html">consequent_issue_3</option>
+
+            
+
+            <option value="../embeddable/consequent_issue/MithrilJS-mithril.js-1645939388.html">consequent_issue_4</option>
+
+            
+
+          </optgroup>
+
+          
+
+          <optgroup label="Consequent Issue PRs">
+
+            
+
+            <option value="../embeddable/consequent_issue_prs/MithrilJS-mithril.js-1652713638.html">consequent_issue_prs_2</option>
+
+            
+
+            <option value="../embeddable/consequent_issue_prs/MithrilJS-mithril.js-1645939388.html">consequent_issue_prs_3</option>
+
+            
+
+          </optgroup>
+
+          
+
+          <optgroup label="Integrating PR Hub">
+
+            
+
+            <option value="../embeddable/integrating_pr_hub/MithrilJS-mithril.js-1652713638.html">integrating_pr_hub_3</option>
+
+            
+
+          </optgroup>
+
+          
+
+        </select>
+
+      </div>
+
+      
+
+      <div style="flex-basis: 50%">
+
+        <label for="unverified-workflow-type"
+
+          >Unverified workflow type matches:</label
+
+        >
+
+        <select
+
+          id="unverified-select"
+
+          name="unverified-workflow-type"
+
+          onchange="setWorkflowType('unverified-select')"
+
+          style="width: fit-content"
+
+        >
+
+          
+
+          <optgroup label="Consequent Issue">
+
+            
+
+            <option value="../embeddable/consequent_issue/MithrilJS-mithril.js-1635665000.html">consequent_issue_1</option>
+
+            
+
+            <option value="../embeddable/consequent_issue/MithrilJS-mithril.js-1499932151.html">consequent_issue_2</option>
+
+            
+
+            <option value="../embeddable/consequent_issue/MithrilJS-mithril.js-1543388534.html">consequent_issue_5</option>
+
+            
+
+            <option value="../embeddable/consequent_issue/MithrilJS-mithril.js-1654002802.html">consequent_issue_6</option>
+
+            
+
+            <option value="../embeddable/consequent_issue/MithrilJS-mithril.js-1618543128.html">consequent_issue_7</option>
+
+            
+
+            <option value="../embeddable/consequent_issue/MithrilJS-mithril.js-1467331113.html">consequent_issue_8</option>
+
+            
+
+          </optgroup>
+
+          
+
+          <optgroup label="Decomposed Issue">
+
+            
+
+            <option value="../embeddable/decomposed_issue/MithrilJS-mithril.js-1466183712.html">decomposed_issue_1</option>
+
+            
+
+            <option value="../embeddable/decomposed_issue/MithrilJS-mithril.js-1479936981.html">decomposed_issue_2</option>
+
+            
+
+          </optgroup>
+
+          
+
+          <optgroup label="Integrating PR Hub">
+
+            
+
+            <option value="../embeddable/integrating_pr_hub/MithrilJS-mithril.js-1654538449.html">integrating_pr_hub_1</option>
+
+            
+
+            <option value="../embeddable/integrating_pr_hub/MithrilJS-mithril.js-1645479739.html">integrating_pr_hub_2</option>
+
+            
+
+            <option value="../embeddable/integrating_pr_hub/MithrilJS-mithril.js-1645499865.html">integrating_pr_hub_4</option>
+
+            
+
+          </optgroup>
+
+          
+
+          <optgroup label="Consequent Issue PRs">
+
+            
+
+            <option value="../embeddable/consequent_issue_prs/MithrilJS-mithril.js-1645479007.html">consequent_issue_prs_1</option>
+
+            
+
+            <option value="../embeddable/consequent_issue_prs/MithrilJS-mithril.js-1569293814.html">consequent_issue_prs_4</option>
+
+            
+
+            <option value="../embeddable/consequent_issue_prs/MithrilJS-mithril.js-1654002802.html">consequent_issue_prs_5</option>
+
+            
+
+            <option value="../embeddable/consequent_issue_prs/MithrilJS-mithril.js-1546065045.html">consequent_issue_prs_6</option>
+
+            
+
+            <option value="../embeddable/consequent_issue_prs/MithrilJS-mithril.js-1618543128.html">consequent_issue_prs_7</option>
+
+            
+
+          </optgroup>
+
+          
+
+          <optgroup label="Dependent PRs">
+
+            
+
+            <option value="../embeddable/dependent_prs/MithrilJS-mithril.js-1569293814.html">dependent_prs_1</option>
+
+            
+
+            <option value="../embeddable/dependent_prs/MithrilJS-mithril.js-1488612580.html">dependent_prs_2</option>
+
+            
+
+          </optgroup>
+
+          
+
         </select>
 
       </div>
@@ -244,7 +428,35 @@
 
       description = `This workflow type abstracts a somewhat common practice in software development in which a single commit bundles multiple changes to the codebase.`;
 
+    } else if (workflowTypeNameNormalized === "dependent_prs") {
+
+      description = `The Dependent PR workflow describes a situation in which pull requests are connected to other pull requests in a chain. Usually, the chained PRs have the same author, or a limited set of authors. This workflow facilitates the review and merging process across different branches `;
+
+    } else if (workflowTypeNameNormalized === "decomposed_issue") {
+
+      description = `This workflow type models a good and well-known software engineering practice in which work is divided into smaller pieces to facilitate its execution, improve documentation, decouple modules, etc.`;
+
+    } else if (
+
+      workflowTypeNameNormalized === "consequent_issue" ||
+
+      workflowTypeNameNormalized === "consequent_issue_prs"
+
+    ) {
+
+      description =
+
+        "This workflow type can be translated into a situation where a solution (PR) to an Issue impacts the rest of the project in such a way that a new Issue is created after the PR.";
+
+    } else if (workflowTypeNameNormalized === "integrating_pr_hub") {
+
+      description =
+
+        "In this workflow type, a developer links to other developers’ contributions to help surface these contributions and to coordinate the software development process.";
+
     }
+
+
 
     document.getElementById("workflow-type-desc").innerText = description;
 
@@ -300,9 +512,9 @@
 
     document.querySelectorAll("option").forEach((el) => {
 
-      if (el.value === "../embeddable/divergent_pr/MithrilJS-mithril.js-1467331113.html") {
+      if (el.value === "../embeddable/decomposed_issue/MithrilJS-mithril.js-1466183712.html") {
 
-        el.parentNode.parentNode.value = "../embeddable/divergent_pr/MithrilJS-mithril.js-1467331113.html";
+        el.parentNode.parentNode.value = "../embeddable/decomposed_issue/MithrilJS-mithril.js-1466183712.html";
 
         setWorkflowType(el.parentNode.parentNode.id);
 
