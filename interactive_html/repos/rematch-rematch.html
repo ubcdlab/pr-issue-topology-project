@@ -78,6 +78,18 @@
 
           
 
+          <optgroup label="Decomposed Issue">
+
+            
+
+            <option value="../embeddable/decomposed_issue/rematch-rematch-1515402839.html">decomposed_issue_3</option>
+
+            
+
+          </optgroup>
+
+          
+
         </select>
 
       </div>
@@ -106,11 +118,71 @@
 
           
 
+          <optgroup label="Consequent Issue">
+
+            
+
+            <option value="../embeddable/consequent_issue/rematch-rematch-1606306865.html">consequent_issue_1</option>
+
+            
+
+          </optgroup>
+
+          
+
           <optgroup label="Competing PRs">
 
             
 
             <option value="../embeddable/competing_prs/rematch-rematch-1547178109.html">competing_prs_1</option>
+
+            
+
+          </optgroup>
+
+          
+
+          <optgroup label="Decomposed Issue">
+
+            
+
+            <option value="../embeddable/decomposed_issue/rematch-rematch-1593557228.html">decomposed_issue_1</option>
+
+            
+
+            <option value="../embeddable/decomposed_issue/rematch-rematch-1596039470.html">decomposed_issue_2</option>
+
+            
+
+          </optgroup>
+
+          
+
+          <optgroup label="Consequent Issue PRs">
+
+            
+
+            <option value="../embeddable/consequent_issue_prs/rematch-rematch-1650136509.html">consequent_issue_prs_1</option>
+
+            
+
+            <option value="../embeddable/consequent_issue_prs/rematch-rematch-1540947265.html">consequent_issue_prs_2</option>
+
+            
+
+            <option value="../embeddable/consequent_issue_prs/rematch-rematch-1547178109.html">consequent_issue_prs_3</option>
+
+            
+
+            <option value="../embeddable/consequent_issue_prs/rematch-rematch-1624920768.html">consequent_issue_prs_4</option>
+
+            
+
+            <option value="../embeddable/consequent_issue_prs/rematch-rematch-1606306865.html">consequent_issue_prs_5</option>
+
+            
+
+            <option value="../embeddable/consequent_issue_prs/rematch-rematch-1549878999.html">consequent_issue_prs_6</option>
 
             
 
@@ -232,7 +304,35 @@
 
       description = `This workflow type abstracts a somewhat common practice in software development in which a single commit bundles multiple changes to the codebase.`;
 
+    } else if (workflowTypeNameNormalized === "dependent_prs") {
+
+      description = `The Dependent PR workflow describes a situation in which pull requests are connected to other pull requests in a chain. Usually, the chained PRs have the same author, or a limited set of authors. This workflow facilitates the review and merging process across different branches `;
+
+    } else if (workflowTypeNameNormalized === "decomposed_issue") {
+
+      description = `This workflow type models a good and well-known software engineering practice in which work is divided into smaller pieces to facilitate its execution, improve documentation, decouple modules, etc.`;
+
+    } else if (
+
+      workflowTypeNameNormalized === "consequent_issue" ||
+
+      workflowTypeNameNormalized === "consequent_issue_prs"
+
+    ) {
+
+      description =
+
+        "This workflow type can be translated into a situation where a solution (PR) to an Issue impacts the rest of the project in such a way that a new Issue is created after the PR.";
+
+    } else if (workflowTypeNameNormalized === "integrating_pr_hub") {
+
+      description =
+
+        "In this workflow type, a developer links to other developers’ contributions to help surface these contributions and to coordinate the software development process.";
+
     }
+
+
 
     document.getElementById("workflow-type-desc").innerText = description;
 

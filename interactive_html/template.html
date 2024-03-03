@@ -105,7 +105,21 @@
       description = `One way to view the Competing PRs workflow is that it enables open source projects to select the best implementation. However, recent research shows that there are different reasons influencing whether contributions (PRs) are accepted. Competing PRs can potentially be due to poor communication.`;
     } else if (workflowTypeNameNormalized === "divergent_pr") {
       description = `This workflow type abstracts a somewhat common practice in software development in which a single commit bundles multiple changes to the codebase.`;
+    } else if (workflowTypeNameNormalized === "dependent_prs") {
+      description = `The Dependent PR workflow describes a situation in which pull requests are connected to other pull requests in a chain. Usually, the chained PRs have the same author, or a limited set of authors. This workflow facilitates the review and merging process across different branches `;
+    } else if (workflowTypeNameNormalized === "decomposed_issue") {
+      description = `This workflow type models a good and well-known software engineering practice in which work is divided into smaller pieces to facilitate its execution, improve documentation, decouple modules, etc.`;
+    } else if (
+      workflowTypeNameNormalized === "consequent_issue" ||
+      workflowTypeNameNormalized === "consequent_issue_prs"
+    ) {
+      description =
+        "This workflow type can be translated into a situation where a solution (PR) to an Issue impacts the rest of the project in such a way that a new Issue is created after the PR.";
+    } else if (workflowTypeNameNormalized === "integrating_pr_hub") {
+      description =
+        "In this workflow type, a developer links to other developers’ contributions to help surface these contributions and to coordinate the software development process.";
     }
+
     document.getElementById("workflow-type-desc").innerText = description;
     const searchParams = new URLSearchParams(window.location.search);
     searchParams.set(

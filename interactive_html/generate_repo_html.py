@@ -20,6 +20,15 @@ manually_verified = [
     "mlflow-mlflow-1635821214.html",
     "mlflow-mlflow-1656691361.html",
     "jupyterhub-jupyterhub-1519952687.html",
+    "deployphp-deployer-1646371332.html",
+    "TypeStrong-ts-node-1655499400.html",
+    "mlflow-mlflow-1642514591.html",
+    "pagekit-pagekit-1406249922.html",
+    "App-vNext-Polly-1656194563.html",
+    "jupyterhub-jupyterhub-1657795356.html",
+    "apache-dubbo-1653940129.html",
+    "rematch-rematch-1515402839.html",
+    "pagekit-pagekit-1406249922.html",
 ]
 
 
@@ -61,7 +70,15 @@ def main(repo: str):
         verified["Duplicate Issue Hub"] = workflow_types["Duplicate Issue Hub"]
     if len(workflow_types["Divergent PR"]):
         verified["Divergent PR"] = workflow_types["Divergent PR"]
-    for key in ["Competing PRs", "Extended PRs"]:
+    for key in [
+        "Competing PRs",
+        "Extended PRs",
+        "Decomposed Issue",
+        "Dependent PRs",
+        "Consequent Issue",
+        "Consequent Issue PRs",
+        "Integrating PR Hub",
+    ]:
         verified[key] = list(
             filter(lambda x: x[2] in manually_verified, workflow_types[key])
         )
@@ -70,7 +87,15 @@ def main(repo: str):
 
     del workflow_types["Duplicate Issue Hub"]
     del workflow_types["Divergent PR"]
-    for key in ["Competing PRs", "Extended PRs"]:
+    for key in [
+        "Competing PRs",
+        "Extended PRs",
+        "Decomposed Issue",
+        "Dependent PRs",
+        "Consequent Issue",
+        "Consequent Issue PRs",
+        "Integrating PR Hub",
+    ]:
         workflow_types[key] = list(
             filter(lambda x: x[2] not in manually_verified, workflow_types[key])
         )
