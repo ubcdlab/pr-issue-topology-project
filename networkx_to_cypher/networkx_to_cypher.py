@@ -4,9 +4,9 @@ import networkx as nx
 
 path.append("..")
 
-from scripts.helpers import all_graphs, to_json
-from pipeline.picklereader import PickleReader
-from pipeline.NetworkVisCreator import NetworkVisCreator
+from data_scripts.helpers import all_graphs, to_json
+from archive.pipeline.picklereader import PickleReader
+from archive.pipeline.NetworkVisCreator import NetworkVisCreator
 from json import loads
 
 graph_list = all_graphs()
@@ -81,12 +81,16 @@ given_input = """{
 pr = PickleReader([])
 nwvc = NetworkVisCreator(None, [])
 
-nodes, _, comment_list, timeline_list, _ = pr.read_repo_local_file(None, "Activiti/Activiti")
+nodes, _, comment_list, timeline_list, _ = pr.read_repo_local_file(
+    None, "Activiti/Activiti"
+)
 selected = loads(given_input)
 graph = nx.Graph()
 to_add = []
 edges_to_add = []
-for index, node in enumerate(list(filter(lambda x: x.number in selected["connected_component"], nodes))):
+for index, node in enumerate(
+    list(filter(lambda x: x.number in selected["connected_component"], nodes))
+):
     node_status = node.state
     if node.pull_request is not None:
         if node.pull_request.raw_data["merged_at"] is not None:
@@ -100,7 +104,9 @@ for index, node in enumerate(list(filter(lambda x: x.number in selected["connect
                 "repository": target_repo,
                 "number": node.number,
                 "creation_date": node.created_at.timestamp(),
-                "closed_at": node.closed_at.timestamp() if node.closed_at is not None else 0,
+                "closed_at": (
+                    node.closed_at.timestamp() if node.closed_at is not None else 0
+                ),
                 "updated_at": node.updated_at.timestamp(),
             },
         )
@@ -108,19 +114,24 @@ for index, node in enumerate(list(filter(lambda x: x.number in selected["connect
     node_timeline = timeline_list[-index - 1]
     node_timeline = list(
         filter(
-            lambda x: x.event == "cross-referenced" and x.source.issue.repository.full_name == target_repo,
+            lambda x: x.event == "cross-referenced"
+            and x.source.issue.repository.full_name == target_repo,
             node_timeline,
         )
     )
     for mention in node_timeline:
-        mentioning_issue_comments = nwvc.find_comment(mention.source.issue.url, comment_list)
+        mentioning_issue_comments = nwvc.find_comment(
+            mention.source.issue.url, comment_list
+        )
         edges_to_add.append(
             (
                 f"{target_repo}#{mention.source.issue.number}",
                 f"{target_repo}#{node.number}",
                 {
                     "link_type": nwvc.find_automatic_links(
-                        node.number, mention.source.issue.body, mentioning_issue_comments
+                        node.number,
+                        mention.source.issue.body,
+                        mentioning_issue_comments,
                     )
                 },
             )

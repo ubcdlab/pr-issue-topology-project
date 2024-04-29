@@ -20,9 +20,9 @@ from math import sqrt
 
 path.append("..")
 
-from scripts.helpers import all_graphs, num_graphs, to_json, fetch_path
-from pipeline.picklereader import PickleReader
-from pipeline.NetworkVisCreator import NetworkVisCreator
+from data_scripts.helpers import all_graphs, num_graphs, to_json, fetch_path
+from archive.pipeline.picklereader import PickleReader
+from archive.pipeline.NetworkVisCreator import NetworkVisCreator
 from typing import List
 
 pr = PickleReader([])
@@ -48,7 +48,10 @@ def parallelize_graph_processing(path: Path) -> List[ConnectedComponentsStatisti
             continue
         seen.add(node["id"])
         last_date = node["creation_date"]
-        if node["event_list"] and node["event_list"][-1]["created_at"] > node["creation_date"]:
+        if (
+            node["event_list"]
+            and node["event_list"][-1]["created_at"] > node["creation_date"]
+        ):
             last_date = node["event_list"][-1]["created_at"]
         elif node["updated_at"] > node["creation_date"]:
             last_date = node["updated_at"]
@@ -62,10 +65,16 @@ def parallelize_graph_processing(path: Path) -> List[ConnectedComponentsStatisti
                 continue
             seen.add(cc_node_id)
             cc_node = next(filter(lambda n: n["id"] == cc_node_id, graph_json["nodes"]))
-            node_cc_stats.min_time = min(node_cc_stats.min_time, cc_node["creation_date"])
+            node_cc_stats.min_time = min(
+                node_cc_stats.min_time, cc_node["creation_date"]
+            )
             node_cc_stats.max_time = max(
                 node_cc_stats.max_time,
-                cc_node["event_list"][-1]["created_at"] if len(cc_node["event_list"]) else cc_node["updated_at"],
+                (
+                    cc_node["event_list"][-1]["created_at"]
+                    if len(cc_node["event_list"])
+                    else cc_node["updated_at"]
+                ),
             )
             node_cc_stats.size += 1
         repo_ccs.append(node_cc_stats)
@@ -84,7 +93,9 @@ def main():
                     all_graphs(),
                 ):
                     for cc in res:
-                        cc_size_to_duration_map[cc.size].append((cc.max_time - cc.min_time) / 86400)
+                        cc_size_to_duration_map[cc.size].append(
+                            (cc.max_time - cc.min_time) / 86400
+                        )
 
                     pbar.update()
         with open("cc_size_to_duration.pickle", "wb") as x:
@@ -104,20 +115,38 @@ def main():
     ax.set_axisbelow(True)
     ax.yaxis.grid(True, zorder=-1, which="minor", color="#ddd")
     ax.xaxis.grid(True, zorder=-1, which="minor", color="#ddd")
-    cc_size_to_duration_map = dict(sorted(cc_size_to_duration_map.items(), key=lambda x: x[0]))
+    cc_size_to_duration_map = dict(
+        sorted(cc_size_to_duration_map.items(), key=lambda x: x[0])
+    )
     plt.bar(
         list(cc_size_to_duration_map.keys()),
-        list(map(lambda x: x / 86400, list(map(lambda x: mean(x), cc_size_to_duration_map.values())))),
+        list(
+            map(
+                lambda x: x / 86400,
+                list(map(lambda x: mean(x), cc_size_to_duration_map.values())),
+            )
+        ),
         width=0.1 * array(list(cc_size_to_duration_map.keys())),
     )
-    non_singular = dict(filter(lambda x: len(x[1]) > 1, list(cc_size_to_duration_map.items())[:31]))
+    non_singular = dict(
+        filter(lambda x: len(x[1]) > 1, list(cc_size_to_duration_map.items())[:31])
+    )
     plt.errorbar(
         list(non_singular.keys()),
-        list(map(lambda x: x / 86400, list(map(lambda x: mean(x), non_singular.values())))),
+        list(
+            map(
+                lambda x: x / 86400, list(map(lambda x: mean(x), non_singular.values()))
+            )
+        ),
         yerr=list(
             map(
                 lambda x: x / 86400,
-                list(map(lambda x: stdev(x) / sqrt(len(x)) if len(x) > 1 else 0, list(non_singular.values()))),
+                list(
+                    map(
+                        lambda x: stdev(x) / sqrt(len(x)) if len(x) > 1 else 0,
+                        list(non_singular.values()),
+                    )
+                ),
             )
         ),
         capsize=3,
@@ -131,14 +160,62 @@ def main():
     print(
         correlation(
             list(cc_size_to_duration_map.keys()),
-            list(map(lambda x: x / 86400, list(map(lambda x: mean(x), cc_size_to_duration_map.values())))),
+            list(
+                map(
+                    lambda x: x / 86400,
+                    list(map(lambda x: mean(x), cc_size_to_duration_map.values())),
+                )
+            ),
         )
     )
-    print(mean(list(map(lambda x: x / 86400, list(map(lambda x: mean(x), cc_size_to_duration_map.values()))))[:5]))
-    print(pstdev(list(map(lambda x: x / 86400, list(map(lambda x: mean(x), cc_size_to_duration_map.values()))))[:5]))
-    print(mean(list(map(lambda x: x / 86400, list(map(lambda x: mean(x), cc_size_to_duration_map.values()))))[-10:]))
-    print(pstdev(list(map(lambda x: x / 86400, list(map(lambda x: mean(x), cc_size_to_duration_map.values()))))[-10:]))
-    print(list(map(lambda x: x / 86400, list(map(lambda x: mean(x), cc_size_to_duration_map.values()))))[0])
+    print(
+        mean(
+            list(
+                map(
+                    lambda x: x / 86400,
+                    list(map(lambda x: mean(x), cc_size_to_duration_map.values())),
+                )
+            )[:5]
+        )
+    )
+    print(
+        pstdev(
+            list(
+                map(
+                    lambda x: x / 86400,
+                    list(map(lambda x: mean(x), cc_size_to_duration_map.values())),
+                )
+            )[:5]
+        )
+    )
+    print(
+        mean(
+            list(
+                map(
+                    lambda x: x / 86400,
+                    list(map(lambda x: mean(x), cc_size_to_duration_map.values())),
+                )
+            )[-10:]
+        )
+    )
+    print(
+        pstdev(
+            list(
+                map(
+                    lambda x: x / 86400,
+                    list(map(lambda x: mean(x), cc_size_to_duration_map.values())),
+                )
+            )[-10:]
+        )
+    )
+    print(
+        list(
+            map(
+                lambda x: x / 86400,
+                list(map(lambda x: mean(x), cc_size_to_duration_map.values())),
+            )
+        )[0]
+    )
 
     try:
         makedirs("misc_images/")

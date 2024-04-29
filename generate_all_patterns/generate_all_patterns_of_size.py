@@ -14,9 +14,9 @@ from click import command, option
 
 path.append("..")
 
-from scripts.helpers import all_graphs, num_graphs, to_json, generate_image
-from pipeline.picklereader import PickleReader
-from pipeline.NetworkVisCreator import NetworkVisCreator
+from data_scripts.helpers import all_graphs, num_graphs, to_json, generate_image
+from archive.pipeline.picklereader import PickleReader
+from archive.pipeline.NetworkVisCreator import NetworkVisCreator
 
 
 def node_match_with_status(node_1, node_2):
@@ -37,9 +37,15 @@ def main(size: int, to_render: bool, with_status: bool, edge_direction: bool):
         path_str = str(path)
         target_repo = to_json(path_str)["repo_url"].replace("https://github.com/", "")
 
-        nodes, _, comment_list, timeline_list, _ = pr.read_repo_local_file(None, target_repo)
+        nodes, _, comment_list, timeline_list, _ = pr.read_repo_local_file(
+            None, target_repo
+        )
 
-        local_graph = nx.DiGraph(repository=target_repo) if edge_direction else nx.Graph(repository=target_repo)
+        local_graph = (
+            nx.DiGraph(repository=target_repo)
+            if edge_direction
+            else nx.Graph(repository=target_repo)
+        )
         to_add = []
         edges_to_add = []
         for index, node in enumerate(nodes):
@@ -51,12 +57,18 @@ def main(size: int, to_render: bool, with_status: bool, edge_direction: bool):
                 (
                     f"{target_repo}#{node.number}",
                     {
-                        "type": "pull_request" if node.pull_request is not None else "issue",
+                        "type": (
+                            "pull_request" if node.pull_request is not None else "issue"
+                        ),
                         "status": node_status,
                         "repository": target_repo,
                         "number": node.number,
                         "creation_date": node.created_at.timestamp(),
-                        "closed_at": node.closed_at.timestamp() if node.closed_at is not None else 0,
+                        "closed_at": (
+                            node.closed_at.timestamp()
+                            if node.closed_at is not None
+                            else 0
+                        ),
                         "updated_at": node.updated_at.timestamp(),
                     },
                 )
@@ -64,19 +76,24 @@ def main(size: int, to_render: bool, with_status: bool, edge_direction: bool):
             node_timeline = timeline_list[-index - 1]
             node_timeline = list(
                 filter(
-                    lambda x: x.event == "cross-referenced" and x.source.issue.repository.full_name == target_repo,
+                    lambda x: x.event == "cross-referenced"
+                    and x.source.issue.repository.full_name == target_repo,
                     node_timeline,
                 )
             )
             for mention in node_timeline:
-                mentioning_issue_comments = nwvc.find_comment(mention.source.issue.url, comment_list)
+                mentioning_issue_comments = nwvc.find_comment(
+                    mention.source.issue.url, comment_list
+                )
                 edges_to_add.append(
                     (
                         f"{target_repo}#{mention.source.issue.number}",
                         f"{target_repo}#{node.number}",
                         {
                             "link_type": nwvc.find_automatic_links(
-                                node.number, mention.source.issue.body, mentioning_issue_comments
+                                node.number,
+                                mention.source.issue.body,
+                                mentioning_issue_comments,
                             )
                         },
                     )
@@ -101,7 +118,9 @@ def main(size: int, to_render: bool, with_status: bool, edge_direction: bool):
     pr = PickleReader([])
     nwvc = NetworkVisCreator(None, [])
 
-    if not isfile(f"pattern_dump/graph_{size}{'_undirected' if not edge_direction else ''}.pk"):
+    if not isfile(
+        f"pattern_dump/graph_{size}{'_undirected' if not edge_direction else ''}.pk"
+    ):
         result = []
         with Pool(cpu_count() // 2) as p:
             with tqdm(total=num_graphs(), leave=False) as pbar:
@@ -109,7 +128,10 @@ def main(size: int, to_render: bool, with_status: bool, edge_direction: bool):
                     result.append(res)
                     pbar.update()
         graph = nx.compose_all(result)
-        connected_components = [graph.subgraph(c).copy() for c in nx.connected_components(graph.to_undirected())]
+        connected_components = [
+            graph.subgraph(c).copy()
+            for c in nx.connected_components(graph.to_undirected())
+        ]
         for cc in connected_components:
             if len(cc.nodes) != size:
                 graph.remove_nodes_from(cc)
@@ -119,7 +141,9 @@ def main(size: int, to_render: bool, with_status: bool, edge_direction: bool):
                     if nx.is_isomorphic(
                         cc,
                         pattern,
-                        node_match=node_match_with_status if with_status else node_match_type,
+                        node_match=(
+                            node_match_with_status if with_status else node_match_type
+                        ),
                         edge_match=(lambda x, y: x == y) if with_status else None,
                     ):
                         all_patterns[pattern] += 1
@@ -131,14 +155,24 @@ def main(size: int, to_render: bool, with_status: bool, edge_direction: bool):
             makedirs(f"pattern_dump/")
         except:
             pass
-        with open(f"pattern_dump/{size}{'_undirected' if not edge_direction else ''}.pk", "wb") as x:
+        with open(
+            f"pattern_dump/{size}{'_undirected' if not edge_direction else ''}.pk", "wb"
+        ) as x:
             dump(all_patterns, x)
-        with open(f"pattern_dump/graph_{size}{'_undirected' if not edge_direction else ''}.pk", "wb") as x:
+        with open(
+            f"pattern_dump/graph_{size}{'_undirected' if not edge_direction else ''}.pk",
+            "wb",
+        ) as x:
             dump(graph, x)
     else:
-        with open(f"pattern_dump/{size}{'_undirected' if not edge_direction else ''}.pk", "rb") as x:
+        with open(
+            f"pattern_dump/{size}{'_undirected' if not edge_direction else ''}.pk", "rb"
+        ) as x:
             all_patterns = load(x)
-        with open(f"pattern_dump/graph_{size}{'_undirected' if not edge_direction else ''}.pk", "rb") as x:
+        with open(
+            f"pattern_dump/graph_{size}{'_undirected' if not edge_direction else ''}.pk",
+            "rb",
+        ) as x:
             graph = load(x)
         total_patterns = sum(all_patterns.values())
 
@@ -154,11 +188,19 @@ def main(size: int, to_render: bool, with_status: bool, edge_direction: bool):
 
     if to_render:
         use("agg")
-        top_20_patterns = list(map(lambda x: x[0], sorted(all_patterns.items(), key=lambda x: x[1], reverse=True)[:20]))
+        top_20_patterns = list(
+            map(
+                lambda x: x[0],
+                sorted(all_patterns.items(), key=lambda x: x[1], reverse=True)[:20],
+            )
+        )
         with Pool(cpu_count() // 2) as p:
             with tqdm(total=len(top_20_patterns), leave=False) as pbar:
                 for _ in p.imap_unordered(
                     generate_image_wrapper,
-                    [(i, component, all_patterns) for i, component in enumerate(top_20_patterns)],
+                    [
+                        (i, component, all_patterns)
+                        for i, component in enumerate(top_20_patterns)
+                    ],
                 ):
                     pbar.update()

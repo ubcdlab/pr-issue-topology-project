@@ -8,7 +8,7 @@ Run `python load_all_to_neo4j.py` to generate a list of [GraphML](http://graphml
 
 The script recreates all components in all repositories. The script takes edge directions into consideration.
 
-Place these files into the `import` directory of a Neo4J graph database, and run the Cypher query script `cypher_scripts/Import_All_Files`. Alternatively, drag and drop the full database dump (`neo4j.dump` in root directory) into Neo4J.
+Place these files into the `import` directory of a Neo4J graph database, and run the Cypher query script `cypher_scripts/Import_All_Files.cypher`. Alternatively, drag and drop the full database dump (`neo4j.dump` in root directory) into Neo4J.
 
 The attributes available in the database are:
 

@@ -1,20 +1,20 @@
 # Statistics Scripts
 
-Several statistics scripts can be found in `scripts/`. These output total counts of certain types of nodes and calculate percentages of component characteristics.
+Several statistics scripts can be found in `data_scripts/`. These output total counts of certain types of nodes and calculate percentages of component characteristics.
 
-Brief documentation for each command can be found below. Run each script like so: `python -m scripts.[script_name] [options]` as opposed to just running the bare Python script.
+Brief documentation for each command can be found below. Run each script like so: `python -m data_scripts.[script_name] [options]` as opposed to just running the bare Python script.
 
 Many of the scripts read fields in structure JSON files in `data/` to fetch the list of nodes in a component, and use the graph JSON files in `data/` to fetch more specific information.
 
 ## Total Count
 
-`python -m scripts.total_count`
+`python -m data_scripts.total_count`
 
 Returns total number of components.
 
 ## Isolated Nodes Statistics
 
-`python -m scripts.isolated_nodes_statistics --print=False`
+`python -m data_scripts.isolated_nodes_statistics --print=False`
 
 Returns the percentage of issues and pull requests that are open / merged / closed. Also prints the total number of isolated components if `--print` is passed.
 
@@ -22,7 +22,7 @@ This command reads the `isolated` field from structure JSON files in `data/` to 
 
 ## Diad Components Statistics
 
-`python -m scripts.diad_components_statistics --closed=False`
+`python -m data_scripts.diad_components_statistics --closed=False`
 
 Returns the distribution of connected components of size 2 (i.e. a single issue connected to a single PR and nothing else) across statuses. These statistics take direction of the connection into consideration. Each number is computed as a percentage of the total amount of size 2 components.
 
@@ -32,7 +32,7 @@ This command fetches components of size 2 from the associated fields in structur
 
 ## Temporal Differences
 
-`python -m scripts.temporal_differences --output_csv=[path] --small=False --print=False --save-all=False --repo-str="" --size=0`
+`python -m data_scripts.temporal_differences --output_csv=[path] --small=False --print=False --save-all=False --repo-str="" --size=0`
 
 Prints or writes information on the time delta between the earliest node creation and latest node update in connected components. Also computes average comment span duration for each connected component by taking the mean of the difference between node creation and last comment. Note that a node being marked as closed will not 'cut off' node updates, as in cases where a node is closed and reopened multiple times, and the script will take the final node update as its last update time regardless of the update type. When a node was not updated after its creation, deltas will show as 0.
 
@@ -50,7 +50,7 @@ This script is used to test if there is a significant difference in the time del
 
 ## Neo4J Query Match Size Distributions
 
-`python -m scripts.neo4j_size_distributions --cypher=[cypher_path] --name=[pattern_name] --to-csv=False`
+`python -m data_scripts.neo4j_size_distributions --cypher=[cypher_path] --name=[pattern_name] --to-csv=False`
 
 Reads the Cypher query supplied and executes it on a local Neo4J database. Prints a table of statistics mapping the size of a match to its frequency. This is useful for calculating statistics on how many 'spoke' nodes are in matches for topologies with node multiplicity or a star topology (i.e. competition, with its `n` PRs connected to a single issue).
 
@@ -58,7 +58,7 @@ The `--to-csv` parameter will redirect output to a CSV file located in `neo4j_st
 
 ## Repo Component Statistics
 
-`python -m scripts.repo_component_statistics --print-repos=False`
+`python -m data_scripts.repo_component_statistics --print-repos=False`
 
 Computes the number of connected components in the graph of each repository, and prints summary statistics for their distribution.
 
@@ -66,7 +66,7 @@ The `--print-repos` flag will print an additional table mapping each repository 
 
 ## Topology Occurrences in Connected Component Statistics
 
-`python -m scripts.topology_cc_occurrences --cypher=[cypher_path] --name=[file_name] --to-csv=False`
+`python -m data_scripts.topology_cc_occurrences --cypher=[cypher_path] --name=[file_name] --to-csv=False`
 
 Computes match topology connected component opportunities for connected components of each size across all repositories. Prints statistics summaries for each connected component size, ordered by number of matches of the topology in connected components of that size.
 
@@ -78,4 +78,4 @@ The `--to-csv` flag saves the results into a CSV file named by `--name` in `neo4
 
 Regenerate statistics in `neo4j_statistics` for all topologies with `./generate_all_topologies.sh`
 
-The script `scripts/topology_repo_occurrences` computes the same statistics, but groups results based on matches within the same repository instead of the same component size across all repositories.
+The script `data_scripts/topology_repo_occurrences` computes the same statistics, but groups results based on matches within the same repository instead of the same component size across all repositories.

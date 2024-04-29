@@ -17,10 +17,9 @@ from scipy.optimize import curve_fit
 
 path.append("..")
 
-from scripts.helpers import all_graphs, num_graphs, to_json
-from pipeline.picklereader import PickleReader
-from pipeline.NetworkVisCreator import NetworkVisCreator
-from scripts.plplot import plplot
+from data_scripts.helpers import all_graphs, num_graphs, to_json
+from archive.pipeline.picklereader import PickleReader
+from archive.pipeline.NetworkVisCreator import NetworkVisCreator
 
 pr = PickleReader([])
 nwvc = NetworkVisCreator(None, [])
@@ -30,7 +29,9 @@ def parallelize_graph_processing(path: Path):
     path_str = str(path)
     target_repo = to_json(path_str)["repo_url"].replace("https://github.com/", "")
 
-    nodes, _, comment_list, timeline_list, _ = pr.read_repo_local_file(None, target_repo)
+    nodes, _, comment_list, timeline_list, _ = pr.read_repo_local_file(
+        None, target_repo
+    )
 
     local_graph = nx.Graph(repository=target_repo)
     to_add = []
@@ -44,12 +45,16 @@ def parallelize_graph_processing(path: Path):
             (
                 f"{target_repo}#{node.number}",
                 {
-                    "type": "pull_request" if node.pull_request is not None else "issue",
+                    "type": (
+                        "pull_request" if node.pull_request is not None else "issue"
+                    ),
                     "status": node_status,
                     "repository": target_repo,
                     "number": node.number,
                     "creation_date": node.created_at.timestamp(),
-                    "closed_at": node.closed_at.timestamp() if node.closed_at is not None else 0,
+                    "closed_at": (
+                        node.closed_at.timestamp() if node.closed_at is not None else 0
+                    ),
                     "updated_at": node.updated_at.timestamp(),
                 },
             )
@@ -57,19 +62,24 @@ def parallelize_graph_processing(path: Path):
         node_timeline = timeline_list[-index - 1]
         node_timeline = list(
             filter(
-                lambda x: x.event == "cross-referenced" and x.source.issue.repository.full_name == target_repo,
+                lambda x: x.event == "cross-referenced"
+                and x.source.issue.repository.full_name == target_repo,
                 node_timeline,
             )
         )
         for mention in node_timeline:
-            mentioning_issue_comments = nwvc.find_comment(mention.source.issue.url, comment_list)
+            mentioning_issue_comments = nwvc.find_comment(
+                mention.source.issue.url, comment_list
+            )
             edges_to_add.append(
                 (
                     f"{target_repo}#{mention.source.issue.number}",
                     f"{target_repo}#{node.number}",
                     {
                         "link_type": nwvc.find_automatic_links(
-                            node.number, mention.source.issue.body, mentioning_issue_comments
+                            node.number,
+                            mention.source.issue.body,
+                            mentioning_issue_comments,
                         )
                     },
                 )
@@ -121,10 +131,20 @@ def main():
             repo_to_fit_map = load(x)
     fits = list(map(lambda x: x + 1, fits))
     quantiles = quantile(fits, array([0.00, 0.25, 0.50, 0.75, 1.00]))
-    ax.vlines(quantiles, [1] * quantiles.size, [1.2] * quantiles.size, color="black", ls=":", lw=0.5, zorder=0)
+    ax.vlines(
+        quantiles,
+        [1] * quantiles.size,
+        [1.2] * quantiles.size,
+        color="black",
+        ls=":",
+        lw=0.5,
+        zorder=0,
+    )
     ax.set_ylim(1, 1.3)
     for i in range(len(quantiles)):
-        ax.text(quantiles[i], 1.22, f"{quantiles[i]:.2f}", **font, fontsize=12, ha="center")
+        ax.text(
+            quantiles[i], 1.22, f"{quantiles[i]:.2f}", **font, fontsize=12, ha="center"
+        )
     ax.set_ylim(0.5, 1.5)
     plt.boxplot(fits, vert=False)
 
@@ -133,8 +153,17 @@ def main():
     except:
         pass
     plt.tight_layout()
-    plt.savefig(f"misc_images/degree_distribution_bplot.png", bbox_inches="tight", dpi=150)
-    print(dict(filter(lambda x: x[1] > quantiles[3] + 3 * (quantiles[3] - quantiles[1]) / 2, repo_to_fit_map.items())))
+    plt.savefig(
+        f"misc_images/degree_distribution_bplot.png", bbox_inches="tight", dpi=150
+    )
+    print(
+        dict(
+            filter(
+                lambda x: x[1] > quantiles[3] + 3 * (quantiles[3] - quantiles[1]) / 2,
+                repo_to_fit_map.items(),
+            )
+        )
+    )
 
 
 if __name__ == "__main__":

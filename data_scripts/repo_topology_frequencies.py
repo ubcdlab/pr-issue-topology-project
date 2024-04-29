@@ -16,7 +16,7 @@ from os import scandir, remove
 
 path.append("..")
 
-from scripts.helpers import generate_image, fetch_path, to_json
+from data_scripts.helpers import generate_image, fetch_path, to_json
 
 
 @command()

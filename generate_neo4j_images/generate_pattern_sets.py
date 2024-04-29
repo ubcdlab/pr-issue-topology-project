@@ -13,7 +13,7 @@ from prettytable import PrettyTable
 
 path.append("..")
 
-from scripts.helpers import generate_image
+from data_scripts.helpers import generate_image
 
 
 class HashableDiGraph(nx.DiGraph):
@@ -21,7 +21,9 @@ class HashableDiGraph(nx.DiGraph):
         return int(nx.weisfeiler_lehman_graph_hash(self), base=16)
 
     def __eq__(self, other):
-        return nx.weisfeiler_lehman_graph_hash(self) == nx.weisfeiler_lehman_graph_hash(other)
+        return nx.weisfeiler_lehman_graph_hash(self) == nx.weisfeiler_lehman_graph_hash(
+            other
+        )
 
 
 @command()

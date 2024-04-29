@@ -11,7 +11,7 @@ from os import makedirs
 
 path.append("..")
 
-from scripts.helpers import generate_image
+from data_scripts.helpers import generate_image
 
 
 @command()
@@ -51,7 +51,9 @@ def main(cypher_path: str, to_csv: bool, name: str):
                     n = record.get(key)
                     to_highlight += [n._properties["number"]]
                 else:
-                    to_highlight += [list_item._properties["number"] for list_item in record.get(key)]
+                    to_highlight += [
+                        list_item._properties["number"] for list_item in record.get(key)
+                    ]
         size_counts_map[len(to_highlight)] += 1
         sizes.append(len(to_highlight))
         continue
@@ -70,7 +72,9 @@ def main(cypher_path: str, to_csv: bool, name: str):
             makedirs(f"neo4j_statistics/size_distribution")
         except:
             pass
-        with open(f"neo4j_statistics/size_distribution/{name}_statistics.csv", "w") as x:
+        with open(
+            f"neo4j_statistics/size_distribution/{name}_statistics.csv", "w"
+        ) as x:
             x.write(table.get_csv_string())
     else:
         print(table)
@@ -79,7 +83,13 @@ def main(cypher_path: str, to_csv: bool, name: str):
     table = PrettyTable()
     table.field_names = ["Average Size", "Min", "Max", "Median", "STDEV"]
     table.add_row(
-        [f"{mean(sizes):.2f}", f"{min(sizes):.2f}", f"{max(sizes):.2f}", f"{median(sizes):.2f}", f"{pstdev(sizes):.2f}"]
+        [
+            f"{mean(sizes):.2f}",
+            f"{min(sizes):.2f}",
+            f"{max(sizes):.2f}",
+            f"{median(sizes):.2f}",
+            f"{pstdev(sizes):.2f}",
+        ]
     )
     print(table)
 

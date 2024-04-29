@@ -10,9 +10,7 @@ from sys import path
 from os import scandir, remove
 
 
-path.append("..")
-
-from scripts.helpers import generate_image
+from data_scripts.helpers import generate_image
 
 
 @command()
@@ -38,7 +36,9 @@ def main(cypher_path: str, query_name: str):
     for record in tqdm(records, total=len(records), leave=False):
         cypher_nodes = record.get("nodes")
         cypher_edges = record.get("relationships") + (
-            record.get("match_relationships") if "match_relationships" in record.keys() else []
+            record.get("match_relationships")
+            if "match_relationships" in record.keys()
+            else []
         )
         if "optional_r" in record.keys() and record.get("optional_r") is not None:
             cypher_edges += [record.get("optional_r")]
@@ -58,7 +58,9 @@ def main(cypher_path: str, query_name: str):
                 if type(record.get(key)) != list:
                     n = record.get(key)
                     to_highlight += [n._properties["number"]]
-                    g.graph["link"] = n._properties["url"] if "url" in n._properties else ""
+                    g.graph["link"] = (
+                        n._properties["url"] if "url" in n._properties else ""
+                    )
                     g.add_node(
                         n._properties["number"],
                         type=n._properties["type"],
@@ -68,7 +70,9 @@ def main(cypher_path: str, query_name: str):
                     if "email" in n._properties:
                         emails += f"{'PR' if n._properties['type'] == 'pull_request' else 'I'} {n._properties['number']}: {n._properties['email']}\n"
                 else:
-                    to_highlight += [list_item._properties["number"] for list_item in record.get(key)]
+                    to_highlight += [
+                        list_item._properties["number"] for list_item in record.get(key)
+                    ]
                     g.add_nodes_from(
                         [
                             (
@@ -115,7 +119,8 @@ def main(cypher_path: str, query_name: str):
             edges_to_hl = [
                 (e.nodes[0]._properties["number"], e.nodes[1]._properties["number"])
                 for e in cypher_edges
-                if e.nodes[0]._properties["number"] in to_highlight and e.nodes[1]._properties["number"] in to_highlight
+                if e.nodes[0]._properties["number"] in to_highlight
+                and e.nodes[1]._properties["number"] in to_highlight
             ]
         else:
             edges_to_hl = [
@@ -124,15 +129,18 @@ def main(cypher_path: str, query_name: str):
                     record.get("match_relationships")
                     + (
                         [record.get("optional_r")]
-                        if "optional_r" in record.keys() and record.get("optional_r") is not None
+                        if "optional_r" in record.keys()
+                        and record.get("optional_r") is not None
                         else []
                     )
                 )
-                if "number" in e.nodes[0]._properties and "number" in e.nodes[1]._properties
+                if "number" in e.nodes[0]._properties
+                and "number" in e.nodes[1]._properties
             ]
             for e in record.get("match_relationships") + (
                 [record.get("optional_r")]
-                if "optional_r" in record.keys() and record.get("optional_r") is not None
+                if "optional_r" in record.keys()
+                and record.get("optional_r") is not None
                 else []
             ):
                 if "email" in e._properties:

@@ -16,7 +16,7 @@ from os import scandir, remove
 
 path.append("..")
 
-from scripts.helpers import generate_image, fetch_path, to_json
+from data_scripts.helpers import generate_image, fetch_path, to_json
 
 
 @dataclass(repr=True)
@@ -33,7 +33,9 @@ class MTOCStatistics:
 @option("--status", "node_status")
 @option("--latex", "latex", is_flag=True, default=False)
 @option("--integrating", "integrating", is_flag=True, default=False)
-def main(cypher_path: str, node_type: str, node_status: str, latex: bool, integrating: bool):
+def main(
+    cypher_path: str, node_type: str, node_status: str, latex: bool, integrating: bool
+):
     command = open(cypher_path, "r").read()
 
     def run_command(tx):
@@ -52,9 +54,13 @@ def main(cypher_path: str, node_type: str, node_status: str, latex: bool, integr
     for record in tqdm(records, total=len(records), leave=False):
         cypher_nodes = record.get("nodes")
         repo = cypher_nodes[0]._properties["repository"]
-        cypher_node_nums = list(map(lambda x: x._properties["number"], record.get("nodes")))
+        cypher_node_nums = list(
+            map(lambda x: x._properties["number"], record.get("nodes"))
+        )
         graph = to_json(f"data/graph_{repo.replace('/','-')}.json")
-        candidates = list(filter(lambda x: x["connected_component_size"][0] > 2, graph["nodes"]))
+        candidates = list(
+            filter(lambda x: x["connected_component_size"][0] > 2, graph["nodes"])
+        )
         if repo not in repo_to_matches_map:
             repo_to_matches_map[repo] = MTOCStatistics(set(), set(), 0, len(candidates))
         repo_to_matches_map[repo].in_topology.update(
@@ -73,7 +79,9 @@ def main(cypher_path: str, node_type: str, node_status: str, latex: bool, integr
         cypher_nodes = record.get("nodes")
         repo = cypher_nodes[0]._properties["repository"]
         graph = to_json(f"data/graph_{repo.replace('/','-')}.json")
-        candidates = list(filter(lambda x: x["connected_component_size"][0] > 2, graph["nodes"]))
+        candidates = list(
+            filter(lambda x: x["connected_component_size"][0] > 2, graph["nodes"])
+        )
         repo_to_matches_map[repo].candidates.update(
             list(
                 map(
@@ -85,7 +93,10 @@ def main(cypher_path: str, node_type: str, node_status: str, latex: bool, integr
                             integrating
                             and (
                                 (x["type"] == "issue" and x["status"] == "closed")
-                                or (x["type"] == "pull_request" and x["status"] == "merged")
+                                or (
+                                    x["type"] == "pull_request"
+                                    and x["status"] == "merged"
+                                )
                             )
                         ),
                         candidates,
@@ -97,7 +108,8 @@ def main(cypher_path: str, node_type: str, node_status: str, latex: bool, integr
     repo_to_matches_map = dict(
         sorted(
             repo_to_matches_map.items(),
-            key=lambda x: len(x[1].candidates.difference(x[1].in_topology)) / len(x[1].candidates),
+            key=lambda x: len(x[1].candidates.difference(x[1].in_topology))
+            / len(x[1].candidates),
             reverse=True,
         )
     )
@@ -105,7 +117,11 @@ def main(cypher_path: str, node_type: str, node_status: str, latex: bool, integr
     table.field_names = ["Repository", "MTRO", "Matches"]
     for repo, mtoc in repo_to_matches_map.items():
         table.add_row(
-            [repo, f"{len(mtoc.candidates.difference(mtoc.in_topology)) / len(mtoc.candidates):.2%}", mtoc.matches]
+            [
+                repo,
+                f"{len(mtoc.candidates.difference(mtoc.in_topology)) / len(mtoc.candidates):.2%}",
+                mtoc.matches,
+            ]
         )
     print(table)
     if latex:

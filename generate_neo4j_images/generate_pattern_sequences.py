@@ -13,7 +13,7 @@ from os.path import isdir
 
 path.append("..")
 
-from scripts.helpers import generate_image
+from data_scripts.helpers import generate_image
 
 
 class HashableDiGraph(nx.DiGraph):
@@ -21,7 +21,9 @@ class HashableDiGraph(nx.DiGraph):
         return int(nx.weisfeiler_lehman_graph_hash(self), base=16)
 
     def __eq__(self, other):
-        return nx.weisfeiler_lehman_graph_hash(self) == nx.weisfeiler_lehman_graph_hash(other)
+        return nx.weisfeiler_lehman_graph_hash(self) == nx.weisfeiler_lehman_graph_hash(
+            other
+        )
 
 
 @command()
@@ -82,21 +84,32 @@ def main(cypher_path: str, query_name: str, legend_names: List[str]):
         hl_edges_list = []
         for key in record.keys():
             if key == "central":
-                graph_to_central_map[g] += [list_item._properties["number"] for list_item in record.get(key)]
+                graph_to_central_map[g] += [
+                    list_item._properties["number"] for list_item in record.get(key)
+                ]
                 continue
             if "match_relationships" in key:
                 hl_edges_list += [
-                    (e.nodes[0]._properties["number"], e.nodes[1]._properties["number"], int(key.split("_")[-1]))
+                    (
+                        e.nodes[0]._properties["number"],
+                        e.nodes[1]._properties["number"],
+                        int(key.split("_")[-1]),
+                    )
                     for e in record.get(key)
-                    if "number" in e.nodes[0]._properties and "number" in e.nodes[1]._properties
+                    if "number" in e.nodes[0]._properties
+                    and "number" in e.nodes[1]._properties
                 ]
                 continue
             if key != "nodes" and key != "relationships":
                 if type(record.get(key)) != list:
-                    hl_map[record.get(key)._properties["number"]] = int(key.split("_")[-1])
+                    hl_map[record.get(key)._properties["number"]] = int(
+                        key.split("_")[-1]
+                    )
                 else:
                     for list_item in record.get(key):
-                        hl_map[list_item._properties["number"]] = int(key.split("_")[-1])
+                        hl_map[list_item._properties["number"]] = int(
+                            key.split("_")[-1]
+                        )
 
         graph_to_highlight_map[g] = {}
         for key in hl_map:

@@ -2,7 +2,7 @@ from collections import defaultdict
 from statistics import correlation
 import matplotlib.pyplot as plt
 
-from scripts.helpers import all_graphs, fetch_repo, to_json, num_graphs
+from data_scripts.helpers import all_graphs, fetch_repo, to_json, num_graphs
 
 with open("scripts/tableConvert.csv") as x:
     lines = x.readlines()
@@ -14,17 +14,27 @@ for l in lines:
     repo_to_matches_map[lsplit[0]] += int(lsplit[1])
 
 repo_to_matches_map = dict(
-    sorted(map(lambda x: [x[0].replace("/", "-"), x[1]], repo_to_matches_map.items()), key=lambda x: x[1], reverse=True)
+    sorted(
+        map(lambda x: [x[0].replace("/", "-"), x[1]], repo_to_matches_map.items()),
+        key=lambda x: x[1],
+        reverse=True,
+    )
 )
 
 size_to_matches_map = {}
 for p in all_graphs():
     repo = fetch_repo(str(p), from_graph=True)
     size_to_matches_map[repo] = {
-        len(to_json(str(p))["nodes"]): repo_to_matches_map[repo] if repo in repo_to_matches_map else 0.01
+        len(to_json(str(p))["nodes"]): (
+            repo_to_matches_map[repo] if repo in repo_to_matches_map else 0.01
+        )
     }
 
-size_to_matches_map = dict(sorted(size_to_matches_map.items(), key=lambda x: list(x[1].values())[0], reverse=True))
+size_to_matches_map = dict(
+    sorted(
+        size_to_matches_map.items(), key=lambda x: list(x[1].values())[0], reverse=True
+    )
+)
 
 plt.figure(figsize=(8, 4))
 
@@ -50,11 +60,21 @@ for i, data_dict in enumerate(size_to_matches_map.values()):
 box = ax.get_position()
 ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
 min_top = [
-    plt.Line2D([0], [0], color="w", marker="o", markerfacecolor=cmap(i), label=x, markersize=8)
+    plt.Line2D(
+        [0], [0], color="w", marker="o", markerfacecolor=cmap(i), label=x, markersize=8
+    )
     for i, x in enumerate(list(size_to_matches_map.keys())[:5])
 ]
 max_top = [
-    plt.Line2D([0], [0], color="w", marker="o", markerfacecolor=cmap(num_graphs() - 5 + i), label=x, markersize=8)
+    plt.Line2D(
+        [0],
+        [0],
+        color="w",
+        marker="o",
+        markerfacecolor=cmap(num_graphs() - 5 + i),
+        label=x,
+        markersize=8,
+    )
     for i, x in enumerate(list(size_to_matches_map.keys())[-5:])
 ]
 plt.legend(handles=min_top + max_top, loc="center left", bbox_to_anchor=(1, 0.5))

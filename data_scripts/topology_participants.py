@@ -22,11 +22,13 @@ from pause import until
 
 path.append("..")
 
-from scripts.helpers import generate_image, fetch_path, to_json
-from pipeline.picklereader import PickleReader
+from data_scripts.helpers import generate_image, fetch_path, to_json
+from archive.pipeline.picklereader import PickleReader
 
 pr = PickleReader([])
-headers = {"Authorization": "token " + open("scripts/token.txt", "r").readline().strip()}
+headers = {
+    "Authorization": "token " + open("scripts/token.txt", "r").readline().strip()
+}
 
 
 @command()
@@ -60,14 +62,18 @@ def main(cypher_path: str, name: str):
     emails = {}
     res = get(f"https://api.github.com/rate_limit", headers=headers)
     res = loads(res.text)
-    print(f"{res['resources']['core']['remaining']} left, resets at {res['resources']['core']['reset']}")
+    print(
+        f"{res['resources']['core']['remaining']} left, resets at {res['resources']['core']['reset']}"
+    )
     if res["resources"]["core"]["remaining"] == 0:
         until(res["resources"]["core"]["reset"] + 5)
 
     for user in tqdm(users, total=len(users), leave=False):
         res = get(f"https://api.github.com/rate_limit", headers=headers)
         res = loads(res.text)
-        print(f"{res['resources']['core']['remaining']} left, resets at {res['resources']['core']['reset']}")
+        print(
+            f"{res['resources']['core']['remaining']} left, resets at {res['resources']['core']['reset']}"
+        )
         if res["resources"]["core"]["remaining"] == 0:
             until(res["resources"]["core"]["reset"] + 5)
         req = get(f"https://api.github.com/users/{user}/repos", headers=headers)
@@ -97,7 +103,9 @@ def main(cypher_path: str, name: str):
         res = res[0]
         if (
             "commit" in res
-            and not res["commit"]["author"]["email"].endswith("users.noreply.github.com")
+            and not res["commit"]["author"]["email"].endswith(
+                "users.noreply.github.com"
+            )
             and "author" in res
             and res["author"]
             and res["author"]["login"] == user
@@ -105,7 +113,9 @@ def main(cypher_path: str, name: str):
             emails[user] = res["commit"]["author"]["email"]
         elif (
             "commit" in res
-            and not res["commit"]["committer"]["email"].endswith("users.noreply.github.com")
+            and not res["commit"]["committer"]["email"].endswith(
+                "users.noreply.github.com"
+            )
             and "committer" in res
             and res["committer"]
             and res["committer"]["login"] == user
@@ -114,7 +124,9 @@ def main(cypher_path: str, name: str):
     with open(f"emails/{name}_query.txt", "w") as x:
         contents = ""
         for user, email in emails.items():
-            contents += f"""call {{MATCH (n {{user: "{user}"}}) SET n.email = "{email}"}}\n"""
+            contents += (
+                f"""call {{MATCH (n {{user: "{user}"}}) SET n.email = "{email}"}}\n"""
+            )
         x.write(contents)
 
     session.close()
